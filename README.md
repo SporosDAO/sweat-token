@@ -1,6 +1,6 @@
 # Sweat Token
 
-Sweat token help startups create an early stage cap table.
+Sweat token help startups create an early stage cap table for sweat equity.
 
 In other words sweat token is the early stage governance token that is gradually and transparently issues based on merits.
 
