@@ -1,0 +1,3 @@
+[submodule "contracts/external/Kali"]
+	path = contracts/external/Kali
+	url = https://github.com/lexDAO/Kali
