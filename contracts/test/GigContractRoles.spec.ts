@@ -29,12 +29,12 @@ describe("GigContract", function () {
       .connect(pm1)
       .addContributor(await contrib1.getAddress())
     ).not.to.be.reverted
-
+    
+    // contrib1 should not be allowed to add contrib
     expect(gigContract
       .connect(contrib1)
       .releaseRewards(contrib1)
     ).to.be.reverted
 
-    // expect(await gigContract.greet()).to.equal("Hello, world!");
   });
 });
