@@ -13,27 +13,6 @@ contract GigContract is GigStore {
         string memory version
     ) GigContractRoles(owner) GigStore(uri, name, version) {}
 
-    /**
-     * @dev See {IERC1155-supportsInterface}.
-     */
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        virtual
-        override(AccessControl, ERC1155)
-        returns (bool)
-    {
-        return
-            // AccessControl
-            interfaceId == type(IAccessControl).interfaceId ||
-            // EIP712
-            interfaceId == type(EIP712).interfaceId ||
-            // ERC1155
-            interfaceId == type(IERC1155).interfaceId ||
-            interfaceId == type(IERC1155MetadataURI).interfaceId ||
-            super.supportsInterface(interfaceId);
-    }
-
     function submitBid(address fromContributor) public {}
 
     function cancelBid(address fromContributor) public {}
