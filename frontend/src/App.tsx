@@ -1,25 +1,22 @@
+import { AppBar, Box, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import React from 'react';
-import logo from './logo.svg';
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
+import { PageLayout } from './layout/Page';
+import { Dashboard } from './pages/Dashboard';
+
+const mdTheme = createTheme();
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={mdTheme}>
+      <PageLayout>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+        </Routes>
+      </PageLayout>
+    </ThemeProvider>
   );
 }
 
