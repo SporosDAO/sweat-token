@@ -7,21 +7,19 @@ import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import MuiDrawer from '@mui/material/Drawer';
-import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import List from '@mui/material/List';
-import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
-import { mainListItems, secondaryListItems } from './listItems';
+import { GetPageTitle, MainListItems, SecondaryListItems } from './menu';
 
 function Copyright(props: any) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
+            <Link color="inherit" href="https://www.sporosdao.xyz/">
+                SporosDAO
             </Link>{' '}
             {new Date().getFullYear()}
             {'.'}
@@ -114,7 +112,7 @@ export function PageLayout(props: any) {
                         noWrap
                         sx={{ flexGrow: 1 }}
                     >
-                        Dashboard
+                        {GetPageTitle()}
                     </Typography>
                     <IconButton color="inherit">
                         <Badge badgeContent={4} color="secondary">
@@ -138,9 +136,9 @@ export function PageLayout(props: any) {
                 </Toolbar>
                 <Divider />
                 <List component="nav">
-                    {mainListItems}
+                    {MainListItems()}
                     <Divider sx={{ my: 1 }} />
-                    {secondaryListItems}
+                    {SecondaryListItems()}
                 </List>
             </Drawer>
             <Box
@@ -157,40 +155,7 @@ export function PageLayout(props: any) {
             >
                 <Toolbar />
                 <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                    <Grid container spacing={3}>
-                        {/* Chart */}
-                        <Grid item xs={12} md={8} lg={9}>
-                            <Paper
-                                sx={{
-                                    p: 2,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    height: 240,
-                                }}
-                            >
-                                POS1
-                            </Paper>
-                        </Grid>
-                        {/* Recent Deposits */}
-                        <Grid item xs={12} md={4} lg={3}>
-                            <Paper
-                                sx={{
-                                    p: 2,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    height: 240,
-                                }}
-                            >
-                                POS2
-                            </Paper>
-                        </Grid>
-                        {/* Recent Orders */}
-                        <Grid item xs={12}>
-                            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                                POS3
-                            </Paper>
-                        </Grid>
-                    </Grid>
+                    {props.children}
                     <Copyright sx={{ pt: 4 }} />
                 </Container>
             </Box>
