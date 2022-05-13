@@ -5,22 +5,22 @@ networks:
     name: sweat-token
 
 services:
-  backend:
-    ports:
-      - 3001:3001
-    restart: unless-stopped
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: sweat-token/backend
-    networks:
-      - sweat-token
-    environment:
-      - DATA_DIR=/data
-      - LOG_LEVEL=info
-      - FRONTEND_BUILD=/app/frontend/build
-    volumes:
-      - ./data/backend:/data
+  # backend:
+  #   ports:
+  #     - 3001:3001
+  #   restart: unless-stopped
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   image: sweat-token/backend
+  #   networks:
+  #     - sweat-token
+  #   environment:
+  #     - DATA_DIR=/data
+  #     - LOG_LEVEL=info
+  #     - FRONTEND_BUILD=/app/frontend/build
+  #   volumes:
+  #     - ./data/backend:/data
   mongo:
     image: mongo
     restart: unless-stopped

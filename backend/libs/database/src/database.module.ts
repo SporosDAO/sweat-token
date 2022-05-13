@@ -1,14 +1,16 @@
-import { Module } from '@nestjs/common';
-import { DatabaseService } from './database.service';
-import { MongooseModule } from '@nestjs/mongoose';
+import { Module } from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { MongooseModule } from '@nestjs/mongoose'
 
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      `mongodb://localhost/sweat-token-${process.env.NODE_ENV}`,
-    ),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: `${configService.get<string>('MONGODB_URI')}-${process.env.NODE_ENV}`,
+      }),
+      inject: [ConfigService],
+    }),
   ],
-  providers: [DatabaseService],
-  exports: [DatabaseService],
 })
 export class DatabaseModule {}
