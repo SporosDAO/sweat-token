@@ -11,6 +11,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/database/tsconfig.lib.json"
       }
+    },
+    "runtime": {
+      "type": "library",
+      "root": "libs/runtime",
+      "entryFile": "index",
+      "sourceRoot": "libs/runtime/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/runtime/tsconfig.lib.json"
+      }
     }
   },
   "compilerOptions": {
