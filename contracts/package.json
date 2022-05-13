@@ -1,4 +1,5 @@
 {
+  "license": "Apache-2.0",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.5",
     "@nomiclabs/hardhat-etherscan": "^3.0.3",
