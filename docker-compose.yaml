@@ -6,6 +6,8 @@ networks:
 
 services:
   contracts:
+    command: yarn run test
+    working_dir: /app/contracts
     restart: unless-stopped
     build:
       context: ./
@@ -16,6 +18,8 @@ services:
     volumes:
       - ./contracts:/app/contracts
   backend:
+    command: yarn run start:dev
+    working_dir: /app/backend
     ports:
       - 3001:3001
     restart: unless-stopped
@@ -31,6 +35,8 @@ services:
     volumes:
       - ./backend:/app/backend
   frontend:
+    command: yarn start
+    working_dir: /app/frontend
     ports:
       - 3000:3000
     restart: unless-stopped
