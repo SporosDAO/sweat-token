@@ -1,6 +1,11 @@
 # Sweat Token backend
 
 
+## Resources
+
+- API Swagger docs `http://<path>/api/docs/`
+- API Swagger JSON `http://<path>/api/docs-json`
+
 ## Installation
 
 ```bash

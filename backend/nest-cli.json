@@ -3,15 +3,6 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "projects": {
-    "database": {
-      "type": "library",
-      "root": "libs/database",
-      "entryFile": "index",
-      "sourceRoot": "libs/database/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/database/tsconfig.lib.json"
-      }
-    },
     "runtime": {
       "type": "library",
       "root": "libs/runtime",

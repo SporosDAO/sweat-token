@@ -1,6 +1,6 @@
-import { DatabaseModule } from '@app/database'
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
+import { MongooseModule } from '@nestjs/mongoose'
 import { ServeStaticModule, ServeStaticModuleOptions } from '@nestjs/serve-static'
 import { join } from 'path'
 
@@ -8,6 +8,13 @@ import { join } from 'path'
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: `${configService.get<string>('MONGODB_URI')}-${process.env.NODE_ENV}`,
+      }),
+      inject: [ConfigService],
     }),
     ServeStaticModule.forRootAsync({
       imports: [ConfigModule],
@@ -18,7 +25,6 @@ import { join } from 'path'
         } as ServeStaticModuleOptions,
       ],
     }),
-    DatabaseModule,
   ],
   providers: [],
   exports: [],
