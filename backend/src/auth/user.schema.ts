@@ -19,6 +19,24 @@ export class User {
   name: string
 
   @Prop({
+    required: false,
+    unique: true,
+  })
+  publicAddress: string
+
+  @Prop({
+    required: false,
+    default: () => uuidv4(),
+  })
+  nonce: string
+
+  @Prop({
+    required: true,
+    default: () => new Date(),
+  })
+  created: Date
+
+  @Prop({
     type: String,
     required: false,
   })

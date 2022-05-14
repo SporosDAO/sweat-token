@@ -13,6 +13,12 @@ export class UserDto {
   name: string
   @ApiProperty()
   roles: Role[]
+  @ApiProperty()
+  publicAddress: string
+  @ApiProperty()
+  nonce: string
+  @ApiProperty()
+  created: Date
 }
 
 export class JwtTokenDto {
