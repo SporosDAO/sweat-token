@@ -1,4 +1,11 @@
 {
     "solidity.defaultCompiler": "localNodeModule",
-    "solidity.packageDefaultDependenciesDirectory": "./contracts/node_modules"
+    "solidity.packageDefaultDependenciesDirectory": "./contracts/node_modules",
+    "[typescript]": {
+        "editor.tabSize": 2,
+        "editor.formatOnSave": true,
+    },
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "eslint.format.enable": true,
+    "source.fixAll.eslint": true,
 }
