@@ -1,9 +1,8 @@
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import MenuIcon from '@mui/icons-material/Menu'
-import NotificationsIcon from '@mui/icons-material/Notifications'
 import { Box, CssBaseline, IconButton, Toolbar } from '@mui/material'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
-import Badge from '@mui/material/Badge'
 import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
 import MuiDrawer from '@mui/material/Drawer'
@@ -12,6 +11,7 @@ import List from '@mui/material/List'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import React, { useState } from 'react'
+import ConnectDialog from '../../components/ConnectDialog'
 import { GetPageTitle, MainListItems, SecondaryListItems } from './menu'
 
 function Copyright(props: any) {
@@ -82,9 +82,19 @@ export function PageLayout(props: any) {
     setOpen(!open)
   }
 
+  const [connectDialogOpen, setConnectDialogOpen] = React.useState(false)
+
+  const openConnectDialog = () => {
+    setConnectDialogOpen(true)
+  }
+  const handleConnectDialogOpen = () => {
+    setConnectDialogOpen(false)
+  }
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
+      <ConnectDialog onClose={handleConnectDialogOpen} open={connectDialogOpen} />
       <AppBar position="absolute" open={open}>
         <Toolbar
           sx={{
@@ -107,9 +117,12 @@ export function PageLayout(props: any) {
             {GetPageTitle()}
           </Typography>
           <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
+            {/* <Badge badgeContent={4} color="secondary">
               <NotificationsIcon />
-            </Badge>
+            </Badge> */}
+          </IconButton>
+          <IconButton color="inherit" onClick={() => openConnectDialog()}>
+            <AccountCircleIcon />
           </IconButton>
         </Toolbar>
       </AppBar>

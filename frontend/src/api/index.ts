@@ -1,27 +1,27 @@
-import { Dao, SignupReq, User } from '../dto'
+import { AuthApi, DaoApi, DaoDto, JwtTokenDto, UserDto } from './openapi'
 
-export const getDao = async (name: string): Promise<Dao> => {
-  return {
-    id: 'sporos',
-    name: name
-  }
+class ApiClient {
+  public auth: AuthApi = new AuthApi()
+  public dao: DaoApi = new DaoApi()
 }
 
-export const getCurrentUser = async (): Promise<User> => {
-  return {
-    id: 'test',
-    username: 'test'
-  }
+const client = new ApiClient()
+
+export const getDao = async (daoId: string): Promise<DaoDto> => {
+  const res = await client.dao.daoControllerLoad(daoId)
+  return res.data
 }
 
-export const signup = async (data: SignupReq): Promise<User> => {
-  return await getCurrentUser()
+export const getCurrentUser = async (): Promise<UserDto> => {
+  const res = await client.auth.authControllerGetProfile()
+  return res.data
 }
 
 export const logout = async (): Promise<void> => {
   //
 }
 
-export const login = async (data: SignupReq): Promise<User> => {
-  return await getCurrentUser()
+export const login = async (user: UserDto): Promise<JwtTokenDto> => {
+  const res = await client.auth.authControllerLogin(user)
+  return res.data
 }

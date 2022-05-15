@@ -1,10 +1,10 @@
 import React, { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import * as api from '../api'
-import { Dao } from '../dto'
+import { DaoDto } from '../api/openapi'
 
 interface DaoContextType {
-  dao?: Dao
+  dao?: DaoDto
   loading: boolean
   error?: any
   load: (name: string) => void
@@ -13,7 +13,7 @@ interface DaoContextType {
 const DaoContext = createContext<DaoContextType>({} as DaoContextType)
 
 export function DaoProvider({ children }: { children: ReactNode }): JSX.Element {
-  const [dao, setDao] = useState<Dao>()
+  const [dao, setDao] = useState<DaoDto>()
   const [error, setError] = useState<any>()
   const [loading, setLoading] = useState<boolean>(false)
   const [loadingInitial, setLoadingInitial] = useState<boolean>(true)
@@ -36,7 +36,9 @@ export function DaoProvider({ children }: { children: ReactNode }): JSX.Element 
     api
       .getDao(daoId)
       .then((dao) => setDao(dao))
-      .catch((_error) => {})
+      .catch((_error) => {
+        //
+      })
       .finally(() => setLoadingInitial(false))
   }, [daoId])
 
@@ -46,7 +48,7 @@ export function DaoProvider({ children }: { children: ReactNode }): JSX.Element 
 
       api
         .getDao(daoId)
-        .then((dao: Dao) => {
+        .then((dao: DaoDto) => {
           setDao(dao)
           navigate(`/${dao.name}`)
         })
