@@ -1,10 +1,10 @@
-import { BadRequestException, Body, Controller, Get, HttpCode, Post, Query, Request, UseGuards } from '@nestjs/common'
-import { AuthService } from './auth.service'
+import { Body, Controller, Get, HttpCode, Post, Query, Request, UseGuards } from '@nestjs/common'
+import { ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger'
+import { NonceDto } from './auth.dto'
 import { JwtAuthGuard } from './auth.jwt.guard'
+import { AuthService } from './auth.service'
 import { LocalAuthGuard } from './local-auth.guard'
 import { JwtTokenDto, UserDto } from './user.dto'
-import { ApiBody, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger'
-import { NonceDto } from './auth.dto'
 
 @Controller('auth')
 @ApiTags('auth')

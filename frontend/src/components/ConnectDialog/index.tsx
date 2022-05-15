@@ -1,4 +1,4 @@
-import { DialogContent } from '@mui/material'
+import { Avatar, DialogContent, ListItemAvatar } from '@mui/material'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import List from '@mui/material/List'
@@ -42,12 +42,12 @@ const WalletProvidersList = ({ providers, onClick }: WalletProvidersListProps) =
       <DialogContent>
         <List sx={{ pt: 0 }}>
           {providers.map((provider) => (
-            <ListItem button onClick={() => onClick(provider)} key={provider.name}>
-              {/* <ListItemAvatar>
-              <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
-                <PersonIcon />
-              </Avatar>
-            </ListItemAvatar> */}
+            <ListItem button onClick={() => onClick(provider)} key={provider.id}>
+              <ListItemAvatar>
+                <Avatar sx={{ bgcolor: '#EFEFEF' }}>
+                  <img src={provider.icon} />
+                </Avatar>
+              </ListItemAvatar>
               <ListItemText primary={provider.name} />
             </ListItem>
           ))}
