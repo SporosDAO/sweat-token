@@ -1,4 +1,4 @@
-import { AuthApi, Configuration, DaoApi, DaoDto, JwtTokenDto, UserDto } from './openapi'
+import { AuthApi, Configuration, DaoApi, DaoDto, JwtTokenDto, NonceDto, UserDto } from './openapi'
 
 class ApiClient {
   public auth: AuthApi = new AuthApi()
@@ -39,5 +39,10 @@ export const logout = async (): Promise<void> => {
 
 export const login = async (user: UserDto): Promise<JwtTokenDto> => {
   const res = await client.auth.authControllerLogin(user)
+  return res.data
+}
+
+export const getUserByAddress = async (publicAddress: string): Promise<NonceDto> => {
+  const res = await client.auth.authControllerGetUser(publicAddress)
   return res.data
 }

@@ -2,6 +2,7 @@ import React, { createContext, ReactNode, useCallback, useContext, useEffect, us
 import { useNavigate, useLocation } from 'react-router-dom'
 import * as api from '../api'
 import { JwtTokenDto, UserDto } from '../api/openapi'
+import useWeb3 from './Web3Context'
 
 interface AuthContextType {
   // We defined the user type in `index.d.ts`, but it's
@@ -15,7 +16,6 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 
-// Export the provider as we need to wrap the entire app with it
 export function AuthProvider({ children }: { children: ReactNode }): JSX.Element {
   const [user, setUser] = useState<UserDto>()
   const [token, setToken] = useState<string>()
@@ -26,19 +26,28 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
   const navigate = useNavigate()
   const location = useLocation()
 
+  const { account } = useWeb3()
+
   useEffect(() => {
     if (error) setError(null)
   }, [error, location.pathname])
 
   useEffect(() => {
+    if (!account) {
+      setLoadingInitial(false)
+      return
+    }
+    setLoadingInitial(true)
     api
-      .getCurrentUser()
-      .then((user) => setUser(user))
+      .getUserByAddress(account)
+      .then((nonce) => {
+        console.log(nonce)
+      })
       .catch((_error) => {
         //
       })
       .finally(() => setLoadingInitial(false))
-  }, [])
+  }, [account])
 
   const login = useCallback(
     (publicAddress: string, nonce: string) => {

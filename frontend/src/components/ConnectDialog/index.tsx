@@ -1,13 +1,12 @@
-import { Avatar, DialogContent, ListItemAvatar } from '@mui/material'
+import { Avatar, CircularProgress, DialogContent, ListItemAvatar } from '@mui/material'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import { Box } from '@mui/system'
-import { useEffect, useMemo, useState } from 'react'
-import useWeb3, { WalletProvider } from '../../context/Web3Context'
-
+import { useCallback, useEffect } from 'react'
+import useWeb3, { providers } from '../../context/Web3Context'
 import { useMetaMask } from '../../context/Web3Context/useMetamask'
 
 export interface ConnectDialogProps {
@@ -15,34 +14,17 @@ export interface ConnectDialogProps {
   onClose: () => void
 }
 
-interface RenderConnectProps {
-  provider: WalletProvider
-}
-
-const ConnectWallet = ({ provider }: RenderConnectProps) => {
-  useMemo(() => provider.connect(), [])
-  return (
-    <Box>
-      <DialogTitle>Connect with {provider.name}</DialogTitle>
-      <DialogContent>
-        {!provider.isInstalled() ? <Box>{provider.name} is not installed. </Box> : <Box>Please select a wallet.</Box>}
-      </DialogContent>
-    </Box>
-  )
-}
-
 interface WalletProvidersListProps {
-  providers: WalletProvider[]
-  onClick: (providers: WalletProvider) => void
+  onClick: (provider: string) => void
 }
-const WalletProvidersList = ({ providers, onClick }: WalletProvidersListProps) => {
+const WalletProvidersList = ({ onClick }: WalletProvidersListProps) => {
   return (
     <Box>
       <DialogTitle>Connect with</DialogTitle>
       <DialogContent>
         <List sx={{ pt: 0 }}>
           {providers.map((provider) => (
-            <ListItem button onClick={() => onClick(provider)} key={provider.id}>
+            <ListItem button onClick={() => onClick(provider.id)} key={provider.id}>
               <ListItemAvatar>
                 <Avatar sx={{ bgcolor: '#EFEFEF' }}>
                   <img src={provider.icon} />
@@ -57,32 +39,61 @@ const WalletProvidersList = ({ providers, onClick }: WalletProvidersListProps) =
   )
 }
 
-export default function ConnectDialog(props: ConnectDialogProps) {
-  const { onClose, open } = props
-  const { providers, selectedProvider, setProvider } = useWeb3()
-  const [completed, setCompleted] = useState(false)
+interface MetamaskWalletProps {
+  onComplete: (account: string) => void
+}
+
+const MetamaskWallet = ({ onComplete }: MetamaskWalletProps) => {
+  const { isInstalled, connectedAccount, getConnectedAccount, connectWallet } = useMetaMask()
 
   useEffect(() => {
-    if (completed) return
-    if (!selectedProvider) return
-    selectedProvider.getAccount().then((account: string | undefined) => {
-      if (!account) return
-      setCompleted(true)
-    })
-  }, [selectedProvider, completed])
+    if (connectedAccount === undefined) return
+    console.log(`Got metamask address ${connectedAccount}`)
+    onComplete(connectedAccount as string)
+  }, [connectedAccount])
 
   useEffect(() => {
-    if (!completed) return
-    onClose()
-  }, [completed])
+    if (connectedAccount !== undefined) return
+    connectWallet()
+  })
 
   return (
-    <Dialog keepMounted onClose={onClose} open={!completed && open}>
-      {selectedProvider === undefined ? (
-        <WalletProvidersList providers={providers} onClick={setProvider} />
-      ) : (
-        <ConnectWallet provider={selectedProvider} />
-      )}
+    <Box>
+      <DialogTitle>Connect with Metamask</DialogTitle>
+      <DialogContent>
+        {!isInstalled() ? (
+          <Box>Metamask is not installed. </Box>
+        ) : (
+          <Box>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <CircularProgress />
+            </Box>
+          </Box>
+        )}
+      </DialogContent>
+    </Box>
+  )
+}
+
+export default function ConnectDialog(props: ConnectDialogProps) {
+  const { onClose, open } = props
+  const { provider, setProvider, account, setAccount } = useWeb3()
+
+  useEffect(() => {
+    if (!account) return
+    onClose()
+  }, [account])
+
+  const renderWallet = useCallback(() => {
+    switch (provider) {
+      case 'metamask':
+        return <MetamaskWallet onComplete={setAccount} />
+    }
+  }, [provider])
+
+  return (
+    <Dialog keepMounted onClose={onClose} open={!account && open}>
+      {provider === undefined ? <WalletProvidersList onClick={setProvider} /> : open ? renderWallet() : ''}
     </Dialog>
   )
 }

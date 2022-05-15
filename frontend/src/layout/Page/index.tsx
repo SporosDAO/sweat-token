@@ -10,7 +10,7 @@ import Link from '@mui/material/Link'
 import List from '@mui/material/List'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import ConnectDialog from '../../components/ConnectDialog'
 import { OWNER } from '../../constants'
 import useWeb3 from '../../context/Web3Context'
@@ -80,9 +80,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export function PageLayout(props: any) {
   const [open, setOpen] = useState(false)
   const [connectDialogOpen, setConnectDialogOpen] = React.useState(false)
-  const [account, setAccount] = React.useState<string>()
 
-  const { selectedProvider } = useWeb3()
+  const { account, setAccount } = useWeb3()
 
   const toggleDrawer = () => {
     setOpen(!open)
@@ -94,13 +93,6 @@ export function PageLayout(props: any) {
   const handleConnectDialogOpen = () => {
     setConnectDialogOpen(false)
   }
-
-  useEffect(() => {
-    if (!selectedProvider) return
-    selectedProvider.getAccount().then((account: string | undefined) => {
-      setAccount(account)
-    })
-  })
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -132,7 +124,7 @@ export function PageLayout(props: any) {
               <NotificationsIcon />
             </Badge> */}
           </IconButton>
-          <IconButton color="inherit" onClick={() => openConnectDialog()}>
+          <IconButton color="inherit" onClick={() => (!account ? openConnectDialog() : setAccount(undefined))}>
             {!account ? <AccountCircleIcon /> : <small>{`${account.substring(0, 8)}..`}</small>}
           </IconButton>
         </Toolbar>

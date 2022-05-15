@@ -153,6 +153,42 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {string} publicAddress 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerGetUser: async (publicAddress: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'publicAddress' is not null or undefined
+            assertParamExists('authControllerGetUser', 'publicAddress', publicAddress)
+            const localVarPath = `/api/auth/user`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (publicAddress !== undefined) {
+                localVarQueryParameter['publicAddress'] = publicAddress;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {UserDto} userDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -186,42 +222,6 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * 
-         * @param {string} publicAddress 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        authControllerNonce: async (publicAddress: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'publicAddress' is not null or undefined
-            assertParamExists('authControllerNonce', 'publicAddress', publicAddress)
-            const localVarPath = `/api/auth/nonce`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            if (publicAddress !== undefined) {
-                localVarQueryParameter['publicAddress'] = publicAddress;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -243,22 +243,22 @@ export const AuthApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} publicAddress 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async authControllerGetUser(publicAddress: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NonceDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerGetUser(publicAddress, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {UserDto} userDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async authControllerLogin(userDto: UserDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JwtTokenDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerLogin(userDto, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {string} publicAddress 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async authControllerNonce(publicAddress: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NonceDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerNonce(publicAddress, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -281,21 +281,21 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @param {string} publicAddress 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerGetUser(publicAddress: string, options?: any): AxiosPromise<NonceDto> {
+            return localVarFp.authControllerGetUser(publicAddress, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {UserDto} userDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         authControllerLogin(userDto: UserDto, options?: any): AxiosPromise<JwtTokenDto> {
             return localVarFp.authControllerLogin(userDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} publicAddress 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        authControllerNonce(publicAddress: string, options?: any): AxiosPromise<NonceDto> {
-            return localVarFp.authControllerNonce(publicAddress, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -319,6 +319,17 @@ export class AuthApi extends BaseAPI {
 
     /**
      * 
+     * @param {string} publicAddress 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public authControllerGetUser(publicAddress: string, options?: AxiosRequestConfig) {
+        return AuthApiFp(this.configuration).authControllerGetUser(publicAddress, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {UserDto} userDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -326,17 +337,6 @@ export class AuthApi extends BaseAPI {
      */
     public authControllerLogin(userDto: UserDto, options?: AxiosRequestConfig) {
         return AuthApiFp(this.configuration).authControllerLogin(userDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} publicAddress 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AuthApi
-     */
-    public authControllerNonce(publicAddress: string, options?: AxiosRequestConfig) {
-        return AuthApiFp(this.configuration).authControllerNonce(publicAddress, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -1,11 +1,12 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 export const useMetaMask = () => {
   const [connectedAccount, setConnectedAccount] = useState<string>()
 
   const isInstalled = () => typeof window.ethereum !== 'undefined'
 
-  const getConnectedAccount = async (): Promise<string | undefined> => {
+  const getConnectedAccount = useCallback(async (): Promise<string | undefined> => {
+    if (connectedAccount) return connectedAccount
     if (!isInstalled()) return undefined
     if (!window.ethereum.request) return undefined
     try {
@@ -20,10 +21,10 @@ export const useMetaMask = () => {
       console.log(error)
     }
     return undefined
-  }
+  }, [connectedAccount])
 
   // connect wallect
-  const connectWallect = async (): Promise<boolean> => {
+  const connectWallet = async (): Promise<boolean> => {
     try {
       if (!isInstalled()) return false
       if (!window.ethereum.request) return false
@@ -72,10 +73,13 @@ export const useMetaMask = () => {
     getConnectedAccount()
   }, [])
 
-  return {
-    isInstalled,
-    getConnectedAccount,
-    checkIfWalletIsConnected: getConnectedAccount,
-    connectWallect
-  }
+  return useMemo(
+    () => ({
+      isInstalled,
+      connectedAccount,
+      getConnectedAccount,
+      connectWallet
+    }),
+    [connectedAccount]
+  )
 }
