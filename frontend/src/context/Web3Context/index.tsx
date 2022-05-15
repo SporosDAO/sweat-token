@@ -1,7 +1,8 @@
-import React, { createContext, ReactNode, useContext, useMemo, useState } from 'react'
+import React, { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import { useMetaMask } from './useMetamask'
 
 export interface WalletProvider {
+  id: string
   name: string
   icon: string
   isInstalled: () => boolean
@@ -25,18 +26,23 @@ export const Web3ProviderContext = createContext<Web3ContextValue>({} as Web3Con
 
 export function Web3ContextProvider({ children }: Web3ContextProviderProps) {
   const [selectedWalletProvider, setSelectedWalletProvider] = useState<WalletProvider>()
-
   const { isInstalled, getConnectedAccount, connectWallect } = useMetaMask()
+
+  const setProvider = (provider: WalletProvider) => {
+    localStorage.setItem('lastProvider', provider.id)
+    setSelectedWalletProvider(provider)
+  }
 
   const value = useMemo(
     () =>
       ({
-        setProvider: setSelectedWalletProvider,
+        setProvider,
         selectedProvider: selectedWalletProvider,
         providers: [
           {
+            id: 'metamask',
             name: 'Metamask',
-            icon: '',
+            icon: '/images/metamask.svg',
             connect: () => connectWallect(),
             isInstalled: () => isInstalled(),
             getAccount: () => getConnectedAccount()
@@ -45,6 +51,15 @@ export function Web3ContextProvider({ children }: Web3ContextProviderProps) {
       } as Web3ContextValue),
     [selectedWalletProvider]
   )
+
+  useEffect(() => {
+    if (selectedWalletProvider) return
+    const lastProvider = localStorage.getItem('lastProvider')
+    if (!lastProvider) return
+    const matches = value.providers.filter((p) => p.id === lastProvider)
+    if (!matches.length) return
+    setSelectedWalletProvider(matches[0])
+  }, [value, selectedWalletProvider])
 
   return <Web3ProviderContext.Provider value={value}>{children}</Web3ProviderContext.Provider>
 }

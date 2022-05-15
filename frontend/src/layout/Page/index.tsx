@@ -10,16 +10,18 @@ import Link from '@mui/material/Link'
 import List from '@mui/material/List'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ConnectDialog from '../../components/ConnectDialog'
+import { OWNER } from '../../constants'
+import useWeb3 from '../../context/Web3Context'
 import { GetPageTitle, MainListItems, SecondaryListItems } from './menu'
 
 function Copyright(props: any) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://www.sporosdao.xyz/">
-        SporosDAO
+      <Link color="inherit" href={OWNER.homepageUrl}>
+        {OWNER.name}
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -77,24 +79,33 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export function PageLayout(props: any) {
   const [open, setOpen] = useState(false)
+  const [connectDialogOpen, setConnectDialogOpen] = React.useState(false)
+  const [account, setAccount] = React.useState<string>()
+
+  const { selectedProvider } = useWeb3()
 
   const toggleDrawer = () => {
     setOpen(!open)
   }
 
-  const [connectDialogOpen, setConnectDialogOpen] = React.useState(false)
-
   const openConnectDialog = () => {
-    setConnectDialogOpen(true)
+    setConnectDialogOpen(!account ? true : false)
   }
   const handleConnectDialogOpen = () => {
     setConnectDialogOpen(false)
   }
 
+  useEffect(() => {
+    if (!selectedProvider) return
+    selectedProvider.getAccount().then((account: string | undefined) => {
+      setAccount(account)
+    })
+  })
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <ConnectDialog onClose={handleConnectDialogOpen} open={connectDialogOpen} />
+      <ConnectDialog onClose={handleConnectDialogOpen} open={!account && connectDialogOpen} />
       <AppBar position="absolute" open={open}>
         <Toolbar
           sx={{
@@ -122,7 +133,7 @@ export function PageLayout(props: any) {
             </Badge> */}
           </IconButton>
           <IconButton color="inherit" onClick={() => openConnectDialog()}>
-            <AccountCircleIcon />
+            {!account ? <AccountCircleIcon /> : <small>{`${account.substring(0, 8)}..`}</small>}
           </IconButton>
         </Toolbar>
       </AppBar>

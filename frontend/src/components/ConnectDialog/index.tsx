@@ -59,19 +59,25 @@ const WalletProvidersList = ({ providers, onClick }: WalletProvidersListProps) =
 
 export default function ConnectDialog(props: ConnectDialogProps) {
   const { onClose, open } = props
-
   const { providers, selectedProvider, setProvider } = useWeb3()
+  const [completed, setCompleted] = useState(false)
 
   useEffect(() => {
+    if (completed) return
     if (!selectedProvider) return
     selectedProvider.getAccount().then((account: string | undefined) => {
       if (!account) return
-      onClose()
+      setCompleted(true)
     })
-  }, [selectedProvider])
+  }, [selectedProvider, completed])
+
+  useEffect(() => {
+    if (!completed) return
+    onClose()
+  }, [completed])
 
   return (
-    <Dialog keepMounted onClose={onClose} open={open}>
+    <Dialog keepMounted onClose={onClose} open={!completed && open}>
       {selectedProvider === undefined ? (
         <WalletProvidersList providers={providers} onClick={setProvider} />
       ) : (
