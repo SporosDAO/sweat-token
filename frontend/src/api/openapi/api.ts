@@ -24,6 +24,25 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
+ * @interface DaoDto
+ */
+export interface DaoDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof DaoDto
+     */
+    'daoId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DaoDto
+     */
+    'name': string;
+}
+/**
+ * 
+ * @export
  * @interface JwtTokenDto
  */
 export interface JwtTokenDto {
@@ -33,6 +52,37 @@ export interface JwtTokenDto {
      * @memberof JwtTokenDto
      */
     'token': string;
+}
+/**
+ * 
+ * @export
+ * @interface NonceDto
+ */
+export interface NonceDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof NonceDto
+     */
+    'nonce': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NonceDto
+     */
+    'userId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NonceDto
+     */
+    'signedId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof NonceDto
+     */
+    'signature'?: string;
 }
 /**
  * 
@@ -58,6 +108,24 @@ export interface UserDto {
      * @memberof UserDto
      */
     'roles': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDto
+     */
+    'publicAddress': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDto
+     */
+    'nonce': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDto
+     */
+    'created': string;
 }
 
 /**
@@ -84,6 +152,10 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -97,14 +169,50 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @param {UserDto} userDto 
+         * @param {string} publicAddress 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authControllerLogin: async (userDto: UserDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'userDto' is not null or undefined
-            assertParamExists('authControllerLogin', 'userDto', userDto)
-            const localVarPath = `/api/auth/login`;
+        authControllerGetUser: async (publicAddress: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'publicAddress' is not null or undefined
+            assertParamExists('authControllerGetUser', 'publicAddress', publicAddress)
+            const localVarPath = `/api/auth/user`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (publicAddress !== undefined) {
+                localVarQueryParameter['publicAddress'] = publicAddress;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {NonceDto} nonceDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerVerifySignature: async (nonceDto: NonceDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'nonceDto' is not null or undefined
+            assertParamExists('authControllerVerifySignature', 'nonceDto', nonceDto)
+            const localVarPath = `/api/auth/user`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -123,7 +231,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(userDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(nonceDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -151,12 +259,22 @@ export const AuthApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {UserDto} userDto 
+         * @param {string} publicAddress 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async authControllerLogin(userDto: UserDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JwtTokenDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerLogin(userDto, options);
+        async authControllerGetUser(publicAddress: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NonceDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerGetUser(publicAddress, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {NonceDto} nonceDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async authControllerVerifySignature(nonceDto: NonceDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JwtTokenDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerVerifySignature(nonceDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -179,12 +297,21 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @param {UserDto} userDto 
+         * @param {string} publicAddress 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authControllerLogin(userDto: UserDto, options?: any): AxiosPromise<JwtTokenDto> {
-            return localVarFp.authControllerLogin(userDto, options).then((request) => request(axios, basePath));
+        authControllerGetUser(publicAddress: string, options?: any): AxiosPromise<NonceDto> {
+            return localVarFp.authControllerGetUser(publicAddress, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {NonceDto} nonceDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerVerifySignature(nonceDto: NonceDto, options?: any): AxiosPromise<JwtTokenDto> {
+            return localVarFp.authControllerVerifySignature(nonceDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -208,13 +335,181 @@ export class AuthApi extends BaseAPI {
 
     /**
      * 
-     * @param {UserDto} userDto 
+     * @param {string} publicAddress 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public authControllerLogin(userDto: UserDto, options?: AxiosRequestConfig) {
-        return AuthApiFp(this.configuration).authControllerLogin(userDto, options).then((request) => request(this.axios, this.basePath));
+    public authControllerGetUser(publicAddress: string, options?: AxiosRequestConfig) {
+        return AuthApiFp(this.configuration).authControllerGetUser(publicAddress, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {NonceDto} nonceDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public authControllerVerifySignature(nonceDto: NonceDto, options?: AxiosRequestConfig) {
+        return AuthApiFp(this.configuration).authControllerVerifySignature(nonceDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * DaoApi - axios parameter creator
+ * @export
+ */
+export const DaoApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        daoControllerList: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/dao`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} daoId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        daoControllerLoad: async (daoId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoControllerLoad', 'daoId', daoId)
+            const localVarPath = `/api/dao/{daoId}`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * DaoApi - functional programming interface
+ * @export
+ */
+export const DaoApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DaoApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async daoControllerList(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<DaoDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoControllerList(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} daoId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async daoControllerLoad(daoId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DaoDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoControllerLoad(daoId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * DaoApi - factory interface
+ * @export
+ */
+export const DaoApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DaoApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        daoControllerList(options?: any): AxiosPromise<Array<DaoDto>> {
+            return localVarFp.daoControllerList(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} daoId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        daoControllerLoad(daoId: string, options?: any): AxiosPromise<DaoDto> {
+            return localVarFp.daoControllerLoad(daoId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * DaoApi - object-oriented interface
+ * @export
+ * @class DaoApi
+ * @extends {BaseAPI}
+ */
+export class DaoApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DaoApi
+     */
+    public daoControllerList(options?: AxiosRequestConfig) {
+        return DaoApiFp(this.configuration).daoControllerList(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} daoId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DaoApi
+     */
+    public daoControllerLoad(daoId: string, options?: AxiosRequestConfig) {
+        return DaoApiFp(this.configuration).daoControllerLoad(daoId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

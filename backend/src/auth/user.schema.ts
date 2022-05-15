@@ -19,7 +19,30 @@ export class User {
   name: string
 
   @Prop({
-    type: String,
+    required: false,
+    unique: true,
+  })
+  publicAddress: string
+
+  @Prop({
+    required: false,
+    default: () => uuidv4(),
+  })
+  nonce: string
+
+  @Prop({
+    required: true,
+    default: () => new Date(),
+  })
+  created: Date
+
+  @Prop({
+    required: false,
+  })
+  signedIn?: Date
+
+  @Prop({
+    type: [String],
     required: false,
   })
   roles: Role[]

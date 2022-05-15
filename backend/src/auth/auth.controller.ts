@@ -1,25 +1,32 @@
-import { Body, Controller, Get, HttpCode, Post, Request, UseGuards } from '@nestjs/common'
-import { AuthService } from './auth.service'
+import { Body, Controller, Get, HttpCode, Post, Query, Request, UseGuards } from '@nestjs/common'
+import { ApiBearerAuth, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger'
+import { NonceDto } from './auth.dto'
 import { JwtAuthGuard } from './auth.jwt.guard'
-import { LocalAuthGuard } from './local-auth.guard'
+import { AuthService } from './auth.service'
 import { JwtTokenDto, UserDto } from './user.dto'
-import { ApiBody, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger'
 
 @Controller('auth')
 @ApiTags('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @UseGuards(LocalAuthGuard)
-  @Post('login')
+  @Get('user')
   @HttpCode(200)
-  @ApiOkResponse({ type: JwtTokenDto })
-  async login(@Body() user: UserDto): Promise<JwtTokenDto> {
-    return this.authService.login(user)
+  @ApiOkResponse({ type: NonceDto })
+  getUser(@Query('publicAddress') publicAddress: string): Promise<NonceDto> {
+    return this.authService.getUserByAddress(publicAddress)
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Post('user')
+  @HttpCode(200)
+  @ApiOkResponse({ type: JwtTokenDto })
+  verifySignature(@Body() sig: NonceDto): Promise<JwtTokenDto> {
+    return this.authService.verifySignature(sig)
+  }
+
   @Get('profile')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: UserDto })
   @ApiUnauthorizedResponse()
   getProfile(@Request() req): UserDto {

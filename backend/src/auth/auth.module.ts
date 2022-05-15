@@ -1,15 +1,12 @@
 import { Module } from '@nestjs/common'
-import { AuthService } from './auth.service'
-import { UsersService } from './users.service'
-import { AuthController } from './auth.controller'
-import { MongooseModule } from '@nestjs/mongoose'
-import { User, UserSchema } from './user.schema'
-import { LocalStrategy } from './local.strategy'
-import { JwtStrategy } from './auth.jwt.strategy'
-import { APP_GUARD } from '@nestjs/core'
-import { JwtAuthGuard } from './auth.jwt.guard'
-import { JwtModule } from '@nestjs/jwt'
 import { ConfigModule, ConfigService } from '@nestjs/config'
+import { JwtModule } from '@nestjs/jwt'
+import { MongooseModule } from '@nestjs/mongoose'
+import { AuthController } from './auth.controller'
+import { JwtStrategy } from './auth.jwt.strategy'
+import { AuthService } from './auth.service'
+import { User, UserSchema } from './user.schema'
+import { UsersService } from './users.service'
 
 @Module({
   imports: [
@@ -26,12 +23,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
   providers: [
     AuthService,
     UsersService,
-    LocalStrategy,
     JwtStrategy,
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: JwtAuthGuard,
+    // },
   ],
   controllers: [AuthController],
 })
