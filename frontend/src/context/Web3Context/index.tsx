@@ -1,3 +1,4 @@
+import { ethers } from 'ethers'
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 
 export interface WalletProvider {
@@ -21,47 +22,52 @@ type Web3ContextProviderProps = {
 type Web3ContextValue = {
   account?: string
   setAccount: (account: string | undefined) => void
-  balance?: number
-  setBalance: (balance: number | undefined) => void
-  provider?: string
-  setProvider: (provider: string | undefined) => void
+  walletProvider?: string
+  setWalletProvider: (provider: string | undefined) => void
+  provider?: ethers.providers.Web3Provider
 }
 
 export const Web3ProviderContext = createContext<Web3ContextValue>({} as Web3ContextValue)
 
 export function Web3ContextProvider({ children }: Web3ContextProviderProps) {
   const [account, setAccount] = useState<string>()
-  const [balance, setBalance] = useState<number>()
-  const [provider, setProvider] = useState<string>()
+  const [walletProvider, setWalletProvider] = useState<string>()
+  const [provider, setProvider] = useState<ethers.providers.Web3Provider>()
 
   useEffect(() => {
-    if (provider) return
+    if (walletProvider) return
     const lastProvider = localStorage.getItem('lastProvider')
     if (!lastProvider) return
     const matches = providers.filter((p) => p.id === lastProvider)
     if (!matches.length) return
-    setProvider(matches[0].id)
-  }, [provider])
+    setWalletProvider(matches[0].id)
+  }, [walletProvider])
+
+  useEffect(() => {
+    if (provider !== undefined) return
+    if (account === undefined) return
+    setProvider(new ethers.providers.Web3Provider(window.ethereum))
+  }, [provider, account])
 
   return (
     <Web3ProviderContext.Provider
       value={
         {
-          provider,
-          setProvider: (provider: string) => {
-            localStorage.setItem('lastProvider', provider)
-            setProvider(provider)
+          walletProvider,
+          setWalletProvider: (walletProvider: string) => {
+            localStorage.setItem('lastProvider', walletProvider)
+            setWalletProvider(walletProvider)
           },
           account,
           setAccount: (account: string | undefined) => {
             if (account === undefined) {
               localStorage.removeItem('lastProvider')
+              setWalletProvider(undefined)
               setProvider(undefined)
             }
             setAccount(account)
           },
-          balance,
-          setBalance
+          provider
         } as Web3ContextValue
       }
     >

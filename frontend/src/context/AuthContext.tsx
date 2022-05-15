@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import * as api from '../api'
-import { JwtTokenDto, UserDto } from '../api/openapi'
+import { JwtTokenDto, NonceDto, UserDto } from '../api/openapi'
 import useWeb3 from './Web3Context'
 
 interface AuthContextType {
@@ -10,8 +10,8 @@ interface AuthContextType {
   user?: UserDto
   loading: boolean
   error?: any
-  login: (email: string, password: string) => void
   logout: () => void
+  token?: string
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType)
@@ -23,51 +23,52 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
   const [loading, setLoading] = useState<boolean>(false)
   const [loadingInitial, setLoadingInitial] = useState<boolean>(true)
 
-  const navigate = useNavigate()
   const location = useLocation()
 
-  const { account } = useWeb3()
+  const { account, provider, setAccount } = useWeb3()
 
   useEffect(() => {
     if (error) setError(null)
   }, [error, location.pathname])
 
   useEffect(() => {
-    if (!account) {
+    if (!account || !provider) {
       setLoadingInitial(false)
       return
     }
     setLoadingInitial(true)
     api
       .getUserByAddress(account)
-      .then((nonce) => {
-        console.log(nonce)
+      .then(({ nonce, userId }: NonceDto) => {
+        const signer = provider.getSigner(account)
+        return signer
+          .signMessage(nonce)
+          .then((signature) =>
+            api.verifySignature({ userId, nonce, signature } as NonceDto).catch((e) => {
+              console.warn(`Invalid signature? ${e.stack}`)
+              setAccount(undefined)
+              return Promise.reject(e)
+            })
+          )
+          .then((jwt: JwtTokenDto) => setToken(jwt.token))
       })
       .catch((_error) => {
         //
       })
       .finally(() => setLoadingInitial(false))
-  }, [account])
+  }, [account, provider, setAccount])
 
-  const login = useCallback(
-    (publicAddress: string, nonce: string) => {
-      setLoading(true)
-
-      api
-        .login({ publicAddress, nonce } as UserDto)
-        .then((jwt: JwtTokenDto) => {
-          setToken(jwt.token)
-          setUser(user)
-          navigate('/')
-        })
-        .catch((error: Error) => setError(error))
-        .finally(() => setLoading(false))
-    },
-    [navigate]
-  )
+  useEffect(() => {
+    if (!token) return
+    if (token === api.getToken()) return
+    api.setToken(token)
+    api.getCurrentUser().then((user: UserDto) => {
+      setUser(user)
+    })
+  }, [token])
 
   const logout = useCallback(() => {
-    api.logout().then(() => setUser(undefined))
+    setToken(undefined)
   }, [])
 
   const memoedValue = useMemo(
@@ -75,10 +76,10 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
       user,
       loading,
       error,
-      login,
-      logout
+      logout,
+      token
     }),
-    [user, loading, error, login, logout]
+    [user, loading, error, logout, token]
   )
 
   return <AuthContext.Provider value={memoedValue}>{!loadingInitial && children}</AuthContext.Provider>

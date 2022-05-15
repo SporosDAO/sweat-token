@@ -44,7 +44,7 @@ interface MetamaskWalletProps {
 }
 
 const MetamaskWallet = ({ onComplete }: MetamaskWalletProps) => {
-  const { isInstalled, connectedAccount, getConnectedAccount, connectWallet } = useMetaMask()
+  const { isInstalled, connectedAccount, connectWallet } = useMetaMask()
 
   useEffect(() => {
     if (connectedAccount === undefined) return
@@ -77,7 +77,7 @@ const MetamaskWallet = ({ onComplete }: MetamaskWalletProps) => {
 
 export default function ConnectDialog(props: ConnectDialogProps) {
   const { onClose, open } = props
-  const { provider, setProvider, account, setAccount } = useWeb3()
+  const { walletProvider, setWalletProvider, account, setAccount } = useWeb3()
 
   useEffect(() => {
     if (!account) return
@@ -85,15 +85,15 @@ export default function ConnectDialog(props: ConnectDialogProps) {
   }, [account])
 
   const renderWallet = useCallback(() => {
-    switch (provider) {
+    switch (walletProvider) {
       case 'metamask':
         return <MetamaskWallet onComplete={setAccount} />
     }
-  }, [provider])
+  }, [walletProvider])
 
   return (
     <Dialog keepMounted onClose={onClose} open={!account && open}>
-      {provider === undefined ? <WalletProvidersList onClick={setProvider} /> : open ? renderWallet() : ''}
+      {walletProvider === undefined ? <WalletProvidersList onClick={setWalletProvider} /> : open ? renderWallet() : ''}
     </Dialog>
   )
 }
