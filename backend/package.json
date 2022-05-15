@@ -11,7 +11,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",
     "start": "NODE_ENV=dev nest start",
     "start:dev": "NODE_ENV=dev nest start --watch",
-    "start:debug": "NODE_ENV=dev nest start --debug --watch",
+    "start:debug": "NODE_ENV=dev nest start --debug 0.0.0.0 --watch",
     "start:prod": "NODE_ENV=prod node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "NODE_ENV=test jest",

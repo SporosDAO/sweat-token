@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpCode, Post, Query, Request, UseGuards } from '@nestjs/common'
-import { ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger'
+import { ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger'
 import { NonceDto } from './auth.dto'
 import { JwtAuthGuard } from './auth.jwt.guard'
 import { AuthService } from './auth.service'
@@ -19,12 +19,11 @@ export class AuthController {
     return this.authService.login(user)
   }
 
-  @UseGuards(LocalAuthGuard)
-  @Get('nonce')
+  @Get('user')
   @HttpCode(200)
   @ApiOkResponse({ type: NonceDto })
-  async nonce(@Query('publicAddress') publicAddress: string): Promise<NonceDto> {
-    return this.authService.getNonce(publicAddress)
+  async getUser(@Query('publicAddress') publicAddress: string): Promise<NonceDto> {
+    return this.authService.getUserByAddress(publicAddress)
   }
 
   @UseGuards(JwtAuthGuard)

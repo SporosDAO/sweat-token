@@ -37,7 +37,7 @@ export class User {
   created: Date
 
   @Prop({
-    type: String,
+    type: [String],
     required: false,
   })
   roles: Role[]

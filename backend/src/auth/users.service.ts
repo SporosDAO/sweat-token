@@ -1,3 +1,4 @@
+import { toDTO } from '@app/runtime/util'
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
@@ -9,7 +10,7 @@ export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   toDTO(user: UserDocument): UserDto {
-    return user.toJSON() as UserDto
+    return toDTO<UserDto>(user)
   }
 
   async load(publicAddress: string): Promise<UserDto | null> {
@@ -26,7 +27,7 @@ export class UsersService {
     if (!userId) throw new BadRequestException()
     userDto.userId = userId
     const res = await this.userModel.updateOne({ userId }, userDto).exec()
-    if (!res.modifiedCount) throw new NotFoundException()
+    if (!res.matchedCount) throw new NotFoundException()
     return userDto
   }
 }

@@ -1,3 +1,4 @@
+import { toDTO } from '@app/runtime/util'
 import { Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
@@ -20,7 +21,7 @@ export class DaoService implements OnModuleInit {
   }
 
   toDto(dao: DaoDocument): DaoDto {
-    return dao.toJSON() as DaoDto
+    return toDTO<DaoDto>(dao)
   }
 
   async list(): Promise<DaoDto[]> {

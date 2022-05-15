@@ -14,7 +14,7 @@ export class AuthService {
     return user
   }
 
-  async getNonce(publicAddress: string): Promise<NonceDto> {
+  async getUserByAddress(publicAddress: string): Promise<NonceDto> {
     if (!publicAddress) throw new BadRequestException()
 
     let user = await this.usersService.load(publicAddress)
