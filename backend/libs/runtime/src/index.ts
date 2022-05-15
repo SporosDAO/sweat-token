@@ -8,6 +8,7 @@ const setupOpenapi = async (app: INestApplication): Promise<void> => {
     .setTitle('Sweat Token')
     .setDescription('Sweat Token API description')
     .setVersion('1.0')
+    .addBearerAuth()
     .build()
   const customOptions: SwaggerCustomOptions = {
     swaggerOptions: {

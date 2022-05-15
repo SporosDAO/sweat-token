@@ -1,25 +1,44 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { JwtTokenDto, UserDto } from './user.dto'
 import { UsersService } from './users.service'
 import { v4 as uuidv4 } from 'uuid'
 import { NonceDto } from './auth.dto'
+import * as crypto from 'crypto'
+import { ethers } from 'ethers'
+
+const randomNonce = (): string => crypto.randomBytes(20).toString('hex')
 
 @Injectable()
 export class AuthService {
   constructor(private usersService: UsersService, private jwtService: JwtService) {}
 
   async validateUser(userId: string): Promise<UserDto> {
-    const user = await this.usersService.load(userId)
+    const user = await this.usersService.load({ userId })
     return user
+  }
+
+  async verifySignature({ userId, nonce, signature }: NonceDto): Promise<JwtTokenDto> {
+    if (!userId || !nonce || !signature) throw new BadRequestException()
+    const user = await this.usersService.load({ userId, nonce })
+    if (!user) throw new NotFoundException()
+
+    const messageAddress = ethers.utils.verifyMessage(nonce, signature)
+    if (messageAddress.toLowerCase() !== user.publicAddress) throw new UnauthorizedException()
+
+    await this.usersService.update(userId, { ...user, nonce: randomNonce() })
+
+    return {
+      token: this.jwtService.sign({ ...user, sub: userId }),
+    }
   }
 
   async getUserByAddress(publicAddress: string): Promise<NonceDto> {
     if (!publicAddress) throw new BadRequestException()
 
-    let user = await this.usersService.load(publicAddress)
+    let user = await this.usersService.load({ publicAddress })
 
-    const nonce = uuidv4()
+    const nonce = randomNonce()
     const userId = user ? user.userId : uuidv4()
 
     if (!user) {
@@ -31,17 +50,11 @@ export class AuthService {
         name: undefined,
         created: new Date(),
       })
+    } else {
+      user.nonce = nonce
+      await this.usersService.update(userId, user)
     }
-
-    await this.usersService.update(userId, user)
 
     return { nonce, userId }
-  }
-
-  async login(user: UserDto): Promise<JwtTokenDto> {
-    const payload = { userId: user.userId, sub: user.userId }
-    return {
-      token: this.jwtService.sign(payload),
-    }
   }
 }

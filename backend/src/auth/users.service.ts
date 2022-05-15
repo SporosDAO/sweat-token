@@ -13,8 +13,9 @@ export class UsersService {
     return toDTO<UserDto>(user)
   }
 
-  async load(publicAddress: string): Promise<UserDto | null> {
-    const user = await this.userModel.findOne({ publicAddress })
+  async load(params: Partial<UserDto>): Promise<UserDto | null> {
+    if (!Object.keys(params).length) throw new BadRequestException()
+    const user = await this.userModel.findOne(params)
     return user ? this.toDTO(user) : null
   }
 

@@ -37,6 +37,11 @@ export class User {
   created: Date
 
   @Prop({
+    required: false,
+  })
+  signedIn?: Date
+
+  @Prop({
     type: [String],
     required: false,
   })
