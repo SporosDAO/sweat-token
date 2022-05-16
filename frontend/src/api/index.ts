@@ -1,10 +1,24 @@
-import { AuthApi, Configuration, DaoApi, DaoDto, JwtTokenDto, NonceDto, UserDto } from './openapi'
+import {
+  ProjectApi,
+  AuthApi,
+  Configuration,
+  DaoApi,
+  DaoDto,
+  JwtTokenDto,
+  NonceDto,
+  UserDto,
+  ProjectQueryDto,
+  ProjectDto
+} from './openapi'
+
+const basePath = `${window.location.protocol}//${window.location.host}`
 
 class ApiClient {
   public token: string | undefined = undefined
 
-  public auth: AuthApi = new AuthApi()
-  public dao: DaoApi = new DaoApi()
+  public auth: AuthApi = new AuthApi(undefined, basePath)
+  public dao: DaoApi = new DaoApi(undefined, basePath)
+  public project: ProjectApi = new ProjectApi(undefined, basePath)
 
   constructor() {
     this.initClient()
@@ -13,9 +27,9 @@ class ApiClient {
   public initClient(accessToken?: string) {
     this.token = accessToken
     const config = new Configuration({ accessToken })
-    const basePath = `${window.location.protocol}//${window.location.host}`
     this.auth = new AuthApi(config, basePath)
     this.dao = new DaoApi(config, basePath)
+    this.project = new ProjectApi(config, basePath)
   }
 }
 
@@ -51,5 +65,15 @@ export const getUserByAddress = async (publicAddress: string): Promise<NonceDto>
 
 export const verifySignature = async (sig: NonceDto): Promise<JwtTokenDto> => {
   const res = await client.auth.authControllerVerifySignature(sig)
-  return res.data as JwtTokenDto
+  return res.data
+}
+
+export const findProjects = async (query: ProjectQueryDto): Promise<ProjectDto[]> => {
+  const res = await client.project.projectControllerFind(query)
+  return res.data
+}
+
+export const createProject = async (p: ProjectDto): Promise<ProjectDto> => {
+  const res = await client.project.projectControllerCreate(p)
+  return res.data
 }
