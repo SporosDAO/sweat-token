@@ -1,4 +1,4 @@
-[![Netlify Status](https://api.netlify.com/api/v1/badges/70a4b25a-2765-4d6b-bbd8-a7e5dd6e98cb/deploy-status)](https://app.netlify.com/sites/happy-franklin-69b6d4/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/1ae6fac2-3c79-42ad-9f3f-8a8e6122d734/deploy-status)](https://app.netlify.com/sites/sporosdaoapp/deploys)
 
 # Sweat Token
 
