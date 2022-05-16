@@ -1,16 +1,14 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
-import { MongooseModule } from '@nestjs/mongoose'
 import { AuthController } from './auth.controller'
 import { JwtStrategy } from './auth.jwt.strategy'
 import { AuthService } from './auth.service'
-import { User, UserSchema } from './user.schema'
-import { UsersService } from './users.service'
+import { UserService } from 'src/user/user.service'
+import { UserModule } from 'src/user/user.module'
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -19,10 +17,10 @@ import { UsersService } from './users.service'
         signOptions: { expiresIn: config.get<string>('JWT_EXPIRES_SEC') || '60s' },
       }),
     }),
+    UserModule,
   ],
   providers: [
     AuthService,
-    UsersService,
     JwtStrategy,
     // {
     //   provide: APP_GUARD,

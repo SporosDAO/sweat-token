@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { JwtTokenDto, UserDto } from './user.dto'
-import { UsersService } from './users.service'
+import { JwtTokenDto, UserDto } from 'src/user/user.dto'
+import { UserService } from 'src/user/user.service'
 import { v4 as uuidv4 } from 'uuid'
 import { NonceDto } from './auth.dto'
 import * as crypto from 'crypto'
@@ -11,7 +11,7 @@ const randomNonce = (): string => crypto.randomBytes(20).toString('hex')
 
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UsersService, private jwtService: JwtService) {}
+  constructor(private usersService: UserService, private jwtService: JwtService) {}
 
   async validateUser(userId: string): Promise<UserDto> {
     const user = await this.usersService.load({ userId })
