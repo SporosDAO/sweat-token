@@ -7,7 +7,7 @@ export enum ProjectStatus {
 export class ProjectQueryDto {
   daoId?: string
   ownerId?: string
-  dateField?: 'created' | 'deadline' = 'created'
+  dateField?: string = 'created'
   from?: Date
   to?: Date
   limit?: number

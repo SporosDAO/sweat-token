@@ -7,21 +7,17 @@ export enum Role {
 }
 
 export class UserDto {
-  @ApiProperty()
   userId: string
-  @ApiProperty()
   name: string
-  @ApiProperty()
+  @ApiProperty({
+    type: [String],
+  })
   roles: Role[]
-  @ApiProperty()
   publicAddress: string
-  @ApiProperty()
   nonce: string
-  @ApiProperty()
   created: Date
 }
 
 export class JwtTokenDto {
-  @ApiProperty()
   token: string
 }
