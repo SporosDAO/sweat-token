@@ -14,10 +14,8 @@
 
   publish = "build/"
 
-  CI = false
-
   # Default build command.
-  command = "yarn install && yarn build"
+  command = "CI= yarn install && yarn build"
 
 [[plugins]]
   # Installs the Lighthouse Build Plugin for all deploy contexts
