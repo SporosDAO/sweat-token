@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put } from '@nestjs/common'
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { CreateProjectDto, ProjectDto, ProjectQueryDto } from './project.dto'
 import { ProjectService } from './project.service'
@@ -16,8 +16,9 @@ export class ProjectController {
   }
 
   @Post()
+  @UsePipes(ValidationPipe)
   @HttpCode(200)
-  create(@Body() project: CreateProjectDto): Promise<ProjectDto> {
+  create(@Body() project: ProjectDto): Promise<ProjectDto> {
     return this.projectService.create(project)
   }
 

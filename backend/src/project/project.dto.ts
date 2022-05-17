@@ -1,4 +1,5 @@
 import { PartialType } from '@nestjs/swagger'
+import { IsNotEmpty } from 'class-validator'
 
 export enum ProjectStatus {
   open = 'open',
@@ -19,15 +20,28 @@ export class ProjectQueryDto {
 
 export class ProjectDto {
   projectId: string
+  @IsNotEmpty()
   name: string
   description: string
+  @IsNotEmpty()
   deadline: Date
+  @IsNotEmpty()
   budget: number
   proposalId: string
   ownerId: string
+  @IsNotEmpty()
   daoId: string
   created: Date
   status: ProjectStatus
 }
 
-export class CreateProjectDto extends PartialType(ProjectDto) {}
+export class CreateProjectDto {
+  @IsNotEmpty()
+  name: string
+  @IsNotEmpty()
+  deadline: Date
+  @IsNotEmpty()
+  budget: number
+  @IsNotEmpty()
+  daoId: string
+}
