@@ -6,16 +6,19 @@ import reportWebVitals from './reportWebVitals'
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { Web3ContextProvider } from './context/Web3Context'
+import { ToastProvider } from './context/ToastContext'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Web3ContextProvider>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </Web3ContextProvider>
+      <ToastProvider>
+        <Web3ContextProvider>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </Web3ContextProvider>
+      </ToastProvider>
     </BrowserRouter>
   </React.StrictMode>
 )

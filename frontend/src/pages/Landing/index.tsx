@@ -24,7 +24,7 @@ export default function Landing() {
         <List>
           {(publicDaos || []).map((dao) => (
             <ListItem key={dao.daoId}>
-              <Link to={`/${dao.daoId}/dashboard`}>{dao.name}</Link>
+              <Link to={`/${dao.daoId}`}>{dao.name}</Link>
             </ListItem>
           ))}
         </List>

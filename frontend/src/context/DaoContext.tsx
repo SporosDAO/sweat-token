@@ -5,6 +5,7 @@ import { DaoDto } from '../api/openapi'
 
 interface DaoContextType {
   dao?: DaoDto
+  daoId?: string
   loading: boolean
   error?: any
   load: (name: string) => void
@@ -61,11 +62,12 @@ export function DaoProvider({ children }: { children: ReactNode }): JSX.Element 
   const memoedValue = useMemo(
     () => ({
       dao,
+      daoId,
       loading,
       error,
       load
     }),
-    [dao, error, load, loading]
+    [dao, daoId, error, load, loading]
   )
 
   return <DaoContext.Provider value={memoedValue}>{!loadingInitial && children}</DaoContext.Provider>

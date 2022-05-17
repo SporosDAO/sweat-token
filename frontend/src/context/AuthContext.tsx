@@ -62,9 +62,13 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
     if (!token) return
     if (token === api.getToken()) return
     api.setToken(token)
-    api.getCurrentUser().then((user: UserDto) => {
-      setUser(user)
-    })
+    setLoading(true)
+    api
+      .getCurrentUser()
+      .then((user: UserDto) => {
+        setUser(user)
+      })
+      .finally(() => setLoading(false))
   }, [token])
 
   const logout = useCallback(() => {

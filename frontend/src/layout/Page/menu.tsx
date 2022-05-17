@@ -60,7 +60,13 @@ const getDaoPath = (pathname: string): string => {
 export const GetPageTitle = (): string => {
   const location = useLocation()
   const path = React.useMemo(() => getDaoPath(location.pathname), [location.pathname])
-  const defaultTitle = menu.filter(({ link }) => link === DEFAULT_PATH)[0].label
+
+  const defaultMatches = menu.filter(({ link }) => link === DEFAULT_PATH)
+  if (!defaultMatches.length) {
+    throw new Error('layout/Page/menu.tsx: Missing a matching default path?')
+  }
+  const defaultTitle = defaultMatches[0].label
+
   const matches = menu.filter(({ link }) => link === path)
   return matches.length ? matches[0].label : defaultTitle
 }
