@@ -27,7 +27,7 @@
     accessibility = 0.9
     best-practices = 0.9
     seo = 0.9
-    pwa = 0.9
+    pwa = 0.8
 
 # Production context: all deploys from the Production branch
 # set in your site’s Branches settings in the UI will inherit
