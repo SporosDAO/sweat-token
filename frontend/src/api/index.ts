@@ -8,7 +8,8 @@ import {
   NonceDto,
   UserDto,
   ProjectQueryDto,
-  ProjectDto
+  ProjectDto,
+  CreateProjectDto
 } from './openapi'
 
 const basePath = `${window.location.protocol}//${window.location.host}`
@@ -73,7 +74,7 @@ export const findProjects = async (query: ProjectQueryDto): Promise<ProjectDto[]
   return res.data
 }
 
-export const createProject = async (p: ProjectDto): Promise<ProjectDto> => {
+export const createProject = async (p: CreateProjectDto): Promise<ProjectDto> => {
   const res = await client.project.projectControllerCreate(p)
   return res.data
 }

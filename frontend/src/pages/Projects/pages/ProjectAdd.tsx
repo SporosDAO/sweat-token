@@ -1,9 +1,9 @@
 import { Box, Button, CircularProgress, Grid, InputAdornment, TextField } from '@mui/material'
 import React, { FormEvent, useCallback, useEffect, useState } from 'react'
-import { ProjectDto, ProjectDtoStatusEnum } from '../../../api/openapi'
+import { createProject } from '../../../api'
+import { CreateProjectDto, ProjectDtoStatusEnum } from '../../../api/openapi'
 import ContentBlock from '../../../components/ContentBlock'
 import useDao from '../../../context/DaoContext'
-import { createProject } from '../../../api'
 import useToast from '../../../context/ToastContext'
 
 export default function ProjectAdd() {
@@ -57,13 +57,15 @@ export default function ProjectAdd() {
   )
 
   const save = useCallback(async (): Promise<void> => {
-    if (!Object.keys(formValues).length) return
     // validation error
     if (Object.values(formValidation).filter((error) => error).length) return
+
+    console.log(formValues)
+
     setLoading(true)
-    await createProject({ ...formValues } as ProjectDto)
+    await createProject({ ...formValues } as CreateProjectDto)
       .then(() => {
-        //
+        showToast('Project saved')
       })
       .catch(() => {
         showToast('Error saving', 'error')

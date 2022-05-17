@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Query } from '@nestjs/common'
-import { ApiBearerAuth, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger'
-import { ProjectDto, ProjectQueryDto } from './project.dto'
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put } from '@nestjs/common'
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import { CreateProjectDto, ProjectDto, ProjectQueryDto } from './project.dto'
 import { ProjectService } from './project.service'
 
 @ApiBearerAuth()
@@ -17,7 +17,7 @@ export class ProjectController {
 
   @Post()
   @HttpCode(200)
-  create(@Body() project: ProjectDto): Promise<ProjectDto> {
+  create(@Body() project: CreateProjectDto): Promise<ProjectDto> {
     return this.projectService.create(project)
   }
 

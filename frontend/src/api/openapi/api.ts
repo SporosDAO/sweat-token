@@ -24,6 +24,82 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
+ * @interface CreateProjectDto
+ */
+export interface CreateProjectDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateProjectDto
+     */
+    'projectId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateProjectDto
+     */
+    'name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateProjectDto
+     */
+    'description'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateProjectDto
+     */
+    'deadline'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateProjectDto
+     */
+    'budget'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateProjectDto
+     */
+    'proposalId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateProjectDto
+     */
+    'ownerId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateProjectDto
+     */
+    'daoId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateProjectDto
+     */
+    'created'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateProjectDto
+     */
+    'status'?: CreateProjectDtoStatusEnum;
+}
+
+export const CreateProjectDtoStatusEnum = {
+    Open: 'open',
+    Closed: 'closed',
+    Disabled: 'disabled'
+} as const;
+
+export type CreateProjectDtoStatusEnum = typeof CreateProjectDtoStatusEnum[keyof typeof CreateProjectDtoStatusEnum];
+
+/**
+ * 
+ * @export
  * @interface DaoDto
  */
 export interface DaoDto {
@@ -662,13 +738,13 @@ export const ProjectApiAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * 
-         * @param {ProjectDto} projectDto 
+         * @param {CreateProjectDto} createProjectDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectControllerCreate: async (projectDto: ProjectDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'projectDto' is not null or undefined
-            assertParamExists('projectControllerCreate', 'projectDto', projectDto)
+        projectControllerCreate: async (createProjectDto: CreateProjectDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createProjectDto' is not null or undefined
+            assertParamExists('projectControllerCreate', 'createProjectDto', createProjectDto)
             const localVarPath = `/api/project`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -692,7 +768,7 @@ export const ProjectApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(projectDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(createProjectDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -867,12 +943,12 @@ export const ProjectApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {ProjectDto} projectDto 
+         * @param {CreateProjectDto} createProjectDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async projectControllerCreate(projectDto: ProjectDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProjectDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.projectControllerCreate(projectDto, options);
+        async projectControllerCreate(createProjectDto: CreateProjectDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProjectDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.projectControllerCreate(createProjectDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -928,12 +1004,12 @@ export const ProjectApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
-         * @param {ProjectDto} projectDto 
+         * @param {CreateProjectDto} createProjectDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectControllerCreate(projectDto: ProjectDto, options?: any): AxiosPromise<ProjectDto> {
-            return localVarFp.projectControllerCreate(projectDto, options).then((request) => request(axios, basePath));
+        projectControllerCreate(createProjectDto: CreateProjectDto, options?: any): AxiosPromise<ProjectDto> {
+            return localVarFp.projectControllerCreate(createProjectDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -984,13 +1060,13 @@ export const ProjectApiFactory = function (configuration?: Configuration, basePa
 export class ProjectApi extends BaseAPI {
     /**
      * 
-     * @param {ProjectDto} projectDto 
+     * @param {CreateProjectDto} createProjectDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProjectApi
      */
-    public projectControllerCreate(projectDto: ProjectDto, options?: AxiosRequestConfig) {
-        return ProjectApiFp(this.configuration).projectControllerCreate(projectDto, options).then((request) => request(this.axios, this.basePath));
+    public projectControllerCreate(createProjectDto: CreateProjectDto, options?: AxiosRequestConfig) {
+        return ProjectApiFp(this.configuration).projectControllerCreate(createProjectDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

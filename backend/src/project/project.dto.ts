@@ -1,3 +1,5 @@
+import { PartialType } from '@nestjs/swagger'
+
 export enum ProjectStatus {
   open = 'open',
   closed = 'closed',
@@ -27,3 +29,5 @@ export class ProjectDto {
   created: Date
   status: ProjectStatus
 }
+
+export class CreateProjectDto extends PartialType(ProjectDto) {}

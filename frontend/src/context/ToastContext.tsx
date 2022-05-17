@@ -8,7 +8,7 @@ interface ToastMessage {
 }
 
 interface ToastContextType {
-  showToast: (msg: string, type: AlertColor) => void
+  showToast: (msg: string, type?: AlertColor) => void
 }
 
 const ToastContext = React.createContext<ToastContextType>({} as ToastContextType)
@@ -29,7 +29,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }): JSX.
   }
 
   const value = {
-    showToast: (message: string, type: AlertColor) => {
+    showToast: (message: string, type?: AlertColor) => {
       setToastMessage({
         message,
         type: type || 'info'

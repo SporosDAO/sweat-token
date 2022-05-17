@@ -2,7 +2,7 @@ import { toDTO } from '@app/runtime/util'
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { FilterQuery, Model } from 'mongoose'
-import { ProjectDto, ProjectQueryDto } from './project.dto'
+import { CreateProjectDto, ProjectDto, ProjectQueryDto } from './project.dto'
 import { Project, ProjectDocument } from './project.schema'
 
 @Injectable()
@@ -13,7 +13,7 @@ export class ProjectService {
     return toDTO<ProjectDto>(doc)
   }
 
-  async create(projectDto: ProjectDto): Promise<ProjectDto> {
+  async create(projectDto: CreateProjectDto): Promise<ProjectDto> {
     const project = new this.projectModel(projectDto)
     await project.save()
     return this.toDto(project)
