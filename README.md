@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/1ae6fac2-3c79-42ad-9f3f-8a8e6122d734/deploy-status)](https://app.netlify.com/sites/sporosdaoapp/deploys)
+
 # Sweat Token
 
 Sweat token help startups create an early stage cap table for sweat equity.
@@ -20,4 +22,8 @@ You can obtain logs for each container while developing with
 - frontend `docker-compose logs -f frontend`
 - backend `docker-compose logs -f backend`
 - contracts `docker-compose logs -f contracts`
+
+## Supporters
+
+- The SporosDAO PWA is hosted by [Netlify](https://www.netlify.com/)
 
