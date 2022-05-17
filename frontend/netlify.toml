@@ -21,7 +21,16 @@
 
 [[plugins]]
   # Installs the Lighthouse Build Plugin for all deploy contexts
+  # https://www.npmjs.com/package/@netlify/plugin-lighthouse
   package = "@netlify/plugin-lighthouse"
+
+[plugins.inputs.thresholds]
+    performance = 0.9
+    performance = 0.9
+    accessibility = 0.9
+    best-practices = 0.9
+    seo = 0.9
+    pwa = 0.9
 
 # Production context: all deploys from the Production branch
 # set in your site’s Branches settings in the UI will inherit
@@ -29,14 +38,14 @@
 # here but we recommend using the Netlify UI for sensitive
 # values to keep them out of your source repository.
 [context.production]
-  publish = "build/"
-  command = "make publish"
+  # publish = "build/"
+  # command = "make publish"
   environment = { NODE_VERSION = "lts/*" }
 
 # Deploy Preview context: all deploys generated from
 # a pull/merge request will inherit these settings.
 [context.deploy-preview]
-  publish = "build/"
+  # publish = "build/"
 
 # Here is an example of how to define context-specific
 # environment variables. Be mindful when using this
