@@ -14,20 +14,36 @@ export default function Landing() {
     })
   })
 
+  let myDaos
+  if (publicDaos) {
+    myDaos = (
+      <List>
+        {(publicDaos || []).map((dao) => (
+          <ListItem key={dao.daoId}>
+            <Link to={`/${dao.daoId}/dashboard`}>{dao.name}</Link>
+          </ListItem>
+        ))}
+      </List>
+    )
+  } else {
+    myDaos = (
+      <p>
+        <span>
+          <a href="https://app.kalidao.xyz/">Create</a> your first DAO with legal benefits.
+        </span>
+        <span>
+          Then go to your <Link to="/dashboard">dashboard</Link> to manage projects and contributors.
+        </span>
+      </p>
+    )
+  }
+
   return (
     <Box sx={{ p: 5 }}>
       <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-        <h1>Welcome to Sweat Token</h1>
+        <h1>Welcome to SporosDAO Sweat Token</h1>
 
-        <p>This is a placeholder for a landing page</p>
-
-        <List>
-          {(publicDaos || []).map((dao) => (
-            <ListItem key={dao.daoId}>
-              <Link to={`/${dao.daoId}`}>{dao.name}</Link>
-            </ListItem>
-          ))}
-        </List>
+        {myDaos}
       </Paper>
     </Box>
   )
