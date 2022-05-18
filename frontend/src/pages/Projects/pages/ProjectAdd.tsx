@@ -1,5 +1,5 @@
 import { Box, Button, CircularProgress, Grid, InputAdornment, TextField } from '@mui/material'
-import React, { FormEvent, useCallback, useEffect, useState } from 'react'
+import React, { FormEvent, useCallback, useState } from 'react'
 import { createProject } from '../../../api'
 import { CreateProjectDto, ProjectDtoStatusEnum } from '../../../api/openapi'
 import ContentBlock from '../../../components/ContentBlock'
@@ -16,25 +16,38 @@ export default function ProjectAdd() {
     status: ProjectDtoStatusEnum.Open
   } as Record<string, any>)
 
-  const [formValidation, setFormValidation] = useState({} as Record<string, boolean>)
+  const [validFields, setFormValidation] = useState({} as Record<string, boolean>)
 
-  const validate = useCallback(
-    (fieldName: string) => {
+  // return true if fields are valid
+  const checkValidFields = useCallback(
+    (...fieldNames: string[]): boolean => {
+      const validation = {} as Record<string, boolean>
+
+      const isValid =
+        fieldNames
+          .map((fieldName) => {
+            const empty = !formValues[fieldName]
+            validation[fieldName] = empty
+            return validation[fieldName]
+          })
+          .filter((error) => error).length === 0
+
       setFormValidation({
-        ...formValidation,
-        [fieldName]: !formValues[fieldName]
+        ...validFields,
+        ...validation
       })
+
+      return isValid
     },
-    [formValidation, formValues]
+    [validFields, formValues]
   )
 
   const onBlur = (e: React.FocusEvent<HTMLTextAreaElement | HTMLInputElement, Element>) => {
-    validate(e.target.name)
+    checkValidFields(e.target.name)
   }
 
   const setValue = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-      // console.log(`set ${e.target.name}: ${e.target.value}`)
       setFormValues({
         ...formValues,
         [e.target.name]: e.target.value
@@ -43,24 +56,18 @@ export default function ProjectAdd() {
     [formValues]
   )
 
-  useEffect(() => {
-    Object.keys(formValidation)
-      .filter((fieldName) => formValidation[fieldName])
-      .forEach((fieldName) => validate(fieldName))
-  }, [formValidation, validate])
-
-  const isValidField = useCallback(
+  const fieldHasError = useCallback(
     (field: string): boolean => {
-      return formValidation[field] || false
+      return validFields[field] === undefined ? false : validFields[field]
     },
-    [formValidation]
+    [validFields]
   )
 
   const save = useCallback(async (): Promise<void> => {
     // validation error
-    if (Object.values(formValidation).filter((error) => error).length) return
+    if (Object.values(validFields).filter((error) => error).length) return
 
-    console.log(formValues)
+    if (!checkValidFields('name', 'deadline', 'budget')) return
 
     setLoading(true)
     await createProject({ ...formValues } as CreateProjectDto)
@@ -71,7 +78,7 @@ export default function ProjectAdd() {
         showToast('Error saving', 'error')
       })
       .finally(() => setLoading(false))
-  }, [formValidation, formValues, showToast])
+  }, [validFields, formValues, showToast, checkValidFields])
 
   return (
     <ContentBlock title="Add Project">
@@ -95,7 +102,7 @@ export default function ProjectAdd() {
                 helperText="A project name used in proposals and listing"
                 value={formValues['name'] || ''}
                 onChange={setValue}
-                error={isValidField('name')}
+                error={fieldHasError('name')}
                 onBlur={onBlur}
                 required
                 fullWidth
@@ -119,7 +126,7 @@ export default function ProjectAdd() {
                 type="datetime-local"
                 value={formValues['deadline'] || ''}
                 onBlur={onBlur}
-                error={isValidField('deadline')}
+                error={fieldHasError('deadline')}
                 onChange={setValue}
                 required
                 fullWidth
@@ -132,7 +139,7 @@ export default function ProjectAdd() {
                 value={formValues['budget'] || ''}
                 onChange={setValue}
                 onBlur={onBlur}
-                error={isValidField('budget')}
+                error={fieldHasError('budget')}
                 required
                 fullWidth
                 InputProps={{
