@@ -26,4 +26,3 @@ You can obtain logs for each container while developing with
 ## Supporters
 
 - The SporosDAO PWA is hosted by [Netlify](https://www.netlify.com/)
-
