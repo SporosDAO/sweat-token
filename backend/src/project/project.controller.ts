@@ -16,9 +16,8 @@ export class ProjectController {
   }
 
   @Post()
-  @UsePipes(ValidationPipe)
   @HttpCode(200)
-  create(@Body() project: ProjectDto): Promise<ProjectDto> {
+  create(@Body() project: CreateProjectDto): Promise<ProjectDto> {
     return this.projectService.create(project)
   }
 
