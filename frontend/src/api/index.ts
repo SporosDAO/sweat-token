@@ -1,27 +1,55 @@
-import { Dao, SignupReq, User } from "../dto";
+import { AuthApi, Configuration, DaoApi, DaoDto, JwtTokenDto, NonceDto, UserDto } from './openapi'
 
-export const getDao = async (name: string): Promise<Dao> => {
-    return {
-        id: "sporos",
-        name: name
-    }
+class ApiClient {
+  public token: string | undefined = undefined
+
+  public auth: AuthApi = new AuthApi()
+  public dao: DaoApi = new DaoApi()
+
+  constructor() {
+    this.initClient()
+  }
+
+  public initClient(accessToken?: string) {
+    this.token = accessToken
+    const config = new Configuration({ accessToken })
+    const basePath = `${window.location.protocol}//${window.location.host}`
+    this.auth = new AuthApi(config, basePath)
+    this.dao = new DaoApi(config, basePath)
+  }
 }
 
-export const getCurrentUser = async (): Promise<User> => {
-    return {
-        id: "test",
-        username: "test"
-    }
+const client = new ApiClient()
+
+export const setToken = (token: string | undefined) => {
+  client.initClient(token)
 }
 
-export const signup = async (data: SignupReq): Promise<User> => {
-    return await getCurrentUser()
+export const getToken = (): string | undefined => {
+  return client.token
 }
 
-export const logout = async (): Promise<void> => {
-    //
+export const getDao = async (daoId: string): Promise<DaoDto> => {
+  const res = await client.dao.daoControllerLoad(daoId)
+  return res.data
 }
 
-export const login = async (data: SignupReq): Promise<User> => {
-    return await getCurrentUser()
+export const listDaos = async (): Promise<DaoDto[]> => {
+  const res = await client.dao.daoControllerList()
+  return res.data
+}
+
+export const getCurrentUser = async (): Promise<UserDto> => {
+  const res = await client.auth.authControllerGetProfile()
+  return res.data
+}
+
+export const getUserByAddress = async (publicAddress: string): Promise<NonceDto> => {
+  const res = await client.auth.authControllerGetUser(publicAddress)
+  return res.data
+}
+
+export const verifySignature = async (sig: NonceDto): Promise<JwtTokenDto> => {
+  const res = await client.auth.authControllerVerifySignature(sig)
+  return res.data as JwtTokenDto
 }
