@@ -7,6 +7,7 @@ import Landing from './pages/Landing'
 import Dashboard from './pages/Dashboard'
 import NotFound from './pages/NotFound'
 import Legal from './pages/Legal'
+import Taxes from './pages/Taxes'
 import Equity from './pages/Equity'
 import People from './pages/People'
 import Projects from './pages/Projects'
@@ -21,6 +22,7 @@ function App() {
         <Route path=":daoId" element={<Dao />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="legal" element={<Legal />} />
+          <Route path="taxes" element={<Taxes />} />
           <Route path="equity" element={<Equity />} />
           <Route path="projects" element={<Projects />} />
           <Route path="people" element={<People />} />

@@ -1,7 +1,7 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import MenuIcon from '@mui/icons-material/Menu'
-import { Box, CssBaseline, IconButton, Toolbar } from '@mui/material'
+import { Box, CssBaseline, IconButton, Toolbar, useTheme, useMediaQuery } from '@mui/material'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
@@ -78,7 +78,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 }))
 
 export function PageLayout(props: any) {
-  const [open, setOpen] = useState(false)
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const [open, setOpen] = useState(!isMobile)
   const [connectDialogOpen, setConnectDialogOpen] = React.useState(false)
 
   const { account, setAccount } = useWeb3()
