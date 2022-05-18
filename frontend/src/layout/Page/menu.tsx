@@ -1,6 +1,7 @@
 import { People } from '@mui/icons-material'
 import AccountTreeIcon from '@mui/icons-material/AccountTree'
-import BalanceIcon from '@mui/icons-material/Balance'
+import PieChartIcon from '@mui/icons-material/PieChart'
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import GavelIcon from '@mui/icons-material/Gavel'
 import HelpIcon from '@mui/icons-material/Help'
@@ -31,8 +32,13 @@ const menu: MenuItem[] = [
     link: 'legal'
   },
   {
+    label: 'Taxes',
+    icon: <ReceiptLongIcon />,
+    link: 'taxes'
+  },
+  {
     label: 'Equity',
-    icon: <BalanceIcon />,
+    icon: <PieChartIcon />,
     link: 'equity'
   },
   {
