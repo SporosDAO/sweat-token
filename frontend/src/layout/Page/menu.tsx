@@ -58,7 +58,7 @@ const DEFAULT_PATH = 'dashboard'
 const getDaoPath = (pathname: string): string => {
   const parts = pathname.split('/')
   if (!parts.length) return DEFAULT_PATH
-  const [, , path] = parts
+  const [, , , path] = parts
   if (!path) return DEFAULT_PATH
   return path
 }
@@ -83,7 +83,7 @@ export const MainListItems = () => {
   const { daoId } = useParams()
 
   const goto = (path: string) => {
-    navigate(`/${daoId}/${path}`)
+    navigate(`/dao/${daoId}/${path}`)
   }
 
   const currentPath = React.useMemo(() => getDaoPath(location.pathname), [location.pathname])

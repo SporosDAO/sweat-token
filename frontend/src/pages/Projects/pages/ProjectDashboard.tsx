@@ -30,7 +30,7 @@ const ProjectsList = () => {
     <List>
       {projects.map((project) => (
         <ListItem key={project.projectId}>
-          <Link to={project.name}>{project.name}</Link>
+          <Link to={project.projectId}>{project.name}</Link>
         </ListItem>
       ))}
     </List>

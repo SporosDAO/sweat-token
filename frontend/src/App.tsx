@@ -13,6 +13,7 @@ import People from './pages/People'
 import Projects from './pages/Projects'
 import ProjectAdd from './pages/Projects/pages/ProjectAdd'
 import ProjectDashboard from './pages/Projects/pages/ProjectDashboard'
+import { Connect } from './pages/Connect'
 
 const mdTheme = createTheme()
 
@@ -21,7 +22,8 @@ function App() {
     <ThemeProvider theme={mdTheme}>
       <Routes>
         <Route path="/" element={<Landing />} />
-        <Route path=":daoId" element={<Dao />}>
+        <Route path="/connect" element={<Connect />} />
+        <Route path="dao/:daoId" element={<Dao />}>
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="legal" element={<Legal />} />

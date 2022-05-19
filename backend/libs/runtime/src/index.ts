@@ -28,7 +28,7 @@ export async function bootstrap(module: any): Promise<INestApplication> {
   app.setGlobalPrefix('/api')
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,
+      // whitelist: true,
       transform: true,
     }),
   )

@@ -1,22 +1,30 @@
 import { Box, Button, CircularProgress, Grid, InputAdornment, TextField } from '@mui/material'
-import React, { FormEvent, useCallback, useState } from 'react'
+import React, { FormEvent, useCallback, useEffect, useState } from 'react'
 import { createProject } from '../../../api'
 import { CreateProjectDto, ProjectDtoStatusEnum } from '../../../api/openapi'
 import ContentBlock from '../../../components/ContentBlock'
+import useAuth from '../../../context/AuthContext'
 import useDao from '../../../context/DaoContext'
 import useToast from '../../../context/ToastContext'
 
 export default function ProjectAdd() {
   const { daoId } = useDao()
+  const { requireAuth, user } = useAuth()
   const { showToast } = useToast()
 
   const [loading, setLoading] = useState(false)
-  const [formValues, setFormValues] = useState({
-    daoId,
-    status: ProjectDtoStatusEnum.Open
-  } as Record<string, any>)
 
   const [validFields, setFormValidation] = useState({} as Record<string, boolean>)
+  const [formValues, setFormValues] = useState({
+    daoId,
+    status: ProjectDtoStatusEnum.Open,
+    ownerId: user ? user.userId : undefined
+  } as Record<string, any>)
+
+  useEffect(() => {
+    if (user) return
+    requireAuth()
+  }, [requireAuth, user])
 
   // return true if fields are valid
   const checkValidFields = useCallback(
