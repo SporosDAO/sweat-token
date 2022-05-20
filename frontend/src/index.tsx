@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { Web3ContextProvider } from './context/Web3Context'
 import { ToastProvider } from './context/ToastContext'
+import { PageProvider } from './context/PageContext'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
@@ -15,7 +16,9 @@ root.render(
       <ToastProvider>
         <Web3ContextProvider>
           <AuthProvider>
-            <App />
+            <PageProvider>
+              <App />
+            </PageProvider>
           </AuthProvider>
         </Web3ContextProvider>
       </ToastProvider>

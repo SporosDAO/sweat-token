@@ -1,19 +1,20 @@
 import { createTheme, ThemeProvider } from '@mui/material'
 import React from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import './App.css'
+import { Connect } from './pages/Connect'
 import Dao from './pages/Dao'
-import Landing from './pages/Landing'
 import Dashboard from './pages/Dashboard'
-import NotFound from './pages/NotFound'
-import Legal from './pages/Legal'
-import Taxes from './pages/Taxes'
 import Equity from './pages/Equity'
+import Landing from './pages/Landing'
+import Legal from './pages/Legal'
+import NotFound from './pages/NotFound'
 import People from './pages/People'
 import Projects from './pages/Projects'
 import ProjectAdd from './pages/Projects/pages/ProjectAdd'
+import ProjectView from './pages/Projects/pages/ProjectView'
 import ProjectDashboard from './pages/Projects/pages/ProjectDashboard'
-import { Connect } from './pages/Connect'
+import Taxes from './pages/Taxes'
 
 const mdTheme = createTheme()
 
@@ -31,8 +32,8 @@ function App() {
           <Route path="equity" element={<Equity />} />
           <Route path="projects" element={<Projects />}>
             <Route index element={<ProjectDashboard />} />
+            <Route path=":projectId" element={<ProjectView />} />
             <Route path="add" element={<ProjectAdd />} />
-            <Route path="*" element={<Navigate to="dashboard" replace />} />
           </Route>
           <Route path="people" element={<People />} />
         </Route>

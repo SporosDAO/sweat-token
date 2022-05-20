@@ -74,6 +74,11 @@ export const findProjects = async (query: ProjectQueryDto): Promise<ProjectDto[]
   return res.data
 }
 
+export const loadProject = async (projectId: string): Promise<ProjectDto> => {
+  const res = await client.project.projectControllerRead(projectId)
+  return res.data
+}
+
 export const createProject = async (p: CreateProjectDto): Promise<ProjectDto> => {
   const res = await client.project.projectControllerCreate(p)
   return res.data

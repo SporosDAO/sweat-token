@@ -1,8 +1,10 @@
 import { Box, Button, CircularProgress, Grid, InputAdornment, TextField } from '@mui/material'
 import React, { FormEvent, useCallback, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { createProject } from '../../../api'
-import { CreateProjectDto, ProjectDtoStatusEnum } from '../../../api/openapi'
+import { CreateProjectDto, ProjectDto, ProjectDtoStatusEnum } from '../../../api/openapi'
 import ContentBlock from '../../../components/ContentBlock'
+import { getDaoProjectUrl } from '../../../constants'
 import useAuth from '../../../context/AuthContext'
 import useDao from '../../../context/DaoContext'
 import useToast from '../../../context/ToastContext'
@@ -11,6 +13,7 @@ export default function ProjectAdd() {
   const { daoId } = useDao()
   const { requireAuth, user } = useAuth()
   const { showToast } = useToast()
+  const navigate = useNavigate()
 
   const [loading, setLoading] = useState(false)
 
@@ -73,20 +76,22 @@ export default function ProjectAdd() {
 
   const save = useCallback(async (): Promise<void> => {
     // validation error
+    if (!daoId) return
     if (Object.values(validFields).filter((error) => error).length) return
 
     if (!checkValidFields('name', 'deadline', 'budget')) return
 
     setLoading(true)
     await createProject({ ...formValues } as CreateProjectDto)
-      .then(() => {
+      .then(({ projectId }: ProjectDto) => {
         showToast('Project saved')
+        navigate(getDaoProjectUrl(daoId, projectId))
       })
       .catch(() => {
         showToast('Error saving', 'error')
       })
       .finally(() => setLoading(false))
-  }, [validFields, formValues, showToast, checkValidFields])
+  }, [validFields, checkValidFields, formValues, showToast, navigate, daoId])
 
   return (
     <ContentBlock title="Add Project">

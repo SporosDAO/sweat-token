@@ -6,6 +6,7 @@ import { ProjectDto } from '../../../api/openapi'
 import { findProjects } from '../../../api'
 import ContentBlock from '../../../components/ContentBlock'
 import useDao from '../../../context/DaoContext'
+import { getDaoProjectUrl } from '../../../constants'
 
 const ProjectsList = () => {
   const [projects, setProjects] = useState<ProjectDto[]>()
@@ -30,13 +31,13 @@ const ProjectsList = () => {
     <List>
       {projects.map((project) => (
         <ListItem key={project.projectId}>
-          <Link to={project.projectId}>{project.name}</Link>
+          <Link to={getDaoProjectUrl(project.daoId, project.projectId)}>{project.name}</Link>
         </ListItem>
       ))}
     </List>
   ) : (
     <Box>
-      No projects yet. <Link to="add">Add a new project</Link>
+      No projects yet. <Link to={getDaoProjectUrl(daoId || '', 'add')}>Add a new project</Link>
     </Box>
   )
 }

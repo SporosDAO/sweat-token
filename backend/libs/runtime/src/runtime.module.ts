@@ -12,7 +12,7 @@ import { join } from 'path'
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        uri: `${configService.get<string>('MONGODB_URI')}-${process.env.NODE_ENV}`,
+        uri: configService.get<string>('MONGODB_URI'),
       }),
       inject: [ConfigService],
     }),
