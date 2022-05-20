@@ -23,6 +23,12 @@ You can obtain logs for each container while developing with
 - backend `docker-compose logs -f backend`
 - contracts `docker-compose logs -f contracts`
 
+## Contributing
+
+We welcome contributions addressing issues or providing improvements. To provide your code please for the project and create a PR against the `dev` branch.
+Include at least a reviewer from the core team. 
+Dev will be merged in `main` branch when we reach a relevant milestone that will be then deployed via the CI/CD pipelines.
+
 ## Supporters
 
 - The SporosDAO PWA is hosted by [Netlify](https://www.netlify.com/)
