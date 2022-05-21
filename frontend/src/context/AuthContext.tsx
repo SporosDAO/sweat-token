@@ -34,6 +34,13 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
   const { account, provider, setAccount } = useWeb3()
 
   useEffect(() => {
+    // account reset
+    if (account) return
+    if (!user) return
+    setUser(undefined)
+  }, [account, user])
+
+  useEffect(() => {
     if (signaturePending) return
     if (!account || !provider) {
       return
