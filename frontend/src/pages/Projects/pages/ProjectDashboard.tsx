@@ -1,12 +1,11 @@
 import { CircularProgress, Grid, List, ListItem } from '@mui/material'
 import { Box } from '@mui/system'
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { ProjectDto } from '../../../api/openapi'
 import { findProjects } from '../../../api'
+import { ProjectDto } from '../../../api/openapi'
 import ContentBlock from '../../../components/ContentBlock'
 import useDao from '../../../context/DaoContext'
-import { getDaoProjectUrl } from '../../../constants'
+import { LinkProject } from '../../../context/PageContext'
 
 const ProjectsList = () => {
   const [projects, setProjects] = useState<ProjectDto[]>()
@@ -31,13 +30,16 @@ const ProjectsList = () => {
     <List>
       {projects.map((project) => (
         <ListItem key={project.projectId}>
-          <Link to={getDaoProjectUrl(project.daoId, project.projectId)}>{project.name}</Link>
+          <LinkProject project={project}>{project.name}</LinkProject>
         </ListItem>
       ))}
     </List>
   ) : (
     <Box>
-      No projects yet. <Link to={getDaoProjectUrl(daoId || '', 'add')}>Add a new project</Link>
+      No projects yet.{' '}
+      <LinkProject add daoId={daoId}>
+        Add a new project
+      </LinkProject>
     </Box>
   )
 }

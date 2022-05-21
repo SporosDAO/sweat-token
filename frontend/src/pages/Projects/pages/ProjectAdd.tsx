@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom'
 import { createProject } from '../../../api'
 import { CreateProjectDto, ProjectDto, ProjectDtoStatusEnum } from '../../../api/openapi'
 import ContentBlock from '../../../components/ContentBlock'
-import { getDaoProjectUrl } from '../../../constants'
 import useAuth from '../../../context/AuthContext'
 import useDao from '../../../context/DaoContext'
+import { getProjectUrl } from '../../../context/PageContext'
 import useToast from '../../../context/ToastContext'
 
 export default function ProjectAdd() {
@@ -85,7 +85,7 @@ export default function ProjectAdd() {
     await createProject({ ...formValues } as CreateProjectDto)
       .then(({ projectId }: ProjectDto) => {
         showToast('Project saved')
-        navigate(getDaoProjectUrl(daoId, projectId))
+        navigate(getProjectUrl(daoId, projectId))
       })
       .catch(() => {
         showToast('Error saving', 'error')
@@ -136,7 +136,7 @@ export default function ProjectAdd() {
                 name="deadline"
                 placeholder="Deadline"
                 helperText="A completion date for this project"
-                type="datetime-local"
+                type="date"
                 value={formValues['deadline'] || ''}
                 onBlur={onBlur}
                 error={fieldHasError('deadline')}

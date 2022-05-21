@@ -13,9 +13,8 @@ import Typography from '@mui/material/Typography'
 import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { OWNER } from '../../constants'
-import usePage from '../../context/PageContext'
+import usePage, { MainListItems, SecondaryListItems } from '../../context/PageContext'
 import useWeb3 from '../../context/Web3Context'
-import { GetPageTitle, MainListItems, SecondaryListItems } from './menu'
 
 function Copyright(props: any) {
   return (
@@ -115,7 +114,7 @@ export function PageLayout(props: any) {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-            {title || 'nuffin'}
+            {title}
           </Typography>
           <IconButton color="inherit">
             {/* <Badge badgeContent={4} color="secondary">

@@ -1,21 +1,26 @@
-import { CircularProgress, Grid, List, ListItem } from '@mui/material'
+import { CircularProgress, Stack } from '@mui/material'
 import { Box } from '@mui/system'
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { loadProject } from '../../../api'
 import { ProjectDto } from '../../../api/openapi'
-import { findProjects, loadProject } from '../../../api'
 import ContentBlock from '../../../components/ContentBlock'
 import useDao from '../../../context/DaoContext'
-import { getDaoProjectUrl } from '../../../constants'
-import usePage from '../../../context/PageContext'
+import usePage, { LinkDao } from '../../../context/PageContext'
+import TaskList from '../components/TaskList'
 
 export default function ProjectView() {
   const [project, setProject] = useState<ProjectDto>()
   const [loading, setLoading] = useState<boolean>(false)
 
-  const { setTitle } = usePage()
   const { daoId } = useDao()
   const { projectId } = useParams()
+  const { setTitle } = usePage()
+
+  useEffect(() => {
+    if (!project) return
+    setTitle(project.name)
+  }, [project, setTitle])
 
   useEffect(() => {
     if (!daoId) return
@@ -29,24 +34,22 @@ export default function ProjectView() {
         setProject(project)
       })
       .finally(() => setLoading(false))
-  }, [daoId, loading, project, projectId])
-
-  useEffect(() => {
-    if (!project) return
-    setTitle(project.name)
-  }, [project, setTitle])
+  }, [daoId, loading, project, projectId, setTitle])
 
   return loading ? (
     <CircularProgress />
   ) : project ? (
-    <ContentBlock title={project.name}>
-      <p>description: {project.description}</p>
-      <p>deadline: {project.deadline}</p>
-      <p>budget: {project.budget}</p>
-    </ContentBlock>
+    <Stack direction={'column'}>
+      <ContentBlock title={project.name}>
+        <p>{project.description}</p>
+        <p>deadline: {project.deadline}</p>
+        <p>budget: {project.budget}</p>
+      </ContentBlock>
+      <TaskList project={project} />
+    </Stack>
   ) : (
     <Box>
-      Failed to load project. <Link to={getDaoProjectUrl(daoId || '', 'add')}>Back to projects</Link>
+      Failed to load project. <LinkDao daoId={daoId}>Back to projects</LinkDao>
     </Box>
   )
 }

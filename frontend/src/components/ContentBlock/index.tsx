@@ -13,7 +13,8 @@ export default function ContentBlock(props: ContentBlockProps) {
     <Paper
       sx={
         props.sx || {
-          p: 2
+          p: 2,
+          mb: 2
         }
       }
     >

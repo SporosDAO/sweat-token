@@ -9,7 +9,11 @@ import {
   UserDto,
   ProjectQueryDto,
   ProjectDto,
-  CreateProjectDto
+  CreateProjectDto,
+  TaskDto,
+  TaskQueryDto,
+  CreateTaskDto,
+  TaskApi
 } from './openapi'
 
 const basePath = `${window.location.protocol}//${window.location.host}`
@@ -20,6 +24,7 @@ class ApiClient {
   public auth: AuthApi = new AuthApi(undefined, basePath)
   public dao: DaoApi = new DaoApi(undefined, basePath)
   public project: ProjectApi = new ProjectApi(undefined, basePath)
+  public task: TaskApi = new TaskApi(undefined, basePath)
 
   constructor() {
     this.initClient()
@@ -31,6 +36,7 @@ class ApiClient {
     this.auth = new AuthApi(config, basePath)
     this.dao = new DaoApi(config, basePath)
     this.project = new ProjectApi(config, basePath)
+    this.task = new TaskApi(config, basePath)
   }
 }
 
@@ -81,5 +87,20 @@ export const loadProject = async (projectId: string): Promise<ProjectDto> => {
 
 export const createProject = async (p: CreateProjectDto): Promise<ProjectDto> => {
   const res = await client.project.projectControllerCreate(p)
+  return res.data
+}
+
+export const findTasks = async (query: TaskQueryDto): Promise<TaskDto[]> => {
+  const res = await client.task.taskControllerFind(query)
+  return res.data
+}
+
+export const loadTask = async (taskId: string): Promise<TaskDto> => {
+  const res = await client.task.taskControllerRead(taskId)
+  return res.data
+}
+
+export const createTask = async (p: CreateTaskDto): Promise<TaskDto> => {
+  const res = await client.task.taskControllerCreate(p)
   return res.data
 }
