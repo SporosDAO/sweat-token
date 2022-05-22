@@ -1,12 +1,14 @@
+import { RuntimeModule } from '@app/runtime'
 import { Test, TestingModule } from '@nestjs/testing'
 import { TaskController } from './task.controller'
+import { TaskModule } from './task.module'
 
 describe('TaskController', () => {
   let controller: TaskController
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [TaskController],
+      imports: [RuntimeModule, TaskModule],
     }).compile()
 
     controller = module.get<TaskController>(TaskController)

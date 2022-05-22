@@ -1,4 +1,6 @@
+import { RuntimeModule } from '@app/runtime'
 import { Test, TestingModule } from '@nestjs/testing'
+import { TaskModule } from './task.module'
 import { TaskService } from './task.service'
 
 describe('TaskService', () => {
@@ -6,7 +8,7 @@ describe('TaskService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [TaskService],
+      imports: [RuntimeModule, TaskModule],
     }).compile()
 
     service = module.get<TaskService>(TaskService)

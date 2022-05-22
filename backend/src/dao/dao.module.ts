@@ -8,5 +8,6 @@ import { MongooseModule } from '@nestjs/mongoose'
   imports: [MongooseModule.forFeature([{ name: Dao.name, schema: DaoSchema }])],
   providers: [DaoService],
   controllers: [DaoController],
+  exports: [DaoService],
 })
 export class DaoModule {}
