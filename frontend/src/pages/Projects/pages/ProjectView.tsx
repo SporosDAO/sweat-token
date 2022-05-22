@@ -37,6 +37,10 @@ export default function ProjectView() {
       .finally(() => setLoading(false))
   }, [daoId, loading, project, projectId, setTitle])
 
+  const onTaskChange = () => {
+    setProject(undefined)
+  }
+
   return loading ? (
     <CircularProgress />
   ) : project ? (
@@ -49,11 +53,11 @@ export default function ProjectView() {
             <br />
             deadline {formatDateFromNow(project.deadline)}
             <br />
-            {formatCurrency(project.budget)}
+            {formatCurrency(project.budgetAllocation)} of {formatCurrency(project.budget)}
           </Box>
         </Stack>
       </ContentBlock>
-      <TaskList project={project} />
+      <TaskList onChange={onTaskChange} project={project} />
     </Stack>
   ) : (
     <Box>

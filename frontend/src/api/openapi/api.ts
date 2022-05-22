@@ -51,6 +51,12 @@ export interface CreateProjectDto {
      * @memberof CreateProjectDto
      */
     'daoId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateProjectDto
+     */
+    'ownerId': string;
 }
 /**
  * 
@@ -129,19 +135,25 @@ export interface CreateTaskDto {
      * @type {Array<string>}
      * @memberof CreateTaskDto
      */
-    'skills'?: Array<string>;
+    'skills': Array<string>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof CreateTaskDto
+     */
+    'bands'?: Array<number>;
     /**
      * 
      * @type {string}
      * @memberof CreateTaskDto
      */
-    'type'?: CreateTaskDtoTypeEnum;
+    'type': CreateTaskDtoTypeEnum;
     /**
      * 
      * @type {string}
      * @memberof CreateTaskDto
      */
-    'period': CreateTaskDtoPeriodEnum;
+    'period'?: CreateTaskDtoPeriodEnum;
 }
 
 export const CreateTaskDtoStatusEnum = {
@@ -259,6 +271,12 @@ export interface ProjectDto {
      * @memberof ProjectDto
      */
     'budget': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ProjectDto
+     */
+    'budgetAllocation': number;
     /**
      * 
      * @type {string}
@@ -440,19 +458,25 @@ export interface TaskDto {
      * @type {Array<string>}
      * @memberof TaskDto
      */
-    'skills'?: Array<string>;
+    'skills': Array<string>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof TaskDto
+     */
+    'bands'?: Array<number>;
     /**
      * 
      * @type {string}
      * @memberof TaskDto
      */
-    'type'?: TaskDtoTypeEnum;
+    'type': TaskDtoTypeEnum;
     /**
      * 
      * @type {string}
      * @memberof TaskDto
      */
-    'period': TaskDtoPeriodEnum;
+    'period'?: TaskDtoPeriodEnum;
 }
 
 export const TaskDtoStatusEnum = {

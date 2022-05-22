@@ -67,6 +67,7 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
       .then(() => {
         showToast('Task created', 'success')
         resetFormValues()
+        setPage(0)
         props.onClose()
       })
       .catch((e: any) => {
