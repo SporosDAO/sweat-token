@@ -1,4 +1,4 @@
-import { Paper, Theme, SxProps } from '@mui/material'
+import { Paper, SxProps, Theme } from '@mui/material'
 import { Box } from '@mui/system'
 import { ReactNode } from 'react'
 

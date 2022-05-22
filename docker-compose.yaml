@@ -42,6 +42,7 @@ services:
     working_dir: /app/frontend
     depends_on:
       - backend
+      - mongo-express
     ports:
       - 3000:3000
     restart: unless-stopped

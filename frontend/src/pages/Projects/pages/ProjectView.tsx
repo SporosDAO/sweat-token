@@ -7,6 +7,7 @@ import { ProjectDto } from '../../../api/openapi'
 import ContentBlock from '../../../components/ContentBlock'
 import useDao from '../../../context/DaoContext'
 import usePage, { LinkDao } from '../../../context/PageContext'
+import { formatCurrency, formatDateFromNow } from '../../../util'
 import TaskList from '../components/TaskList'
 
 export default function ProjectView() {
@@ -41,9 +42,16 @@ export default function ProjectView() {
   ) : project ? (
     <Stack direction={'column'}>
       <ContentBlock title={project.name}>
-        <p>{project.description}</p>
-        <p>deadline: {project.deadline}</p>
-        <p>budget: {project.budget}</p>
+        <Stack direction="row" justifyContent="space-between" spacing={1}>
+          <Box>{project.description || 'Description not provided.'}</Box>
+          <Box>
+            {project.status ? project.status.toUpperCase() : ''}
+            <br />
+            deadline {formatDateFromNow(project.deadline)}
+            <br />
+            {formatCurrency(project.budget)}
+          </Box>
+        </Stack>
       </ContentBlock>
       <TaskList project={project} />
     </Stack>

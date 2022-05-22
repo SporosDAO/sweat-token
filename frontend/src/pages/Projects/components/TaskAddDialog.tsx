@@ -16,9 +16,10 @@ import {
   ToggleButtonGroup
 } from '@mui/material'
 import { Box } from '@mui/system'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createTask } from '../../../api'
 import { CreateTaskDto, ProjectDto } from '../../../api/openapi'
+import useAuth from '../../../context/AuthContext'
 import useToast from '../../../context/ToastContext'
 
 const skills = ['Mentor', 'Software Engineer', 'UX/Designer', 'Legal', 'Operations', 'Finance', 'Policy']
@@ -30,21 +31,25 @@ interface TaskAddDialogProps {
 }
 
 export default function TaskAddDialog(props: TaskAddDialogProps) {
-  const [loading, setLoading] = useState(false)
+  const { showToast } = useToast()
+  const { requireAuth, user } = useAuth()
 
-  const [formValues, setFormValues] = useState({
-    daoId: props.project.daoId,
-    projectId: props.project.projectId
-  } as Record<string, any>)
+  const [loading, setLoading] = useState(false)
+  const [formValues, setFormValues] = useState({} as Record<string, any>)
   const [page, setPage] = useState(0)
 
-  const { showToast } = useToast()
+  useEffect(() => {
+    if (user) return
+    requireAuth()
+  }, [requireAuth, user])
 
   const updateFormValues = (name: string, value: any) =>
     setFormValues((formValues) => ({
       ...formValues,
       [name]: value
     }))
+
+  const resetFormValues = () => setFormValues(() => ({}))
 
   const onChange = (e: any) => {
     updateFormValues(e.target.name, e.target.value)
@@ -53,9 +58,16 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
   const save = () => {
     if (loading) return
     setLoading(true)
-    createTask({ ...formValues } as CreateTaskDto)
+    createTask({
+      ...formValues,
+      daoId: props.project.daoId,
+      projectId: props.project.projectId,
+      ownerId: user?.userId
+    } as CreateTaskDto)
       .then(() => {
         showToast('Task created', 'success')
+        resetFormValues()
+        props.onClose()
       })
       .catch((e: any) => {
         showToast('Task creation failed', 'error')

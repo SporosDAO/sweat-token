@@ -1,19 +1,19 @@
 import {
-  ProjectApi,
   AuthApi,
   Configuration,
+  CreateProjectDto,
+  CreateTaskDto,
   DaoApi,
   DaoDto,
   JwtTokenDto,
   NonceDto,
-  UserDto,
-  ProjectQueryDto,
+  ProjectApi,
   ProjectDto,
-  CreateProjectDto,
+  ProjectQueryDto,
+  TaskApi,
   TaskDto,
   TaskQueryDto,
-  CreateTaskDto,
-  TaskApi
+  UserDto
 } from './openapi'
 
 const basePath = `${window.location.protocol}//${window.location.host}`
@@ -103,4 +103,8 @@ export const loadTask = async (taskId: string): Promise<TaskDto> => {
 export const createTask = async (p: CreateTaskDto): Promise<TaskDto> => {
   const res = await client.task.taskControllerCreate(p)
   return res.data
+}
+
+export const deleteTask = async (taskId: string): Promise<void> => {
+  await client.task.taskControllerDelete(taskId)
 }
