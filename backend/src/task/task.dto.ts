@@ -1,0 +1,112 @@
+import { IsArray, IsDate, IsEnum, IsNotEmpty, IsNumber, IsNumberString, IsOptional, IsUUID } from 'class-validator'
+
+export type RecordEventType = 'create' | 'update' | 'delete'
+
+export interface TaskEvent {
+  taskId: string
+  projectId: string
+  daoId: string
+  type: RecordEventType
+}
+
+export enum PaymentPeriod {
+  monthly = 'monthly',
+  weekly = 'weekly',
+  daily = 'daily',
+}
+
+export enum CommitmentType {
+  ongoing = 'ongoing',
+  onetime = 'onetime',
+}
+
+export enum TaskStatus {
+  open = 'open',
+  closed = 'closed',
+  cancelled = 'cancelled',
+  dispute = 'dispute',
+}
+
+export class TaskQueryDto {
+  @IsUUID()
+  @IsOptional()
+  daoId?: string
+  @IsUUID()
+  @IsOptional()
+  ownerId?: string
+  @IsUUID()
+  @IsOptional()
+  projectId?: string
+  @IsOptional()
+  dateField?: string = 'created'
+  @IsOptional()
+  from?: Date
+  @IsOptional()
+  to?: Date
+  @IsOptional()
+  @IsNumber()
+  limit?: number
+  @IsOptional()
+  @IsNumber()
+  skip?: number
+  @IsOptional()
+  @IsEnum(TaskStatus)
+  status?: TaskStatus
+}
+
+export class TaskDto {
+  @IsNotEmpty()
+  daoId: string
+
+  @IsNotEmpty()
+  projectId: string
+
+  @IsNotEmpty()
+  @IsOptional()
+  taskId?: string
+
+  @IsNotEmpty()
+  name: string
+
+  description?: string
+
+  @IsNotEmpty()
+  @IsOptional()
+  deadline?: Date
+
+  @IsNotEmpty()
+  @IsNumberString()
+  budget: number
+
+  @IsUUID()
+  ownerId: string
+
+  @IsUUID()
+  @IsOptional()
+  contributorId?: string
+
+  @IsDate()
+  @IsOptional()
+  created?: Date
+
+  @IsEnum(TaskStatus)
+  @IsOptional()
+  status?: TaskStatus
+
+  @IsArray()
+  @IsOptional()
+  skills?: string[]
+
+  @IsArray()
+  @IsOptional()
+  bands?: [number, number]
+
+  @IsEnum(CommitmentType)
+  type: CommitmentType
+
+  @IsEnum(PaymentPeriod)
+  @IsOptional()
+  period?: PaymentPeriod = PaymentPeriod.monthly
+}
+
+export class CreateTaskDto extends TaskDto {}

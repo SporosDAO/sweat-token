@@ -1,16 +1,22 @@
 import { Module } from '@nestjs/common'
-import { ProjectService } from './project.service'
-import { ProjectController } from './project.controller'
-import { TaskService } from './task/task.service'
-import { TaskController } from './task/task.controller'
 import { MongooseModule } from '@nestjs/mongoose'
-import { Project, ProjectSchema } from './project.schema'
 import { DaoModule } from 'src/dao/dao.module'
+import { TaskModule } from 'src/task/task.module'
 import { UserModule } from 'src/user/user.module'
+import { ProjectController } from './project.controller'
+import { ProjectEventListenerService } from './project.event-listener.service'
+import { Project, ProjectSchema } from './project.schema'
+import { ProjectService } from './project.service'
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Project.name, schema: ProjectSchema }]), DaoModule, UserModule],
-  providers: [ProjectService, TaskService],
-  controllers: [ProjectController, TaskController],
+  imports: [
+    MongooseModule.forFeature([{ name: Project.name, schema: ProjectSchema }]),
+    DaoModule,
+    TaskModule,
+    UserModule,
+  ],
+  providers: [ProjectService, ProjectEventListenerService],
+  controllers: [ProjectController],
+  exports: [ProjectService],
 })
 export class ProjectModule {}

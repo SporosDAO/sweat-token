@@ -1,5 +1,11 @@
-import { PartialType } from '@nestjs/swagger'
-import { IsNotEmpty } from 'class-validator'
+import { IsDate, IsNotEmpty, IsNumber, IsOptional } from 'class-validator'
+import { RecordEventType } from 'src/task/task.dto'
+
+export interface ProjectEvent {
+  projectId: string
+  daoId: string
+  type: RecordEventType
+}
 
 export enum ProjectStatus {
   open = 'open',
@@ -20,13 +26,24 @@ export class ProjectQueryDto {
 
 export class ProjectDto {
   projectId: string
+
   @IsNotEmpty()
   name: string
+
   description: string
+
   @IsNotEmpty()
+  @IsDate()
   deadline: Date
+
   @IsNotEmpty()
+  @IsNumber()
   budget: number
+
+  @IsOptional()
+  @IsNumber()
+  budgetAllocation: number
+
   proposalId: string
   ownerId: string
   @IsNotEmpty()
@@ -44,4 +61,6 @@ export class CreateProjectDto {
   budget: number
   @IsNotEmpty()
   daoId: string
+  @IsNotEmpty()
+  ownerId: string
 }

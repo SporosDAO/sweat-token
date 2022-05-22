@@ -10,6 +10,7 @@ export class Project {
   @Prop({
     default: () => uuidv4(),
     unique: true,
+    required: true,
   })
   projectId: string
 
@@ -48,6 +49,16 @@ export class Project {
     required: true,
   })
   daoId: string
+
+  @Prop({
+    required: false,
+  })
+  budget: number
+
+  @Prop({
+    required: false,
+  })
+  budgetAllocation: number
 
   @Prop({
     required: true,
