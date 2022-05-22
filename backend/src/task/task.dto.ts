@@ -62,8 +62,7 @@ export class TaskDto {
   projectId: string
 
   @IsNotEmpty()
-  @IsOptional()
-  taskId?: string
+  taskId: string
 
   @IsNotEmpty()
   name: string
@@ -71,8 +70,7 @@ export class TaskDto {
   description?: string
 
   @IsNotEmpty()
-  @IsOptional()
-  deadline?: Date
+  deadline: Date
 
   @IsNotEmpty()
   @IsNumberString()
@@ -87,19 +85,17 @@ export class TaskDto {
 
   @IsDate()
   @IsOptional()
-  created?: Date
+  created: Date
 
   @IsEnum(TaskStatus)
-  @IsOptional()
-  status?: TaskStatus
+  status: TaskStatus
+
+  @IsArray()
+  skills: string[]
 
   @IsArray()
   @IsOptional()
-  skills?: string[]
-
-  @IsArray()
-  @IsOptional()
-  bands?: [number, number]
+  bands?: number[]
 
   @IsEnum(CommitmentType)
   type: CommitmentType
@@ -109,4 +105,19 @@ export class TaskDto {
   period?: PaymentPeriod = PaymentPeriod.monthly
 }
 
-export class CreateTaskDto extends TaskDto {}
+export class CreateTaskDto extends TaskDto {
+  @IsOptional()
+  taskId: string
+
+  @IsOptional()
+  status: TaskStatus
+
+  @IsOptional()
+  created: Date
+
+  @IsOptional()
+  skills: string[]
+
+  @IsOptional()
+  deadline: Date
+}
