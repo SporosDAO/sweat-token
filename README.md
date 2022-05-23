@@ -1,10 +1,11 @@
-[![Netlify Status](https://api.netlify.com/api/v1/badges/1ae6fac2-3c79-42ad-9f3f-8a8e6122d734/deploy-status)](https://app.netlify.com/sites/sporosdaoapp/deploys)
 
 # Sweat Token
 
 Sweat token help startups create an early stage cap table for sweat equity.
 
 In other words sweat token is the early stage governance token that is gradually and transparently issues based on merits.
+
+This web3 app is live [here](https://sporosdaoapp-main.netlify.app/).
 
 ## Resources
 
