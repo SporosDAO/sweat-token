@@ -1,7 +1,7 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import MenuIcon from '@mui/icons-material/Menu'
-import { Box, CssBaseline, IconButton, Toolbar, useMediaQuery, useTheme } from '@mui/material'
+import { Box, CssBaseline, IconButton, Stack, Toolbar, useMediaQuery, useTheme } from '@mui/material'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
@@ -125,7 +125,10 @@ export function PageLayout(props: any) {
             color="inherit"
             onClick={() => (!account ? navigate(`/connect?redirect=${location.pathname}`) : setAccount(undefined))}
           >
-            {!account ? <AccountCircleIcon /> : <small>{`${account.substring(0, 8)}..`}</small>}
+            <Stack spacing={1} direction="row">
+              <AccountCircleIcon />
+              {!account ? <></> : <small>{`${account.substring(0, 8)}..`}</small>}
+            </Stack>
           </IconButton>
         </Toolbar>
       </AppBar>

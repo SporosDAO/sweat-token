@@ -4,10 +4,8 @@ import { JwtTokenDto, UserDto } from 'src/user/user.dto'
 import { UserService } from 'src/user/user.service'
 import { v4 as uuidv4 } from 'uuid'
 import { NonceDto } from './auth.dto'
-import * as crypto from 'crypto'
 import { ethers } from 'ethers'
-
-const randomNonce = (): string => crypto.randomBytes(20).toString('hex')
+import { randomString } from '@app/runtime/util'
 
 @Injectable()
 export class AuthService {
@@ -26,7 +24,7 @@ export class AuthService {
     const messageAddress = ethers.utils.verifyMessage(nonce, signature)
     if (messageAddress.toLowerCase() !== user.publicAddress) throw new UnauthorizedException()
 
-    await this.usersService.update(userId, { ...user, nonce: randomNonce() })
+    await this.usersService.update(userId, { ...user, nonce: randomString() })
 
     return {
       token: this.jwtService.sign({ ...user, sub: userId }),
@@ -38,7 +36,7 @@ export class AuthService {
 
     let user = await this.usersService.load({ publicAddress })
 
-    const nonce = randomNonce()
+    const nonce = randomString()
     const userId = user ? user.userId : uuidv4()
 
     if (!user) {

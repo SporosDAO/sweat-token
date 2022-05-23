@@ -3,12 +3,22 @@ import { Module } from '@nestjs/common'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { AuthModule } from './auth/auth.module'
 import { DaoModule } from './dao/dao.module'
+import { MemberModule } from './member/member.module'
 import { ProjectModule } from './project/project.module'
 import { TaskModule } from './task/task.module'
 import { UserModule } from './user/user.module'
 
 @Module({
-  imports: [EventEmitterModule.forRoot(), RuntimeModule, AuthModule, DaoModule, ProjectModule, TaskModule, UserModule],
+  imports: [
+    EventEmitterModule.forRoot(),
+    RuntimeModule,
+    AuthModule,
+    DaoModule,
+    ProjectModule,
+    TaskModule,
+    UserModule,
+    MemberModule,
+  ],
   providers: [],
   controllers: [],
 })

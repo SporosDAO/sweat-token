@@ -1,6 +1,5 @@
+import { RecordEventType } from '@app/runtime/event.dto'
 import { IsArray, IsDate, IsEnum, IsNotEmpty, IsNumber, IsNumberString, IsOptional, IsUUID } from 'class-validator'
-
-export type RecordEventType = 'create' | 'update' | 'delete'
 
 export interface TaskEvent {
   taskId: string

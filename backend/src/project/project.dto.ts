@@ -1,5 +1,5 @@
+import { RecordEventType } from '@app/runtime/event.dto'
 import { IsDate, IsNotEmpty, IsNumber, IsOptional } from 'class-validator'
-import { RecordEventType } from 'src/task/task.dto'
 
 export interface ProjectEvent {
   projectId: string

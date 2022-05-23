@@ -1,29 +1,45 @@
-import { ApiProperty } from '@nestjs/swagger'
-import { IsAlphanumeric, IsArray, IsDate, IsEnum, IsUUID } from 'class-validator'
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+import { IsAlphanumeric, IsArray, IsDate, IsEnum, IsOptional, IsUUID } from 'class-validator'
 
 export enum Role {
   admin = 'admin',
   founder = 'founder',
-  contributor = 'contributor',
+  projectManager = 'projectManager',
+}
+
+export class ContactHandle {
+  @ApiProperty()
+  type: 'twitter' | 'discord' | 'email'
+  @ApiProperty()
+  value: string
 }
 
 export class UserDto {
   @IsUUID()
   userId: string
+
   @IsAlphanumeric()
   name: string
-  @ApiProperty({
+
+  @ApiPropertyOptional({
     type: [String],
   })
   @IsArray()
   @IsEnum(Role)
-  roles: Role[]
+  @IsOptional()
+  roles?: Role[]
+
   @IsAlphanumeric()
   publicAddress: string
+
   @IsAlphanumeric()
   nonce: string
+
   @IsDate()
   created: Date
+
+  @IsOptional()
+  contacts?: ContactHandle[]
 }
 
 export class JwtTokenDto {

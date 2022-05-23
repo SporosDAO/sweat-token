@@ -1,10 +1,11 @@
+import { RecordEventType } from '@app/runtime/event.dto'
 import { toDTO } from '@app/runtime/util'
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 import { InjectModel } from '@nestjs/mongoose'
 import { FilterQuery, Model } from 'mongoose'
-import { CreateTaskDto, RecordEventType, TaskDto, TaskEvent, TaskQueryDto, TaskStatus } from './task.dto'
+import { CreateTaskDto, TaskDto, TaskEvent, TaskQueryDto, TaskStatus } from './task.dto'
 import { Task, TaskDocument } from './task.schema'
-import { EventEmitter2 } from '@nestjs/event-emitter'
 
 @Injectable()
 export class TaskService {
@@ -65,6 +66,10 @@ export class TaskService {
 
   async deleteAll(): Promise<void> {
     await this.taskModel.deleteMany({}).exec()
+  }
+
+  async deleteByProject(projectId: string): Promise<void> {
+    await this.taskModel.deleteMany({ projectId }).exec()
   }
 
   async find(query: TaskQueryDto): Promise<TaskDto[]> {

@@ -13,7 +13,11 @@ import {
   TaskApi,
   TaskDto,
   TaskQueryDto,
-  UserDto
+  UserDto,
+  MemberApi,
+  CreateMemberDto,
+  MemberDto,
+  MemberQueryDto
 } from './openapi'
 
 const basePath = `${window.location.protocol}//${window.location.host}`
@@ -25,6 +29,7 @@ class ApiClient {
   public dao: DaoApi = new DaoApi(undefined, basePath)
   public project: ProjectApi = new ProjectApi(undefined, basePath)
   public task: TaskApi = new TaskApi(undefined, basePath)
+  public member: MemberApi = new MemberApi(undefined, basePath)
 
   constructor() {
     this.initClient()
@@ -37,6 +42,7 @@ class ApiClient {
     this.dao = new DaoApi(config, basePath)
     this.project = new ProjectApi(config, basePath)
     this.task = new TaskApi(config, basePath)
+    this.member = new MemberApi(config, basePath)
   }
 }
 
@@ -107,4 +113,23 @@ export const createTask = async (p: CreateTaskDto): Promise<TaskDto> => {
 
 export const deleteTask = async (taskId: string): Promise<void> => {
   await client.task.taskControllerDelete(taskId)
+}
+
+export const findMembers = async (query: MemberQueryDto): Promise<MemberDto[]> => {
+  const res = await client.member.memberControllerFind(query)
+  return res.data
+}
+
+export const loadMember = async (memberId: string): Promise<MemberDto> => {
+  const res = await client.member.memberControllerRead(memberId)
+  return res.data
+}
+
+export const createMember = async (p: CreateMemberDto): Promise<MemberDto> => {
+  const res = await client.member.memberControllerCreate(p)
+  return res.data
+}
+
+export const deleteMember = async (memberId: string): Promise<void> => {
+  await client.member.memberControllerDelete(memberId)
 }

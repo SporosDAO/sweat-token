@@ -1,4 +1,5 @@
-import { CircularProgress, Stack } from '@mui/material'
+import { AccountCircle } from '@mui/icons-material'
+import { Chip, CircularProgress, Stack } from '@mui/material'
 import { Box } from '@mui/system'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -9,6 +10,32 @@ import useDao from '../../../context/DaoContext'
 import usePage, { LinkDao } from '../../../context/PageContext'
 import { formatCurrency, formatDateFromNow } from '../../../util'
 import TaskList from '../components/TaskList'
+
+const ProjectOverview = ({ project }: { project: ProjectDto }) => {
+  const status = project.status ? project.status.toUpperCase() : ''
+  return (
+    <ContentBlock title={project.name}>
+      <Stack direction="row" justifyContent="space-between" spacing={1}>
+        <Box>
+          <p>{project.description || 'Description not provided.'}</p>
+          <Chip
+            variant="outlined"
+            color="info"
+            avatar={<AccountCircle color="info" />}
+            label={`0x${project.ownerId.substring(0, 6)}..`}
+          />
+        </Box>
+        <Box>
+          <Chip label={status} color={status === 'OPEN' ? 'success' : 'primary'} variant="outlined" />
+          <br />
+          deadline {formatDateFromNow(project.deadline)}
+          <br />
+          {formatCurrency(project.budgetAllocation)} of {formatCurrency(project.budget)}
+        </Box>
+      </Stack>
+    </ContentBlock>
+  )
+}
 
 export default function ProjectView() {
   const [project, setProject] = useState<ProjectDto>()
@@ -45,18 +72,7 @@ export default function ProjectView() {
     <CircularProgress />
   ) : project ? (
     <Stack direction={'column'}>
-      <ContentBlock title={project.name}>
-        <Stack direction="row" justifyContent="space-between" spacing={1}>
-          <Box>{project.description || 'Description not provided.'}</Box>
-          <Box>
-            {project.status ? project.status.toUpperCase() : ''}
-            <br />
-            deadline {formatDateFromNow(project.deadline)}
-            <br />
-            {formatCurrency(project.budgetAllocation)} of {formatCurrency(project.budget)}
-          </Box>
-        </Stack>
-      </ContentBlock>
+      <ProjectOverview project={project} />
       <TaskList onChange={onTaskChange} project={project} />
     </Stack>
   ) : (

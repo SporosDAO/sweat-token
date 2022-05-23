@@ -24,6 +24,77 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
+ * @interface ContactHandle
+ */
+export interface ContactHandle {
+    /**
+     * 
+     * @type {object}
+     * @memberof ContactHandle
+     */
+    'type': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContactHandle
+     */
+    'value': string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateMemberDto
+ */
+export interface CreateMemberDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMemberDto
+     */
+    'memberId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMemberDto
+     */
+    'userId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMemberDto
+     */
+    'daoId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMemberDto
+     */
+    'invitation': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof CreateMemberDto
+     */
+    'roles': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMemberDto
+     */
+    'status': CreateMemberDtoStatusEnum;
+}
+
+export const CreateMemberDtoStatusEnum = {
+    Enabled: 'enabled',
+    Disabled: 'disabled',
+    Pending: 'pending'
+} as const;
+
+export type CreateMemberDtoStatusEnum = typeof CreateMemberDtoStatusEnum[keyof typeof CreateMemberDtoStatusEnum];
+
+/**
+ * 
+ * @export
  * @interface CreateProjectDto
  */
 export interface CreateProjectDto {
@@ -99,7 +170,7 @@ export interface CreateTaskDto {
      * @type {string}
      * @memberof CreateTaskDto
      */
-    'deadline'?: string;
+    'deadline': string;
     /**
      * 
      * @type {number}
@@ -210,6 +281,134 @@ export interface JwtTokenDto {
      */
     'token': string;
 }
+/**
+ * 
+ * @export
+ * @interface MemberDto
+ */
+export interface MemberDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof MemberDto
+     */
+    'memberId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MemberDto
+     */
+    'userId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MemberDto
+     */
+    'daoId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MemberDto
+     */
+    'invitation': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof MemberDto
+     */
+    'roles': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof MemberDto
+     */
+    'status': MemberDtoStatusEnum;
+}
+
+export const MemberDtoStatusEnum = {
+    Enabled: 'enabled',
+    Disabled: 'disabled',
+    Pending: 'pending'
+} as const;
+
+export type MemberDtoStatusEnum = typeof MemberDtoStatusEnum[keyof typeof MemberDtoStatusEnum];
+
+/**
+ * 
+ * @export
+ * @interface MemberQueryDto
+ */
+export interface MemberQueryDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof MemberQueryDto
+     */
+    'daoId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MemberQueryDto
+     */
+    'userId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MemberQueryDto
+     */
+    'memberId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MemberQueryDto
+     */
+    'projectId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MemberQueryDto
+     */
+    'dateField'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MemberQueryDto
+     */
+    'from'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MemberQueryDto
+     */
+    'to'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof MemberQueryDto
+     */
+    'limit'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof MemberQueryDto
+     */
+    'skip'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MemberQueryDto
+     */
+    'status'?: MemberQueryDtoStatusEnum;
+}
+
+export const MemberQueryDtoStatusEnum = {
+    Enabled: 'enabled',
+    Disabled: 'disabled',
+    Pending: 'pending'
+} as const;
+
+export type MemberQueryDtoStatusEnum = typeof MemberQueryDtoStatusEnum[keyof typeof MemberQueryDtoStatusEnum];
+
 /**
  * 
  * @export
@@ -422,7 +621,7 @@ export interface TaskDto {
      * @type {string}
      * @memberof TaskDto
      */
-    'deadline'?: string;
+    'deadline': string;
     /**
      * 
      * @type {number}
@@ -583,7 +782,7 @@ export interface UserDto {
      * @type {Array<string>}
      * @memberof UserDto
      */
-    'roles': Array<string>;
+    'roles'?: Array<string>;
     /**
      * 
      * @type {string}
@@ -614,6 +813,12 @@ export interface UserDto {
      * @memberof UserDto
      */
     'created': string;
+    /**
+     * 
+     * @type {Array<ContactHandle>}
+     * @memberof UserDto
+     */
+    'contacts'?: Array<ContactHandle>;
 }
 
 /**
@@ -1003,6 +1208,392 @@ export class DaoApi extends BaseAPI {
 
 
 /**
+ * MemberApi - axios parameter creator
+ * @export
+ */
+export const MemberApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateMemberDto} createMemberDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        memberControllerCreate: async (createMemberDto: CreateMemberDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createMemberDto' is not null or undefined
+            assertParamExists('memberControllerCreate', 'createMemberDto', createMemberDto)
+            const localVarPath = `/api/member`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createMemberDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} memberId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        memberControllerDelete: async (memberId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'memberId' is not null or undefined
+            assertParamExists('memberControllerDelete', 'memberId', memberId)
+            const localVarPath = `/api/member/{memberId}`
+                .replace(`{${"memberId"}}`, encodeURIComponent(String(memberId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {MemberQueryDto} memberQueryDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        memberControllerFind: async (memberQueryDto: MemberQueryDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'memberQueryDto' is not null or undefined
+            assertParamExists('memberControllerFind', 'memberQueryDto', memberQueryDto)
+            const localVarPath = `/api/member/find`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(memberQueryDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} memberId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        memberControllerRead: async (memberId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'memberId' is not null or undefined
+            assertParamExists('memberControllerRead', 'memberId', memberId)
+            const localVarPath = `/api/member/{memberId}`
+                .replace(`{${"memberId"}}`, encodeURIComponent(String(memberId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} memberId 
+         * @param {MemberDto} memberDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        memberControllerUpdate: async (memberId: string, memberDto: MemberDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'memberId' is not null or undefined
+            assertParamExists('memberControllerUpdate', 'memberId', memberId)
+            // verify required parameter 'memberDto' is not null or undefined
+            assertParamExists('memberControllerUpdate', 'memberDto', memberDto)
+            const localVarPath = `/api/member/{memberId}`
+                .replace(`{${"memberId"}}`, encodeURIComponent(String(memberId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(memberDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MemberApi - functional programming interface
+ * @export
+ */
+export const MemberApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MemberApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateMemberDto} createMemberDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async memberControllerCreate(createMemberDto: CreateMemberDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MemberDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.memberControllerCreate(createMemberDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} memberId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async memberControllerDelete(memberId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.memberControllerDelete(memberId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {MemberQueryDto} memberQueryDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async memberControllerFind(memberQueryDto: MemberQueryDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MemberDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.memberControllerFind(memberQueryDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} memberId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async memberControllerRead(memberId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MemberDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.memberControllerRead(memberId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} memberId 
+         * @param {MemberDto} memberDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async memberControllerUpdate(memberId: string, memberDto: MemberDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MemberDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.memberControllerUpdate(memberId, memberDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * MemberApi - factory interface
+ * @export
+ */
+export const MemberApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MemberApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateMemberDto} createMemberDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        memberControllerCreate(createMemberDto: CreateMemberDto, options?: any): AxiosPromise<MemberDto> {
+            return localVarFp.memberControllerCreate(createMemberDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} memberId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        memberControllerDelete(memberId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.memberControllerDelete(memberId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {MemberQueryDto} memberQueryDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        memberControllerFind(memberQueryDto: MemberQueryDto, options?: any): AxiosPromise<Array<MemberDto>> {
+            return localVarFp.memberControllerFind(memberQueryDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} memberId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        memberControllerRead(memberId: string, options?: any): AxiosPromise<MemberDto> {
+            return localVarFp.memberControllerRead(memberId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} memberId 
+         * @param {MemberDto} memberDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        memberControllerUpdate(memberId: string, memberDto: MemberDto, options?: any): AxiosPromise<MemberDto> {
+            return localVarFp.memberControllerUpdate(memberId, memberDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * MemberApi - object-oriented interface
+ * @export
+ * @class MemberApi
+ * @extends {BaseAPI}
+ */
+export class MemberApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreateMemberDto} createMemberDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MemberApi
+     */
+    public memberControllerCreate(createMemberDto: CreateMemberDto, options?: AxiosRequestConfig) {
+        return MemberApiFp(this.configuration).memberControllerCreate(createMemberDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} memberId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MemberApi
+     */
+    public memberControllerDelete(memberId: string, options?: AxiosRequestConfig) {
+        return MemberApiFp(this.configuration).memberControllerDelete(memberId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {MemberQueryDto} memberQueryDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MemberApi
+     */
+    public memberControllerFind(memberQueryDto: MemberQueryDto, options?: AxiosRequestConfig) {
+        return MemberApiFp(this.configuration).memberControllerFind(memberQueryDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} memberId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MemberApi
+     */
+    public memberControllerRead(memberId: string, options?: AxiosRequestConfig) {
+        return MemberApiFp(this.configuration).memberControllerRead(memberId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} memberId 
+     * @param {MemberDto} memberDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MemberApi
+     */
+    public memberControllerUpdate(memberId: string, memberDto: MemberDto, options?: AxiosRequestConfig) {
+        return MemberApiFp(this.configuration).memberControllerUpdate(memberId, memberDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * ProjectApi - axios parameter creator
  * @export
  */
@@ -1105,10 +1696,6 @@ export const ProjectApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -1144,10 +1731,6 @@ export const ProjectApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
