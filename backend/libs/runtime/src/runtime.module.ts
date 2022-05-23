@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
+import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 import { ServeStaticModule, ServeStaticModuleOptions } from '@nestjs/serve-static'
 import { join } from 'path'
@@ -8,14 +9,16 @@ import { join } from 'path'
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: [`.env.${process.env.NODE_ENV}`, '.env'],
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        uri: `${configService.get<string>('MONGODB_URI')}-${process.env.NODE_ENV}`,
+        uri: configService.get<string>('MONGODB_URI'),
       }),
       inject: [ConfigService],
     }),
+    EventEmitterModule.forRoot(),
     ServeStaticModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

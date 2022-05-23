@@ -1,15 +1,17 @@
+import { RuntimeModule } from '@app/runtime'
 import { Test, TestingModule } from '@nestjs/testing'
-import { UsersService } from './users.service'
+import { UserModule } from './user.module'
+import { UserService } from './user.service'
 
 describe('UsersService', () => {
-  let service: UsersService
+  let service: UserService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersService],
+      imports: [RuntimeModule, UserModule],
     }).compile()
 
-    service = module.get<UsersService>(UsersService)
+    service = module.get<UserService>(UserService)
   })
 
   it('should be defined', () => {

@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common'
+import { INestApplication, ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerCustomOptions, SwaggerModule } from '@nestjs/swagger'
 export * from './runtime.module'
@@ -26,6 +26,12 @@ export async function bootstrap(module: any): Promise<INestApplication> {
   })
 
   app.setGlobalPrefix('/api')
+  app.useGlobalPipes(
+    new ValidationPipe({
+      // whitelist: true,
+      transform: true,
+    }),
+  )
 
   setupOpenapi(app)
 
