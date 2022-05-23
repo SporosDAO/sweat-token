@@ -7,7 +7,7 @@ In other words sweat token is the early stage governance token that is gradually
 
 # Progressive Web App
 
-SporosDAO Sweat Token is a Progressive Web App hosted on Netlify. Deployment sites.
+SporosDAO Sweat Token is a Progressive Web App hosted on Netlify. Deployment sites below:
 
 | Branch | Live Deployment | Admin Console |
 |--------|-----------------|---------------|
