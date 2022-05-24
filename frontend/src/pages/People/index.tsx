@@ -18,7 +18,7 @@ export default function People() {
           Failed to load. <Button onClick={() => setFailed(false)}>Retry</Button>
         </Box>
       ) : (
-        <>LIST</>
+        <>coming soon</>
       )}
     </ContentBlock>
   )
