@@ -5,18 +5,18 @@ networks:
     name: sweat-token
 
 services:
-  contracts:
-    command: yarn run test
-    working_dir: /app/contracts
-    restart: unless-stopped
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    image: sweat-token/dev
-    networks:
-      - sweat-token
-    volumes:
-      - ./contracts:/app/contracts
+#  contracts:
+#    command: echo "TBD"
+#    working_dir: /app/contracts
+#    restart: unless-stopped
+#    build:
+#      context: ./
+#      dockerfile: Dockerfile
+#    image: sweat-token/dev
+#    networks:
+#      - sweat-token
+#    volumes:
+#      - ./contracts:/app/contracts
   backend:
     command: yarn run start:debug
     working_dir: /app/backend
