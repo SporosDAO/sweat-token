@@ -9,10 +9,10 @@ In other words sweat token is the early stage governance token that is gradually
 
 SporosDAO Sweat Token is a Progressive Web App hosted on Netlify. Deployment sites below:
 
-| Branch | Live Deployment | Admin Console |
-|--------|-----------------|---------------|
-| `main` / production | [live](https://sporosdaoapp-main.netlify.app/) | [admin](https://app.netlify.com/sites/sporosdaoapp-main/overview) |
-| `dev` / development | [live](https://sporosdaoapp-dev.netlify.app/) | [admin](https://app.netlify.com/sites/sporosdaoapp-dev/overview) |
+| Purpose | Branch | Live Deployment | Admin Console |
+|---------|--------|-----------------|---------------|
+| Production | `main` | [live](https://sporosdaoapp-main.netlify.app/) | [admin](https://app.netlify.com/sites/sporosdaoapp-main/overview) |
+| Development staging | `dev` | [live](https://sporosdaoapp-dev.netlify.app/) | [admin](https://app.netlify.com/sites/sporosdaoapp-dev/overview) |
 
 
 ## Resources
@@ -47,7 +47,3 @@ For convenience Steps 1 & 2 are configured in [`.gitpod.yaml`](.gitpod.yml) and 
 We welcome your contributions. To provide your code please fork the project and create a PR against the `dev` branch.
 Request at least one review from the core team.
 `dev` will be merged in `main` branch when we reach a relevant milestone that will be then deployed via the CI/CD pipelines.
-
-## Supporters
-
-- The SporosDAO PWA is hosted by [Netlify](https://www.netlify.com/)

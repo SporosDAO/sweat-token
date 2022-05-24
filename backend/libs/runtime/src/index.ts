@@ -21,8 +21,16 @@ const setupOpenapi = async (app: INestApplication): Promise<void> => {
 }
 
 export async function bootstrap(module: any): Promise<INestApplication> {
+
+  let corsOn;
+  if (process.env.NODE_ENV === 'development') {
+    corsOn = false;
+  } else {
+    corsOn = true;
+  }
+
   const app = await NestFactory.create(module, {
-    cors: true,
+    cors: corsOn,
   })
 
   app.setGlobalPrefix('/api')
