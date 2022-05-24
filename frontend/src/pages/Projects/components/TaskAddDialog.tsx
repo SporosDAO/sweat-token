@@ -39,9 +39,10 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
   const [page, setPage] = useState(0)
 
   useEffect(() => {
+    if (!props.open) return
     if (user) return
     requireAuth()
-  }, [requireAuth, user])
+  }, [props.open, requireAuth, user])
 
   const updateFormValues = (name: string, value: any) =>
     setFormValues((formValues) => ({
