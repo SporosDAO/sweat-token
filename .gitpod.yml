@@ -1,4 +1,15 @@
 
+tasks:
+  - name: SporosDAO App
+    init: |
+      # bring in secret access tokens from gitpod user dashboard
+      eval $(gp env -e)
+      # builds the images from the dockerfiles
+      docker-compose build
+      gp sync-done build
+    command: |
+      docker-compose up -d
+
 vscode:
   extensions:
     - ms-vscode.vscode-typescript-tslint-plugin
