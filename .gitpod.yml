@@ -8,7 +8,9 @@ tasks:
       docker-compose build
       gp sync-done build
     command: |
-      docker-compose up -d
+      docker-compose -f docker-compose.yaml -f docker-compose.install.yaml --profile install up -d --no-deps
+      echo "Start app with:"
+      echo "docker-compose up -d"
 
 vscode:
   extensions:
