@@ -92,9 +92,9 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
 
   const requireAuth = useCallback(() => {
     if (user) return
-    const destination = location.pathname === CONNECT_PAGE ? '/' : location.pathname
+    const destination = location.pathname === CONNECT_PAGE ? '/' : `${location.pathname}${location.search}`
     navigate(`${CONNECT_PAGE}${REDIR_QUERY}${destination}`)
-  }, [location.pathname, navigate, user])
+  }, [location.pathname, location.search, navigate, user])
 
   const memoedValue = useMemo(
     () => ({

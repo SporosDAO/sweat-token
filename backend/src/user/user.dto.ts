@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import { IsAlphanumeric, IsArray, IsDate, IsEnum, IsOptional, IsUUID } from 'class-validator'
+import { IsAlphanumeric, IsArray, IsDate, IsEnum, IsNotEmpty, IsOptional, IsUUID } from 'class-validator'
 
 export enum Role {
   admin = 'admin',
@@ -19,7 +19,7 @@ export class UserDto {
   userId: string
 
   @IsAlphanumeric()
-  name: string
+  name?: string
 
   @ApiPropertyOptional({
     type: [String],
@@ -40,6 +40,12 @@ export class UserDto {
 
   @IsOptional()
   contacts?: ContactHandle[]
+}
+
+export class CreateUserDto extends UserDto {
+  @IsAlphanumeric()
+  @IsNotEmpty()
+  publicAddress: string
 }
 
 export class JwtTokenDto {

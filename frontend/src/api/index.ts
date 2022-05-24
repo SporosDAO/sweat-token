@@ -1,11 +1,16 @@
 import {
   AuthApi,
   Configuration,
+  CreateMemberDto,
   CreateProjectDto,
   CreateTaskDto,
   DaoApi,
   DaoDto,
   JwtTokenDto,
+  MemberApi,
+  MemberDto,
+  MemberInviteDto,
+  MemberQueryDto,
   NonceDto,
   ProjectApi,
   ProjectDto,
@@ -13,11 +18,7 @@ import {
   TaskApi,
   TaskDto,
   TaskQueryDto,
-  UserDto,
-  MemberApi,
-  CreateMemberDto,
-  MemberDto,
-  MemberQueryDto
+  UserDto
 } from './openapi'
 
 const basePath = `${window.location.protocol}//${window.location.host}`
@@ -132,4 +133,9 @@ export const createMember = async (p: CreateMemberDto): Promise<MemberDto> => {
 
 export const deleteMember = async (memberId: string): Promise<void> => {
   await client.member.memberControllerDelete(memberId)
+}
+
+export const inviteMember = async (data: MemberInviteDto): Promise<MemberDto> => {
+  const res = await client.member.memberControllerInvite(data)
+  return res.data
 }

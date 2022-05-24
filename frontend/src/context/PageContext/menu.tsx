@@ -138,9 +138,15 @@ interface LinkDaoProps {
   daoId?: string
   children: any
   path?: string
+  onClick?: (e: any) => void
 }
 
-export const LinkDao = ({ children, daoId, path, add }: LinkDaoProps) => {
+export const LinkDao = ({ children, daoId, path, add, onClick }: LinkDaoProps) => {
+  const { daoId: paramDaoId } = useParams()
   path = add === true ? 'add' : path || undefined
-  return <Link to={getDaoUrl(daoId, path)}>{children}</Link>
+  return (
+    <Link to={getDaoUrl(daoId || paramDaoId, path)} onClick={onClick}>
+      {children}
+    </Link>
+  )
 }

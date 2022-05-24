@@ -51,12 +51,6 @@ export interface CreateMemberDto {
      * @type {string}
      * @memberof CreateMemberDto
      */
-    'memberId'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateMemberDto
-     */
     'userId': string;
     /**
      * 
@@ -66,28 +60,37 @@ export interface CreateMemberDto {
     'daoId': string;
     /**
      * 
-     * @type {string}
-     * @memberof CreateMemberDto
-     */
-    'invitation': string;
-    /**
-     * 
      * @type {object}
      * @memberof CreateMemberDto
      */
-    'roles': object;
+    'roles'?: object;
     /**
      * 
      * @type {string}
      * @memberof CreateMemberDto
      */
-    'status': CreateMemberDtoStatusEnum;
+    'memberId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMemberDto
+     */
+    'invitation'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMemberDto
+     */
+    'status'?: CreateMemberDtoStatusEnum;
 }
 
 export const CreateMemberDtoStatusEnum = {
     Enabled: 'enabled',
     Disabled: 'disabled',
-    Pending: 'pending'
+    Invited: 'invited',
+    Pending: 'pending',
+    Accepted: 'accepted',
+    Cancelled: 'cancelled'
 } as const;
 
 export type CreateMemberDtoStatusEnum = typeof CreateMemberDtoStatusEnum[keyof typeof CreateMemberDtoStatusEnum];
@@ -328,11 +331,45 @@ export interface MemberDto {
 export const MemberDtoStatusEnum = {
     Enabled: 'enabled',
     Disabled: 'disabled',
-    Pending: 'pending'
+    Invited: 'invited',
+    Pending: 'pending',
+    Accepted: 'accepted',
+    Cancelled: 'cancelled'
 } as const;
 
 export type MemberDtoStatusEnum = typeof MemberDtoStatusEnum[keyof typeof MemberDtoStatusEnum];
 
+/**
+ * 
+ * @export
+ * @interface MemberInviteDto
+ */
+export interface MemberInviteDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof MemberInviteDto
+     */
+    'daoId': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof MemberInviteDto
+     */
+    'projectId'?: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof MemberInviteDto
+     */
+    'roles'?: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof MemberInviteDto
+     */
+    'publicAddress': string;
+}
 /**
  * 
  * @export
@@ -404,7 +441,10 @@ export interface MemberQueryDto {
 export const MemberQueryDtoStatusEnum = {
     Enabled: 'enabled',
     Disabled: 'disabled',
-    Pending: 'pending'
+    Invited: 'invited',
+    Pending: 'pending',
+    Accepted: 'accepted',
+    Cancelled: 'cancelled'
 } as const;
 
 export type MemberQueryDtoStatusEnum = typeof MemberQueryDtoStatusEnum[keyof typeof MemberQueryDtoStatusEnum];
@@ -794,7 +834,7 @@ export interface UserDto {
      * @type {string}
      * @memberof UserDto
      */
-    'name': string;
+    'name'?: string;
     /**
      * 
      * @type {string}
@@ -1330,6 +1370,45 @@ export const MemberApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
+         * @param {MemberInviteDto} memberInviteDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        memberControllerInvite: async (memberInviteDto: MemberInviteDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'memberInviteDto' is not null or undefined
+            assertParamExists('memberControllerInvite', 'memberInviteDto', memberInviteDto)
+            const localVarPath = `/api/member/invite`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(memberInviteDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} memberId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1450,6 +1529,16 @@ export const MemberApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {MemberInviteDto} memberInviteDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async memberControllerInvite(memberInviteDto: MemberInviteDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MemberDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.memberControllerInvite(memberInviteDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} memberId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1505,6 +1594,15 @@ export const MemberApiFactory = function (configuration?: Configuration, basePat
          */
         memberControllerFind(memberQueryDto: MemberQueryDto, options?: any): AxiosPromise<Array<MemberDto>> {
             return localVarFp.memberControllerFind(memberQueryDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {MemberInviteDto} memberInviteDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        memberControllerInvite(memberInviteDto: MemberInviteDto, options?: any): AxiosPromise<MemberDto> {
+            return localVarFp.memberControllerInvite(memberInviteDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1566,6 +1664,17 @@ export class MemberApi extends BaseAPI {
      */
     public memberControllerFind(memberQueryDto: MemberQueryDto, options?: AxiosRequestConfig) {
         return MemberApiFp(this.configuration).memberControllerFind(memberQueryDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {MemberInviteDto} memberInviteDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MemberApi
+     */
+    public memberControllerInvite(memberInviteDto: MemberInviteDto, options?: AxiosRequestConfig) {
+        return MemberApiFp(this.configuration).memberControllerInvite(memberInviteDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

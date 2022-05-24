@@ -25,7 +25,6 @@ export class Member {
   daoId: string
 
   @Prop({
-    default: () => randomString(),
     required: false,
   })
   invitation?: string
@@ -33,11 +32,13 @@ export class Member {
   @Prop({
     required: false,
     type: [String],
+    default: () => [],
   })
   roles?: Role[]
 
   @Prop({
     required: false,
+    default: () => [],
     type: [String],
   })
   projects?: string[]

@@ -1,16 +1,19 @@
-import { toDTO } from '@app/runtime/util'
+import { randomString, toDTO } from '@app/runtime/util'
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { FilterQuery, Model } from 'mongoose'
-import { CreateMemberDto, MemberDto, MemberEvent, MemberQueryDto, MemberStatus } from './member.dto'
+import { CreateMemberDto, MemberDto, MemberEvent, MemberInviteDto, MemberQueryDto, MemberStatus } from './member.dto'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Member, MemberDocument } from './member.schema'
 import { RecordEventType } from '@app/runtime/event.dto'
+import { UserService } from 'src/user/user.service'
+import { UserDto } from 'src/user/user.dto'
 
 @Injectable()
 export class MemberService {
   constructor(
     private eventEmitter: EventEmitter2,
+    private userService: UserService,
     @InjectModel(Member.name) private memberModel: Model<MemberDocument>,
   ) {}
 
@@ -27,8 +30,36 @@ export class MemberService {
     } as MemberEvent)
   }
 
+  async invite(invite: MemberInviteDto): Promise<MemberDto> {
+    const publicAddress = invite.publicAddress
+
+    let user = await this.userService.load({ publicAddress })
+    if (!user) {
+      user = await this.userService.create({ publicAddress } as UserDto)
+    }
+
+    const previousInvitation = await this.load({
+      userId: user.userId,
+      daoId: invite.daoId,
+    })
+
+    if (previousInvitation) {
+      await this.delete(previousInvitation.memberId)
+    }
+
+    const memberDto: CreateMemberDto = {
+      daoId: invite.daoId,
+      roles: invite.roles || [],
+      invitation: `${randomString()}${randomString()}`,
+      status: MemberStatus.invited,
+      userId: user.userId,
+    }
+
+    return await this.create(memberDto)
+  }
+
   async create(memberDto: CreateMemberDto): Promise<MemberDto> {
-    memberDto.status = MemberStatus.enabled
+    memberDto.status = memberDto.status || MemberStatus.invited
     const member = new this.memberModel(memberDto)
     await member.save()
     this.emit('create', member)
@@ -37,6 +68,12 @@ export class MemberService {
 
   async read(memberId: string): Promise<MemberDto> {
     const member = await this.memberModel.findOne({ memberId }).exec()
+    return member ? this.toDto(member) : null
+  }
+
+  async load(memberDto: Partial<MemberDto>): Promise<MemberDto> {
+    if (Object.keys(memberDto).length === 0) throw new BadRequestException()
+    const member = await this.memberModel.findOne(memberDto).exec()
     return member ? this.toDto(member) : null
   }
 

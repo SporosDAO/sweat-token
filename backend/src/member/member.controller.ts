@@ -4,7 +4,7 @@ import { Auth } from 'src/auth/auth.decorator'
 import { Roles } from 'src/auth/auth.roles.decorator'
 import { RolesGuard } from 'src/auth/auth.roles.guard'
 import { Role } from 'src/user/user.dto'
-import { CreateMemberDto, MemberDto, MemberQueryDto } from './member.dto'
+import { CreateMemberDto, MemberDto, MemberInviteDto, MemberQueryDto } from './member.dto'
 import { MemberService } from './member.service'
 
 @ApiBearerAuth()
@@ -17,6 +17,12 @@ export class MemberController {
   @HttpCode(200)
   find(@Body() query: MemberQueryDto): Promise<MemberDto[]> {
     return this.memberService.find(query)
+  }
+
+  @Post('invite')
+  @HttpCode(200)
+  invite(@Body() invite: MemberInviteDto): Promise<MemberDto> {
+    return this.memberService.invite(invite)
   }
 
   @Post()
