@@ -2,3 +2,4 @@
 vscode:
   extensions:
     - ms-vscode.vscode-typescript-tslint-plugin
+    - bungcip.better-toml
