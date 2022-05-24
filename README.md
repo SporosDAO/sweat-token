@@ -35,6 +35,13 @@ You can obtain debug logs for each container while developing with
 - backend `docker-compose logs -f backend`
 - contracts `docker-compose logs -f contracts`
 
+### Gitpod
+
+In [gitpod](https://gitpod.io/) environment, the same dev setup described above still applies.
+
+For convenience Steps 1 & 2 are configured in [`.gitpod.yaml`](.gitpod.yml) and automatically run on workspace launch.
+
+
 ## Contributing
 
 We welcome your contributions. To provide your code please fork the project and create a PR against the `dev` branch.

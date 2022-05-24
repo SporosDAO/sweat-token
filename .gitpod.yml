@@ -10,7 +10,7 @@ tasks:
     command: |
       docker-compose -f docker-compose.yaml -f docker-compose.install.yaml --profile install up --no-deps
       echo "Start app with:"
-      echo "docker-compose up -d"
+      echo "docker-compose up"
 
 vscode:
   extensions:
