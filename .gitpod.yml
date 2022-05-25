@@ -8,7 +8,7 @@ tasks:
       docker-compose build
       gp sync-done build
     command: |
-      .gitpod.sh
+      bash .gitpod.sh
 
 vscode:
   extensions:
@@ -25,7 +25,7 @@ ports:
     visibility: public
 
   - port: 3000-8999
-    onOpen: ignore
+    onOpen: open-browser
 
 github:
   prebuilds:
