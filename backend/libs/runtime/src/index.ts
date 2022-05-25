@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerCustomOptions, SwaggerModule } from '@nestjs/swagger'
 export * from './runtime.module'
 
-const logger = new Logger('BackendSetup')
+const bootstrapLogger = new Logger('BackendSetup')
 
 const setupOpenapi = async (app: INestApplication): Promise<void> => {
   const config = new DocumentBuilder()
@@ -25,20 +25,26 @@ const setupOpenapi = async (app: INestApplication): Promise<void> => {
 export async function bootstrap(module: any): Promise<INestApplication> {
 
   let cors
+  let logger
   if (process.env.NODE_ENV === 'development' ||
       process.env.NODE_ENV === 'dev') {
     cors = {
-      origin: true, // ["http://localhost", "/.*\.gitpod\.io$/", "/.*\.sporosdao\.xyz$/"]
+      origin: true, // ["http://localhost", "/.*\.gitpod\.io$/", "/.*\.sporosdao\.xyz$/"],
       credentials: true
     }
+    logger = ['log', 'debug', 'error', 'verbose', 'warn']
   } else {
-    cors = { origin: true, credentials: true }
+    cors = {
+      origin: true,
+      credentials: true
+    }
+    logger = ['error', 'warn']
   }
-  logger.debug(`process.env.NODE_ENV=${process.env.NODE_ENV}`)
-  logger.debug('CORS:', cors)
 
-  const app = await NestFactory.create(module)
-  app.enableCors(cors)
+  const app = await NestFactory.create(module, {cors, logger})
+
+  bootstrapLogger.debug(`process.env.NODE_ENV=${process.env.NODE_ENV}`)
+  bootstrapLogger.debug('CORS:', cors)
 
   app.setGlobalPrefix('/api')
   app.useGlobalPipes(
