@@ -16,3 +16,10 @@ vscode:
   extensions:
     - ms-vscode.vscode-typescript-tslint-plugin
     - bungcip.better-toml
+
+ports:
+  - port: 3000
+    onOpen: open-browser
+
+  - port: 3001-8999
+    onOpen: ignore

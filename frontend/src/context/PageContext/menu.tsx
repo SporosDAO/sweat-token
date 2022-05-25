@@ -1,5 +1,5 @@
 import { People } from '@mui/icons-material'
-import TaskIcon from '@mui/icons-material/Task'
+import FactoryIcon from '@mui/icons-material/Factory'
 import PieChartIcon from '@mui/icons-material/PieChart'
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 import DashboardIcon from '@mui/icons-material/Dashboard'
@@ -44,7 +44,7 @@ export const menu: MenuItem[] = [
   },
   {
     label: 'Projects',
-    icon: TaskIcon,
+    icon: FactoryIcon,
     link: 'projects'
   },
   {
