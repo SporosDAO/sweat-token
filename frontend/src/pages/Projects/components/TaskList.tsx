@@ -85,8 +85,8 @@ export default function TaskList({ onChange, project }: TaskListProps) {
     if (task.type === TaskDtoTypeEnum.Onetime) return value
     let bands = ''
     if (task.bands) {
-      const band = (b: number): string => Math.round((task.budget / 10) * b).toString()
-      bands = `${band(task.bands[0])}$-${band(task.bands[1])}$`
+      const band = (b: number): string => formatCurrency(Math.round((task.budget / 10) * b))
+      bands = `${band(task.bands[0])}-${band(task.bands[1])}`
     }
     return bands ? `${bands} (${value} max)` : `${value} max`
   }

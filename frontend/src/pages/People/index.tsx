@@ -1,17 +1,18 @@
-import { Button, CircularProgress } from '@mui/material'
+import { Button, CircularProgress, Stack } from '@mui/material'
 import { Box } from '@mui/system'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { findMembers } from '../../api'
-import { MemberDto } from '../../api/openapi'
+import { listMembers } from '../../api'
+import { ExtendedMemberDto, MemberDto } from '../../api/openapi'
 import ContentBlock from '../../components/ContentBlock'
 import { getDaoUrl, LinkDao } from '../../context/PageContext'
 import InviteFormDialog from './components/InviteFormDialog'
+import MemberItem from './components/MemberItem'
 
 export default function People() {
   const [failed, setFailed] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [members, setMembers] = useState<MemberDto[]>()
+  const [members, setMembers] = useState<ExtendedMemberDto[]>()
 
   const [showInviteForm, setShowInviteForm] = useState(false)
 
@@ -29,7 +30,7 @@ export default function People() {
     if (failed) return
     if (loading) return
     setLoading(true)
-    findMembers({ daoId })
+    listMembers({ daoId })
       .then((m) => {
         setMembers(m)
       })
@@ -42,6 +43,7 @@ export default function People() {
 
   const onInviteFormClose = () => {
     setShowInviteForm(false)
+    setMembers(undefined)
     navigate(getDaoUrl(daoId, 'people'))
   }
 
@@ -56,14 +58,18 @@ export default function People() {
         </Box>
       ) : (
         <Box>
-          {members && members.length ? (
-            members.map((member) => <p>{member.userId}</p>)
-          ) : (
-            <p>This DAO has no members yet.</p>
-          )}
-          <Box>
+          <Box sx={{ mb: 3 }}>
             <LinkDao path="people?invite">Invite a member</LinkDao>
           </Box>
+          <Stack direction="row" spacing={2}>
+            {members && members.length ? (
+              members.map((member) => (
+                <MemberItem key={member.memberId} member={member} onUpdate={() => setMembers(undefined)} />
+              ))
+            ) : (
+              <p>This DAO has no members yet.</p>
+            )}
+          </Stack>
         </Box>
       )}
     </ContentBlock>

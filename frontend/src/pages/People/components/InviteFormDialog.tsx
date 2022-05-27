@@ -18,16 +18,7 @@ import useAuth from '../../../context/AuthContext'
 import useDao from '../../../context/DaoContext'
 import useToast from '../../../context/ToastContext'
 
-const roles = [
-  {
-    label: 'Founder',
-    value: 'founder'
-  },
-  {
-    label: 'Project Manager',
-    value: 'projectManager'
-  }
-]
+const roles = ['founder', 'projectManager']
 
 interface InviteFormDialogProps {
   open: boolean
@@ -108,15 +99,12 @@ export default function InviteFormDialog(props: InviteFormDialogProps) {
                 options={roles}
                 value={formValues['roles'] || []}
                 fullWidth
-                onChange={(event: any, newValue: any[]) => {
-                  updateFormValues(
-                    'roles',
-                    (newValue || []).map(({ value }) => value)
-                  )
+                onChange={(event: any, newValue: string[]) => {
+                  updateFormValues('roles', newValue || [])
                 }}
-                renderTags={(value: readonly any[], getTagProps) =>
-                  value.map((option: any, index: number) => (
-                    <Chip variant="outlined" label={option.label} {...getTagProps({ index })} />
+                renderTags={(value: readonly string[], getTagProps) =>
+                  value.map((option: string, index: number) => (
+                    <Chip variant="outlined" label={option} {...getTagProps({ index })} />
                   ))
                 }
                 renderInput={(params) => (

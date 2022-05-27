@@ -6,6 +6,7 @@ import {
   CreateTaskDto,
   DaoApi,
   DaoDto,
+  ExtendedMemberDto,
   JwtTokenDto,
   MemberApi,
   MemberDto,
@@ -116,8 +117,8 @@ export const deleteTask = async (taskId: string): Promise<void> => {
   await client.task.taskControllerDelete(taskId)
 }
 
-export const findMembers = async (query: MemberQueryDto): Promise<MemberDto[]> => {
-  const res = await client.member.memberControllerFind(query)
+export const listMembers = async (query: MemberQueryDto): Promise<ExtendedMemberDto[]> => {
+  const res = await client.member.memberControllerList(query)
   return res.data
 }
 
@@ -128,6 +129,11 @@ export const loadMember = async (memberId: string): Promise<MemberDto> => {
 
 export const createMember = async (p: CreateMemberDto): Promise<MemberDto> => {
   const res = await client.member.memberControllerCreate(p)
+  return res.data
+}
+
+export const updateMember = async (p: MemberDto): Promise<MemberDto> => {
+  const res = await client.member.memberControllerUpdate(p.memberId, p)
   return res.data
 }
 
