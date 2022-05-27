@@ -23,11 +23,14 @@ SporosDAO Sweat Token is a Progressive Web App hosted on Netlify. Deployment sit
 
 ## Development
 
-To start the development environment use `docker-compose up -d`
+The following steps will build and start docker containers and services for `mongodb`, `frontend`, `backend` and `contracts` mounting on the local directory.
 
-It will start three containers for `frontend`, `backend` and `contracts` mounting on the local directory
+1. Build the development environment with `docker-compose build`
+1. Update package dependencies with `docker-compose -f docker-compose.yaml -f docker-compose.install.yaml --profile install up --no-deps`
+1. Start the development environment with `docker-compose up -d`
+1. Check the status of services with `docker-compose ps`. All should be in `running` state. If any service is in `restarting` or `exited` state then something went wrong with the setup.
 
-You can obtain logs for each container while developing with
+You can obtain debug logs for each container while developing with
 - frontend `docker-compose logs -f frontend`
 - backend `docker-compose logs -f backend`
 - contracts `docker-compose logs -f contracts`
