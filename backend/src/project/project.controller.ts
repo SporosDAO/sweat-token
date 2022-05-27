@@ -22,7 +22,11 @@ export class ProjectController {
 
   @Post()
   @HttpCode(200)
-  @Auth(Role.projectManager, Role.founder)
+  // @opny721 I am thinking anyone should be able to
+  // submit an on-chain proposal for a new project.
+  // If the DAO approves via vote, then that person
+  // can manage the project and its tasks.
+  // @Auth(Role.projectManager, Role.founder)
   create(@Body() project: CreateProjectDto): Promise<ProjectDto> {
     return this.projectService.create(project)
   }

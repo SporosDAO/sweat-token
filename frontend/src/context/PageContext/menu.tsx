@@ -1,5 +1,5 @@
 import { People } from '@mui/icons-material'
-import AccountTreeIcon from '@mui/icons-material/AccountTree'
+import FactoryIcon from '@mui/icons-material/Factory'
 import PieChartIcon from '@mui/icons-material/PieChart'
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 import DashboardIcon from '@mui/icons-material/Dashboard'
@@ -44,7 +44,7 @@ export const menu: MenuItem[] = [
   },
   {
     label: 'Projects',
-    icon: AccountTreeIcon,
+    icon: FactoryIcon,
     link: 'projects'
   },
   {

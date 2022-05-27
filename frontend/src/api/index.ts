@@ -22,7 +22,13 @@ import {
   UserDto
 } from './openapi'
 
-const basePath = `${window.location.protocol}//${window.location.host}`
+let basePath = process.env.REACT_APP_SWEAT_TOKEN_API_BASEPATH
+console.debug(`process.env.NODE_ENV=${process.env.NODE_ENV}`)
+console.debug(`process.env.REACT_APP_SWEAT_TOKEN_API_BASEPATH=${process.env.REACT_APP_SWEAT_TOKEN_API_BASEPATH}`)
+if (!basePath) {
+  basePath = `${window.location.protocol}//${window.location.host}`
+}
+console.debug(`basePath=${basePath}`)
 
 class ApiClient {
   public token: string | undefined = undefined
@@ -39,7 +45,9 @@ class ApiClient {
 
   public initClient(accessToken?: string) {
     this.token = accessToken
-    const config = new Configuration({ accessToken })
+    // Enable credentials for prod and gitpod access
+    const baseOptions = { withCredentials: true }
+    const config = new Configuration({ accessToken, baseOptions })
     this.auth = new AuthApi(config, basePath)
     this.dao = new DaoApi(config, basePath)
     this.project = new ProjectApi(config, basePath)
