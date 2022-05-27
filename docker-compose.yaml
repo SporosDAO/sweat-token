@@ -29,6 +29,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+      target: deps
     image: sweat-token/dev
     networks:
       - sweat-token
@@ -49,12 +50,14 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+      target: deps
     image: sweat-token/dev
     networks:
       - sweat-token
     environment:
       - DATA_DIR=/data
       - LOG_LEVEL=info
+      - REACT_APP_SWEAT_TOKEN_API_BASEPATH=$REACT_APP_SWEAT_TOKEN_API_BASEPATH
     volumes:
       - ./frontend:/app/frontend
   mongo:
