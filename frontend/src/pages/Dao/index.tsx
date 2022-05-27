@@ -6,11 +6,9 @@ import { PageLayout } from '../../layout/Page'
 export default function Dao() {
   return (
     <DaoProvider>
-      <PageProvider>
-        <PageLayout>
-          <Outlet />
-        </PageLayout>
-      </PageProvider>
+      <PageLayout>
+        <Outlet />
+      </PageLayout>
     </DaoProvider>
   )
 }

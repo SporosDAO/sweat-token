@@ -1,10 +1,9 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, UseGuards } from '@nestjs/common'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { Auth } from 'src/auth/auth.decorator'
-import { Roles } from 'src/auth/auth.roles.decorator'
 import { RolesGuard } from 'src/auth/auth.roles.guard'
 import { Role } from 'src/user/user.dto'
-import { CreateMemberDto, MemberDto, MemberInviteDto, MemberQueryDto } from './member.dto'
+import { CreateMemberDto, ExtendedMemberDto, MemberDto, MemberInviteDto, MemberQueryDto } from './member.dto'
 import { MemberService } from './member.service'
 
 @ApiBearerAuth()
@@ -13,16 +12,22 @@ import { MemberService } from './member.service'
 export class MemberController {
   constructor(private memberService: MemberService) {}
 
-  @Post('find')
+  @Post('list')
   @HttpCode(200)
-  find(@Body() query: MemberQueryDto): Promise<MemberDto[]> {
-    return this.memberService.find(query)
+  list(@Body() query: MemberQueryDto): Promise<ExtendedMemberDto[]> {
+    return this.memberService.list(query)
   }
 
   @Post('invite')
   @HttpCode(200)
   invite(@Body() invite: MemberInviteDto): Promise<MemberDto> {
     return this.memberService.invite(invite)
+  }
+
+  @Post('find')
+  @HttpCode(200)
+  find(@Body() query: MemberQueryDto): Promise<MemberDto[]> {
+    return this.memberService.find(query)
   }
 
   @Post()

@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, UseGuards } from '@nestjs/common'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import { Auth } from 'src/auth/auth.decorator'
 import { Roles } from 'src/auth/auth.roles.decorator'
 import { RolesGuard } from 'src/auth/auth.roles.guard'
 import { Role } from 'src/user/user.dto'
@@ -20,8 +21,7 @@ export class TaskController {
 
   @Post()
   @HttpCode(200)
-  @UseGuards(RolesGuard)
-  @Roles(Role.founder, Role.projectManager)
+  @Auth(Role.founder, Role.projectManager)
   create(@Body() task: CreateTaskDto): Promise<TaskDto> {
     return this.taskService.create(task)
   }
@@ -34,8 +34,7 @@ export class TaskController {
 
   @Put(':taskId')
   @HttpCode(200)
-  @UseGuards(RolesGuard)
-  @Roles(Role.founder, Role.projectManager)
+  @Auth(Role.founder, Role.projectManager)
   update(@Param('taskId') taskId: string, @Body() taskDto: TaskDto): Promise<TaskDto> {
     taskDto.taskId = taskId
     return this.taskService.update(taskDto)
@@ -43,8 +42,7 @@ export class TaskController {
 
   @Delete(':taskId')
   @HttpCode(200)
-  @UseGuards(RolesGuard)
-  @Roles(Role.founder, Role.projectManager)
+  @Auth(Role.founder, Role.projectManager)
   delete(@Param('taskId') taskId: string): Promise<void> {
     return this.taskService.delete(taskId)
   }

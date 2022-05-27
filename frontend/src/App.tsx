@@ -24,6 +24,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/connect" element={<Connect />} />
+        {/* <Route path="dao/create" element={<DaoCreate />} /> */}
         <Route path="dao/:daoId" element={<Dao />}>
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />

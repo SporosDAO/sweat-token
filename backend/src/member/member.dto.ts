@@ -1,12 +1,21 @@
 import { RecordEventType } from '@app/runtime/event.dto'
-import { ApiHideProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger'
+import { ApiHideProperty, PartialType } from '@nestjs/swagger'
 import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
-import { Role } from 'src/user/user.dto'
+import { ContactHandle, Role } from 'src/user/user.dto'
+
+export enum Skill {
+  'Mentor' = 'Mentor',
+  'Software Engineer' = 'Software Engineer',
+  'UX/Designer' = 'UX/Designer',
+  'Legal' = 'Legal',
+  'Operations' = 'Operations',
+  'Finance' = 'Finance',
+  'Policy' = 'Policy',
+}
 
 export enum MemberStatus {
   enabled = 'enabled',
   disabled = 'disabled',
-  invited = 'invited',
   pending = 'pending',
   accepted = 'accepted',
   cancelled = 'cancelled',
@@ -47,6 +56,9 @@ export class MemberQueryDto {
   @IsOptional()
   @IsEnum(MemberStatus)
   status?: MemberStatus
+  @IsOptional()
+  @IsEnum(Skill)
+  skills?: Skill[]
 }
 
 export class MemberInviteDto {
@@ -60,7 +72,7 @@ export class MemberInviteDto {
 
   @IsArray()
   @IsOptional()
-  roles?: string[]
+  roles?: Role[]
 
   @IsString()
   @IsNotEmpty()
@@ -84,10 +96,14 @@ export class MemberDto {
   invitation: string
 
   @IsOptional()
-  roles: Role[] | string[]
+  roles: Role[]
 
   @IsOptional()
   status: MemberStatus = MemberStatus.pending
+
+  @IsOptional()
+  @IsArray()
+  skills?: Skill[]
 }
 
 export class CreateMemberDto extends PartialType(MemberDto) {
@@ -109,7 +125,21 @@ export class CreateMemberDto extends PartialType(MemberDto) {
 
   @IsArray()
   @IsOptional()
-  roles?: Role[] | string[]
+  roles?: Role[]
 }
 
 export class UpdateMemberDto extends CreateMemberDto {}
+
+export class ExtendedMemberDto extends MemberDto {
+  @IsString()
+  @IsOptional()
+  name: string
+
+  @IsString()
+  @IsOptional()
+  publicAddress: string
+
+  @IsOptional()
+  @IsArray()
+  contacts?: ContactHandle[]
+}

@@ -2,7 +2,15 @@ import { randomString, toDTO } from '@app/runtime/util'
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { FilterQuery, Model } from 'mongoose'
-import { CreateMemberDto, MemberDto, MemberEvent, MemberInviteDto, MemberQueryDto, MemberStatus } from './member.dto'
+import {
+  CreateMemberDto,
+  ExtendedMemberDto,
+  MemberDto,
+  MemberEvent,
+  MemberInviteDto,
+  MemberQueryDto,
+  MemberStatus,
+} from './member.dto'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Member, MemberDocument } from './member.schema'
 import { RecordEventType } from '@app/runtime/event.dto'
@@ -51,7 +59,7 @@ export class MemberService {
       daoId: invite.daoId,
       roles: invite.roles || [],
       invitation: `${randomString()}${randomString()}`,
-      status: MemberStatus.invited,
+      status: MemberStatus.pending,
       userId: user.userId,
     }
 
@@ -119,6 +127,7 @@ export class MemberService {
     if (query.userId) q.userId = query.userId
     if (query.daoId) q.daoId = query.daoId
     if (query.status) q.status = query.status
+    if (query.skills) q.skills = query.skills
 
     const dateField = query.dateField || 'created'
 
@@ -139,5 +148,22 @@ export class MemberService {
 
     const res = await find.exec()
     return res.map((doc) => this.toDto(doc))
+  }
+
+  async list(query: MemberQueryDto): Promise<ExtendedMemberDto[]> {
+    const members = await this.find(query)
+    const users = (
+      await this.userService.find({
+        userId: members.map((m) => m.userId),
+      })
+    ).reduce((o, u) => ({ ...o, [u.userId]: u }), {})
+    return members.map(
+      (m) =>
+        ({
+          ...m,
+          ...users[m.userId],
+          roles: m.roles,
+        } as ExtendedMemberDto),
+    )
   }
 }

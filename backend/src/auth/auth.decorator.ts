@@ -7,8 +7,8 @@ import { RolesGuard } from './auth.roles.guard'
 
 export function Auth(...roles: Role[]) {
   return applyDecorators(
-    Roles(...roles),
     UseGuards(JwtAuthGuard, RolesGuard),
+    Roles(...roles),
     ApiBearerAuth(),
     ApiUnauthorizedResponse({ description: 'Unauthorized' }),
   )

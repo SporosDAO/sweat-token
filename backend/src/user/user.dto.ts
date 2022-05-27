@@ -1,10 +1,21 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import { IsAlphanumeric, IsArray, IsDate, IsEnum, IsNotEmpty, IsOptional, IsUUID } from 'class-validator'
+import {
+  IsAlphanumeric,
+  IsArray,
+  IsDate,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator'
 
 export enum Role {
   admin = 'admin',
   founder = 'founder',
   projectManager = 'projectManager',
+  mentor = 'mentor',
 }
 
 export class ContactHandle {
@@ -50,4 +61,21 @@ export class CreateUserDto extends UserDto {
 
 export class JwtTokenDto {
   token: string
+}
+
+export class UserQueryDto {
+  @IsArray()
+  userId?: string[]
+
+  @IsOptional()
+  @IsString()
+  name?: string
+
+  @IsOptional()
+  @IsNumber()
+  limit?: number
+
+  @IsOptional()
+  @IsNumber()
+  skip?: number
 }
