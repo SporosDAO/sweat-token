@@ -5,9 +5,12 @@
   "author": "",
   "private": true,
   "license": "Apache-2.0",
+  "engines": {
+    "node": "16"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build",
+    "build": "yarn install && nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",
     "start": "NODE_ENV=dev nest start",
     "start:dev": "NODE_ENV=dev nest start --watch",
