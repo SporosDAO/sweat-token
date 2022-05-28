@@ -21,6 +21,22 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 
+function getCookieToken(): string | null {
+  const name = 'token='
+  const decodedCookie = decodeURIComponent(document.cookie)
+  const ca = decodedCookie.split(';')
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i]
+    while (c.charAt(0) === ' ') {
+      c = c.substring(1)
+    }
+    if (c.indexOf(name) === 0) {
+      return c.substring(name.length, c.length)
+    }
+  }
+  return null
+}
+
 export function AuthProvider({ children }: { children: ReactNode }): JSX.Element {
   const [user, setUser] = useState<UserDto>()
   const [token, setToken] = useState<string>()
@@ -32,6 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
   const navigate = useNavigate()
 
   const { account, provider, setAccount } = useWeb3()
+  const ctoken = useMemo(() => getCookieToken(), [])
 
   useEffect(() => {
     // account reset
@@ -41,10 +58,9 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
   }, [account, user])
 
   useEffect(() => {
+    if (token) return
     if (signaturePending) return
-    if (!account || !provider) {
-      return
-    }
+    if (!account || !provider) return
     api
       .getUserByAddress(account)
       .then(({ nonce, userId }: NonceDto) => {
@@ -58,7 +74,10 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
               return Promise.reject(e)
             })
           )
-          .then((jwt: JwtTokenDto) => setToken(jwt.token))
+          .then((jwt: JwtTokenDto) => {
+            setToken(jwt.token)
+            document.cookie = `token=${jwt.token};expires=${new Date(Date.now() + 10 * 24 * 60 * 60 * 1000)};path=/`
+          })
       })
       .catch((e: any) => {
         // user denied
@@ -71,7 +90,12 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
         console.error('failed to load account', e)
       })
     // .finally(() => {})
-  }, [account, provider, setAccount, signaturePending])
+  }, [account, provider, setAccount, signaturePending, token])
+
+  useEffect(() => {
+    if (!ctoken) return
+    setToken(ctoken)
+  }, [ctoken])
 
   useEffect(() => {
     if (!token) return
