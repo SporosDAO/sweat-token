@@ -101,6 +101,12 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
     if (!token) return
     if (token === api.getToken()) return
     api.setToken(token)
+  }, [token])
+
+  useEffect(() => {
+    if (!token) return
+    if (user) return
+    if (loading) return
     setLoading(true)
     api
       .getCurrentUser()
@@ -108,7 +114,7 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
         setUser(user)
       })
       .finally(() => setLoading(false))
-  }, [token])
+  }, [loading, token, user])
 
   const logout = useCallback(() => {
     setToken(undefined)

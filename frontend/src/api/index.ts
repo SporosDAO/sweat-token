@@ -60,6 +60,7 @@ class ApiClient {
 const client = new ApiClient()
 
 export const setToken = (token: string | undefined) => {
+  console.log(`Set API token`)
   client.initClient(token)
 }
 

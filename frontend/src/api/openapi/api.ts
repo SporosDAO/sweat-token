@@ -88,6 +88,12 @@ export interface CreateDaoDto {
      * @memberof CreateDaoDto
      */
     'isPrivate': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateDaoDto
+     */
+    'created': string;
 }
 /**
  * 
@@ -373,6 +379,12 @@ export interface DaoDto {
      * @memberof DaoDto
      */
     'isPrivate': boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof DaoDto
+     */
+    'created': string;
 }
 /**
  * 
@@ -1367,6 +1379,10 @@ export const DaoApiAxiosParamCreator = function (configuration?: Configuration) 
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -1402,6 +1418,10 @@ export const DaoApiAxiosParamCreator = function (configuration?: Configuration) 
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
@@ -1500,6 +1520,10 @@ export const DaoApiAxiosParamCreator = function (configuration?: Configuration) 
             const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     
