@@ -1,6 +1,7 @@
 import {
   AuthApi,
   Configuration,
+  CreateDaoDto,
   CreateMemberDto,
   CreateProjectDto,
   CreateTaskDto,
@@ -67,12 +68,22 @@ export const getToken = (): string | undefined => {
 }
 
 export const getDao = async (daoId: string): Promise<DaoDto> => {
-  const res = await client.dao.daoControllerLoad(daoId)
+  const res = await client.dao.daoControllerRead(daoId)
   return res.data
 }
 
 export const listDaos = async (): Promise<DaoDto[]> => {
   const res = await client.dao.daoControllerList()
+  return res.data
+}
+
+export const createDao = async (p: CreateDaoDto): Promise<DaoDto> => {
+  const res = await client.dao.daoControllerCreate(p)
+  return res.data
+}
+
+export const updateDao = async (p: DaoDto): Promise<DaoDto> => {
+  const res = await client.dao.daoControllerUpdate(p.daoId, p)
   return res.data
 }
 

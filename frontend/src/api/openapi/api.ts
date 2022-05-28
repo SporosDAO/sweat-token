@@ -43,6 +43,55 @@ export interface ContactHandle {
 /**
  * 
  * @export
+ * @interface CreateDaoDto
+ */
+export interface CreateDaoDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateDaoDto
+     */
+    'daoId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateDaoDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateDaoDto
+     */
+    'mission': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateDaoDto
+     */
+    'website': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateDaoDto
+     */
+    'logo': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateDaoDto
+     */
+    'kaliAddress': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateDaoDto
+     */
+    'isPrivate': boolean;
+}
+/**
+ * 
+ * @export
  * @interface CreateMemberDto
  */
 export interface CreateMemberDto {
@@ -82,25 +131,42 @@ export interface CreateMemberDto {
      * @memberof CreateMemberDto
      */
     'status'?: CreateMemberDtoStatusEnum;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof CreateMemberDto
+     */
+    'skills'?: Array<CreateMemberDtoSkillsEnum>;
 }
 
 export const CreateMemberDtoRolesEnum = {
     Admin: 'admin',
     Founder: 'founder',
-    ProjectManager: 'projectManager'
+    ProjectManager: 'projectManager',
+    Mentor: 'mentor'
 } as const;
 
 export type CreateMemberDtoRolesEnum = typeof CreateMemberDtoRolesEnum[keyof typeof CreateMemberDtoRolesEnum];
 export const CreateMemberDtoStatusEnum = {
     Enabled: 'enabled',
     Disabled: 'disabled',
-    Invited: 'invited',
     Pending: 'pending',
     Accepted: 'accepted',
     Cancelled: 'cancelled'
 } as const;
 
 export type CreateMemberDtoStatusEnum = typeof CreateMemberDtoStatusEnum[keyof typeof CreateMemberDtoStatusEnum];
+export const CreateMemberDtoSkillsEnum = {
+    Mentor: 'Mentor',
+    SoftwareEngineer: 'Software Engineer',
+    UxDesigner: 'UX/Designer',
+    Legal: 'Legal',
+    Operations: 'Operations',
+    Finance: 'Finance',
+    Policy: 'Policy'
+} as const;
+
+export type CreateMemberDtoSkillsEnum = typeof CreateMemberDtoSkillsEnum[keyof typeof CreateMemberDtoSkillsEnum];
 
 /**
  * 
@@ -277,6 +343,36 @@ export interface DaoDto {
      * @memberof DaoDto
      */
     'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DaoDto
+     */
+    'mission': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DaoDto
+     */
+    'website': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DaoDto
+     */
+    'logo': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DaoDto
+     */
+    'kaliAddress': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof DaoDto
+     */
+    'isPrivate': boolean;
 }
 /**
  * 
@@ -338,25 +434,42 @@ export interface ExtendedMemberDto {
      * @memberof ExtendedMemberDto
      */
     'status': ExtendedMemberDtoStatusEnum;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ExtendedMemberDto
+     */
+    'skills'?: Array<ExtendedMemberDtoSkillsEnum>;
 }
 
 export const ExtendedMemberDtoRolesEnum = {
     Admin: 'admin',
     Founder: 'founder',
-    ProjectManager: 'projectManager'
+    ProjectManager: 'projectManager',
+    Mentor: 'mentor'
 } as const;
 
 export type ExtendedMemberDtoRolesEnum = typeof ExtendedMemberDtoRolesEnum[keyof typeof ExtendedMemberDtoRolesEnum];
 export const ExtendedMemberDtoStatusEnum = {
     Enabled: 'enabled',
     Disabled: 'disabled',
-    Invited: 'invited',
     Pending: 'pending',
     Accepted: 'accepted',
     Cancelled: 'cancelled'
 } as const;
 
 export type ExtendedMemberDtoStatusEnum = typeof ExtendedMemberDtoStatusEnum[keyof typeof ExtendedMemberDtoStatusEnum];
+export const ExtendedMemberDtoSkillsEnum = {
+    Mentor: 'Mentor',
+    SoftwareEngineer: 'Software Engineer',
+    UxDesigner: 'UX/Designer',
+    Legal: 'Legal',
+    Operations: 'Operations',
+    Finance: 'Finance',
+    Policy: 'Policy'
+} as const;
+
+export type ExtendedMemberDtoSkillsEnum = typeof ExtendedMemberDtoSkillsEnum[keyof typeof ExtendedMemberDtoSkillsEnum];
 
 /**
  * 
@@ -413,25 +526,42 @@ export interface MemberDto {
      * @memberof MemberDto
      */
     'status': MemberDtoStatusEnum;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof MemberDto
+     */
+    'skills'?: Array<MemberDtoSkillsEnum>;
 }
 
 export const MemberDtoRolesEnum = {
     Admin: 'admin',
     Founder: 'founder',
-    ProjectManager: 'projectManager'
+    ProjectManager: 'projectManager',
+    Mentor: 'mentor'
 } as const;
 
 export type MemberDtoRolesEnum = typeof MemberDtoRolesEnum[keyof typeof MemberDtoRolesEnum];
 export const MemberDtoStatusEnum = {
     Enabled: 'enabled',
     Disabled: 'disabled',
-    Invited: 'invited',
     Pending: 'pending',
     Accepted: 'accepted',
     Cancelled: 'cancelled'
 } as const;
 
 export type MemberDtoStatusEnum = typeof MemberDtoStatusEnum[keyof typeof MemberDtoStatusEnum];
+export const MemberDtoSkillsEnum = {
+    Mentor: 'Mentor',
+    SoftwareEngineer: 'Software Engineer',
+    UxDesigner: 'UX/Designer',
+    Legal: 'Legal',
+    Operations: 'Operations',
+    Finance: 'Finance',
+    Policy: 'Policy'
+} as const;
+
+export type MemberDtoSkillsEnum = typeof MemberDtoSkillsEnum[keyof typeof MemberDtoSkillsEnum];
 
 /**
  * 
@@ -468,7 +598,8 @@ export interface MemberInviteDto {
 export const MemberInviteDtoRolesEnum = {
     Admin: 'admin',
     Founder: 'founder',
-    ProjectManager: 'projectManager'
+    ProjectManager: 'projectManager',
+    Mentor: 'mentor'
 } as const;
 
 export type MemberInviteDtoRolesEnum = typeof MemberInviteDtoRolesEnum[keyof typeof MemberInviteDtoRolesEnum];
@@ -539,18 +670,34 @@ export interface MemberQueryDto {
      * @memberof MemberQueryDto
      */
     'status'?: MemberQueryDtoStatusEnum;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof MemberQueryDto
+     */
+    'skills'?: Array<MemberQueryDtoSkillsEnum>;
 }
 
 export const MemberQueryDtoStatusEnum = {
     Enabled: 'enabled',
     Disabled: 'disabled',
-    Invited: 'invited',
     Pending: 'pending',
     Accepted: 'accepted',
     Cancelled: 'cancelled'
 } as const;
 
 export type MemberQueryDtoStatusEnum = typeof MemberQueryDtoStatusEnum[keyof typeof MemberQueryDtoStatusEnum];
+export const MemberQueryDtoSkillsEnum = {
+    Mentor: 'Mentor',
+    SoftwareEngineer: 'Software Engineer',
+    UxDesigner: 'UX/Designer',
+    Legal: 'Legal',
+    Operations: 'Operations',
+    Finance: 'Finance',
+    Policy: 'Policy'
+} as const;
+
+export type MemberQueryDtoSkillsEnum = typeof MemberQueryDtoSkillsEnum[keyof typeof MemberQueryDtoSkillsEnum];
 
 /**
  * 
@@ -1201,6 +1348,74 @@ export const DaoApiAxiosParamCreator = function (configuration?: Configuration) 
     return {
         /**
          * 
+         * @param {CreateDaoDto} createDaoDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        daoControllerCreate: async (createDaoDto: CreateDaoDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createDaoDto' is not null or undefined
+            assertParamExists('daoControllerCreate', 'createDaoDto', createDaoDto)
+            const localVarPath = `/api/dao`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createDaoDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} daoId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        daoControllerDelete: async (daoId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoControllerDelete', 'daoId', daoId)
+            const localVarPath = `/api/dao/{daoId}`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1234,9 +1449,9 @@ export const DaoApiAxiosParamCreator = function (configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        daoControllerLoad: async (daoId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        daoControllerRead: async (daoId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'daoId' is not null or undefined
-            assertParamExists('daoControllerLoad', 'daoId', daoId)
+            assertParamExists('daoControllerRead', 'daoId', daoId)
             const localVarPath = `/api/dao/{daoId}`
                 .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1261,6 +1476,45 @@ export const DaoApiAxiosParamCreator = function (configuration?: Configuration) 
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} daoId 
+         * @param {CreateDaoDto} createDaoDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        daoControllerUpdate: async (daoId: string, createDaoDto: CreateDaoDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoControllerUpdate', 'daoId', daoId)
+            // verify required parameter 'createDaoDto' is not null or undefined
+            assertParamExists('daoControllerUpdate', 'createDaoDto', createDaoDto)
+            const localVarPath = `/api/dao/{daoId}`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createDaoDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -1271,6 +1525,26 @@ export const DaoApiAxiosParamCreator = function (configuration?: Configuration) 
 export const DaoApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DaoApiAxiosParamCreator(configuration)
     return {
+        /**
+         * 
+         * @param {CreateDaoDto} createDaoDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async daoControllerCreate(createDaoDto: CreateDaoDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DaoDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoControllerCreate(createDaoDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} daoId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async daoControllerDelete(daoId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoControllerDelete(daoId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
         /**
          * 
          * @param {*} [options] Override http request option.
@@ -1286,8 +1560,19 @@ export const DaoApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async daoControllerLoad(daoId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DaoDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.daoControllerLoad(daoId, options);
+        async daoControllerRead(daoId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DaoDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoControllerRead(daoId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} daoId 
+         * @param {CreateDaoDto} createDaoDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async daoControllerUpdate(daoId: string, createDaoDto: CreateDaoDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DaoDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoControllerUpdate(daoId, createDaoDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -1302,6 +1587,24 @@ export const DaoApiFactory = function (configuration?: Configuration, basePath?:
     return {
         /**
          * 
+         * @param {CreateDaoDto} createDaoDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        daoControllerCreate(createDaoDto: CreateDaoDto, options?: any): AxiosPromise<DaoDto> {
+            return localVarFp.daoControllerCreate(createDaoDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} daoId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        daoControllerDelete(daoId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.daoControllerDelete(daoId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1314,8 +1617,18 @@ export const DaoApiFactory = function (configuration?: Configuration, basePath?:
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        daoControllerLoad(daoId: string, options?: any): AxiosPromise<DaoDto> {
-            return localVarFp.daoControllerLoad(daoId, options).then((request) => request(axios, basePath));
+        daoControllerRead(daoId: string, options?: any): AxiosPromise<DaoDto> {
+            return localVarFp.daoControllerRead(daoId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} daoId 
+         * @param {CreateDaoDto} createDaoDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        daoControllerUpdate(daoId: string, createDaoDto: CreateDaoDto, options?: any): AxiosPromise<DaoDto> {
+            return localVarFp.daoControllerUpdate(daoId, createDaoDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1327,6 +1640,28 @@ export const DaoApiFactory = function (configuration?: Configuration, basePath?:
  * @extends {BaseAPI}
  */
 export class DaoApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreateDaoDto} createDaoDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DaoApi
+     */
+    public daoControllerCreate(createDaoDto: CreateDaoDto, options?: AxiosRequestConfig) {
+        return DaoApiFp(this.configuration).daoControllerCreate(createDaoDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} daoId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DaoApi
+     */
+    public daoControllerDelete(daoId: string, options?: AxiosRequestConfig) {
+        return DaoApiFp(this.configuration).daoControllerDelete(daoId, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {*} [options] Override http request option.
@@ -1344,8 +1679,20 @@ export class DaoApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DaoApi
      */
-    public daoControllerLoad(daoId: string, options?: AxiosRequestConfig) {
-        return DaoApiFp(this.configuration).daoControllerLoad(daoId, options).then((request) => request(this.axios, this.basePath));
+    public daoControllerRead(daoId: string, options?: AxiosRequestConfig) {
+        return DaoApiFp(this.configuration).daoControllerRead(daoId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} daoId 
+     * @param {CreateDaoDto} createDaoDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DaoApi
+     */
+    public daoControllerUpdate(daoId: string, createDaoDto: CreateDaoDto, options?: AxiosRequestConfig) {
+        return DaoApiFp(this.configuration).daoControllerUpdate(daoId, createDaoDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -1900,10 +2247,6 @@ export const ProjectApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
     

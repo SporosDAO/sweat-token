@@ -67,7 +67,7 @@ export class MemberService {
   }
 
   async create(memberDto: CreateMemberDto): Promise<MemberDto> {
-    memberDto.status = memberDto.status || MemberStatus.invited
+    memberDto.status = memberDto.status || MemberStatus.pending
     const member = new this.memberModel(memberDto)
     await member.save()
     this.emit('create', member)
@@ -112,8 +112,8 @@ export class MemberService {
     this.emit('delete', member)
   }
 
-  async deleteAll(): Promise<void> {
-    await this.memberModel.deleteMany({}).exec()
+  async deleteAll(filter?: FilterQuery<MemberDocument>): Promise<void> {
+    await this.memberModel.deleteMany(filter).exec()
   }
 
   async deleteByProject(projectId: string): Promise<void> {

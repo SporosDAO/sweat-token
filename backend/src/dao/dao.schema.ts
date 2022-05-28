@@ -9,13 +9,41 @@ export class Dao {
   @Prop({
     default: () => uuidv4(),
     unique: true,
+    required: true,
   })
   daoId: string
 
   @Prop({
-    required: false,
+    required: true,
   })
   name: string
+
+  @Prop({
+    required: false,
+  })
+  mission: string
+  @Prop({
+    required: false,
+  })
+  website: string
+  @Prop({
+    required: false,
+  })
+  logo: string
+  @Prop({
+    required: true,
+  })
+  kaliAddress: string
+  @Prop({
+    required: true,
+    default: () => false,
+  })
+  isPrivate: boolean
+  @Prop({
+    required: true,
+    default: () => new Date(),
+  })
+  created: Date
 }
 
 export const DaoSchema = SchemaFactory.createForClass(Dao)

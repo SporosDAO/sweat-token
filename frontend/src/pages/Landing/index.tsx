@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Grid, List, ListItem, Paper, SxProps, Theme } from '@mui/material'
+import { Button, CircularProgress, Grid, List, ListItem, SxProps, Theme } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { listDaos } from '../../api'
@@ -8,18 +8,24 @@ import { PageLayout } from '../../layout/Page'
 
 export default function Landing() {
   const [loading, setLoading] = useState(false)
+  const [failed, setFailed] = useState(false)
   const [publicDaos, setPublicDaos] = useState<DaoDto[]>()
 
   useEffect(() => {
     if (publicDaos !== undefined) return
     if (loading) return
+    if (failed) return
     setLoading(true)
     listDaos()
       .then((daos: DaoDto[]) => {
         setPublicDaos(daos)
       })
+      .catch((e) => {
+        setFailed(true)
+        console.log(e)
+      })
       .finally(() => setLoading(false))
-  })
+  }, [failed, loading, publicDaos])
 
   const blockStyle: SxProps<Theme> = {
     m: 1,
@@ -36,8 +42,31 @@ export default function Landing() {
 
       <Grid container>
         <Grid item lg={6}>
-          <ContentBlock sx={blockStyle} title="Public DAOs">
-            {loading ? (
+          <ContentBlock sx={{ ...blockStyle }} title="Create a DAOs">
+            <p>
+              <span>
+                <a href="https://app.kalidao.xyz/">Create</a> your first DAO with legal benefits.
+              </span>
+              <span>
+                Then add it to your <Link to="/dao/create">dashboard</Link> to manage projects and contributors.
+              </span>
+            </p>
+          </ContentBlock>
+        </Grid>
+        <Grid item lg={6}>
+          <ContentBlock sx={{ ...blockStyle, ml: 1, mr: 0 }} title="Public DAOs">
+            {failed ? (
+              <p>
+                Failed to load list.{' '}
+                <Button
+                  onClick={() => {
+                    setFailed(false)
+                  }}
+                >
+                  Retry
+                </Button>
+              </p>
+            ) : loading ? (
               <CircularProgress />
             ) : publicDaos && publicDaos.length ? (
               <List>
@@ -50,18 +79,6 @@ export default function Landing() {
             ) : (
               <p>No public DAOs yet.</p>
             )}
-          </ContentBlock>
-        </Grid>
-        <Grid item lg={6}>
-          <ContentBlock sx={{ ...blockStyle, ml: 1, mr: 0 }} title="Create a DAOs">
-            <p>
-              <span>
-                <a href="https://app.kalidao.xyz/">Create</a> your first DAO with legal benefits.
-              </span>
-              <span>
-                Then go to your <Link to="/dashboard">dashboard</Link> to manage projects and contributors.
-              </span>
-            </p>
           </ContentBlock>
         </Grid>
       </Grid>
