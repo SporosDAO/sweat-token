@@ -1,7 +1,7 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import MenuIcon from '@mui/icons-material/Menu'
-import { Box, CssBaseline, IconButton, Toolbar, useTheme, useMediaQuery } from '@mui/material'
+import { Box, CssBaseline, IconButton, Stack, Toolbar, useMediaQuery, useTheme } from '@mui/material'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
@@ -11,10 +11,10 @@ import List from '@mui/material/List'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import React, { useState } from 'react'
-import ConnectDialog from '../../components/ConnectDialog'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { OWNER } from '../../constants'
+import usePage, { MainListItems, SecondaryListItems } from '../../context/PageContext'
 import useWeb3 from '../../context/Web3Context'
-import { GetPageTitle, MainListItems, SecondaryListItems } from './menu'
 
 function Copyright(props: any) {
   return (
@@ -79,27 +79,22 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export function PageLayout(props: any) {
   const theme = useTheme()
+  const navigate = useNavigate()
+  const location = useLocation()
+
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const [open, setOpen] = useState(!isMobile)
-  const [connectDialogOpen, setConnectDialogOpen] = React.useState(false)
 
   const { account, setAccount } = useWeb3()
+  const { title } = usePage()
 
   const toggleDrawer = () => {
     setOpen(!open)
   }
 
-  const openConnectDialog = () => {
-    setConnectDialogOpen(!account ? true : false)
-  }
-  const handleConnectDialogOpen = () => {
-    setConnectDialogOpen(false)
-  }
-
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <ConnectDialog onClose={handleConnectDialogOpen} open={!account && connectDialogOpen} />
       <AppBar position="absolute" open={open}>
         <Toolbar
           sx={{
@@ -119,15 +114,21 @@ export function PageLayout(props: any) {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-            {GetPageTitle()}
+            {title}
           </Typography>
           <IconButton color="inherit">
             {/* <Badge badgeContent={4} color="secondary">
               <NotificationsIcon />
             </Badge> */}
           </IconButton>
-          <IconButton color="inherit" onClick={() => (!account ? openConnectDialog() : setAccount(undefined))}>
-            {!account ? <AccountCircleIcon /> : <small>{`${account.substring(0, 8)}..`}</small>}
+          <IconButton
+            color="inherit"
+            onClick={() => (!account ? navigate(`/connect?redirect=${location.pathname}`) : setAccount(undefined))}
+          >
+            <Stack spacing={1} direction="row">
+              <AccountCircleIcon />
+              {!account ? <></> : <small>{`${account.substring(0, 8)}..`}</small>}
+            </Stack>
           </IconButton>
         </Toolbar>
       </AppBar>

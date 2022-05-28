@@ -1,18 +1,25 @@
-import { Grid, Paper } from '@mui/material'
+import { Button, CircularProgress } from '@mui/material'
+import { Box } from '@mui/system'
+import { useState } from 'react'
+import { MemberDto } from '../../api/openapi'
+import ContentBlock from '../../components/ContentBlock'
 
 export default function People() {
+  const [failed, setFailed] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [members, setMembers] = useState<MemberDto[]>()
+
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={12} md={12} lg={12}>
-        <Paper
-          sx={{
-            p: 2,
-            height: 240
-          }}
-        >
-          <h2>coming soon..</h2>
-        </Paper>
-      </Grid>
-    </Grid>
+    <ContentBlock title="People">
+      {loading ? (
+        <CircularProgress />
+      ) : failed ? (
+        <Box>
+          Failed to load. <Button onClick={() => setFailed(false)}>Retry</Button>
+        </Box>
+      ) : (
+        <>coming soon</>
+      )}
+    </ContentBlock>
   )
 }

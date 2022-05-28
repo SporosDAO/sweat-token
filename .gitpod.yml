@@ -1,4 +1,45 @@
 
+tasks:
+  - name: SporosDAO App
+    init: |
+      # bring in secret access tokens from gitpod user dashboard
+      eval $(gp env -e)
+      # builds the images from the dockerfiles
+      docker-compose build
+      gp sync-done build
+    command: |
+      bash .gitpod.sh
+
 vscode:
   extensions:
     - ms-vscode.vscode-typescript-tslint-plugin
+    - bungcip.better-toml
+
+    - esbenp.prettier-vscode
+
+ports:
+
+  # allow front end to access backend api
+  # https://www.gitpod.io/docs/config-ports#cors
+  - port: 3001
+    visibility: public
+
+  - port: 3000-8999
+    onOpen: open-browser
+
+github:
+  prebuilds:
+    # enable for the master/default branch (defaults to true)
+    master: true
+    # enable for all branches in this repo (defaults to false)
+    branches: true
+    # enable for pull requests coming from this repo (defaults to true)
+    pullRequests: true
+    # enable for pull requests coming from forks (defaults to false)
+    pullRequestsFromForks: true
+    # add a "Review in Gitpod" button as a comment to pull requests (defaults to true)
+    addComment: true
+    # add a "Review in Gitpod" button to pull requests (defaults to false)
+    addBadge: true
+    # add a label once the prebuild is ready to pull requests (defaults to false)
+    addLabel: prebuilt-in-gitpod

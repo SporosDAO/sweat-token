@@ -5,6 +5,8 @@ import { DaoDto } from '../api/openapi'
 
 interface DaoContextType {
   dao?: DaoDto
+  daoId?: string
+  projectId?: string
   loading: boolean
   error?: any
   load: (name: string) => void
@@ -21,7 +23,7 @@ export function DaoProvider({ children }: { children: ReactNode }): JSX.Element 
   const navigate = useNavigate()
   const location = useLocation()
 
-  const { daoId } = useParams()
+  const { daoId, projectId } = useParams()
 
   // If we change page, reset the error state.
   useEffect(() => {
@@ -61,11 +63,13 @@ export function DaoProvider({ children }: { children: ReactNode }): JSX.Element 
   const memoedValue = useMemo(
     () => ({
       dao,
+      daoId,
+      projectId,
       loading,
       error,
       load
     }),
-    [dao, error, load, loading]
+    [dao, daoId, projectId, error, load, loading]
   )
 
   return <DaoContext.Provider value={memoedValue}>{!loadingInitial && children}</DaoContext.Provider>

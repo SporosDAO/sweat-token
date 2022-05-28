@@ -1,9 +1,24 @@
-import { Grid, Paper } from '@mui/material'
+import { CircularProgress, Grid, Paper } from '@mui/material'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import useDao from '../../context/DaoContext'
+import useToast from '../../context/ToastContext'
 
 export default function Dashboard() {
-  const { dao } = useDao()
-  return (
+  const { loading, dao } = useDao()
+  const navigate = useNavigate()
+  const { showToast } = useToast()
+
+  useEffect(() => {
+    if (loading) return
+    if (dao) return
+    showToast('Dao not found', 'error')
+    navigate('/')
+  }, [dao, loading, navigate, showToast])
+
+  return loading ? (
+    <CircularProgress />
+  ) : (
     <Grid container spacing={3}>
       <Grid item xs={12} md={8} lg={9}>
         <Paper

@@ -5,18 +5,18 @@ networks:
     name: sweat-token
 
 services:
-  contracts:
-    command: yarn run test
-    working_dir: /app/contracts
-    restart: unless-stopped
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    image: sweat-token/dev
-    networks:
-      - sweat-token
-    volumes:
-      - ./contracts:/app/contracts
+#  contracts:
+#    command: echo "TBD"
+#    working_dir: /app/contracts
+#    restart: unless-stopped
+#    build:
+#      context: ./
+#      dockerfile: Dockerfile
+#    image: sweat-token/dev
+#    networks:
+#      - sweat-token
+#    volumes:
+#      - ./contracts:/app/contracts
   backend:
     command: yarn run start:debug
     working_dir: /app/backend
@@ -29,6 +29,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+      target: deps
     image: sweat-token/dev
     networks:
       - sweat-token
@@ -42,18 +43,21 @@ services:
     working_dir: /app/frontend
     depends_on:
       - backend
+      - mongo-express
     ports:
       - 3000:3000
     restart: unless-stopped
     build:
       context: ./
       dockerfile: Dockerfile
+      target: deps
     image: sweat-token/dev
     networks:
       - sweat-token
     environment:
       - DATA_DIR=/data
       - LOG_LEVEL=info
+      - REACT_APP_SWEAT_TOKEN_API_BASEPATH=$REACT_APP_SWEAT_TOKEN_API_BASEPATH
     volumes:
       - ./frontend:/app/frontend
   mongo:

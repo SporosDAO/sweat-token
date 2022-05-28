@@ -1,0 +1,22 @@
+version: "3.9"
+
+# Install latest package updates in dev environment
+
+services:
+  # contracts:
+  #  command: yarn install
+  #  restart: "no"
+  #  profiles: ["install"]
+  backend:
+    command: yarn install
+    restart: "no"
+    profiles: ["install"]
+  frontend:
+    command: yarn install
+    restart: "no"
+    profiles: ["install"]
+
+  mongo:
+    profiles: ["no-install"]
+  mongo-express:
+    profiles: ["no-install"]
