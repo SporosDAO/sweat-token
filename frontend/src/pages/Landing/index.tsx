@@ -25,17 +25,16 @@ export default function Landing() {
               <ListItem key={dao.daoId}>
                 <Link to={`dao/${dao.daoId}/dashboard`}>{dao.name}</Link>
               </ListItem>
-          ))}
-        </List>
+            ))}
+          </List>
         ) : (
           <p>
-            <span>
-              Loading your DAOs...
-            </span>
+            <span>Loading your DAOs...</span>
           </p>
         )}
         <p>
-            <a href="https://app.kalidao.xyz/">Create</a> a new DAO with legal benefits via KaliDAO. Once created it will show up in your list of managed DAOs above.
+          <a href="https://app.kalidao.xyz/">Create</a> a new DAO with legal benefits via KaliDAO. Once created it will
+          show up in your list of managed DAOs above.
         </p>
       </Paper>
     </Box>
