@@ -94,6 +94,12 @@ export interface CreateDaoDto {
      * @memberof CreateDaoDto
      */
     'created': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateDaoDto
+     */
+    'createdBy': string;
 }
 /**
  * 
@@ -119,6 +125,12 @@ export interface CreateMemberDto {
      * @memberof CreateMemberDto
      */
     'roles'?: Array<CreateMemberDtoRolesEnum>;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMemberDto
+     */
+    'invitedBy': string;
     /**
      * 
      * @type {string}
@@ -385,6 +397,12 @@ export interface DaoDto {
      * @memberof DaoDto
      */
     'created': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DaoDto
+     */
+    'createdBy': string;
 }
 /**
  * 
@@ -452,6 +470,12 @@ export interface ExtendedMemberDto {
      * @memberof ExtendedMemberDto
      */
     'skills'?: Array<ExtendedMemberDtoSkillsEnum>;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExtendedMemberDto
+     */
+    'invitedBy': string;
 }
 
 export const ExtendedMemberDtoRolesEnum = {
@@ -544,6 +568,12 @@ export interface MemberDto {
      * @memberof MemberDto
      */
     'skills'?: Array<MemberDtoSkillsEnum>;
+    /**
+     * 
+     * @type {string}
+     * @memberof MemberDto
+     */
+    'invitedBy': string;
 }
 
 export const MemberDtoRolesEnum = {
@@ -587,6 +617,12 @@ export interface MemberInviteDto {
      * @memberof MemberInviteDto
      */
     'daoId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MemberInviteDto
+     */
+    'invitedBy': string;
     /**
      * 
      * @type {Array<string>}
@@ -1729,14 +1765,18 @@ export const MemberApiAxiosParamCreator = function (configuration?: Configuratio
     return {
         /**
          * 
+         * @param {string} daoId 
          * @param {CreateMemberDto} createMemberDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        memberControllerCreate: async (createMemberDto: CreateMemberDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        daoMemberControllerCreate: async (daoId: string, createMemberDto: CreateMemberDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoMemberControllerCreate', 'daoId', daoId)
             // verify required parameter 'createMemberDto' is not null or undefined
-            assertParamExists('memberControllerCreate', 'createMemberDto', createMemberDto)
-            const localVarPath = `/api/member`;
+            assertParamExists('daoMemberControllerCreate', 'createMemberDto', createMemberDto)
+            const localVarPath = `/api/dao/{daoId}/member`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1768,14 +1808,18 @@ export const MemberApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} memberId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        memberControllerDelete: async (memberId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        daoMemberControllerDelete: async (daoId: string, memberId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoMemberControllerDelete', 'daoId', daoId)
             // verify required parameter 'memberId' is not null or undefined
-            assertParamExists('memberControllerDelete', 'memberId', memberId)
-            const localVarPath = `/api/member/{memberId}`
+            assertParamExists('daoMemberControllerDelete', 'memberId', memberId)
+            const localVarPath = `/api/dao/{daoId}/member/{memberId}`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)))
                 .replace(`{${"memberId"}}`, encodeURIComponent(String(memberId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1805,14 +1849,18 @@ export const MemberApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {MemberQueryDto} memberQueryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        memberControllerFind: async (memberQueryDto: MemberQueryDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        daoMemberControllerFind: async (daoId: string, memberQueryDto: MemberQueryDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoMemberControllerFind', 'daoId', daoId)
             // verify required parameter 'memberQueryDto' is not null or undefined
-            assertParamExists('memberControllerFind', 'memberQueryDto', memberQueryDto)
-            const localVarPath = `/api/member/find`;
+            assertParamExists('daoMemberControllerFind', 'memberQueryDto', memberQueryDto)
+            const localVarPath = `/api/dao/{daoId}/member/find`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1844,14 +1892,18 @@ export const MemberApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {MemberInviteDto} memberInviteDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        memberControllerInvite: async (memberInviteDto: MemberInviteDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        daoMemberControllerInvite: async (daoId: string, memberInviteDto: MemberInviteDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoMemberControllerInvite', 'daoId', daoId)
             // verify required parameter 'memberInviteDto' is not null or undefined
-            assertParamExists('memberControllerInvite', 'memberInviteDto', memberInviteDto)
-            const localVarPath = `/api/member/invite`;
+            assertParamExists('daoMemberControllerInvite', 'memberInviteDto', memberInviteDto)
+            const localVarPath = `/api/dao/{daoId}/member/invite`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1883,14 +1935,18 @@ export const MemberApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {MemberQueryDto} memberQueryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        memberControllerList: async (memberQueryDto: MemberQueryDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        daoMemberControllerList: async (daoId: string, memberQueryDto: MemberQueryDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoMemberControllerList', 'daoId', daoId)
             // verify required parameter 'memberQueryDto' is not null or undefined
-            assertParamExists('memberControllerList', 'memberQueryDto', memberQueryDto)
-            const localVarPath = `/api/member/list`;
+            assertParamExists('daoMemberControllerList', 'memberQueryDto', memberQueryDto)
+            const localVarPath = `/api/dao/{daoId}/member/list`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1922,14 +1978,18 @@ export const MemberApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} memberId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        memberControllerRead: async (memberId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        daoMemberControllerRead: async (daoId: string, memberId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoMemberControllerRead', 'daoId', daoId)
             // verify required parameter 'memberId' is not null or undefined
-            assertParamExists('memberControllerRead', 'memberId', memberId)
-            const localVarPath = `/api/member/{memberId}`
+            assertParamExists('daoMemberControllerRead', 'memberId', memberId)
+            const localVarPath = `/api/dao/{daoId}/member/{memberId}`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)))
                 .replace(`{${"memberId"}}`, encodeURIComponent(String(memberId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1959,17 +2019,21 @@ export const MemberApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} memberId 
          * @param {MemberDto} memberDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        memberControllerUpdate: async (memberId: string, memberDto: MemberDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        daoMemberControllerUpdate: async (daoId: string, memberId: string, memberDto: MemberDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoMemberControllerUpdate', 'daoId', daoId)
             // verify required parameter 'memberId' is not null or undefined
-            assertParamExists('memberControllerUpdate', 'memberId', memberId)
+            assertParamExists('daoMemberControllerUpdate', 'memberId', memberId)
             // verify required parameter 'memberDto' is not null or undefined
-            assertParamExists('memberControllerUpdate', 'memberDto', memberDto)
-            const localVarPath = `/api/member/{memberId}`
+            assertParamExists('daoMemberControllerUpdate', 'memberDto', memberDto)
+            const localVarPath = `/api/dao/{daoId}/member/{memberId}`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)))
                 .replace(`{${"memberId"}}`, encodeURIComponent(String(memberId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2012,73 +2076,80 @@ export const MemberApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {string} daoId 
          * @param {CreateMemberDto} createMemberDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async memberControllerCreate(createMemberDto: CreateMemberDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MemberDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.memberControllerCreate(createMemberDto, options);
+        async daoMemberControllerCreate(daoId: string, createMemberDto: CreateMemberDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MemberDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoMemberControllerCreate(daoId, createMemberDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} memberId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async memberControllerDelete(memberId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.memberControllerDelete(memberId, options);
+        async daoMemberControllerDelete(daoId: string, memberId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoMemberControllerDelete(daoId, memberId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {MemberQueryDto} memberQueryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async memberControllerFind(memberQueryDto: MemberQueryDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MemberDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.memberControllerFind(memberQueryDto, options);
+        async daoMemberControllerFind(daoId: string, memberQueryDto: MemberQueryDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MemberDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoMemberControllerFind(daoId, memberQueryDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {MemberInviteDto} memberInviteDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async memberControllerInvite(memberInviteDto: MemberInviteDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MemberDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.memberControllerInvite(memberInviteDto, options);
+        async daoMemberControllerInvite(daoId: string, memberInviteDto: MemberInviteDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MemberDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoMemberControllerInvite(daoId, memberInviteDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {MemberQueryDto} memberQueryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async memberControllerList(memberQueryDto: MemberQueryDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ExtendedMemberDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.memberControllerList(memberQueryDto, options);
+        async daoMemberControllerList(daoId: string, memberQueryDto: MemberQueryDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ExtendedMemberDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoMemberControllerList(daoId, memberQueryDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} memberId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async memberControllerRead(memberId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MemberDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.memberControllerRead(memberId, options);
+        async daoMemberControllerRead(daoId: string, memberId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MemberDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoMemberControllerRead(daoId, memberId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} memberId 
          * @param {MemberDto} memberDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async memberControllerUpdate(memberId: string, memberDto: MemberDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MemberDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.memberControllerUpdate(memberId, memberDto, options);
+        async daoMemberControllerUpdate(daoId: string, memberId: string, memberDto: MemberDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MemberDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoMemberControllerUpdate(daoId, memberId, memberDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -2093,67 +2164,74 @@ export const MemberApiFactory = function (configuration?: Configuration, basePat
     return {
         /**
          * 
+         * @param {string} daoId 
          * @param {CreateMemberDto} createMemberDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        memberControllerCreate(createMemberDto: CreateMemberDto, options?: any): AxiosPromise<MemberDto> {
-            return localVarFp.memberControllerCreate(createMemberDto, options).then((request) => request(axios, basePath));
+        daoMemberControllerCreate(daoId: string, createMemberDto: CreateMemberDto, options?: any): AxiosPromise<MemberDto> {
+            return localVarFp.daoMemberControllerCreate(daoId, createMemberDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} memberId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        memberControllerDelete(memberId: string, options?: any): AxiosPromise<void> {
-            return localVarFp.memberControllerDelete(memberId, options).then((request) => request(axios, basePath));
+        daoMemberControllerDelete(daoId: string, memberId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.daoMemberControllerDelete(daoId, memberId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {MemberQueryDto} memberQueryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        memberControllerFind(memberQueryDto: MemberQueryDto, options?: any): AxiosPromise<Array<MemberDto>> {
-            return localVarFp.memberControllerFind(memberQueryDto, options).then((request) => request(axios, basePath));
+        daoMemberControllerFind(daoId: string, memberQueryDto: MemberQueryDto, options?: any): AxiosPromise<Array<MemberDto>> {
+            return localVarFp.daoMemberControllerFind(daoId, memberQueryDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {MemberInviteDto} memberInviteDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        memberControllerInvite(memberInviteDto: MemberInviteDto, options?: any): AxiosPromise<MemberDto> {
-            return localVarFp.memberControllerInvite(memberInviteDto, options).then((request) => request(axios, basePath));
+        daoMemberControllerInvite(daoId: string, memberInviteDto: MemberInviteDto, options?: any): AxiosPromise<MemberDto> {
+            return localVarFp.daoMemberControllerInvite(daoId, memberInviteDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {MemberQueryDto} memberQueryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        memberControllerList(memberQueryDto: MemberQueryDto, options?: any): AxiosPromise<Array<ExtendedMemberDto>> {
-            return localVarFp.memberControllerList(memberQueryDto, options).then((request) => request(axios, basePath));
+        daoMemberControllerList(daoId: string, memberQueryDto: MemberQueryDto, options?: any): AxiosPromise<Array<ExtendedMemberDto>> {
+            return localVarFp.daoMemberControllerList(daoId, memberQueryDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} memberId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        memberControllerRead(memberId: string, options?: any): AxiosPromise<MemberDto> {
-            return localVarFp.memberControllerRead(memberId, options).then((request) => request(axios, basePath));
+        daoMemberControllerRead(daoId: string, memberId: string, options?: any): AxiosPromise<MemberDto> {
+            return localVarFp.daoMemberControllerRead(daoId, memberId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} memberId 
          * @param {MemberDto} memberDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        memberControllerUpdate(memberId: string, memberDto: MemberDto, options?: any): AxiosPromise<MemberDto> {
-            return localVarFp.memberControllerUpdate(memberId, memberDto, options).then((request) => request(axios, basePath));
+        daoMemberControllerUpdate(daoId: string, memberId: string, memberDto: MemberDto, options?: any): AxiosPromise<MemberDto> {
+            return localVarFp.daoMemberControllerUpdate(daoId, memberId, memberDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2167,80 +2245,87 @@ export const MemberApiFactory = function (configuration?: Configuration, basePat
 export class MemberApi extends BaseAPI {
     /**
      * 
+     * @param {string} daoId 
      * @param {CreateMemberDto} createMemberDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MemberApi
      */
-    public memberControllerCreate(createMemberDto: CreateMemberDto, options?: AxiosRequestConfig) {
-        return MemberApiFp(this.configuration).memberControllerCreate(createMemberDto, options).then((request) => request(this.axios, this.basePath));
+    public daoMemberControllerCreate(daoId: string, createMemberDto: CreateMemberDto, options?: AxiosRequestConfig) {
+        return MemberApiFp(this.configuration).daoMemberControllerCreate(daoId, createMemberDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {string} daoId 
      * @param {string} memberId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MemberApi
      */
-    public memberControllerDelete(memberId: string, options?: AxiosRequestConfig) {
-        return MemberApiFp(this.configuration).memberControllerDelete(memberId, options).then((request) => request(this.axios, this.basePath));
+    public daoMemberControllerDelete(daoId: string, memberId: string, options?: AxiosRequestConfig) {
+        return MemberApiFp(this.configuration).daoMemberControllerDelete(daoId, memberId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {string} daoId 
      * @param {MemberQueryDto} memberQueryDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MemberApi
      */
-    public memberControllerFind(memberQueryDto: MemberQueryDto, options?: AxiosRequestConfig) {
-        return MemberApiFp(this.configuration).memberControllerFind(memberQueryDto, options).then((request) => request(this.axios, this.basePath));
+    public daoMemberControllerFind(daoId: string, memberQueryDto: MemberQueryDto, options?: AxiosRequestConfig) {
+        return MemberApiFp(this.configuration).daoMemberControllerFind(daoId, memberQueryDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {string} daoId 
      * @param {MemberInviteDto} memberInviteDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MemberApi
      */
-    public memberControllerInvite(memberInviteDto: MemberInviteDto, options?: AxiosRequestConfig) {
-        return MemberApiFp(this.configuration).memberControllerInvite(memberInviteDto, options).then((request) => request(this.axios, this.basePath));
+    public daoMemberControllerInvite(daoId: string, memberInviteDto: MemberInviteDto, options?: AxiosRequestConfig) {
+        return MemberApiFp(this.configuration).daoMemberControllerInvite(daoId, memberInviteDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {string} daoId 
      * @param {MemberQueryDto} memberQueryDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MemberApi
      */
-    public memberControllerList(memberQueryDto: MemberQueryDto, options?: AxiosRequestConfig) {
-        return MemberApiFp(this.configuration).memberControllerList(memberQueryDto, options).then((request) => request(this.axios, this.basePath));
+    public daoMemberControllerList(daoId: string, memberQueryDto: MemberQueryDto, options?: AxiosRequestConfig) {
+        return MemberApiFp(this.configuration).daoMemberControllerList(daoId, memberQueryDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {string} daoId 
      * @param {string} memberId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MemberApi
      */
-    public memberControllerRead(memberId: string, options?: AxiosRequestConfig) {
-        return MemberApiFp(this.configuration).memberControllerRead(memberId, options).then((request) => request(this.axios, this.basePath));
+    public daoMemberControllerRead(daoId: string, memberId: string, options?: AxiosRequestConfig) {
+        return MemberApiFp(this.configuration).daoMemberControllerRead(daoId, memberId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {string} daoId 
      * @param {string} memberId 
      * @param {MemberDto} memberDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MemberApi
      */
-    public memberControllerUpdate(memberId: string, memberDto: MemberDto, options?: AxiosRequestConfig) {
-        return MemberApiFp(this.configuration).memberControllerUpdate(memberId, memberDto, options).then((request) => request(this.axios, this.basePath));
+    public daoMemberControllerUpdate(daoId: string, memberId: string, memberDto: MemberDto, options?: AxiosRequestConfig) {
+        return MemberApiFp(this.configuration).daoMemberControllerUpdate(daoId, memberId, memberDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2253,14 +2338,18 @@ export const ProjectApiAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * 
+         * @param {string} daoId 
          * @param {CreateProjectDto} createProjectDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectControllerCreate: async (createProjectDto: CreateProjectDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        daoProjectControllerCreate: async (daoId: string, createProjectDto: CreateProjectDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoProjectControllerCreate', 'daoId', daoId)
             // verify required parameter 'createProjectDto' is not null or undefined
-            assertParamExists('projectControllerCreate', 'createProjectDto', createProjectDto)
-            const localVarPath = `/api/project`;
+            assertParamExists('daoProjectControllerCreate', 'createProjectDto', createProjectDto)
+            const localVarPath = `/api/dao/{daoId}/project`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2288,14 +2377,18 @@ export const ProjectApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} projectId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectControllerDelete: async (projectId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        daoProjectControllerDelete: async (daoId: string, projectId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoProjectControllerDelete', 'daoId', daoId)
             // verify required parameter 'projectId' is not null or undefined
-            assertParamExists('projectControllerDelete', 'projectId', projectId)
-            const localVarPath = `/api/project/{projectId}`
+            assertParamExists('daoProjectControllerDelete', 'projectId', projectId)
+            const localVarPath = `/api/dao/{daoId}/project/{projectId}`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)))
                 .replace(`{${"projectId"}}`, encodeURIComponent(String(projectId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2325,14 +2418,18 @@ export const ProjectApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {ProjectQueryDto} projectQueryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectControllerFind: async (projectQueryDto: ProjectQueryDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        daoProjectControllerFind: async (daoId: string, projectQueryDto: ProjectQueryDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoProjectControllerFind', 'daoId', daoId)
             // verify required parameter 'projectQueryDto' is not null or undefined
-            assertParamExists('projectControllerFind', 'projectQueryDto', projectQueryDto)
-            const localVarPath = `/api/project/find`;
+            assertParamExists('daoProjectControllerFind', 'projectQueryDto', projectQueryDto)
+            const localVarPath = `/api/dao/{daoId}/project/find`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2360,14 +2457,18 @@ export const ProjectApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} projectId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectControllerRead: async (projectId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        daoProjectControllerRead: async (daoId: string, projectId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoProjectControllerRead', 'daoId', daoId)
             // verify required parameter 'projectId' is not null or undefined
-            assertParamExists('projectControllerRead', 'projectId', projectId)
-            const localVarPath = `/api/project/{projectId}`
+            assertParamExists('daoProjectControllerRead', 'projectId', projectId)
+            const localVarPath = `/api/dao/{daoId}/project/{projectId}`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)))
                 .replace(`{${"projectId"}}`, encodeURIComponent(String(projectId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2393,17 +2494,21 @@ export const ProjectApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} projectId 
          * @param {ProjectDto} projectDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectControllerUpdate: async (projectId: string, projectDto: ProjectDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        daoProjectControllerUpdate: async (daoId: string, projectId: string, projectDto: ProjectDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoProjectControllerUpdate', 'daoId', daoId)
             // verify required parameter 'projectId' is not null or undefined
-            assertParamExists('projectControllerUpdate', 'projectId', projectId)
+            assertParamExists('daoProjectControllerUpdate', 'projectId', projectId)
             // verify required parameter 'projectDto' is not null or undefined
-            assertParamExists('projectControllerUpdate', 'projectDto', projectDto)
-            const localVarPath = `/api/project/{projectId}`
+            assertParamExists('daoProjectControllerUpdate', 'projectDto', projectDto)
+            const localVarPath = `/api/dao/{daoId}/project/{projectId}`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)))
                 .replace(`{${"projectId"}}`, encodeURIComponent(String(projectId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2446,53 +2551,58 @@ export const ProjectApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {string} daoId 
          * @param {CreateProjectDto} createProjectDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async projectControllerCreate(createProjectDto: CreateProjectDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProjectDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.projectControllerCreate(createProjectDto, options);
+        async daoProjectControllerCreate(daoId: string, createProjectDto: CreateProjectDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProjectDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoProjectControllerCreate(daoId, createProjectDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} projectId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async projectControllerDelete(projectId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.projectControllerDelete(projectId, options);
+        async daoProjectControllerDelete(daoId: string, projectId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoProjectControllerDelete(daoId, projectId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {ProjectQueryDto} projectQueryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async projectControllerFind(projectQueryDto: ProjectQueryDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProjectDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.projectControllerFind(projectQueryDto, options);
+        async daoProjectControllerFind(daoId: string, projectQueryDto: ProjectQueryDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ProjectDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoProjectControllerFind(daoId, projectQueryDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} projectId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async projectControllerRead(projectId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProjectDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.projectControllerRead(projectId, options);
+        async daoProjectControllerRead(daoId: string, projectId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProjectDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoProjectControllerRead(daoId, projectId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} projectId 
          * @param {ProjectDto} projectDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async projectControllerUpdate(projectId: string, projectDto: ProjectDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProjectDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.projectControllerUpdate(projectId, projectDto, options);
+        async daoProjectControllerUpdate(daoId: string, projectId: string, projectDto: ProjectDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProjectDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoProjectControllerUpdate(daoId, projectId, projectDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -2507,49 +2617,54 @@ export const ProjectApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
+         * @param {string} daoId 
          * @param {CreateProjectDto} createProjectDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectControllerCreate(createProjectDto: CreateProjectDto, options?: any): AxiosPromise<ProjectDto> {
-            return localVarFp.projectControllerCreate(createProjectDto, options).then((request) => request(axios, basePath));
+        daoProjectControllerCreate(daoId: string, createProjectDto: CreateProjectDto, options?: any): AxiosPromise<ProjectDto> {
+            return localVarFp.daoProjectControllerCreate(daoId, createProjectDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} projectId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectControllerDelete(projectId: string, options?: any): AxiosPromise<void> {
-            return localVarFp.projectControllerDelete(projectId, options).then((request) => request(axios, basePath));
+        daoProjectControllerDelete(daoId: string, projectId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.daoProjectControllerDelete(daoId, projectId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {ProjectQueryDto} projectQueryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectControllerFind(projectQueryDto: ProjectQueryDto, options?: any): AxiosPromise<Array<ProjectDto>> {
-            return localVarFp.projectControllerFind(projectQueryDto, options).then((request) => request(axios, basePath));
+        daoProjectControllerFind(daoId: string, projectQueryDto: ProjectQueryDto, options?: any): AxiosPromise<Array<ProjectDto>> {
+            return localVarFp.daoProjectControllerFind(daoId, projectQueryDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} projectId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectControllerRead(projectId: string, options?: any): AxiosPromise<ProjectDto> {
-            return localVarFp.projectControllerRead(projectId, options).then((request) => request(axios, basePath));
+        daoProjectControllerRead(daoId: string, projectId: string, options?: any): AxiosPromise<ProjectDto> {
+            return localVarFp.daoProjectControllerRead(daoId, projectId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} projectId 
          * @param {ProjectDto} projectDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectControllerUpdate(projectId: string, projectDto: ProjectDto, options?: any): AxiosPromise<ProjectDto> {
-            return localVarFp.projectControllerUpdate(projectId, projectDto, options).then((request) => request(axios, basePath));
+        daoProjectControllerUpdate(daoId: string, projectId: string, projectDto: ProjectDto, options?: any): AxiosPromise<ProjectDto> {
+            return localVarFp.daoProjectControllerUpdate(daoId, projectId, projectDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2563,58 +2678,63 @@ export const ProjectApiFactory = function (configuration?: Configuration, basePa
 export class ProjectApi extends BaseAPI {
     /**
      * 
+     * @param {string} daoId 
      * @param {CreateProjectDto} createProjectDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProjectApi
      */
-    public projectControllerCreate(createProjectDto: CreateProjectDto, options?: AxiosRequestConfig) {
-        return ProjectApiFp(this.configuration).projectControllerCreate(createProjectDto, options).then((request) => request(this.axios, this.basePath));
+    public daoProjectControllerCreate(daoId: string, createProjectDto: CreateProjectDto, options?: AxiosRequestConfig) {
+        return ProjectApiFp(this.configuration).daoProjectControllerCreate(daoId, createProjectDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {string} daoId 
      * @param {string} projectId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProjectApi
      */
-    public projectControllerDelete(projectId: string, options?: AxiosRequestConfig) {
-        return ProjectApiFp(this.configuration).projectControllerDelete(projectId, options).then((request) => request(this.axios, this.basePath));
+    public daoProjectControllerDelete(daoId: string, projectId: string, options?: AxiosRequestConfig) {
+        return ProjectApiFp(this.configuration).daoProjectControllerDelete(daoId, projectId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {string} daoId 
      * @param {ProjectQueryDto} projectQueryDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProjectApi
      */
-    public projectControllerFind(projectQueryDto: ProjectQueryDto, options?: AxiosRequestConfig) {
-        return ProjectApiFp(this.configuration).projectControllerFind(projectQueryDto, options).then((request) => request(this.axios, this.basePath));
+    public daoProjectControllerFind(daoId: string, projectQueryDto: ProjectQueryDto, options?: AxiosRequestConfig) {
+        return ProjectApiFp(this.configuration).daoProjectControllerFind(daoId, projectQueryDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {string} daoId 
      * @param {string} projectId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProjectApi
      */
-    public projectControllerRead(projectId: string, options?: AxiosRequestConfig) {
-        return ProjectApiFp(this.configuration).projectControllerRead(projectId, options).then((request) => request(this.axios, this.basePath));
+    public daoProjectControllerRead(daoId: string, projectId: string, options?: AxiosRequestConfig) {
+        return ProjectApiFp(this.configuration).daoProjectControllerRead(daoId, projectId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {string} daoId 
      * @param {string} projectId 
      * @param {ProjectDto} projectDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProjectApi
      */
-    public projectControllerUpdate(projectId: string, projectDto: ProjectDto, options?: AxiosRequestConfig) {
-        return ProjectApiFp(this.configuration).projectControllerUpdate(projectId, projectDto, options).then((request) => request(this.axios, this.basePath));
+    public daoProjectControllerUpdate(daoId: string, projectId: string, projectDto: ProjectDto, options?: AxiosRequestConfig) {
+        return ProjectApiFp(this.configuration).daoProjectControllerUpdate(daoId, projectId, projectDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2627,14 +2747,18 @@ export const TaskApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
+         * @param {string} daoId 
          * @param {CreateTaskDto} createTaskDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerCreate: async (createTaskDto: CreateTaskDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        daoTaskControllerCreate: async (daoId: string, createTaskDto: CreateTaskDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoTaskControllerCreate', 'daoId', daoId)
             // verify required parameter 'createTaskDto' is not null or undefined
-            assertParamExists('taskControllerCreate', 'createTaskDto', createTaskDto)
-            const localVarPath = `/api/task`;
+            assertParamExists('daoTaskControllerCreate', 'createTaskDto', createTaskDto)
+            const localVarPath = `/api/dao/{daoId}/task`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2666,14 +2790,18 @@ export const TaskApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} taskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerDelete: async (taskId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        daoTaskControllerDelete: async (daoId: string, taskId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoTaskControllerDelete', 'daoId', daoId)
             // verify required parameter 'taskId' is not null or undefined
-            assertParamExists('taskControllerDelete', 'taskId', taskId)
-            const localVarPath = `/api/task/{taskId}`
+            assertParamExists('daoTaskControllerDelete', 'taskId', taskId)
+            const localVarPath = `/api/dao/{daoId}/task/{taskId}`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)))
                 .replace(`{${"taskId"}}`, encodeURIComponent(String(taskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2703,14 +2831,18 @@ export const TaskApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {TaskQueryDto} taskQueryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerFind: async (taskQueryDto: TaskQueryDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        daoTaskControllerFind: async (daoId: string, taskQueryDto: TaskQueryDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoTaskControllerFind', 'daoId', daoId)
             // verify required parameter 'taskQueryDto' is not null or undefined
-            assertParamExists('taskControllerFind', 'taskQueryDto', taskQueryDto)
-            const localVarPath = `/api/task/find`;
+            assertParamExists('daoTaskControllerFind', 'taskQueryDto', taskQueryDto)
+            const localVarPath = `/api/dao/{daoId}/task/find`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2742,14 +2874,18 @@ export const TaskApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} taskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerRead: async (taskId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        daoTaskControllerRead: async (daoId: string, taskId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoTaskControllerRead', 'daoId', daoId)
             // verify required parameter 'taskId' is not null or undefined
-            assertParamExists('taskControllerRead', 'taskId', taskId)
-            const localVarPath = `/api/task/{taskId}`
+            assertParamExists('daoTaskControllerRead', 'taskId', taskId)
+            const localVarPath = `/api/dao/{daoId}/task/{taskId}`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)))
                 .replace(`{${"taskId"}}`, encodeURIComponent(String(taskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2779,17 +2915,21 @@ export const TaskApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} taskId 
          * @param {TaskDto} taskDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerUpdate: async (taskId: string, taskDto: TaskDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        daoTaskControllerUpdate: async (daoId: string, taskId: string, taskDto: TaskDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoTaskControllerUpdate', 'daoId', daoId)
             // verify required parameter 'taskId' is not null or undefined
-            assertParamExists('taskControllerUpdate', 'taskId', taskId)
+            assertParamExists('daoTaskControllerUpdate', 'taskId', taskId)
             // verify required parameter 'taskDto' is not null or undefined
-            assertParamExists('taskControllerUpdate', 'taskDto', taskDto)
-            const localVarPath = `/api/task/{taskId}`
+            assertParamExists('daoTaskControllerUpdate', 'taskDto', taskDto)
+            const localVarPath = `/api/dao/{daoId}/task/{taskId}`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)))
                 .replace(`{${"taskId"}}`, encodeURIComponent(String(taskId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2832,53 +2972,58 @@ export const TaskApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {string} daoId 
          * @param {CreateTaskDto} createTaskDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async taskControllerCreate(createTaskDto: CreateTaskDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerCreate(createTaskDto, options);
+        async daoTaskControllerCreate(daoId: string, createTaskDto: CreateTaskDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoTaskControllerCreate(daoId, createTaskDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} taskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async taskControllerDelete(taskId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerDelete(taskId, options);
+        async daoTaskControllerDelete(daoId: string, taskId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoTaskControllerDelete(daoId, taskId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {TaskQueryDto} taskQueryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async taskControllerFind(taskQueryDto: TaskQueryDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TaskDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerFind(taskQueryDto, options);
+        async daoTaskControllerFind(daoId: string, taskQueryDto: TaskQueryDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TaskDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoTaskControllerFind(daoId, taskQueryDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} taskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async taskControllerRead(taskId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerRead(taskId, options);
+        async daoTaskControllerRead(daoId: string, taskId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoTaskControllerRead(daoId, taskId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} taskId 
          * @param {TaskDto} taskDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async taskControllerUpdate(taskId: string, taskDto: TaskDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerUpdate(taskId, taskDto, options);
+        async daoTaskControllerUpdate(daoId: string, taskId: string, taskDto: TaskDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoTaskControllerUpdate(daoId, taskId, taskDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -2893,49 +3038,54 @@ export const TaskApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
+         * @param {string} daoId 
          * @param {CreateTaskDto} createTaskDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerCreate(createTaskDto: CreateTaskDto, options?: any): AxiosPromise<TaskDto> {
-            return localVarFp.taskControllerCreate(createTaskDto, options).then((request) => request(axios, basePath));
+        daoTaskControllerCreate(daoId: string, createTaskDto: CreateTaskDto, options?: any): AxiosPromise<TaskDto> {
+            return localVarFp.daoTaskControllerCreate(daoId, createTaskDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} taskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerDelete(taskId: string, options?: any): AxiosPromise<void> {
-            return localVarFp.taskControllerDelete(taskId, options).then((request) => request(axios, basePath));
+        daoTaskControllerDelete(daoId: string, taskId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.daoTaskControllerDelete(daoId, taskId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {TaskQueryDto} taskQueryDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerFind(taskQueryDto: TaskQueryDto, options?: any): AxiosPromise<Array<TaskDto>> {
-            return localVarFp.taskControllerFind(taskQueryDto, options).then((request) => request(axios, basePath));
+        daoTaskControllerFind(daoId: string, taskQueryDto: TaskQueryDto, options?: any): AxiosPromise<Array<TaskDto>> {
+            return localVarFp.daoTaskControllerFind(daoId, taskQueryDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} taskId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerRead(taskId: string, options?: any): AxiosPromise<TaskDto> {
-            return localVarFp.taskControllerRead(taskId, options).then((request) => request(axios, basePath));
+        daoTaskControllerRead(daoId: string, taskId: string, options?: any): AxiosPromise<TaskDto> {
+            return localVarFp.daoTaskControllerRead(daoId, taskId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {string} daoId 
          * @param {string} taskId 
          * @param {TaskDto} taskDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerUpdate(taskId: string, taskDto: TaskDto, options?: any): AxiosPromise<TaskDto> {
-            return localVarFp.taskControllerUpdate(taskId, taskDto, options).then((request) => request(axios, basePath));
+        daoTaskControllerUpdate(daoId: string, taskId: string, taskDto: TaskDto, options?: any): AxiosPromise<TaskDto> {
+            return localVarFp.daoTaskControllerUpdate(daoId, taskId, taskDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2949,58 +3099,63 @@ export const TaskApiFactory = function (configuration?: Configuration, basePath?
 export class TaskApi extends BaseAPI {
     /**
      * 
+     * @param {string} daoId 
      * @param {CreateTaskDto} createTaskDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TaskApi
      */
-    public taskControllerCreate(createTaskDto: CreateTaskDto, options?: AxiosRequestConfig) {
-        return TaskApiFp(this.configuration).taskControllerCreate(createTaskDto, options).then((request) => request(this.axios, this.basePath));
+    public daoTaskControllerCreate(daoId: string, createTaskDto: CreateTaskDto, options?: AxiosRequestConfig) {
+        return TaskApiFp(this.configuration).daoTaskControllerCreate(daoId, createTaskDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {string} daoId 
      * @param {string} taskId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TaskApi
      */
-    public taskControllerDelete(taskId: string, options?: AxiosRequestConfig) {
-        return TaskApiFp(this.configuration).taskControllerDelete(taskId, options).then((request) => request(this.axios, this.basePath));
+    public daoTaskControllerDelete(daoId: string, taskId: string, options?: AxiosRequestConfig) {
+        return TaskApiFp(this.configuration).daoTaskControllerDelete(daoId, taskId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {string} daoId 
      * @param {TaskQueryDto} taskQueryDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TaskApi
      */
-    public taskControllerFind(taskQueryDto: TaskQueryDto, options?: AxiosRequestConfig) {
-        return TaskApiFp(this.configuration).taskControllerFind(taskQueryDto, options).then((request) => request(this.axios, this.basePath));
+    public daoTaskControllerFind(daoId: string, taskQueryDto: TaskQueryDto, options?: AxiosRequestConfig) {
+        return TaskApiFp(this.configuration).daoTaskControllerFind(daoId, taskQueryDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {string} daoId 
      * @param {string} taskId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TaskApi
      */
-    public taskControllerRead(taskId: string, options?: AxiosRequestConfig) {
-        return TaskApiFp(this.configuration).taskControllerRead(taskId, options).then((request) => request(this.axios, this.basePath));
+    public daoTaskControllerRead(daoId: string, taskId: string, options?: AxiosRequestConfig) {
+        return TaskApiFp(this.configuration).daoTaskControllerRead(daoId, taskId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {string} daoId 
      * @param {string} taskId 
      * @param {TaskDto} taskDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TaskApi
      */
-    public taskControllerUpdate(taskId: string, taskDto: TaskDto, options?: AxiosRequestConfig) {
-        return TaskApiFp(this.configuration).taskControllerUpdate(taskId, taskDto, options).then((request) => request(this.axios, this.basePath));
+    public daoTaskControllerUpdate(daoId: string, taskId: string, taskDto: TaskDto, options?: AxiosRequestConfig) {
+        return TaskApiFp(this.configuration).daoTaskControllerUpdate(daoId, taskId, taskDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -44,6 +44,10 @@ export class Dao {
     default: () => new Date(),
   })
   created: Date
+  @Prop({
+    required: true,
+  })
+  createdBy: string
 }
 
 export const DaoSchema = SchemaFactory.createForClass(Dao)

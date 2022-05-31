@@ -1,4 +1,3 @@
-import { randomString } from '@app/runtime/util'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
 import { Role } from 'src/user/user.dto'
@@ -19,6 +18,11 @@ export class Member {
     required: true,
   })
   userId: string
+
+  @Prop({
+    required: true,
+  })
+  invitedBy: string
 
   @Prop({
     required: false,

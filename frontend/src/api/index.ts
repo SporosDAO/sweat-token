@@ -1,7 +1,6 @@
 import {
   AuthApi,
   Configuration,
-  ConfigurationParameters,
   CreateDaoDto,
   CreateMemberDto,
   CreateProjectDto,
@@ -25,8 +24,10 @@ import {
 } from './openapi'
 
 let basePath = process.env.REACT_APP_SWEAT_TOKEN_API_BASEPATH
+
 console.debug(`process.env.NODE_ENV=${process.env.NODE_ENV}`)
 console.debug(`process.env.REACT_APP_SWEAT_TOKEN_API_BASEPATH=${process.env.REACT_APP_SWEAT_TOKEN_API_BASEPATH}`)
+
 if (!basePath) {
   basePath = `${window.location.protocol}//${window.location.host}`
 }
@@ -147,7 +148,7 @@ export const deleteTask = async (taskId: string): Promise<void> => {
 }
 
 export const listMembers = async (query: MemberQueryDto): Promise<ExtendedMemberDto[]> => {
-  const res = await client.member.memberControllerList(query)
+  const res = await client.dao.(query)
   return res.data
 }
 

@@ -51,15 +51,17 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
   const { account, provider, setAccount } = useWeb3()
   const ctoken = useMemo(() => getCookieToken(), [])
 
-  useEffect(() => {
-    // account reset
-    if (account) return
-    if (!user) return
-    setUser(undefined)
-  }, [account, user])
+  // useEffect(() => {
+  //   // account reset
+  //   if (account) return
+  //   if (!user && !token) return
+  //   console.log('no accout, reset user')
+  //   setUser(undefined)
+  //   setToken(undefined)
+  // }, [account, token, user])
 
   useEffect(() => {
-    if (token) return
+    if (token || user) return
     if (signaturePending) return
     if (!account || !provider) return
     if (error) return
@@ -92,7 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
         console.error('failed to load account', e)
       })
     // .finally(() => {})
-  }, [account, error, provider, setAccount, signaturePending, token])
+  }, [account, error, provider, setAccount, signaturePending, token, user])
 
   useEffect(() => {
     if (!ctoken) return
@@ -107,13 +109,14 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
 
   useEffect(() => {
     if (error) return
-    if (!token) return
     if (user) return
+    if (!token) return
     if (loading) return
     setLoading(true)
     api
       .getCurrentUser()
       .then((user: UserDto) => {
+        console.log('aaaaa', token, user)
         setUser(user)
       })
       .catch((e) => {

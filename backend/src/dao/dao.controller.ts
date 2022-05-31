@@ -1,7 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { Auth } from 'src/auth/auth.decorator'
-import { Role } from 'src/user/user.dto'
+import { User } from 'src/auth/user.decorator'
+import { Role, UserDto } from 'src/user/user.dto'
+import { DaoAuth } from './dao.auth.decorator'
 import { CreateDaoDto, DaoDto } from './dao.dto'
 import { DaoService } from './dao.service'
 
@@ -21,19 +23,20 @@ export class DaoController {
   }
 
   @Delete(':daoId')
-  @Auth(Role.admin)
+  @DaoAuth(Role.founder)
   delete(@Param('daoId') daoId: string): Promise<void> {
     return this.daoService.delete(daoId)
   }
 
   @Post()
   @Auth()
-  create(@Body() daoDto: CreateDaoDto): Promise<DaoDto> {
+  create(@User() user: UserDto, @Body() daoDto: CreateDaoDto): Promise<DaoDto> {
+    daoDto.createdBy = user.userId
     return this.daoService.create(daoDto)
   }
 
   @Put(':daoId')
-  @Auth()
+  @DaoAuth(Role.founder)
   update(@Param('daoId') daoId: string, @Body() daoDto: CreateDaoDto): Promise<DaoDto> {
     return this.daoService.update({ ...daoDto, daoId })
   }

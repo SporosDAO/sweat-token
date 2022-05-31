@@ -44,16 +44,18 @@ export function Web3ContextProvider({ children }: Web3ContextProviderProps) {
   }, [walletProvider])
 
   useEffect(() => {
-    if (!window.ethereum) return
-    if (!window.ethereum.selectedAddress) return
-    setAccount(window.ethereum.selectedAddress)
-  }, [])
-
-  useEffect(() => {
     if (provider !== undefined) return
     if (account === undefined) return
     setProvider(new ethers.providers.Web3Provider(window.ethereum))
   }, [provider, account])
+
+  useEffect(() => {
+    if (account) return
+    if (!window.ethereum) return
+    if (!window.ethereum.selectedAddress) return
+    console.log('use connected address')
+    setAccount(window.ethereum.selectedAddress)
+  }, [account])
 
   return (
     <Web3ProviderContext.Provider

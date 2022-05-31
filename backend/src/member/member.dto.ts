@@ -66,6 +66,10 @@ export class MemberInviteDto {
   @IsUUID()
   daoId: string
 
+  @IsOptional()
+  @IsUUID()
+  invitedBy: string
+
   @IsArray()
   @IsOptional()
   projectId?: string[]
@@ -104,6 +108,9 @@ export class MemberDto {
   @IsOptional()
   @IsArray()
   skills?: Skill[]
+
+  @IsUUID()
+  invitedBy: string
 }
 
 export class CreateMemberDto extends PartialType(MemberDto) {
@@ -126,6 +133,9 @@ export class CreateMemberDto extends PartialType(MemberDto) {
   @IsArray()
   @IsOptional()
   roles?: Role[]
+
+  @IsOptional()
+  invitedBy: string
 }
 
 export class UpdateMemberDto extends CreateMemberDto {}

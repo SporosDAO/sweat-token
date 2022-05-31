@@ -1,6 +1,6 @@
 import { RecordEventType } from '@app/runtime/event.dto'
 import { toDTO } from '@app/runtime/util'
-import { BadRequestException, Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common'
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
@@ -8,23 +8,14 @@ import { CreateDaoDto, DaoDto, DaoEvent } from './dao.dto'
 import { Dao, DaoDocument } from './dao.schema'
 
 @Injectable()
-export class DaoService implements OnModuleInit {
+export class DaoService {
   private readonly logger = new Logger(DaoService.name)
   constructor(private eventEmitter: EventEmitter2, @InjectModel(Dao.name) private daoModel: Model<DaoDocument>) {}
-
-  async onModuleInit() {
-    this.logger.warn(`Adding sample DAO`)
-    if ((await this.list()).length === 0) {
-      const dao = new this.daoModel({
-        name: 'SporosDAO',
-      } as DaoDto)
-      await dao.save()
-    }
-  }
 
   private emit(type: RecordEventType, dao: DaoDto | DaoDocument) {
     this.eventEmitter.emit('dao.changed', {
       daoId: dao.daoId,
+      ownerId: dao.createdBy,
       type,
     } as DaoEvent)
   }

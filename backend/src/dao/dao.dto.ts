@@ -26,6 +26,9 @@ export class DaoDto {
   isPrivate: boolean
   @IsOptional()
   created: Date
+  @IsOptional()
+  @IsUUID()
+  createdBy: string
 }
 
 export class CreateDaoDto extends DaoDto {

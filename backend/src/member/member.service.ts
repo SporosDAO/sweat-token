@@ -61,6 +61,7 @@ export class MemberService {
       invitation: `${randomString()}${randomString()}`,
       status: MemberStatus.pending,
       userId: user.userId,
+      invitedBy: invite.invitedBy,
     }
 
     return await this.create(memberDto)
@@ -79,7 +80,7 @@ export class MemberService {
     return member ? this.toDto(member) : null
   }
 
-  async load(memberDto: Partial<MemberDto>): Promise<MemberDto> {
+  async load(memberDto: Partial<MemberDto>): Promise<MemberDto | null> {
     if (Object.keys(memberDto).length === 0) throw new BadRequestException()
     const member = await this.memberModel.findOne(memberDto).exec()
     return member ? this.toDto(member) : null
