@@ -5,13 +5,13 @@ import { RolesGuard } from 'src/auth/auth.roles.guard'
 import { User } from 'src/auth/user.decorator'
 import { DaoAuth } from 'src/dao/dao.auth.decorator'
 import { Role } from 'src/user/user.dto'
-import { CreateMemberDto, ExtendedMemberDto, MemberDto, MemberInviteDto, MemberQueryDto } from '../member/member.dto'
-import { MemberService } from '../member/member.service'
+import { CreateMemberDto, ExtendedMemberDto, MemberDto, MemberInviteDto, MemberQueryDto } from '../../member/member.dto'
+import { MemberService } from '../../member/member.service'
 
 @ApiBearerAuth()
 @ApiTags('member')
 @Controller('/dao/:daoId/member')
-export class DaoMemberController {
+export class MemberController {
   constructor(private memberService: MemberService) {}
 
   @Post('list')
@@ -24,7 +24,7 @@ export class DaoMemberController {
 
   @Post('invite')
   @HttpCode(200)
-  @Auth(Role.admin)
+  @DaoAuth(Role.founder, Role.projectManager)
   invite(
     @Param('daoId') daoId: string,
     @User('userId') userId: string,
@@ -43,21 +43,21 @@ export class DaoMemberController {
 
   @Post()
   @HttpCode(200)
-  @Auth(Role.admin)
+  @DaoAuth(Role.admin)
   create(@Param('daoId') daoId: string, @Body() member: CreateMemberDto): Promise<MemberDto> {
     return this.memberService.create(member)
   }
 
   @Get(':memberId')
   @HttpCode(200)
-  @Auth(Role.admin)
+  @DaoAuth(Role.admin)
   read(@Param('daoId') daoId: string, @Param('memberId') memberId: string): Promise<MemberDto> {
     return this.memberService.read(memberId)
   }
 
   @Put(':memberId')
   @HttpCode(200)
-  @Auth(Role.admin)
+  @DaoAuth(Role.admin)
   update(
     @Param('daoId') daoId: string,
     @Param('memberId') memberId: string,
@@ -70,7 +70,7 @@ export class DaoMemberController {
   @Delete(':memberId')
   @HttpCode(200)
   @UseGuards(RolesGuard)
-  @Auth(Role.admin)
+  @DaoAuth(Role.admin)
   delete(@Param('daoId') daoId: string, @Param('memberId') memberId: string): Promise<void> {
     return this.memberService.delete(memberId)
   }

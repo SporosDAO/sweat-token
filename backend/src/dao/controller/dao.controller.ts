@@ -3,9 +3,9 @@ import { ApiTags } from '@nestjs/swagger'
 import { Auth } from 'src/auth/auth.decorator'
 import { User } from 'src/auth/user.decorator'
 import { Role, UserDto } from 'src/user/user.dto'
-import { DaoAuth } from './dao.auth.decorator'
-import { CreateDaoDto, DaoDto } from './dao.dto'
-import { DaoService } from './dao.service'
+import { DaoAuth } from '../dao.auth.decorator'
+import { CreateDaoDto, DaoDto } from '../dao.dto'
+import { DaoService } from '../dao.service'
 
 @Controller('dao')
 @ApiTags('dao')

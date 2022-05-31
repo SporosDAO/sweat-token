@@ -65,7 +65,7 @@ export default function TaskList({ onChange, project }: TaskListProps) {
   const removeTask = (task: TaskDto) => {
     if (!task || !task.taskId) return
     if (!window.confirm(`Remove selected task? `)) return
-    deleteTask(task.taskId)
+    deleteTask(task.daoId, task.taskId)
       .then(() => {
         showToast(`Task deletion succeeded`, 'success')
       })

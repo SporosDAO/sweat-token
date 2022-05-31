@@ -57,7 +57,7 @@ export default function ProjectView() {
 
     if (loading) return
     setLoading(true)
-    loadProject(projectId)
+    loadProject(daoId, projectId)
       .then((project: ProjectDto) => {
         setProject(project)
       })

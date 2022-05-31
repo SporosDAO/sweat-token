@@ -4,12 +4,12 @@ import { DaoController } from './controller/dao.controller'
 import { Dao, DaoSchema } from './dao.schema'
 import { MongooseModule } from '@nestjs/mongoose'
 import { MemberModule } from 'src/member/member.module'
-import { DaoMemberController } from './controller/dao.member.controller'
+import { MemberController } from './controller/member.controller'
 import { ProjectEventListenerService } from './dao.project.listener.service'
 import { TaskModule } from 'src/task/task.module'
 import { ProjectModule } from 'src/project/project.module'
-import { DaoTaskController } from './controller/dao.task.controller'
-import { DaoProjectController } from './controller/dao.project.controller'
+import { TaskController } from './controller/task.controller'
+import { ProjectController } from './controller/project.controller'
 
 @Module({
   imports: [
@@ -19,7 +19,7 @@ import { DaoProjectController } from './controller/dao.project.controller'
     ProjectModule,
   ],
   providers: [DaoService, ProjectEventListenerService],
-  controllers: [DaoController, DaoMemberController, DaoTaskController, DaoProjectController],
+  controllers: [DaoController, MemberController, TaskController, ProjectController],
   exports: [DaoService],
 })
 export class DaoModule {}

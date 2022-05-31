@@ -2,14 +2,14 @@ import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post
 import { ApiTags } from '@nestjs/swagger'
 import { Auth } from 'src/auth/auth.decorator'
 import { Role } from 'src/user/user.dto'
-import { CreateProjectDto, ProjectDto, ProjectQueryDto } from '../project/project.dto'
-import { ProjectGuard } from '../project/project.guard'
-import { ProjectService } from '../project/project.service'
+import { CreateProjectDto, ProjectDto, ProjectQueryDto } from '../../project/project.dto'
+import { ProjectGuard } from '../../project/project.guard'
+import { ProjectService } from '../../project/project.service'
 
 @ApiTags('project')
 @Controller('/dao/:daoId/project')
 @UseGuards(ProjectGuard)
-export class DaoProjectController {
+export class ProjectController {
   constructor(private projectService: ProjectService) {}
 
   @Post('find')

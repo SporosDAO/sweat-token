@@ -8,6 +8,7 @@ import IconButton from '@mui/material/IconButton'
 import * as React from 'react'
 import { updateMember } from '../../../api'
 import { ExtendedMemberDto } from '../../../api/openapi'
+import useDao from '../../../context/DaoContext'
 import useToast from '../../../context/ToastContext'
 
 interface MemberItemProps {
