@@ -1,6 +1,7 @@
 import {
   AuthApi,
   Configuration,
+  ConfigurationParameters,
   CreateDaoDto,
   CreateMemberDto,
   CreateProjectDto,
@@ -47,8 +48,16 @@ class ApiClient {
   public initClient(accessToken?: string) {
     this.token = accessToken
     // Enable credentials for prod and gitpod access
-    const baseOptions = { withCredentials: true }
-    const config = new Configuration({ accessToken, baseOptions })
+    const baseOptions = {
+      headers: {
+        Authorization: 'Bearer ' + accessToken
+      },
+      withCredentials: true
+    }
+    const config = new Configuration({
+      accessToken,
+      baseOptions
+    })
     this.auth = new AuthApi(config, basePath)
     this.dao = new DaoApi(config, basePath)
     this.project = new ProjectApi(config, basePath)

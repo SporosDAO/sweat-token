@@ -33,7 +33,7 @@ export function Connect() {
       <ContentBlock title="Connect with your wallet">
         {error ? (
           <Box>
-            <p>{error}</p>
+            <p>{error.mesasge || 'An internal error occured during authentication.'}</p>
             <Button onClick={() => resetError()}>Retry</Button>
           </Box>
         ) : account ? (

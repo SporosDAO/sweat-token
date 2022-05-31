@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import * as api from '../api'
 import { JwtTokenDto, NonceDto, UserDto } from '../api/openapi'
 import useWeb3 from './Web3Context'
+import useToast from './ToastContext'
 
 export const CONNECT_PAGE = '/connect'
 export const REDIR_QUERY = '?redirect='
@@ -61,6 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
     if (token) return
     if (signaturePending) return
     if (!account || !provider) return
+    if (error) return
     api
       .getUserByAddress(account)
       .then(({ nonce, userId }: NonceDto) => {
@@ -90,7 +92,7 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
         console.error('failed to load account', e)
       })
     // .finally(() => {})
-  }, [account, provider, setAccount, signaturePending, token])
+  }, [account, error, provider, setAccount, signaturePending, token])
 
   useEffect(() => {
     if (!ctoken) return
@@ -104,6 +106,7 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
   }, [token])
 
   useEffect(() => {
+    if (error) return
     if (!token) return
     if (user) return
     if (loading) return
@@ -113,8 +116,16 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
       .then((user: UserDto) => {
         setUser(user)
       })
+      .catch((e) => {
+        // skip if JWT expired
+        if (e.code && e.code !== 401) {
+          setError(e)
+        }
+        setToken(undefined)
+        setUser(undefined)
+      })
       .finally(() => setLoading(false))
-  }, [loading, token, user])
+  }, [error, loading, token, user])
 
   const logout = useCallback(() => {
     setToken(undefined)
