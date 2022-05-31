@@ -5,9 +5,18 @@ Sweat token help startups create an early stage cap table for sweat equity.
 
 In other words sweat token is the early stage governance token that is gradually and transparently issues based on merits.
 
+# Repo Structure
+
+```ml
+ ├─ frontend - "ReactJs Progressive Web App"
+ │─ backend - "Nesjs middleware API"
+ │─ contracts - "smart contracts"
+```
+
 # Progressive Web App
 
-SporosDAO Sweat Token is a Progressive Web App hosted on Netlify. Deployment sites below:
+SporosDAO Sweat Token is a Progressive Web App (source in `frontend`) hosted on Netlify.
+It uses NestJS backend (`backend` dir) hosted on Heroku and Mongodb Atlas cloud database. Deployment URLs for the app below:
 
 | Purpose | Branch | Live Deployment | Admin Console |
 |---------|--------|-----------------|---------------|

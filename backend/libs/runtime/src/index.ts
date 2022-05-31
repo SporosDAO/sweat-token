@@ -56,7 +56,9 @@ export async function bootstrap(module: any): Promise<INestApplication> {
 
   setupOpenapi(app)
 
-  await app.listen(3001)
+  // heroku sets deployment web port
+  // in process.env.PORT
+  await app.listen(process.env.PORT || 3001)
 
   return app
 }
