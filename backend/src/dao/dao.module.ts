@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common'
 import { DaoService } from './dao.service'
-import { DaoController } from './dao.controller'
+import { DaoController } from './controller/dao.controller'
 import { Dao, DaoSchema } from './dao.schema'
 import { MongooseModule } from '@nestjs/mongoose'
 import { MemberModule } from 'src/member/member.module'
-import { DaoMemberController } from './dao.member.controller'
+import { DaoMemberController } from './controller/dao.member.controller'
 import { ProjectEventListenerService } from './dao.project.listener.service'
 import { TaskModule } from 'src/task/task.module'
 import { ProjectModule } from 'src/project/project.module'
-import { DaoTaskController } from './dao.task.controller'
-import { DaoProjectController } from './dao.project.controller'
+import { DaoTaskController } from './controller/dao.task.controller'
+import { DaoProjectController } from './controller/dao.project.controller'
 
 @Module({
   imports: [
