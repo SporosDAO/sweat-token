@@ -37,7 +37,7 @@ export default function Landing() {
   return (
     <PageLayout withDrawer={false}>
       <ContentBlock>
-        <h1>Welcome to SporosDAO Sweat Token</h1>
+        <h1>Your DevCo DAOs</h1>
       </ContentBlock>
 
       <Grid container>
@@ -77,7 +77,7 @@ export default function Landing() {
                 ))}
               </List>
             ) : (
-              <p>No public DAOs yet.</p>
+              <p>No DAOs yet.</p>
             )}
           </ContentBlock>
         </Grid>
