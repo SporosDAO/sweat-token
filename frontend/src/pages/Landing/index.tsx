@@ -17,7 +17,7 @@ export default function Landing() {
   return (
     <Box sx={{ p: 5 }}>
       <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-        <h1>Welcome to SporosDAO Sweat Token</h1>
+        <h1>Your DevCo DAOs</h1>
 
         {publicDaos && publicDaos.length ? (
           <List>
@@ -29,14 +29,13 @@ export default function Landing() {
           </List>
         ) : (
           <p>
-            <span>
-              <a href="https://app.kalidao.xyz/">Create</a> your first DAO with legal benefits.
-            </span>
-            <span>
-              Then go to your <Link to="/dashboard">dashboard</Link> to manage projects and contributors.
-            </span>
+            <span>Loading your DAOs...</span>
           </p>
         )}
+        <p>
+          <a href="https://app.kalidao.xyz/">Create</a> a new DAO with legal benefits via KaliDAO. Once created it will
+          show up in your list of managed DAOs above.
+        </p>
       </Paper>
     </Box>
   )
