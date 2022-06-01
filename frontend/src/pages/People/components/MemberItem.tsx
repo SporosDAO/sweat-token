@@ -7,19 +7,21 @@ import CardHeader from '@mui/material/CardHeader'
 import IconButton from '@mui/material/IconButton'
 import * as React from 'react'
 import { updateMember } from '../../../api'
-import { ExtendedMemberDto } from '../../../api/openapi'
-import useDao from '../../../context/DaoContext'
+import { ExtendedMemberDto, ExtendedMemberDtoStatusEnum, MemberDto } from '../../../api/openapi'
 import useToast from '../../../context/ToastContext'
+import useWeb3 from '../../../context/Web3Context'
 
 interface MemberItemProps {
   member: ExtendedMemberDto
   onUpdate: () => void
+  onEdit: (member: MemberDto) => void
 }
 
 export default function MemberItem(props: MemberItemProps) {
   const member = props.member
 
   const { showToast } = useToast()
+  const { account } = useWeb3()
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -30,9 +32,12 @@ export default function MemberItem(props: MemberItemProps) {
     setAnchorEl(null)
   }
 
-  const cancelInvite = () => {
+  const isUser = account === member.publicAddress
+  const isPending = member.status == 'pending'
+
+  const updateInvite = React.useCallback(() => {
     handleClose()
-    updateMember({ ...member, status: 'cancelled' })
+    updateMember({ ...member, status: isPending ? 'cancelled' : 'pending' })
       .then(() => {
         props.onUpdate()
       })
@@ -40,6 +45,17 @@ export default function MemberItem(props: MemberItemProps) {
         showToast(`Request failed`, 'error')
         console.error(`Update failed: ${e.stack}`)
       })
+  }, [isPending, member, props, showToast])
+
+  const renderRoleColor = (role: string) => {
+    switch (role) {
+      case 'founder':
+        return 'success'
+      case 'projectManager':
+        return 'secondary'
+      default:
+        return 'primary'
+    }
   }
 
   return (
@@ -53,7 +69,8 @@ export default function MemberItem(props: MemberItemProps) {
           'aria-labelledby': 'basic-button'
         }}
       >
-        <MenuItem onClick={cancelInvite}>Cancel invitation</MenuItem>
+        <MenuItem onClick={updateInvite}>{isPending ? 'Cancel' : 'Renew'} invitation</MenuItem>
+        <MenuItem onClick={() => props.onEdit(member)}>Edit</MenuItem>
       </Menu>
       <CardHeader
         avatar={
@@ -72,18 +89,22 @@ export default function MemberItem(props: MemberItemProps) {
             <MoreVertIcon />
           </IconButton>
         }
-        title={member.name || 'No name'}
+        title={(isUser ? '(*) ' : '') + (member.name || 'No name')}
         subheader={member.publicAddress.substring(0, 6) + '..'}
       />
       {/* <CardMedia component="img" height="194" image="/static/images/cards/paella.jpg" alt="Paella dish" /> */}
       <CardContent>
         <Stack direction="row" spacing={1}>
           {(member.roles || []).map((role) => (
-            <Chip label={role} color={role === 'founder' ? 'success' : 'primary'} variant="outlined" />
+            <Chip key={role} label={role} color={renderRoleColor(role)} variant="outlined" />
           ))}
         </Stack>
-        <Stack direction="row" spacing={1}>
-          <Chip label={member.status} variant="outlined" />
+        <Stack direction="row" mt={1} spacing={1}>
+          <Chip
+            label={member.status}
+            color={member.status === ExtendedMemberDtoStatusEnum.Pending ? 'warning' : undefined}
+            variant="outlined"
+          />
         </Stack>
       </CardContent>
       {/* <CardActions disableSpacing>

@@ -13,7 +13,7 @@ import {
 import { Box } from '@mui/system'
 import { useEffect, useState } from 'react'
 import { inviteMember } from '../../../api'
-import { MemberInviteDto } from '../../../api/openapi'
+import { MemberDto, MemberInviteDto } from '../../../api/openapi'
 import useAuth from '../../../context/AuthContext'
 import useDao from '../../../context/DaoContext'
 import useToast from '../../../context/ToastContext'
@@ -84,6 +84,18 @@ export default function InviteFormDialog(props: InviteFormDialogProps) {
                 helperText="The new member wallet address"
                 name="publicAddress"
                 value={formValues['publicAddress'] || ''}
+                required
+                fullWidth
+                onChange={onChange}
+                // InputProps={{
+                // startAdornment: <InputAdornment position="start">0x</InputAdornment>
+                // }}
+              />
+              <TextField
+                placeholder="Friendly name"
+                helperText="The new member friendly name"
+                name="name"
+                value={formValues['name'] || ''}
                 required
                 fullWidth
                 onChange={onChange}

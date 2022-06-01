@@ -116,7 +116,6 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
     api
       .getCurrentUser()
       .then((user: UserDto) => {
-        console.log('aaaaa', token, user)
         setUser(user)
       })
       .catch((e) => {

@@ -641,6 +641,12 @@ export interface MemberInviteDto {
      * @memberof MemberInviteDto
      */
     'publicAddress': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MemberInviteDto
+     */
+    'name'?: string;
 }
 
 export const MemberInviteDtoRolesEnum = {
@@ -664,6 +670,12 @@ export interface MemberQueryDto {
      * @memberof MemberQueryDto
      */
     'daoId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MemberQueryDto
+     */
+    'match'?: string;
     /**
      * 
      * @type {string}
@@ -1108,6 +1120,47 @@ export const TaskQueryDtoStatusEnum = {
 } as const;
 
 export type TaskQueryDtoStatusEnum = typeof TaskQueryDtoStatusEnum[keyof typeof TaskQueryDtoStatusEnum];
+
+/**
+ * 
+ * @export
+ * @interface UpdateTaskDto
+ */
+export interface UpdateTaskDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateTaskDto
+     */
+    'taskId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateTaskDto
+     */
+    'contributorId'?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof UpdateTaskDto
+     */
+    'skills'?: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateTaskDto
+     */
+    'status'?: UpdateTaskDtoStatusEnum;
+}
+
+export const UpdateTaskDtoStatusEnum = {
+    Open: 'open',
+    Closed: 'closed',
+    Cancelled: 'cancelled',
+    Dispute: 'dispute'
+} as const;
+
+export type UpdateTaskDtoStatusEnum = typeof UpdateTaskDtoStatusEnum[keyof typeof UpdateTaskDtoStatusEnum];
 
 /**
  * 
@@ -2917,17 +2970,17 @@ export const TaskApiAxiosParamCreator = function (configuration?: Configuration)
          * 
          * @param {string} daoId 
          * @param {string} taskId 
-         * @param {TaskDto} taskDto 
+         * @param {UpdateTaskDto} updateTaskDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerUpdate: async (daoId: string, taskId: string, taskDto: TaskDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        taskControllerUpdate: async (daoId: string, taskId: string, updateTaskDto: UpdateTaskDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'daoId' is not null or undefined
             assertParamExists('taskControllerUpdate', 'daoId', daoId)
             // verify required parameter 'taskId' is not null or undefined
             assertParamExists('taskControllerUpdate', 'taskId', taskId)
-            // verify required parameter 'taskDto' is not null or undefined
-            assertParamExists('taskControllerUpdate', 'taskDto', taskDto)
+            // verify required parameter 'updateTaskDto' is not null or undefined
+            assertParamExists('taskControllerUpdate', 'updateTaskDto', updateTaskDto)
             const localVarPath = `/api/dao/{daoId}/task/{taskId}`
                 .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)))
                 .replace(`{${"taskId"}}`, encodeURIComponent(String(taskId)));
@@ -2953,7 +3006,7 @@ export const TaskApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(taskDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(updateTaskDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3018,12 +3071,12 @@ export const TaskApiFp = function(configuration?: Configuration) {
          * 
          * @param {string} daoId 
          * @param {string} taskId 
-         * @param {TaskDto} taskDto 
+         * @param {UpdateTaskDto} updateTaskDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async taskControllerUpdate(daoId: string, taskId: string, taskDto: TaskDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerUpdate(daoId, taskId, taskDto, options);
+        async taskControllerUpdate(daoId: string, taskId: string, updateTaskDto: UpdateTaskDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TaskDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.taskControllerUpdate(daoId, taskId, updateTaskDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -3080,12 +3133,12 @@ export const TaskApiFactory = function (configuration?: Configuration, basePath?
          * 
          * @param {string} daoId 
          * @param {string} taskId 
-         * @param {TaskDto} taskDto 
+         * @param {UpdateTaskDto} updateTaskDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        taskControllerUpdate(daoId: string, taskId: string, taskDto: TaskDto, options?: any): AxiosPromise<TaskDto> {
-            return localVarFp.taskControllerUpdate(daoId, taskId, taskDto, options).then((request) => request(axios, basePath));
+        taskControllerUpdate(daoId: string, taskId: string, updateTaskDto: UpdateTaskDto, options?: any): AxiosPromise<TaskDto> {
+            return localVarFp.taskControllerUpdate(daoId, taskId, updateTaskDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3149,13 +3202,13 @@ export class TaskApi extends BaseAPI {
      * 
      * @param {string} daoId 
      * @param {string} taskId 
-     * @param {TaskDto} taskDto 
+     * @param {UpdateTaskDto} updateTaskDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TaskApi
      */
-    public taskControllerUpdate(daoId: string, taskId: string, taskDto: TaskDto, options?: AxiosRequestConfig) {
-        return TaskApiFp(this.configuration).taskControllerUpdate(daoId, taskId, taskDto, options).then((request) => request(this.axios, this.basePath));
+    public taskControllerUpdate(daoId: string, taskId: string, updateTaskDto: UpdateTaskDto, options?: AxiosRequestConfig) {
+        return TaskApiFp(this.configuration).taskControllerUpdate(daoId, taskId, updateTaskDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

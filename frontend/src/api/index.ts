@@ -145,6 +145,11 @@ export const createTask = async (p: CreateTaskDto): Promise<TaskDto> => {
   return res.data
 }
 
+export const updateTask = async (p: TaskDto): Promise<TaskDto> => {
+  const res = await client.task.taskControllerUpdate(p.daoId, p.taskId, p)
+  return res.data
+}
+
 export const deleteTask = async (daoId: string, taskId: string): Promise<void> => {
   await client.task.taskControllerDelete(daoId, taskId)
 }

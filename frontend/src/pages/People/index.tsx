@@ -3,7 +3,7 @@ import { Box } from '@mui/system'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { listMembers } from '../../api'
-import { ExtendedMemberDto } from '../../api/openapi'
+import { ExtendedMemberDto, MemberDto } from '../../api/openapi'
 import ContentBlock from '../../components/ContentBlock'
 import { getDaoUrl, LinkDao } from '../../context/PageContext'
 import InviteFormDialog from './components/InviteFormDialog'
@@ -47,9 +47,14 @@ export default function People() {
     navigate(getDaoUrl(daoId, 'people'))
   }
 
+  const onMemberEdit = (memberDto: MemberDto) => {
+    console.log(`TODO: edit member`, memberDto)
+  }
+
   return (
     <ContentBlock title="People">
       <InviteFormDialog open={showInviteForm} onClose={onInviteFormClose} />
+
       {loading ? (
         <CircularProgress />
       ) : failed ? (
@@ -64,7 +69,12 @@ export default function People() {
           <Stack direction="row" spacing={2}>
             {members && members.length ? (
               members.map((member) => (
-                <MemberItem key={member.memberId} member={member} onUpdate={() => setMembers(undefined)} />
+                <MemberItem
+                  key={member.memberId}
+                  member={member}
+                  onUpdate={() => setMembers(undefined)}
+                  onEdit={onMemberEdit}
+                />
               ))
             ) : (
               <p>This DAO has no members yet.</p>
