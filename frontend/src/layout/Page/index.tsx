@@ -125,13 +125,14 @@ export function PageLayout(props: PageLayoutProps) {
           <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
             {title}
           </Typography>
-          <IconButton color="inherit">
+          <IconButton color="inherit" aria-label="account">
             {/* <Badge badgeContent={4} color="secondary">
               <NotificationsIcon />
             </Badge> */}
           </IconButton>
           <IconButton
             color="inherit"
+            aria-label="connect"
             onClick={() => (!account ? navigate(`/connect?redirect=${location.pathname}`) : setAccount(undefined))}
           >
             <Stack spacing={1} direction="row">

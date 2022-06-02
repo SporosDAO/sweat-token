@@ -53,7 +53,7 @@ export class DaoService {
   async update(daoDto: DaoDto): Promise<DaoDto> {
     if (!daoDto) throw new BadRequestException()
     const { daoId } = daoDto
-    if (daoId) throw new BadRequestException()
+    if (!daoId) throw new BadRequestException()
     const dao = await this.read(daoDto.daoId)
     if (!dao) throw new NotFoundException()
 

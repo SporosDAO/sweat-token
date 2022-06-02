@@ -174,7 +174,7 @@ export default function TaskAssignDialog(props: TaskAssignDialogProps) {
           <></>
         ) : (
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
-            <Button variant="contained" onClick={save}>
+            <Button variant="contained" onClick={save} aria-label="save">
               Save
             </Button>
           </Stack>

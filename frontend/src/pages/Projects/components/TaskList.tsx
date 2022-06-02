@@ -120,7 +120,7 @@ export default function TaskList({ onChange, project }: TaskListProps) {
       <TaskAddDialog project={project} onClose={() => onAddTaskClose()} open={showAddTask} />
       <TaskAssignDialog task={selectedTask} onClose={() => onAssignedTask()} open={showAssignTask} />
       <Box sx={{ textAlign: 'right' }} mb={1}>
-        <Button variant="contained" onClick={(e) => setShowAddTask(true)}>
+        <Button variant="contained" onClick={(e) => setShowAddTask(true)} aria-label="add">
           Add a task
         </Button>
       </Box>
@@ -128,7 +128,7 @@ export default function TaskList({ onChange, project }: TaskListProps) {
       {failed ? (
         <div style={{ textAlign: 'center' }}>
           <p>Failed to load list. </p>
-          <Button variant="outlined" color="secondary" onClick={() => setFailed(false)}>
+          <Button variant="outlined" color="secondary" onClick={() => setFailed(false)} aria-label="retry">
             Retry
           </Button>
         </div>
@@ -191,7 +191,7 @@ export default function TaskList({ onChange, project }: TaskListProps) {
                     )}
                   </TableCell>
                   <TableCell align="center" sx={{ width: '1%' }}>
-                    <Button color="error" onClick={() => removeTask(task)}>
+                    <Button color="error" onClick={() => removeTask(task)} aria-label="remove">
                       <CancelOutlined />
                     </Button>
                   </TableCell>

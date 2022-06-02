@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put } from '@nestjs/common'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { Role } from 'src/user/user.dto'
-import { CreateTaskDto, TaskDto, TaskQueryDto } from '../../task/task.dto'
+import { CreateTaskDto, TaskDto, TaskQueryDto, UpdateTaskDto } from '../../task/task.dto'
 import { TaskService } from '../../task/task.service'
 import { DaoAuth } from '../dao.auth.decorator'
 
@@ -34,7 +34,11 @@ export class TaskController {
   @Put(':taskId')
   @HttpCode(200)
   @DaoAuth(Role.founder, Role.projectManager)
-  update(@Param('daoId') daoId: string, @Param('taskId') taskId: string, @Body() taskDto: TaskDto): Promise<TaskDto> {
+  update(
+    @Param('daoId') daoId: string,
+    @Param('taskId') taskId: string,
+    @Body() taskDto: UpdateTaskDto,
+  ): Promise<TaskDto> {
     taskDto.taskId = taskId
     return this.taskService.update(taskDto)
   }

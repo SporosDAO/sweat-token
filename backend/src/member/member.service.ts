@@ -43,7 +43,8 @@ export class MemberService {
 
     let user = await this.userService.load({ publicAddress })
     if (!user) {
-      user = await this.userService.create({ publicAddress } as UserDto)
+      const { name } = invite
+      user = await this.userService.create({ publicAddress, name } as UserDto)
     }
 
     const previousInvitation = await this.load({
@@ -89,7 +90,7 @@ export class MemberService {
   async update(memberDto: MemberDto): Promise<MemberDto> {
     if (!memberDto) throw new BadRequestException()
     const { memberId } = memberDto
-    if (memberId) throw new BadRequestException()
+    if (!memberId) throw new BadRequestException()
     const member = await this.read(memberDto.memberId)
     if (!member) throw new NotFoundException()
 
@@ -158,7 +159,8 @@ export class MemberService {
         userId: members.map((m) => m.userId),
       })
     ).reduce((o, u) => ({ ...o, [u.userId]: u }), {})
-    return members.map(
+
+    const membersList = members.map(
       (m) =>
         ({
           ...m,
@@ -166,5 +168,16 @@ export class MemberService {
           roles: m.roles,
         } as ExtendedMemberDto),
     )
+
+    if (query.match) {
+      const q = query.match.toLowerCase()
+      return membersList.filter(
+        (m: ExtendedMemberDto) =>
+          (m.name && m.name.toLowerCase().indexOf(q) > -1) ||
+          (m.publicAddress && m.publicAddress.toLowerCase().indexOf(q) > -1),
+      )
+    }
+
+    return membersList
   }
 }

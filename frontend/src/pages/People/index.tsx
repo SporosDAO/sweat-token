@@ -59,7 +59,10 @@ export default function People() {
         <CircularProgress />
       ) : failed ? (
         <Box>
-          Failed to load. <Button onClick={() => setFailed(false)}>Retry</Button>
+          Failed to load.{' '}
+          <Button onClick={() => setFailed(false)} aria-label="retry">
+            Retry
+          </Button>
         </Box>
       ) : (
         <Box>

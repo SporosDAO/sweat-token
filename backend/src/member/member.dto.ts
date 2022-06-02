@@ -32,6 +32,11 @@ export class MemberQueryDto {
   @IsUUID()
   @IsOptional()
   daoId?: string
+
+  @IsString()
+  @IsOptional()
+  match?: string
+
   @IsUUID()
   @IsOptional()
   userId?: string
@@ -81,6 +86,10 @@ export class MemberInviteDto {
   @IsString()
   @IsNotEmpty()
   publicAddress: string
+
+  @IsString()
+  @IsOptional()
+  name?: string
 }
 
 export class MemberDto {

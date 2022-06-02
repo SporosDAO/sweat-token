@@ -118,18 +118,18 @@ export default function DaoCreate() {
             <Box>
               <Stack spacing={2} sx={{ mt: 2 }} direction="row" justifyContent="space-between">
                 {page === 1 ? (
-                  <Button variant="contained" onClick={() => setPage(0)}>
+                  <Button variant="contained" onClick={() => setPage(0)} aria-label="Previous">
                     Previous
                   </Button>
                 ) : (
                   <></>
                 )}
                 {page === 0 ? (
-                  <Button variant="contained" onClick={() => setPage(1)}>
+                  <Button variant="contained" onClick={() => setPage(1)} aria-label="Continue">
                     Continue
                   </Button>
                 ) : (
-                  <Button variant="contained" onClick={() => save()}>
+                  <Button variant="contained" onClick={() => save()} aria-label="Save">
                     Save
                   </Button>
                 )}

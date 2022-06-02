@@ -136,7 +136,7 @@ export default function InviteFormDialog(props: InviteFormDialogProps) {
           <></>
         ) : (
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
-            <Button variant="contained" onClick={save}>
+            <Button variant="contained" onClick={save} aria-label="Send">
               Send
             </Button>
           </Stack>

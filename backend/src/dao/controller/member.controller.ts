@@ -37,7 +37,9 @@ export class MemberController {
 
   @Post('find')
   @HttpCode(200)
+  @DaoAuth()
   find(@Param('daoId') daoId: string, @Body() query: MemberQueryDto): Promise<MemberDto[]> {
+    query.daoId = daoId
     return this.memberService.find(query)
   }
 
@@ -57,20 +59,24 @@ export class MemberController {
 
   @Put(':memberId')
   @HttpCode(200)
-  @DaoAuth(Role.admin)
+  @DaoAuth(Role.founder)
   update(
+    @User('userId') userId: string,
     @Param('daoId') daoId: string,
     @Param('memberId') memberId: string,
     @Body() memberDto: MemberDto,
   ): Promise<MemberDto> {
     memberDto.memberId = memberId
+    memberDto.daoId = daoId
+    memberDto.invitedBy = userId
+
     return this.memberService.update(memberDto)
   }
 
   @Delete(':memberId')
   @HttpCode(200)
   @UseGuards(RolesGuard)
-  @DaoAuth(Role.admin)
+  @DaoAuth(Role.founder)
   delete(@Param('daoId') daoId: string, @Param('memberId') memberId: string): Promise<void> {
     return this.memberService.delete(memberId)
   }

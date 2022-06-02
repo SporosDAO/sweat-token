@@ -62,6 +62,7 @@ export default function Landing() {
                   onClick={() => {
                     setFailed(false)
                   }}
+                  aria-label="Retry"
                 >
                   Retry
                 </Button>

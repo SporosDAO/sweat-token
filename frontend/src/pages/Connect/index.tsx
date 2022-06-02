@@ -34,7 +34,9 @@ export function Connect() {
         {error ? (
           <Box>
             <p>{error.mesasge || 'An internal error occured during authentication.'}</p>
-            <Button onClick={() => resetError()}>Retry</Button>
+            <Button onClick={() => resetError()} aria-label="retry">
+              Retry
+            </Button>
           </Box>
         ) : account ? (
           <CircularProgress />
