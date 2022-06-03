@@ -10,6 +10,8 @@ import { start } from 'repl';
  * A minimal initial e2e flow with puppeteer
  * generated and exported from Chrome DevTools
  *
+ * https://developer.chrome.com/docs/devtools/recorder/
+ *
  */
 
 const browser = await puppeteer.launch({
