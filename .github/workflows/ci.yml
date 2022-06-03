@@ -29,6 +29,7 @@ jobs:
       - name: Run E2E tests
         run: |
           cd e2e-tests
+          yarn install
           yarn test
           yarn coverage
       - name: Shutdown docker services
