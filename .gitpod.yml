@@ -9,6 +9,9 @@ tasks:
       gp sync-done build
     command: |
       bash .gitpod.sh
+  - name: Shell
+    command: bash
+    openMode: split-right
 
 vscode:
   extensions:
