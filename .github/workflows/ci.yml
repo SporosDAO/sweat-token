@@ -21,7 +21,7 @@ jobs:
         if: always()
         run: docker-compose logs frontend backend
       - name: Test minimal frontend availability
-        run: docker run --network container:frontend appropriate/curl -s --retry 10 --retry-connrefused http://localhost:3000/
+        run: docker run --network container:frontend appropriate/curl -s --retry 10 --retry-connrefused http://127.0.0.1:3000/
       - name: Check if all services are running
         if: always()
         run: docker-compose ps
