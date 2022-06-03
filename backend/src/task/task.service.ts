@@ -4,7 +4,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { InjectModel } from '@nestjs/mongoose'
 import { FilterQuery, Model } from 'mongoose'
-import { CreateTaskDto, TaskDto, TaskEvent, TaskQueryDto, TaskStatus } from './task.dto'
+import { CreateTaskDto, TaskDto, TaskEvent, TaskQueryDto, TaskStatus, UpdateTaskDto } from './task.dto'
 import { Task, TaskDocument } from './task.schema'
 
 @Injectable()
@@ -37,10 +37,10 @@ export class TaskService {
     return task ? this.toDto(task) : null
   }
 
-  async update(taskDto: TaskDto): Promise<TaskDto> {
+  async update(taskDto: UpdateTaskDto): Promise<TaskDto> {
     if (!taskDto) throw new BadRequestException()
     const { taskId } = taskDto
-    if (taskId) throw new BadRequestException()
+    if (!taskId) throw new BadRequestException()
     const task = await this.read(taskDto.taskId)
     if (!task) throw new NotFoundException()
 

@@ -1,7 +1,7 @@
 import { RuntimeModule } from '@app/runtime'
 import { Test, TestingModule } from '@nestjs/testing'
+import { ProjectModule } from '../../project/project.module'
 import { ProjectController } from './project.controller'
-import { ProjectModule } from './project.module'
 
 describe('ProjectController', () => {
   let controller: ProjectController

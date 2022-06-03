@@ -161,7 +161,7 @@ export default function ProjectAdd() {
               />
             </Grid>
           </Grid>
-          <Button sx={{ mt: 5 }} fullWidth variant="contained" onClick={() => save()}>
+          <Button sx={{ mt: 5 }} fullWidth variant="contained" onClick={() => save()} aria-label="save">
             Save
           </Button>
         </Box>

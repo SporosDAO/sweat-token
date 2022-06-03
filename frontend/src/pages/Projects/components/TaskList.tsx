@@ -1,5 +1,6 @@
 import { CancelOutlined, Loop, TaskAlt } from '@mui/icons-material'
 import {
+  Avatar,
   Button,
   Checkbox,
   CircularProgress,
@@ -18,6 +19,7 @@ import ContentBlock from '../../../components/ContentBlock'
 import useToast from '../../../context/ToastContext'
 import { formatCurrency, formatDateFromNow } from '../../../util'
 import TaskAddDialog from './TaskAddDialog'
+import TaskAssignDialog from './TaskAssignDialog'
 
 interface TaskListProps {
   project: ProjectDto
@@ -33,6 +35,9 @@ export default function TaskList({ onChange, project }: TaskListProps) {
   const [tasks, setTasks] = useState<TaskDto[]>()
   const { showToast } = useToast()
 
+  const [selectedTask, setSelectedTask] = useState<TaskDto>()
+  const [showAssignTask, setShowAssignTask] = useState(false)
+
   useEffect(() => {
     if (selection !== undefined) return
     if (!tasks) return
@@ -44,7 +49,7 @@ export default function TaskList({ onChange, project }: TaskListProps) {
     if (failed) return
     if (loading) return
     setLoading(true)
-    findTasks({ projectId: project.projectId })
+    findTasks({ daoId: project.daoId, projectId: project.projectId })
       .then((tasks: TaskDto[]) => {
         setTasks(tasks)
       })
@@ -65,7 +70,7 @@ export default function TaskList({ onChange, project }: TaskListProps) {
   const removeTask = (task: TaskDto) => {
     if (!task || !task.taskId) return
     if (!window.confirm(`Remove selected task? `)) return
-    deleteTask(task.taskId)
+    deleteTask(task.daoId, task.taskId)
       .then(() => {
         showToast(`Task deletion succeeded`, 'success')
       })
@@ -85,8 +90,8 @@ export default function TaskList({ onChange, project }: TaskListProps) {
     if (task.type === TaskDtoTypeEnum.Onetime) return value
     let bands = ''
     if (task.bands) {
-      const band = (b: number): string => Math.round((task.budget / 10) * b).toString()
-      bands = `${band(task.bands[0])}$-${band(task.bands[1])}$`
+      const band = (b: number): string => formatCurrency(Math.round((task.budget / 10) * b))
+      bands = `${band(task.bands[0])}-${band(task.bands[1])}`
     }
     return bands ? `${bands} (${value} max)` : `${value} max`
   }
@@ -99,12 +104,23 @@ export default function TaskList({ onChange, project }: TaskListProps) {
     [selection]
   )
 
+  const onShowAssignTask = (task: TaskDto) => {
+    console.log('assign', task)
+    setSelectedTask(task)
+    setShowAssignTask(true)
+  }
+
+  const onAssignedTask = () => {
+    setSelectedTask(undefined)
+    setShowAssignTask(false)
+  }
+
   return (
     <ContentBlock title="Tasks">
       <TaskAddDialog project={project} onClose={() => onAddTaskClose()} open={showAddTask} />
-
+      <TaskAssignDialog task={selectedTask} onClose={() => onAssignedTask()} open={showAssignTask} />
       <Box sx={{ textAlign: 'right' }} mb={1}>
-        <Button variant="contained" onClick={() => setShowAddTask(true)}>
+        <Button variant="contained" onClick={(e) => setShowAddTask(true)} aria-label="add">
           Add a task
         </Button>
       </Box>
@@ -112,7 +128,7 @@ export default function TaskList({ onChange, project }: TaskListProps) {
       {failed ? (
         <div style={{ textAlign: 'center' }}>
           <p>Failed to load list. </p>
-          <Button variant="outlined" color="secondary" onClick={() => setFailed(false)}>
+          <Button variant="outlined" color="secondary" onClick={() => setFailed(false)} aria-label="retry">
             Retry
           </Button>
         </div>
@@ -159,9 +175,23 @@ export default function TaskList({ onChange, project }: TaskListProps) {
                       {renderBudget(task)}
                     </Box>
                   </TableCell>
-                  <TableCell>{task.contributorId || 'Not assigned'}</TableCell>
+                  <TableCell>
+                    {task.contributorId ? (
+                      <Avatar>{task.contributorId.substring(0, 2)}</Avatar>
+                    ) : (
+                      <a
+                        href={`?assign=${task.taskId}`}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          onShowAssignTask(task)
+                        }}
+                      >
+                        Not assigned
+                      </a>
+                    )}
+                  </TableCell>
                   <TableCell align="center" sx={{ width: '1%' }}>
-                    <Button color="error" onClick={() => removeTask(task)}>
+                    <Button color="error" onClick={() => removeTask(task)} aria-label="remove">
                       <CancelOutlined />
                     </Button>
                   </TableCell>

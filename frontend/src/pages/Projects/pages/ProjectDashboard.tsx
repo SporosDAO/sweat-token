@@ -35,7 +35,10 @@ const ProjectsList = () => {
     <Box>
       {failed ? (
         <p>
-          Failed to load. <Button onClick={() => setFailed(false)}>Retry</Button>
+          Failed to load.{' '}
+          <Button onClick={() => setFailed(false)} aria-label="retry">
+            Retry
+          </Button>
         </p>
       ) : loading ? (
         <CircularProgress />

@@ -1,18 +1,16 @@
+import { RecordEventType } from '@app/runtime/event.dto'
 import { toDTO } from '@app/runtime/util'
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 import { InjectModel } from '@nestjs/mongoose'
 import { FilterQuery, Model } from 'mongoose'
 import { CreateProjectDto, ProjectDto, ProjectEvent, ProjectQueryDto, ProjectStatus } from './project.dto'
 import { Project, ProjectDocument } from './project.schema'
-import { EventEmitter2 } from '@nestjs/event-emitter'
-import { TaskService } from 'src/task/task.service'
-import { RecordEventType } from '@app/runtime/event.dto'
 
 @Injectable()
 export class ProjectService {
   constructor(
     private eventEmitter: EventEmitter2,
-    private taskService: TaskService,
     @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
   ) {}
 
@@ -65,13 +63,11 @@ export class ProjectService {
     const project = await this.read(projectId)
     if (!project) return
     await this.projectModel.deleteOne({ projectId }).exec()
-    await this.taskService.deleteByProject(projectId)
     this.emit('delete', project)
   }
 
   async deleteAll(): Promise<void> {
     await this.projectModel.deleteMany({}).exec()
-    await this.taskService.deleteAll()
   }
 
   async find(query: ProjectQueryDto): Promise<ProjectDto[]> {

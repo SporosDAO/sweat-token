@@ -49,6 +49,14 @@ export function Web3ContextProvider({ children }: Web3ContextProviderProps) {
     setProvider(new ethers.providers.Web3Provider(window.ethereum))
   }, [provider, account])
 
+  useEffect(() => {
+    if (account) return
+    if (!window.ethereum) return
+    if (!window.ethereum.selectedAddress) return
+    console.log('use connected address')
+    setAccount(window.ethereum.selectedAddress)
+  }, [account])
+
   return (
     <Web3ProviderContext.Provider
       value={

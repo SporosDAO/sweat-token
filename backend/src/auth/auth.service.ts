@@ -6,10 +6,15 @@ import { v4 as uuidv4 } from 'uuid'
 import { NonceDto } from './auth.dto'
 import { ethers } from 'ethers'
 import { randomString } from '@app/runtime/util'
+import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UserService, private jwtService: JwtService) {}
+  constructor(
+    private usersService: UserService,
+    private jwtService: JwtService,
+    private configService: ConfigService,
+  ) {}
 
   async validateUser(userId: string): Promise<UserDto> {
     const user = await this.usersService.load({ userId })
@@ -27,7 +32,12 @@ export class AuthService {
     await this.usersService.update(userId, { ...user, nonce: randomString() })
 
     return {
-      token: this.jwtService.sign({ ...user, sub: userId }),
+      token: this.jwtService.sign(
+        { ...user, sub: userId },
+        {
+          expiresIn: this.configService.get('JWT_EXPIRES_IN'),
+        },
+      ),
     }
   }
 

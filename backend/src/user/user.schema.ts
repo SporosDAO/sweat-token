@@ -1,3 +1,4 @@
+import { randomString } from '@app/runtime/util'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
@@ -16,7 +17,7 @@ export class User {
   @Prop({
     required: false,
   })
-  name: string
+  name?: string
 
   @Prop({
     required: false,
@@ -26,7 +27,7 @@ export class User {
 
   @Prop({
     required: false,
-    default: () => uuidv4(),
+    default: () => randomString(),
   })
   nonce: string
 
