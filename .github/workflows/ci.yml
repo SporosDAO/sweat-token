@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build the stack
-        run: docker-compose up -d
+        run: docker-compose up -d --build
       - name: Check if all services are running
         if: always()
         run: docker-compose ps
