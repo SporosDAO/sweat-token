@@ -28,6 +28,7 @@ jobs:
         run: docker-compose logs frontend backend
       - name: Run E2E tests
         run: |
+          cd e2e-tests
           yarn test
           yarn coverage
       - name: Shutdown docker services
