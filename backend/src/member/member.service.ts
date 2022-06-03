@@ -1,16 +1,27 @@
-import { toDTO } from '@app/runtime/util'
+import { randomString, toDTO } from '@app/runtime/util'
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { FilterQuery, Model } from 'mongoose'
-import { CreateMemberDto, MemberDto, MemberEvent, MemberQueryDto, MemberStatus } from './member.dto'
+import {
+  CreateMemberDto,
+  ExtendedMemberDto,
+  MemberDto,
+  MemberEvent,
+  MemberInviteDto,
+  MemberQueryDto,
+  MemberStatus,
+} from './member.dto'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { Member, MemberDocument } from './member.schema'
 import { RecordEventType } from '@app/runtime/event.dto'
+import { UserService } from 'src/user/user.service'
+import { UserDto } from 'src/user/user.dto'
 
 @Injectable()
 export class MemberService {
   constructor(
     private eventEmitter: EventEmitter2,
+    private userService: UserService,
     @InjectModel(Member.name) private memberModel: Model<MemberDocument>,
   ) {}
 
@@ -27,8 +38,38 @@ export class MemberService {
     } as MemberEvent)
   }
 
+  async invite(invite: MemberInviteDto): Promise<MemberDto> {
+    const publicAddress = invite.publicAddress
+
+    let user = await this.userService.load({ publicAddress })
+    if (!user) {
+      const { name } = invite
+      user = await this.userService.create({ publicAddress, name } as UserDto)
+    }
+
+    const previousInvitation = await this.load({
+      userId: user.userId,
+      daoId: invite.daoId,
+    })
+
+    if (previousInvitation) {
+      await this.delete(previousInvitation.memberId)
+    }
+
+    const memberDto: CreateMemberDto = {
+      daoId: invite.daoId,
+      roles: invite.roles || [],
+      invitation: `${randomString()}${randomString()}`,
+      status: MemberStatus.pending,
+      userId: user.userId,
+      invitedBy: invite.invitedBy,
+    }
+
+    return await this.create(memberDto)
+  }
+
   async create(memberDto: CreateMemberDto): Promise<MemberDto> {
-    memberDto.status = MemberStatus.enabled
+    memberDto.status = memberDto.status || MemberStatus.pending
     const member = new this.memberModel(memberDto)
     await member.save()
     this.emit('create', member)
@@ -40,10 +81,16 @@ export class MemberService {
     return member ? this.toDto(member) : null
   }
 
+  async load(memberDto: Partial<MemberDto>): Promise<MemberDto | null> {
+    if (Object.keys(memberDto).length === 0) throw new BadRequestException()
+    const member = await this.memberModel.findOne(memberDto).exec()
+    return member ? this.toDto(member) : null
+  }
+
   async update(memberDto: MemberDto): Promise<MemberDto> {
     if (!memberDto) throw new BadRequestException()
     const { memberId } = memberDto
-    if (memberId) throw new BadRequestException()
+    if (!memberId) throw new BadRequestException()
     const member = await this.read(memberDto.memberId)
     if (!member) throw new NotFoundException()
 
@@ -67,8 +114,8 @@ export class MemberService {
     this.emit('delete', member)
   }
 
-  async deleteAll(): Promise<void> {
-    await this.memberModel.deleteMany({}).exec()
+  async deleteAll(filter?: FilterQuery<MemberDocument>): Promise<void> {
+    await this.memberModel.deleteMany(filter).exec()
   }
 
   async deleteByProject(projectId: string): Promise<void> {
@@ -82,6 +129,7 @@ export class MemberService {
     if (query.userId) q.userId = query.userId
     if (query.daoId) q.daoId = query.daoId
     if (query.status) q.status = query.status
+    if (query.skills) q.skills = query.skills
 
     const dateField = query.dateField || 'created'
 
@@ -102,5 +150,34 @@ export class MemberService {
 
     const res = await find.exec()
     return res.map((doc) => this.toDto(doc))
+  }
+
+  async list(query: MemberQueryDto): Promise<ExtendedMemberDto[]> {
+    const members = await this.find(query)
+    const users = (
+      await this.userService.find({
+        userId: members.map((m) => m.userId),
+      })
+    ).reduce((o, u) => ({ ...o, [u.userId]: u }), {})
+
+    const membersList = members.map(
+      (m) =>
+        ({
+          ...m,
+          ...users[m.userId],
+          roles: m.roles,
+        } as ExtendedMemberDto),
+    )
+
+    if (query.match) {
+      const q = query.match.toLowerCase()
+      return membersList.filter(
+        (m: ExtendedMemberDto) =>
+          (m.name && m.name.toLowerCase().indexOf(q) > -1) ||
+          (m.publicAddress && m.publicAddress.toLowerCase().indexOf(q) > -1),
+      )
+    }
+
+    return membersList
   }
 }

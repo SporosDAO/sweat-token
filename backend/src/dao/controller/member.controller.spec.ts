@@ -1,7 +1,7 @@
 import { RuntimeModule } from '@app/runtime'
 import { Test, TestingModule } from '@nestjs/testing'
 import { MemberController } from './member.controller'
-import { MemberModule } from './member.module'
+import { MemberModule } from '../../member/member.module'
 
 describe('MemberController', () => {
   let controller: MemberController

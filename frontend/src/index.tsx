@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import { AuthProvider } from './context/AuthContext'
+import { PageProvider } from './context/PageContext'
 import { ToastProvider } from './context/ToastContext'
 import { Web3ContextProvider } from './context/Web3Context'
 import './index.css'
@@ -16,7 +17,9 @@ root.render(
       <ToastProvider>
         <Web3ContextProvider>
           <AuthProvider>
-            <App />
+            <PageProvider>
+              <App />
+            </PageProvider>
           </AuthProvider>
         </Web3ContextProvider>
       </ToastProvider>

@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import ContentBlock from '../../components/ContentBlock'
 import useAuth from '../../context/AuthContext'
 import useWeb3 from '../../context/Web3Context'
+import { PageLayout } from '../../layout/Page'
 import ConnectWidget from './components/ConnectWidget'
 
 export function Connect() {
@@ -27,12 +28,15 @@ export function Connect() {
   }, [location.search, navigate, user])
 
   return (
-    <Container maxWidth="lg" sx={{ mt: '6em' }}>
+    <PageLayout withDrawer={false}>
+      {/* <Container maxWidth="lg" sx={{ mt: '6em' }}> */}
       <ContentBlock title="Connect with your wallet">
         {error ? (
           <Box>
-            <p>{error}</p>
-            <Button onClick={() => resetError()}>Retry</Button>
+            <p>{error.mesasge || 'An internal error occured during authentication.'}</p>
+            <Button onClick={() => resetError()} aria-label="retry">
+              Retry
+            </Button>
           </Box>
         ) : account ? (
           <CircularProgress />
@@ -40,6 +44,7 @@ export function Connect() {
           <ConnectWidget />
         )}
       </ContentBlock>
-    </Container>
+      {/* </Container> */}
+    </PageLayout>
   )
 }

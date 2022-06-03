@@ -1,11 +1,18 @@
 import {
   AuthApi,
   Configuration,
+  CreateDaoDto,
+  CreateMemberDto,
   CreateProjectDto,
   CreateTaskDto,
   DaoApi,
   DaoDto,
+  ExtendedMemberDto,
   JwtTokenDto,
+  MemberApi,
+  MemberDto,
+  MemberInviteDto,
+  MemberQueryDto,
   NonceDto,
   ProjectApi,
   ProjectDto,
@@ -13,16 +20,14 @@ import {
   TaskApi,
   TaskDto,
   TaskQueryDto,
-  UserDto,
-  MemberApi,
-  CreateMemberDto,
-  MemberDto,
-  MemberQueryDto
+  UserDto
 } from './openapi'
 
 let basePath = process.env.REACT_APP_SWEAT_TOKEN_API_BASEPATH
+
 console.debug(`process.env.NODE_ENV=${process.env.NODE_ENV}`)
 console.debug(`process.env.REACT_APP_SWEAT_TOKEN_API_BASEPATH=${process.env.REACT_APP_SWEAT_TOKEN_API_BASEPATH}`)
+
 if (!basePath) {
   basePath = `${window.location.protocol}//${window.location.host}`
 }
@@ -44,8 +49,16 @@ class ApiClient {
   public initClient(accessToken?: string) {
     this.token = accessToken
     // Enable credentials for prod and gitpod access
-    const baseOptions = { withCredentials: true }
-    const config = new Configuration({ accessToken, baseOptions })
+    const baseOptions = {
+      headers: {
+        Authorization: 'Bearer ' + accessToken
+      },
+      withCredentials: true
+    }
+    const config = new Configuration({
+      accessToken,
+      baseOptions
+    })
     this.auth = new AuthApi(config, basePath)
     this.dao = new DaoApi(config, basePath)
     this.project = new ProjectApi(config, basePath)
@@ -57,6 +70,7 @@ class ApiClient {
 const client = new ApiClient()
 
 export const setToken = (token: string | undefined) => {
+  console.log(`Set API token`)
   client.initClient(token)
 }
 
@@ -65,12 +79,22 @@ export const getToken = (): string | undefined => {
 }
 
 export const getDao = async (daoId: string): Promise<DaoDto> => {
-  const res = await client.dao.daoControllerLoad(daoId)
+  const res = await client.dao.daoControllerRead(daoId)
   return res.data
 }
 
 export const listDaos = async (): Promise<DaoDto[]> => {
   const res = await client.dao.daoControllerList()
+  return res.data
+}
+
+export const createDao = async (p: CreateDaoDto): Promise<DaoDto> => {
+  const res = await client.dao.daoControllerCreate(p)
+  return res.data
+}
+
+export const updateDao = async (p: DaoDto): Promise<DaoDto> => {
+  const res = await client.dao.daoControllerUpdate(p.daoId, p)
   return res.data
 }
 
@@ -90,54 +114,72 @@ export const verifySignature = async (sig: NonceDto): Promise<JwtTokenDto> => {
 }
 
 export const findProjects = async (query: ProjectQueryDto): Promise<ProjectDto[]> => {
-  const res = await client.project.projectControllerFind(query)
+  if (!query.daoId) throw new Error('daoId is required')
+  const res = await client.project.projectControllerFind(query.daoId, query)
   return res.data
 }
 
-export const loadProject = async (projectId: string): Promise<ProjectDto> => {
-  const res = await client.project.projectControllerRead(projectId)
+export const loadProject = async (daoId: string, projectId: string): Promise<ProjectDto> => {
+  const res = await client.project.projectControllerRead(daoId, projectId)
   return res.data
 }
 
 export const createProject = async (p: CreateProjectDto): Promise<ProjectDto> => {
-  const res = await client.project.projectControllerCreate(p)
+  const res = await client.project.projectControllerCreate(p.daoId, p)
   return res.data
 }
 
 export const findTasks = async (query: TaskQueryDto): Promise<TaskDto[]> => {
-  const res = await client.task.taskControllerFind(query)
+  if (!query.daoId) throw new Error('daoId is required')
+  const res = await client.task.taskControllerFind(query.daoId, query)
   return res.data
 }
 
-export const loadTask = async (taskId: string): Promise<TaskDto> => {
-  const res = await client.task.taskControllerRead(taskId)
+export const loadTask = async (daoId: string, taskId: string): Promise<TaskDto> => {
+  const res = await client.task.taskControllerRead(daoId, taskId)
   return res.data
 }
 
 export const createTask = async (p: CreateTaskDto): Promise<TaskDto> => {
-  const res = await client.task.taskControllerCreate(p)
+  const res = await client.task.taskControllerCreate(p.daoId, p)
   return res.data
 }
 
-export const deleteTask = async (taskId: string): Promise<void> => {
-  await client.task.taskControllerDelete(taskId)
-}
-
-export const findMembers = async (query: MemberQueryDto): Promise<MemberDto[]> => {
-  const res = await client.member.memberControllerFind(query)
+export const updateTask = async (p: TaskDto): Promise<TaskDto> => {
+  const res = await client.task.taskControllerUpdate(p.daoId, p.taskId, p)
   return res.data
 }
 
-export const loadMember = async (memberId: string): Promise<MemberDto> => {
-  const res = await client.member.memberControllerRead(memberId)
+export const deleteTask = async (daoId: string, taskId: string): Promise<void> => {
+  await client.task.taskControllerDelete(daoId, taskId)
+}
+
+export const listMembers = async (query: MemberQueryDto): Promise<ExtendedMemberDto[]> => {
+  if (!query.daoId) throw new Error(`daoId is required`)
+  const res = await client.member.memberControllerList(query.daoId, query)
+  return res.data
+}
+
+export const loadMember = async (daoId: string, memberId: string): Promise<MemberDto> => {
+  const res = await client.member.memberControllerRead(daoId, memberId)
   return res.data
 }
 
 export const createMember = async (p: CreateMemberDto): Promise<MemberDto> => {
-  const res = await client.member.memberControllerCreate(p)
+  const res = await client.member.memberControllerCreate(p.daoId, p)
   return res.data
 }
 
-export const deleteMember = async (memberId: string): Promise<void> => {
-  await client.member.memberControllerDelete(memberId)
+export const updateMember = async (p: MemberDto): Promise<MemberDto> => {
+  const res = await client.member.memberControllerUpdate(p.daoId, p.memberId, p)
+  return res.data
+}
+
+export const deleteMember = async (daoId: string, memberId: string): Promise<void> => {
+  await client.member.memberControllerDelete(daoId, memberId)
+}
+
+export const inviteMember = async (data: MemberInviteDto): Promise<MemberDto> => {
+  const res = await client.member.memberControllerInvite(data.daoId, data)
+  return res.data
 }
