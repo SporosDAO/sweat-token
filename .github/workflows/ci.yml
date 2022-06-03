@@ -26,6 +26,10 @@ jobs:
       - name: Dump debug log in case there was an error above
         if: always()
         run: docker-compose logs frontend backend
+      - name: Run E2E tests
+        run: |
+          yarn test
+          yarn coverage
       - name: Shutdown docker services
         if: always()
         run: docker-compose down
