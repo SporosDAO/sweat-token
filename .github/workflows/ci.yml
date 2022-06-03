@@ -11,4 +11,11 @@ jobs:
       - name: Test minimal frontend availability
         run: docker run --network container:frontend appropriate/curl -s --retry 10 --retry-connrefused http://localhost:3000/
       - name: Test minimal backend availability
+        if: always()
         run: docker run --network container:backend appropriate/curl -s --retry 10 --retry-connrefused http://localhost:3001/
+      - name: Check if all services are running
+        if: always()
+        run: docker-compose ps
+      - name: Shutdown docker services
+        if: always()
+        run: docker-compose down
