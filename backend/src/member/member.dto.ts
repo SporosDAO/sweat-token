@@ -1,12 +1,24 @@
 import { RecordEventType } from '@app/runtime/event.dto'
-import { ApiPropertyOptional } from '@nestjs/swagger'
-import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsUUID } from 'class-validator'
-import { Role } from 'src/user/user.dto'
+import { ApiHideProperty, PartialType } from '@nestjs/swagger'
+import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
+import { ContactHandle, Role } from 'src/user/user.dto'
+
+export enum Skill {
+  'Mentor' = 'Mentor',
+  'Software Engineer' = 'Software Engineer',
+  'UX/Designer' = 'UX/Designer',
+  'Legal' = 'Legal',
+  'Operations' = 'Operations',
+  'Finance' = 'Finance',
+  'Policy' = 'Policy',
+}
 
 export enum MemberStatus {
   enabled = 'enabled',
   disabled = 'disabled',
   pending = 'pending',
+  accepted = 'accepted',
+  cancelled = 'cancelled',
 }
 
 export interface MemberEvent {
@@ -20,6 +32,11 @@ export class MemberQueryDto {
   @IsUUID()
   @IsOptional()
   daoId?: string
+
+  @IsString()
+  @IsOptional()
+  match?: string
+
   @IsUUID()
   @IsOptional()
   userId?: string
@@ -44,6 +61,35 @@ export class MemberQueryDto {
   @IsOptional()
   @IsEnum(MemberStatus)
   status?: MemberStatus
+  @IsOptional()
+  @IsEnum(Skill)
+  skills?: Skill[]
+}
+
+export class MemberInviteDto {
+  @IsNotEmpty()
+  @IsUUID()
+  daoId: string
+
+  @IsOptional()
+  @IsUUID()
+  invitedBy: string
+
+  @IsArray()
+  @IsOptional()
+  projectId?: string[]
+
+  @IsArray()
+  @IsOptional()
+  roles?: Role[]
+
+  @IsString()
+  @IsNotEmpty()
+  publicAddress: string
+
+  @IsString()
+  @IsOptional()
+  name?: string
 }
 
 export class MemberDto {
@@ -63,16 +109,23 @@ export class MemberDto {
   invitation: string
 
   @IsOptional()
-  roles: Role[] | string[]
+  roles: Role[]
 
   @IsOptional()
   status: MemberStatus = MemberStatus.pending
+
+  @IsOptional()
+  @IsArray()
+  skills?: Skill[]
+
+  @IsUUID()
+  invitedBy: string
 }
 
-export class CreateMemberDto extends MemberDto {
-  @ApiPropertyOptional()
+export class CreateMemberDto extends PartialType(MemberDto) {
+  @ApiHideProperty()
   @IsOptional()
-  memberId: string
+  memberId?: string
 
   @IsNotEmpty()
   @IsUUID()
@@ -82,11 +135,30 @@ export class CreateMemberDto extends MemberDto {
   @IsUUID()
   daoId: string
 
+  @ApiHideProperty()
   @IsOptional()
-  invitation: string
+  invitation?: string
 
   @IsArray()
-  roles: Role[] | string[]
+  @IsOptional()
+  roles?: Role[]
+
+  @IsOptional()
+  invitedBy: string
 }
 
 export class UpdateMemberDto extends CreateMemberDto {}
+
+export class ExtendedMemberDto extends MemberDto {
+  @IsString()
+  @IsOptional()
+  name: string
+
+  @IsString()
+  @IsOptional()
+  publicAddress: string
+
+  @IsOptional()
+  @IsArray()
+  contacts?: ContactHandle[]
+}

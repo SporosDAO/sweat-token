@@ -15,6 +15,7 @@ import ProjectAdd from './pages/Projects/pages/ProjectAdd'
 import ProjectView from './pages/Projects/pages/ProjectView'
 import ProjectDashboard from './pages/Projects/pages/ProjectDashboard'
 import Taxes from './pages/Taxes'
+import DaoCreate from './pages/DaoCreate'
 
 const mdTheme = createTheme()
 
@@ -24,6 +25,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/connect" element={<Connect />} />
+        <Route path="dao/create" element={<DaoCreate />} />
         <Route path="dao/:daoId" element={<Dao />}>
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />

@@ -1,7 +1,7 @@
 import { RuntimeModule } from '@app/runtime'
 import { Test, TestingModule } from '@nestjs/testing'
 import { TaskController } from './task.controller'
-import { TaskModule } from './task.module'
+import { TaskModule } from '../../task/task.module'
 
 describe('TaskController', () => {
   let controller: TaskController

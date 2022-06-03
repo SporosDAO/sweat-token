@@ -130,8 +130,12 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
                       if (formValues['type'] === undefined) setPage(1)
                     }}
                   >
-                    <ToggleButton value="onetime">One Time</ToggleButton>
-                    <ToggleButton value="ongoing">Ongoing</ToggleButton>
+                    <ToggleButton value="onetime" aria-label="One Time">
+                      One Time
+                    </ToggleButton>
+                    <ToggleButton value="ongoing" aria-label="Ongoing">
+                      Ongoing
+                    </ToggleButton>
                   </ToggleButtonGroup>
                 </Box>
               </Stack>
@@ -209,18 +213,18 @@ export default function TaskAddDialog(props: TaskAddDialogProps) {
         ) : (
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
             {page === 1 ? (
-              <Button variant="outlined" onClick={() => setPage(0)}>
+              <Button variant="outlined" onClick={() => setPage(0)} aria-label="back">
                 Back
               </Button>
             ) : formValues['type'] !== undefined ? (
-              <Button variant="outlined" onClick={() => setPage(1)}>
+              <Button variant="outlined" onClick={() => setPage(1)} aria-label="next">
                 Next
               </Button>
             ) : (
               <></>
             )}
             {page === 1 ? (
-              <Button variant="contained" onClick={save}>
+              <Button variant="contained" onClick={save} aria-label="save">
                 Save
               </Button>
             ) : (

@@ -120,3 +120,21 @@ export class CreateTaskDto extends TaskDto {
   @IsOptional()
   deadline: Date
 }
+
+export class UpdateTaskDto {
+  @IsUUID()
+  @IsOptional()
+  taskId?: string
+
+  @IsUUID()
+  @IsOptional()
+  contributorId?: string
+
+  @IsOptional()
+  @IsArray()
+  skills?: string[]
+
+  @IsOptional()
+  @IsEnum(TaskStatus)
+  status?: TaskStatus
+}

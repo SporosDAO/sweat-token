@@ -1,12 +1,12 @@
 import { RuntimeModule } from '@app/runtime'
 import { Test, TestingModule } from '@nestjs/testing'
 import * as moment from 'moment'
-import { CommitmentType } from 'src/task/task.dto'
+import { CommitmentType, CreateTaskDto } from 'src/task/task.dto'
 import { TaskModule } from 'src/task/task.module'
 import { TaskService } from 'src/task/task.service'
-import { ProjectEventListenerService } from './project.event-listener.service'
-import { ProjectModule } from './project.module'
-import { ProjectService } from './project.service'
+import { ProjectEventListenerService } from './dao.project.listener.service'
+import { ProjectModule } from '../project/project.module'
+import { ProjectService } from '../project/project.service'
 
 describe('ProjectEventListenerService', () => {
   let module: TestingModule
@@ -53,7 +53,7 @@ describe('ProjectEventListenerService', () => {
       type: CommitmentType.onetime,
       budget: 4000,
       ownerId: 'owner',
-    })
+    } as CreateTaskDto)
 
     // allocate 60% in 6 month
     const t2 = await taskService.create({
@@ -64,7 +64,7 @@ describe('ProjectEventListenerService', () => {
       bands: [1, 10],
       budget: 1000,
       ownerId: 'owner',
-    })
+    } as CreateTaskDto)
 
     const budgetAllocation = await projectEventListenerService.updateAllocation(p.projectId)
     expect(budgetAllocation).toBe(p.budget)

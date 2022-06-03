@@ -11,7 +11,7 @@ const formatter = new Intl.NumberFormat('en-US', {
 
 export const formatCurrency = (value: string | number | bigint | undefined): string => {
   if (value === undefined) return ''
-  return formatter.format(typeof value === 'string' ? +value : value)
+  return formatter.format(typeof value === 'string' ? +value : value).substring(1)
 }
 
 export const formatDateFromNow = (value: string | Date | undefined): string => {

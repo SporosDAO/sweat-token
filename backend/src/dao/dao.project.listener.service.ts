@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import { TaskService } from 'src/task/task.service'
 import { CommitmentType, TaskEvent } from '../task/task.dto'
-import { ProjectService } from './project.service'
+import { ProjectService } from '../project/project.service'
 
 @Injectable()
 export class ProjectEventListenerService {
