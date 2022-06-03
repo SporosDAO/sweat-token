@@ -9,6 +9,6 @@ jobs:
       - name: Build the stack
         run: docker-compose up -d
       - name: Test minimal frontend availability
-        run: docker run --network container:sweat-token-frontend-1 appropriate/curl -s --retry 10 --retry-connrefused http://localhost:3000/
+        run: docker run --network container:frontend appropriate/curl -s --retry 10 --retry-connrefused http://localhost:3000/
       - name: Test minimal backend availability
-        run: docker run --network container:sweat-token-backend-1 appropriate/curl -s --retry 10 --retry-connrefused http://localhost:3001/
+        run: docker run --network container:backend appropriate/curl -s --retry 10 --retry-connrefused http://localhost:3001/
