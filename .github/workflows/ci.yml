@@ -8,8 +8,14 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build the stack
         run: docker-compose up -d
+      - name: Check if all services are running
+        if: always()
+        run: docker-compose ps
       - name: Test minimal frontend availability
         run: docker run --network container:frontend appropriate/curl -s --retry 10 --retry-connrefused http://localhost:3000/
+      - name: Check if all services are running
+        if: always()
+        run: docker-compose ps
       - name: Test minimal backend availability
         if: always()
         run: docker run --network container:backend appropriate/curl -s --retry 10 --retry-connrefused http://localhost:3001/
