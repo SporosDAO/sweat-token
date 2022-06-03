@@ -15,7 +15,7 @@ jobs:
       - name: Start containers
         run: docker-compose up -d
       - name: Test minimal frontend availability
-        run: docker run --network container:frontend appropriate/curl -s -v --connect-timeout 10 --retry 10 --retry-max-time 120 --retry-delay 10  --retry-connrefused http://127.0.0.1:3000/
+        run: docker run --network container:frontend appropriate/curl -s -v --connect-timeout 10 --retry 10 --retry-max-time 120 --retry-delay 10  --retry-connrefused http://localhost:3000/
         # curl parameters explained in this thread: https://github.com/curl/curl/issues/5080#issuecomment-597923701
       - name: Test minimal backend availability
         if: always()
