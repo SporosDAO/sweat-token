@@ -1,0 +1,37 @@
+name: "Build and test the full SporosDAO app stack"
+
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      REACT_APP_SWEAT_TOKEN_API_BASEPATH: http://localhost:3001
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the stack
+        run: docker-compose build
+      - name: Update dependencies
+        run: docker-compose -f docker-compose.yaml -f docker-compose.install.yaml --profile install up --no-deps
+      - name: Start containers
+        run: docker-compose up -d
+      - name: Test minimal frontend availability
+        run: docker run --network container:frontend appropriate/curl -s -v -4 --connect-timeout 10 --retry 10 --retry-max-time 120 --retry-delay 10  --retry-connrefused http://localhost:3000/
+        # curl parameters explained in this thread: https://github.com/curl/curl/issues/5080#issuecomment-597923701
+      - name: Test minimal backend availability
+        if: always()
+        run: docker run --network container:backend appropriate/curl -s --retry 10 --retry-connrefused $REACT_APP_SWEAT_TOKEN_API_BASEPATH
+      - name: Check if all services are running
+        if: always()
+        run: docker-compose ps
+      - name: Dump debug log in case there was an error above
+        if: always()
+        run: docker-compose logs frontend backend
+      - name: Run E2E tests
+        run: |
+          cd e2e-tests
+          yarn install
+          yarn test
+          yarn coverage
+      - name: Shutdown docker services
+        if: always()
+        run: docker-compose down
