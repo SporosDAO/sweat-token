@@ -42,7 +42,7 @@ export default function Landing() {
 
       <Grid container>
         <Grid item lg={6}>
-          <ContentBlock sx={{ ...blockStyle }} title="Create a DAOs">
+          <ContentBlock sx={{ ...blockStyle }} title="Create a DAO">
             <p>
               <span>
                 <a href="https://app.kalidao.xyz/">Create</a> your first DAO with legal benefits.
