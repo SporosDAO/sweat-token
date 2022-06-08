@@ -22,8 +22,7 @@ vscode:
 
     - ContractShark.solidity-lang
 
-ports
-:
+ports:
 
   # allow front end to access backend api
   # https://www.gitpod.io/docs/config-ports#cors
