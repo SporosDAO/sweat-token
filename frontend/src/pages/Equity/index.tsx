@@ -1,10 +1,8 @@
 import { Grid, Paper, useMediaQuery, useTheme } from '@mui/material'
-import { makeStyles } from '@mui/styles';
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    
-  },
+  root: {},
   legal_content: {
     margin: '0 40px'
   },
@@ -13,8 +11,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '16px',
     lineHeight: '20px'
   }
-})
-)
+}))
 
 export default function Equity() {
   const theme = useTheme()

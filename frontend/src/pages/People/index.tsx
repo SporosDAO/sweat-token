@@ -87,11 +87,7 @@ export default function People() {
             {members && members.length ? (
               members.map((member) => (
                 <Grid key={member.memberId} item xs={12} md={6} lg={4}>
-                  <MemberItem
-                    member={member}
-                    onUpdate={() => setMembers(undefined)}
-                    onEdit={onMemberEdit}
-                  />
+                  <MemberItem member={member} onUpdate={() => setMembers(undefined)} onEdit={onMemberEdit} />
                 </Grid>
               ))
             ) : (

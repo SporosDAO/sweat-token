@@ -1,11 +1,9 @@
 import { Grid, Paper, useMediaQuery, useTheme } from '@mui/material'
-import { makeStyles } from '@mui/styles';
-import { useNavigate } from 'react-router-dom';
+import { makeStyles } from '@mui/styles'
+import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-
-  },
+  root: {},
   legal_content: {
     margin: '0 40px'
   },
@@ -15,8 +13,7 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '20px',
     cursor: 'pointer'
   }
-})
-)
+}))
 
 export default function Legal() {
   const theme = useTheme()
@@ -35,11 +32,19 @@ export default function Legal() {
         >
           <h2>Dao Legal Assets</h2>
           <div className={classes.legal_content}>
-            <div className={classes.legal_button} onClick={() => navigate('registration')}>DELAWARE LLC REGISTRATION</div>
-            <div className={classes.legal_button} onClick={() => navigate('registration')}>DELAWARE LLC OPERATING AGREEMENT</div>
-            <div className={classes.legal_button} onClick={() => navigate('registration')}>Sweat Equity Contributor Agreement</div>
-            <div className={classes.legal_button} onClick={() => navigate('registration')}>Doxxed Members</div>
-          </div>          
+            <div className={classes.legal_button} onClick={() => navigate('registration')}>
+              DELAWARE LLC REGISTRATION
+            </div>
+            <div className={classes.legal_button} onClick={() => navigate('registration')}>
+              DELAWARE LLC OPERATING AGREEMENT
+            </div>
+            <div className={classes.legal_button} onClick={() => navigate('registration')}>
+              Sweat Equity Contributor Agreement
+            </div>
+            <div className={classes.legal_button} onClick={() => navigate('registration')}>
+              Doxxed Members
+            </div>
+          </div>
         </Paper>
       </Grid>
     </Grid>

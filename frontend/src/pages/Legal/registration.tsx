@@ -1,10 +1,8 @@
 import { Grid, Paper, useMediaQuery, useTheme } from '@mui/material'
-import { makeStyles } from '@mui/styles';
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-
-  },
+  root: {},
   legal_content: {
     margin: '0 40px'
   },
@@ -14,8 +12,7 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '20px',
     cursor: 'pointer'
   }
-})
-)
+}))
 
 export default function Registration() {
   const theme = useTheme()
@@ -31,7 +28,7 @@ export default function Registration() {
             height: '100%'
           }}
         >
-          <h2>Coming Soon...</h2>       
+          <h2>Coming Soon...</h2>
         </Paper>
       </Grid>
     </Grid>

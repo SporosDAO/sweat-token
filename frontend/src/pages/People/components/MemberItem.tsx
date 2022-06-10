@@ -1,7 +1,7 @@
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { Chip, Menu, MenuItem, Stack, Grid, useMediaQuery, useTheme } from '@mui/material'
 import { Box } from '@mui/system'
-import { makeStyles } from '@mui/styles';
+import { makeStyles } from '@mui/styles'
 import Avatar from '@mui/material/Avatar'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -20,15 +20,12 @@ interface MemberItemProps {
 }
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    
-  },
+  root: {},
   each_member: {
     display: 'block',
     border: `1px solid #000000`,
     padding: '20px',
     margin: '10px'
-
   },
   member_title: {
     fontSize: '18px',
@@ -40,9 +37,7 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '22px',
     marginBottom: '10px'
   }
-
-})
-)
+}))
 
 export default function MemberItem(props: MemberItemProps) {
   const member = props.member
@@ -89,7 +84,7 @@ export default function MemberItem(props: MemberItemProps) {
 
   return (
     <>
-        {/*
+      {/*
             <Card sx={{ maxWidth: 345 }}>
               <Menu
                 id="basic-menu"
@@ -149,22 +144,32 @@ export default function MemberItem(props: MemberItemProps) {
             </Card> 
           */}
       <Box className={classes.each_member}>
-        <div className={classes.member_title} style={{marginBottom: '20px'}}>{(member.name)? member.name: 'UNDEFINED USER'}</div>
-        <div className={classes.member_item}>ETH: {member.publicAddress?.substring(0, 6)+'...'+member.publicAddress?.substring(memberLength-4, memberLength)}</div>
+        <div className={classes.member_title} style={{ marginBottom: '20px' }}>
+          {member.name ? member.name : 'UNDEFINED USER'}
+        </div>
+        <div className={classes.member_item}>
+          ETH:{' '}
+          {member.publicAddress?.substring(0, 6) +
+            '...' +
+            member.publicAddress?.substring(memberLength - 4, memberLength)}
+        </div>
         <div className={classes.member_item}>Voting Power: </div>
         <div className={classes.member_item}>ENS: </div>
         <div className={classes.member_item}>Discord: </div>
         <div className={classes.member_item}>Twitter: </div>
         {(member.roles || []).map((role) => (
-          <div key={role} className={classes.member_item}>Roles: {role}</div>
+          <div key={role} className={classes.member_item}>
+            Roles: {role}
+          </div>
         ))}
         <div className={classes.member_item}>
           <div className={classes.member_item}>Projects: </div>
           {/* {(member.projects || []).map((role) => ( */}
-            <div className={classes.member_item} style={{fontSize: '16px', marginLeft: '20px'}}>Project: NFT minting, Marketplace Release</div>
+          <div className={classes.member_item} style={{ fontSize: '16px', marginLeft: '20px' }}>
+            Project: NFT minting, Marketplace Release
+          </div>
           {/* ))} */}
         </div>
-        
       </Box>
     </>
   )

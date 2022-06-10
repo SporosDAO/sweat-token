@@ -1,12 +1,10 @@
 import { Grid, Paper, useTheme, useMediaQuery } from '@mui/material'
-import { makeStyles } from '@mui/styles';
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    
-  },
+  root: {},
   legal_content: {
-    margin: '0 40px',
+    margin: '0 40px'
     // textAlign: 'center'
   },
   legal_button: {
@@ -14,8 +12,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '16px',
     lineHeight: '20px'
   }
-})
-)
+}))
 
 export default function Equity() {
   const theme = useTheme()
@@ -26,7 +23,7 @@ export default function Equity() {
       <Grid item xs={12} md={12} lg={12}>
         <Paper
           sx={{
-            p: 2,
+            p: 2
             // height: 240
           }}
         >
@@ -34,9 +31,9 @@ export default function Equity() {
           <div className={classes.legal_content}>
             <div className={classes.legal_button}>Tax ID / EIN: 22-333-6666</div>
             <div className={classes.legal_button}>Last Year Tax Report</div>
-            <div className={classes.legal_button}>Tax Vault:   $15,000</div>
+            <div className={classes.legal_button}>Tax Vault: $15,000</div>
             <div className={classes.legal_button}>Tax Withholding Contract</div>
-          </div>      
+          </div>
         </Paper>
       </Grid>
     </Grid>

@@ -1,5 +1,5 @@
 import { Stack, Button, CircularProgress, Grid, List, ListItem, useMediaQuery, useTheme } from '@mui/material'
-import { makeStyles } from '@mui/styles';
+import { makeStyles } from '@mui/styles'
 import { Box } from '@mui/system'
 import { useEffect, useState } from 'react'
 import { findProjects } from '../../../api'
@@ -10,15 +10,12 @@ import { LinkProject } from '../../../context/PageContext'
 import { formatCurrency, formatDateFromNow } from '../../../util'
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    
-  },
+  root: {},
   each_project: {
     display: 'block',
     border: `1px solid #000000`,
     padding: '20px',
     margin: '10px'
-
   },
   project_title: {
     fontSize: '18px',
@@ -30,9 +27,7 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '22px',
     marginBottom: '10px'
   }
-
-})
-)
+}))
 
 const ProjectsList = () => {
   const [projects, setProjects] = useState<ProjectDto[]>()
@@ -90,7 +85,7 @@ const ProjectsList = () => {
             {(projects || []).map((project) => (
               <Grid key={project.projectId} item xs={12} md={6} lg={4}>
                 <Box className={classes.each_project}>
-                  <div className={classes.project_title} style={{marginBottom: '20px'}}>
+                  <div className={classes.project_title} style={{ marginBottom: '20px' }}>
                     <LinkProject project={project}>{project.name}</LinkProject>
                   </div>
                   <div className={classes.project_item}>Project Manager: </div>
@@ -98,10 +93,13 @@ const ProjectsList = () => {
                   <div className={classes.project_item}>Deadline: {formatDateFromNow(project.deadline)}</div>
                   <div className={classes.project_item}>
                     <div className={classes.project_item}>Key Goals:</div>
-                    <div className={classes.project_item} style={{fontSize: '16px', marginLeft: '20px'}}>1. Retain attorney</div>
-                    <div className={classes.project_item} style={{fontSize: '16px', marginLeft: '20px'}}>2. Deliver LLC OA draft</div>
+                    <div className={classes.project_item} style={{ fontSize: '16px', marginLeft: '20px' }}>
+                      1. Retain attorney
+                    </div>
+                    <div className={classes.project_item} style={{ fontSize: '16px', marginLeft: '20px' }}>
+                      2. Deliver LLC OA draft
+                    </div>
                   </div>
-                  
                 </Box>
               </Grid>
             ))}
