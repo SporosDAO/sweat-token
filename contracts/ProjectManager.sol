@@ -40,7 +40,8 @@ contract ProjectManager is ReentrancyGuard {
     /// Errors
     /// -----------------------------------------------------------------------
 
-    error NoArrayParity();
+    error NoBudgetLeft();
+    error ProjectExpired();
     error Forbidden();
 
     /// -----------------------------------------------------------------------
@@ -55,11 +56,11 @@ contract ProjectManager is ReentrancyGuard {
         string goals; // structured text referencing key goals for the manager's mandate
     }
 
-    // manager to projects mapping (1 -> [0..n])
-    mapping(address => mapping(address => Project[]) public projectsByManager;
+    // DAO to projects mapping
+    mapping(address => mapping(uint => Project[]) public management;
 
-    // project to manager mapping (n -> 1)
-    mapping(uint => mapping(uint => address) public managerByProject;
+    // project to manager mapping
+    // ?? mapping(uint => mapping(uint => address) public managerByProject;
 
 
     /// -----------------------------------------------------------------------
@@ -76,7 +77,8 @@ contract ProjectManager is ReentrancyGuard {
         );
 
         for (uint256 i; i < projects.length; ) {
-            management[msg.sender][managers[i]] = approvals[i];
+            // msg.sender here is the DAO that controls this extension
+            management[msg.sender][projects[i].id] = projects[i];
             // cannot realistically overflow
             unchecked {
                 ++i;
