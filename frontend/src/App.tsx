@@ -16,6 +16,7 @@ import ProjectView from './pages/Projects/pages/ProjectView'
 import ProjectDashboard from './pages/Projects/pages/ProjectDashboard'
 import Taxes from './pages/Taxes'
 import DaoCreate from './pages/DaoCreate'
+import Registration from './pages/Legal/registration'
 
 const mdTheme = createTheme()
 
@@ -30,6 +31,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="legal" element={<Legal />} />
+            <Route path="legal/registration" element={<Registration />} />
           <Route path="taxes" element={<Taxes />} />
           <Route path="equity" element={<Equity />} />
           <Route path="projects" element={<Projects />}>

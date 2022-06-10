@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Stack } from '@mui/material'
+import { Button, CircularProgress, Stack, useMediaQuery, useTheme, Grid } from '@mui/material'
 import { Box } from '@mui/system'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
@@ -69,7 +69,7 @@ export default function People() {
           <Box sx={{ mb: 3 }}>
             <LinkDao path="people?invite">Invite a member</LinkDao>
           </Box>
-          <Stack direction="row" spacing={2}>
+          {/* <Stack direction="row" spacing={2}>
             {members && members.length ? (
               members.map((member) => (
                 <MemberItem
@@ -82,7 +82,22 @@ export default function People() {
             ) : (
               <p>This DAO has no members yet.</p>
             )}
-          </Stack>
+          </Stack> */}
+          <Grid container sx={{ flexGrow: 1 }}>
+            {members && members.length ? (
+              members.map((member) => (
+                <Grid key={member.memberId} item xs={12} md={6} lg={4}>
+                  <MemberItem
+                    member={member}
+                    onUpdate={() => setMembers(undefined)}
+                    onEdit={onMemberEdit}
+                  />
+                </Grid>
+              ))
+            ) : (
+              <p>This DAO has no members yet.</p>
+            )}
+          </Grid>
         </Box>
       )}
     </ContentBlock>

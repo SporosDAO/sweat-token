@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    
+
   },
   legal_content: {
     margin: '0 40px'
@@ -11,14 +11,16 @@ const useStyles = makeStyles((theme) => ({
   legal_button: {
     marginBottom: '10px',
     fontSize: '16px',
-    lineHeight: '20px'
+    lineHeight: '20px',
+    cursor: 'pointer'
   }
 })
 )
 
-export default function Equity() {
+export default function Registration() {
   const theme = useTheme()
   const classes = useStyles()
+  // console.log("theme is:", theme)
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   return (
     <Grid container spacing={3}>
@@ -26,16 +28,10 @@ export default function Equity() {
         <Paper
           sx={{
             p: 2,
-            height: 240
+            height: '100%'
           }}
         >
-          <h2>Issued Sweat Equity Warrants </h2>
-          <div className={classes.legal_content}>
-            <div className={classes.legal_button}>lipman.eth: 16%</div>
-            <div className={classes.legal_button}>kleb: 15.4%</div>
-            <div className={classes.legal_button}>ivelin.eth: 14%</div>
-            <div className={classes.legal_button}>bigbabol: 8%</div>
-          </div>
+          <h2>Coming Soon...</h2>       
         </Paper>
       </Grid>
     </Grid>
