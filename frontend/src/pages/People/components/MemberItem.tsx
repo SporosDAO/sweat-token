@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 export default function MemberItem(props: MemberItemProps) {
   const member = props.member
   const memberLength = member.publicAddress.length
-  console.log('member', member)
+  // console.log('member', member)
   const classes = useStyles()
   const { showToast } = useToast()
   const { account } = useWeb3()
