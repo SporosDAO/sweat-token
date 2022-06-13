@@ -1,20 +1,10 @@
-
 import url from 'url';
 import { createRunner, PuppeteerRunnerExtension } from '@puppeteer/replay';
 import pti from 'puppeteer-to-istanbul';
 import puppeteer from 'puppeteer';
-import { start } from 'repl';
 
-/**
- *
- * A minimal initial e2e flow with puppeteer
- * generated and exported from Chrome DevTools
- *
- * https://developer.chrome.com/docs/devtools/recorder/
- *
- */
+// Note: Please run this test after creating a public DAO named SporosDao
 
-// This is just for local test
 const browser = await puppeteer.launch({
     headless: true,
 });
@@ -70,15 +60,15 @@ class CoverageExtension extends PuppeteerRunnerExtension {
       await super.afterAllSteps(flow);
       console.log('done');
     }
-  }
+}
 
 export const flow = {
-    "title": "SporosDAO App Home Page + Dashboard",
+    "title": "TestDao",
     "steps": [
         {
             "type": "setViewport",
-            "width": 885,
-            "height": 1304,
+            "width": 1051,
+            "height": 757,
             "deviceScaleFactor": 1,
             "isMobile": false,
             "hasTouch": false,
@@ -96,37 +86,99 @@ export const flow = {
             ]
         },
         {
+            "type": "waitForElement",
+            "selectors": [
+                "aria/SporosDAO"
+            ]
+        },
+        {
             "type": "click",
             "target": "main",
             "selectors": [
                 [
-                    "aria/Your DevCo DAOs"
+                    "aria/SporosDAO"
+                ],
+                [
+                    "#root > div > main > div.MuiContainer-root.MuiContainer-maxWidthLg.css-1oifrf6 > div.MuiGrid-root.MuiGrid-container.css-1d3bbye > div:nth-child(2) > div > div:nth-child(2) > ul > li:nth-child(1) > a"
                 ]
             ],
-            "offsetX": 282,
-            "offsetY": 29.5625
+            "offsetX": 66,
+            "offsetY": 4.3125
         },
         {
-            "type": "waitForElement",
-            "target": "main",
-            "frame": [],
+            "type": "click",
             "selectors": [
                 [
-                    "aria/Create a DAO"
+                    "#root > div > div > div > nav > div.MuiListItemButton-root.MuiListItemButton-gutters.Mui-selected.MuiButtonBase-root.css-1uwabd6 > div.MuiListItemText-root.css-1tsvksn > span"
                 ]
-            ]
+            ],
+            "target": "main",
+            "offsetX": 115,
+            "offsetY": 20
         },
         {
-            "type": "waitForElement",
-            "target": "main",
-            "frame": [],
+            "type": "click",
             "selectors": [
                 [
-                    "aria/Public DAOs"
+                    "aria/Legal"
+                ],
+                [
+                    "#root > div > div > div > nav > div:nth-child(2)"
                 ]
-            ]
+            ],
+            "target": "main",
+            "offsetX": 167,
+            "offsetY": 44
+        },
+        {
+            "type": "click",
+            "selectors": [
+                [
+                    "#root > div > main > div.MuiContainer-root.MuiContainer-maxWidthLg.css-1oifrf6 > div > div > div > div > div:nth-child(1)"
+                ]
+            ],
+            "target": "main",
+            "offsetX": 48,
+            "offsetY": 9.1875
+        },
+        {
+            "type": "click",
+            "selectors": [
+                [
+                    "#root > div > div > div > nav > div.MuiListItemButton-root.MuiListItemButton-gutters.Mui-selected.MuiButtonBase-root.css-1uwabd6 > div.MuiListItemText-root.css-1tsvksn > span"
+                ]
+            ],
+            "target": "main",
+            "offsetX": 47,
+            "offsetY": 10
+        },
+        {
+            "type": "click",
+            "selectors": [
+                [
+                    "aria/Taxes"
+                ],
+                [
+                    "#root > div > div > div > nav > div:nth-child(3)"
+                ]
+            ],
+            "target": "main",
+            "offsetX": 126,
+            "offsetY": 37
+        },
+        {
+            "type": "click",
+            "selectors": [
+                [
+                    "#root > div > div > div > nav > div:nth-child(4) > div.MuiListItemText-root.css-1tsvksn > span"
+                ]
+            ],
+            "target": "main",
+            "offsetX": 60,
+            "offsetY": 6
         }
-    ]
+    ],
+    "timeout": 30000
 };
 
 export async function run(extension) {
@@ -134,9 +186,11 @@ export async function run(extension) {
   await runner.run();
 }
 
-if (process && import.meta.url === url.pathToFileURL(process.argv[1]).href) {
-  const extension = new CoverageExtension(browser, page, 7000)
-  await run(extension);
-}
 
+if (process && import.meta.url === url.pathToFileURL(process.argv[1]).href) {
+    const extension = new CoverageExtension(browser, page, 7000)
+    await run(extension);
+  }
+  
 await browser.close();
+      
