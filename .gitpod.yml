@@ -20,7 +20,7 @@ vscode:
 
     - esbenp.prettier-vscode
 
-    - ContractShark.solidity-lang
+    - juanblanco.solidity
 
 ports:
 

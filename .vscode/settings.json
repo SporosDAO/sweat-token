@@ -1,5 +1,5 @@
 {
-    "solidity.defaultCompiler": "localNodeModule",
+    "solidity.defaultCompiler": "remote",
     "solidity.packageDefaultDependenciesDirectory": "./contracts/node_modules",
     "[typescript]": {
         "editor.tabSize": 2,
