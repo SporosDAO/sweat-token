@@ -8,7 +8,14 @@
     "clean": "hardhat clean",
     "build": "hardhat compile",
     "test": "hardhat test",
-    "lint": "prettier --list-different 'src/**/*.sol'"
+    "lint": "yarn prettier:solidity",
+    "solhint": "solhint -f table src/**/*.sol",
+    "prettier:solidity": "./node_modules/.bin/prettier --write src/**/*.sol"
+  },
+  "husky": {
+    "hooks": {
+       "pre-push": "yarn lint"
+    }
   },
   "repository": {
     "type": "git",
@@ -37,6 +44,9 @@
     "hardhat-deploy": "^0.11.10",
     "hardhat-gas-reporter": "^1.0.8",
     "hardhat-watcher": "^2.2.0",
+    "husky": "^8.0.1",
+    "solhint": "^3.3.7",
+    "solhint-plugin-prettier": "^0.0.5",
     "solidity-coverage": "^0.7.21",
     "ts-node": "^10.7.0",
     "tslog": "^3.3.3",
@@ -44,6 +54,7 @@
     "typescript": "^4.6.3"
   },
   "dependencies": {
+    "prettier": "^2.7.0",
     "prettier-plugin-solidity": "^1.0.0-beta.19"
   }
 }

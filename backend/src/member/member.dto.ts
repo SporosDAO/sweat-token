@@ -162,3 +162,4 @@ export class ExtendedMemberDto extends MemberDto {
   @IsArray()
   contacts?: ContactHandle[]
 }
+//

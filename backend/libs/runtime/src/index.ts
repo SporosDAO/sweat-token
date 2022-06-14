@@ -23,25 +23,23 @@ const setupOpenapi = async (app: INestApplication): Promise<void> => {
 }
 
 export async function bootstrap(module: any): Promise<INestApplication> {
-
   let cors
   let logger
-  if (process.env.NODE_ENV === 'development' ||
-      process.env.NODE_ENV === 'dev') {
+  if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'dev') {
     cors = {
       origin: true, // ["http://localhost", "/.*\.gitpod\.io$/", "/.*\.sporosdao\.xyz$/"],
-      credentials: true
+      credentials: true,
     }
     logger = ['log', 'debug', 'error', 'verbose', 'warn']
   } else {
     cors = {
       origin: true,
-      credentials: true
+      credentials: true,
     }
     logger = ['error', 'warn']
   }
 
-  const app = await NestFactory.create(module, {cors, logger})
+  const app = await NestFactory.create(module, { cors, logger })
 
   bootstrapLogger.debug(`process.env.NODE_ENV=${process.env.NODE_ENV}`)
   bootstrapLogger.debug('CORS:', cors)
