@@ -10,7 +10,8 @@
     "test": "hardhat test",
     "lint": "yarn prettier:solidity",
     "solhint": "solhint -f table src/**/*.sol",
-    "prettier:solidity": "./node_modules/.bin/prettier --write src/**/*.sol"
+    "prettier:solidity": "./node_modules/.bin/prettier --write src/**/*.sol",
+    "prepare": "husky install"
   },
   "husky": {
     "hooks": {

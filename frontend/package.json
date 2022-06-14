@@ -41,7 +41,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint './src/**/*.ts?'"
+    "lint": "eslint './src/**/*.ts?'",
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": [
