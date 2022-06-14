@@ -18,6 +18,9 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
     A project has exactly one manager. A manager may be assigned to 0, 1 or mutliple projects.
 
+    Modeled after KaliShareManager.sol
+    https://github.com/kalidao/kali-contracts/blob/main/contracts/extensions/manager/KaliShareManager.sol
+
     (c) 2022 SporosDAO.eth
 
     @author ivelin.eth
