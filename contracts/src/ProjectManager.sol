@@ -133,7 +133,7 @@ contract ProjectManager is ReentrancyGuard {
 
             if (project.budget < mintAmount) revert NoBudget(projectId);
 
-            if (project.deadline < currentblock.timestamp) revert ProjectExpired();
+            if (project.expiration < currentblock.timestamp) revert ProjectExpired();
 
             IProjectManager(dao).mintTokens(
                 toContributorAccount,
