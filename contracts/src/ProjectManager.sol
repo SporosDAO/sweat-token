@@ -82,24 +82,24 @@ contract ProjectManager is ReentrancyGuard {
       @param extensionData : Contains DAO approved projects[]; either new or existing project updates. New projects have id of 0.
      */
     function setExtension(bytes calldata extensionData) external {
-        (Project[] projects) = abi.decode(
+        (Project[] memory projects) = abi.decode(
             extensionData,
             (Project[])
         );
 
         for (uint256 i; i < projects.length; ++i) {
-            Project projectUpdate = projects[i];
+            Project memory projectUpdate = projects[i];
             if (projectUpdate.id == 0) {
                 // id == 0 means new Project creation
                 // assign next id and auto increment id counter
                 projectUpdate.id = nextProjectId++;
                 projectUpdate.dao = msg.sender;
-                // manager cannot be noone
-                if (!projectUpdate.manager) revert ProjectManagerRequired();
+                // manager address needs to be set
+                if (projectUpdate.manager == address(0)) revert ProjectManagerRequired();
             } else {
-                Project savedProject = projects[projectUpdate.id];
-                // someone is trying to update a non-existant project
-                if (!savedProject) revert ProjectUnknown();
+                Project memory savedProject = projects[projectUpdate.id];
+                // someone is trying to update a non-existent project
+                if (savedProject.id == 0) revert ProjectUnknown();
                 // someone is trying to update a project that belongs to a different DAO address
                 // only the DAO that created a project can modify it
                 if (projectUpdate.dao != msg.sender || savedProject.dao != msg.sender) revert Forbidden();
@@ -130,15 +130,15 @@ contract ProjectManager is ReentrancyGuard {
                 uint256 projectId,
                 address toContributorAccount,
                 uint256 mintAmount
-            ) = abi.decode(extensionData[i], (address, uint256, bool));
+            ) = abi.decode(extensionData[i], (uint256, address, uint256));
 
-            Project project = projects[projectId];
+            Project memory project = projects[projectId];
 
-            if (!project) revert ProjectUnknown();
+            if (project.id == 0) revert ProjectUnknown();
 
-            if (project.manager != msg.sender) revert Forbidden(projectId);
+            if (project.manager != msg.sender) revert Forbidden();
 
-            if (project.budget < mintAmount) revert ProjectNotEnoughBudget(projectId);
+            if (project.budget < mintAmount) revert ProjectNotEnoughBudget();
 
             if (project.deadline < block.timestamp) revert ProjectExpired();
 
