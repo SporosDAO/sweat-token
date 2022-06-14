@@ -14,3 +14,4 @@ docker-compose up -d frontend
 # fixes problems when some files are installed as root by docker scripts
 sudo chown -hR gitpod.gitpod backend/node_modules/
 sudo chown -hR gitpod.gitpod frontend/node_modules/
+sudo chown -hR gitpod.gitpod e2e-tests/node_modules/
