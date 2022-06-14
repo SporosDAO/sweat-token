@@ -31,7 +31,7 @@ describe("Crowdsale", function () {
     beforeEach(async () => {
       ;[proposer, alice, bob] = await ethers.getSigners()
 
-      Kali = await ethers.getContractFactory("KaliDAO")
+      Kali = await ethers.getContractFactory("ProjectManager")
       kali = await Kali.deploy()
       await kali.deployed()
 

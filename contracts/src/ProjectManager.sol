@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity >=0.8.14;
 
-import {IProjectManager} from "interfaces/IProjectManager.sol";
+import {IProjectManager} from "./interfaces/IProjectManager.sol";
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
@@ -14,7 +14,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
     - budget: A manager can order mint of DAO tokens up to a given budget.
     - goals: A manager is expected to act in accordance with the goals outlined in the DAO project proposal.
 
-    A project's manager, budget, expiration and goals can be updated via DAO proposal.
+    A project's manager, budget, deadline and goals can be updated via DAO proposal.
 
     A project has exactly one manager. A manager may be assigned to 0, 1 or mutliple projects.
 
@@ -45,8 +45,10 @@ contract ProjectManager is ReentrancyGuard {
     /// Errors
     /// -----------------------------------------------------------------------
 
-    error NoBudgetLeft();
+    error ProjectNotEnoughBudget();
     error ProjectExpired();
+    error ProjectManagerRequired();
+    error ProjectUnknown();
     error Forbidden();
 
     /// -----------------------------------------------------------------------
@@ -54,10 +56,11 @@ contract ProjectManager is ReentrancyGuard {
     /// -----------------------------------------------------------------------
 
     struct Project {
-        unit id; // unique project identifier
+        uint256 id; // unique project identifier
+        address dao; // the address of the DAO that this project belongs to
         address manager; // manager assigned to this project
         uint256 budget; // maximum allowed tokens the manager is authorized to mint
-        unit expiration; // expiration date of the project
+        uint256 deadline; // deadline date of the project
         string goals; // structured text referencing key goals for the manager's mandate
     }
 
@@ -66,22 +69,17 @@ contract ProjectManager is ReentrancyGuard {
     // 0 is reserved for a new project proposal that has not been processed and assigned an id yet.
     uint256 nextProjectId = 100;
 
-    // DAO to projects mapping
-    mapping(address => mapping(uint => Project[]) public management;
-
-    // project to manager mapping
-    // ?? mapping(uint => mapping(uint => address) public managerByProject;
-
+    // project id -> Project mapping
+    mapping(uint256 => Project) public projects;
 
     /// -----------------------------------------------------------------------
     /// Management Settings
     /// -----------------------------------------------------------------------
 
     /**
-      @notice Activate DAO approved Project Proposals
+      @notice A DAO calls this method to activate an approved Project Proposal.
 
       @param extensionData : Contains DAO approved projects[]; either new or existing project updates. New projects have id of 0.
-
      */
     function setExtension(bytes calldata extensionData) external {
         (Project[] projects) = abi.decode(
@@ -90,13 +88,24 @@ contract ProjectManager is ReentrancyGuard {
         );
 
         for (uint256 i; i < projects.length; ++i) {
-            projectUpdate = projects[i];
+            Project projectUpdate = projects[i];
             if (projectUpdate.id == 0) {
+                // id == 0 means new Project creation
                 // assign next id and auto increment id counter
                 projectUpdate.id = nextProjectId++;
+                projectUpdate.dao = msg.sender;
+                // manager cannot be noone
+                if (!projectUpdate.manager) revert ProjectManagerRequired();
+            } else {
+                Project savedProject = projects[projectUpdate.id];
+                // someone is trying to update a non-existant project
+                if (!savedProject) revert ProjectUnknown();
+                // someone is trying to update a project that belongs to a different DAO address
+                // only the DAO that created a project can modify it
+                if (projectUpdate.dao != msg.sender || savedProject.dao != msg.sender) revert Forbidden();
             }
-            // msg.sender here is the DAO that controls this extension
-            management[msg.sender][projects[i].id] = projects[i];
+            // if all safety checks passed, create/update project
+            projects[projectUpdate.id] = projectUpdate;
         }
 
         emit ExtensionSet(msg.sender, projects);
@@ -107,17 +116,15 @@ contract ProjectManager is ReentrancyGuard {
     /// -----------------------------------------------------------------------
 
     /**
-        @notice An authorized project manager calls this method to order DAO mint to contributors.
+        @notice An authorized project manager calls this method to order a DAO token mint to contributors.
 
         @param dao - the dao that the project manager is authorized to manage.
-        @param extensionData - contains a list of pairs: (project id, to contributor account, amount to mint).
+        @param extensionData - contains a list of tuples: (project id, recipient contributor account, amount to mint).
      */
     function callExtension(address dao, bytes[] calldata extensionData)
         external
         nonReentrant
     {
-        if (!management[dao][msg.sender]) revert Forbidden();
-
         for (uint256 i; i < extensionData.length; ++i) {
             (
                 uint256 projectId,
@@ -125,15 +132,15 @@ contract ProjectManager is ReentrancyGuard {
                 uint256 mintAmount
             ) = abi.decode(extensionData[i], (address, uint256, bool));
 
-            project = projects[projectId];
+            Project project = projects[projectId];
 
-            if (!project) revert UknownProjectId(projectId);
+            if (!project) revert ProjectUnknown();
 
             if (project.manager != msg.sender) revert Forbidden(projectId);
 
-            if (project.budget < mintAmount) revert NoBudget(projectId);
+            if (project.budget < mintAmount) revert ProjectNotEnoughBudget(projectId);
 
-            if (project.expiration < currentblock.timestamp) revert ProjectExpired();
+            if (project.deadline < block.timestamp) revert ProjectExpired();
 
             IProjectManager(dao).mintTokens(
                 toContributorAccount,

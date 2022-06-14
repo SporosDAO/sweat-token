@@ -7,18 +7,23 @@ import "hardhat-gas-reporter";
 import "solidity-coverage";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import "hardhat-watcher";
+import "hardhat-deploy";
 
 dotenv.config();
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
-task("accounts", "Prints the list of accounts", async (taskArgs: unknown, hre: HardhatRuntimeEnvironment) => {
-  const accounts = await hre.ethers.getSigners();
+task(
+  "accounts",
+  "Prints the list of accounts",
+  async (taskArgs: unknown, hre: HardhatRuntimeEnvironment) => {
+    const accounts = await hre.ethers.getSigners();
 
-  for (const account of accounts) {
-    console.log(account.address);
+    for (const account of accounts) {
+      console.log(account.address);
+    }
   }
-});
+);
 
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
@@ -27,16 +32,16 @@ const config: HardhatUserConfig = {
   paths: {
     artifacts: "./build/artifacts",
     cache: "./build/cache",
-    sources: "./contracts",
+    sources: "./src",
     tests: "./test",
   },
   typechain: {
-    outDir: './build/types',
+    outDir: "./build/types",
   },
   solidity: {
     compilers: [
       {
-        version: "0.8.7",
+        version: "0.8.14",
         settings: {
           optimizer: {
             enabled: true,
@@ -65,6 +70,20 @@ const config: HardhatUserConfig = {
       tasks: [{ command: "compile", params: { quiet: true } }, "test"],
       files: ["./contracts", "./test"],
       verbose: true,
+    },
+  },
+  namedAccounts: {
+    deployer: {
+      default: 0,
+    },
+    alice: {
+      default: 1,
+    },
+    bob: {
+      default: 2,
+    },
+    carol: {
+      default: 3,
     },
   },
 };
