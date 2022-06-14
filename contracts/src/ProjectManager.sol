@@ -82,12 +82,12 @@ contract ProjectManager is ReentrancyGuard {
       @param extensionData : Contains DAO approved projects[]; either new or existing project updates. New projects have id of 0.
      */
     function setExtension(bytes calldata extensionData) external {
-        (Project[] memory projects) = abi.decode(
+        (Project[] memory projectUpdates) = abi.decode(
             extensionData,
             (Project[])
         );
 
-        for (uint256 i; i < projects.length; ++i) {
+        for (uint256 i; i < projectUpdates.length; ++i) {
             Project memory projectUpdate = projects[i];
             if (projectUpdate.id == 0) {
                 // id == 0 means new Project creation
@@ -108,7 +108,7 @@ contract ProjectManager is ReentrancyGuard {
             projects[projectUpdate.id] = projectUpdate;
         }
 
-        emit ExtensionSet(msg.sender, projects);
+        emit ExtensionSet(msg.sender, projectUpdates);
     }
 
     /// -----------------------------------------------------------------------
@@ -151,4 +151,3 @@ contract ProjectManager is ReentrancyGuard {
         emit ExtensionCalled(dao, msg.sender, extensionData);
     }
 }
-//
