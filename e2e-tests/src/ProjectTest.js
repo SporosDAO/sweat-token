@@ -1,20 +1,11 @@
-
 import url from 'url';
 import { createRunner, PuppeteerRunnerExtension } from '@puppeteer/replay';
 import pti from 'puppeteer-to-istanbul';
 import puppeteer from 'puppeteer';
-import { start } from 'repl';
 
-/**
- *
- * A minimal initial e2e flow with puppeteer
- * generated and exported from Chrome DevTools
- *
- * https://developer.chrome.com/docs/devtools/recorder/
- *
- */
+// Note: Please run this test after creating a public DAO named SporosDao
+// And make sure that SporosDao has a project named 'My New Project June 3 2022'
 
-// This is just for local test
 const browser = await puppeteer.launch({
     headless: true,
 });
@@ -70,15 +61,15 @@ class CoverageExtension extends PuppeteerRunnerExtension {
       await super.afterAllSteps(flow);
       console.log('done');
     }
-  }
+}
 
 export const flow = {
-    "title": "SporosDAO App Home Page + Dashboard",
+    "title": "ProjectTest",
     "steps": [
         {
             "type": "setViewport",
-            "width": 885,
-            "height": 1304,
+            "width": 1174,
+            "height": 757,
             "deviceScaleFactor": 1,
             "isMobile": false,
             "hasTouch": false,
@@ -96,37 +87,86 @@ export const flow = {
             ]
         },
         {
+            "type": "waitForElement",
+            "selectors": [
+                "aria/SporosDAO"
+            ]
+        },
+        {
             "type": "click",
             "target": "main",
             "selectors": [
                 [
-                    "aria/Your DevCo DAOs"
+                    "aria/SporosDAO"
+                ],
+                [
+                    "#root > div > main > div.MuiContainer-root.MuiContainer-maxWidthLg.css-1oifrf6 > div.MuiGrid-root.MuiGrid-container.css-1d3bbye > div:nth-child(2) > div > div:nth-child(2) > ul > li:nth-child(1) > a"
                 ]
             ],
-            "offsetX": 282,
-            "offsetY": 29.5625
+            "offsetX": 25.125,
+            "offsetY": 17.3125
+        },
+        {
+            "type": "click",
+            "selectors": [
+                [
+                    "#root > div > div > div > nav > div:nth-child(4) > div.MuiListItemText-root.css-1tsvksn > span"
+                ]
+            ],
+            "target": "main",
+            "offsetX": 48,
+            "offsetY": 11
         },
         {
             "type": "waitForElement",
-            "target": "main",
-            "frame": [],
             "selectors": [
-                [
-                    "aria/Create a DAO"
-                ]
+                "#root > div > div > div > nav > div:nth-child(5) > div.MuiListItemText-root.css-1tsvksn > span"
             ]
         },
         {
-            "type": "waitForElement",
+            "type": "click",
             "target": "main",
-            "frame": [],
             "selectors": [
                 [
-                    "aria/Public DAOs"
+                    "#root > div > div > div > nav > div:nth-child(5) > div.MuiListItemText-root.css-1tsvksn > span"
                 ]
+            ],
+            "offsetX": 49,
+            "offsetY": 0
+        },
+        {
+            "type": "waitForElement",
+            "selectors": [
+                "aria/My New Project June 3 2022"
+            ]
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/My New Project June 3 2022"
+                ],
+                [
+                    "#root > div > main > div.MuiContainer-root.MuiContainer-maxWidthLg.css-1oifrf6 > div > div:nth-child(1) > div > div:nth-child(2) > div > div.MuiGrid-root.MuiGrid-container.css-11ngdyu > div:nth-child(1) > div > div.jss6 > a"
+                ]
+            ],
+            "offsetX": 37,
+            "offsetY": 11.1875
+        },
+        {
+            "type": "navigate",
+            "url": "http://localhost:3000/dao/b32b9ebb-b4b1-4d12-9e55-2aa62178cdf8/projects",
+            "assertedEvents": [
+                {
+                    "type": "navigation",
+                    "url": "http://localhost:3000/dao/b32b9ebb-b4b1-4d12-9e55-2aa62178cdf8/projects",
+                    "title": "SporosDAO App"
+                }
             ]
         }
-    ]
+    ],
+    "timeout": 20000
 };
 
 export async function run(extension) {
@@ -135,8 +175,9 @@ export async function run(extension) {
 }
 
 if (process && import.meta.url === url.pathToFileURL(process.argv[1]).href) {
-  const extension = new CoverageExtension(browser, page, 7000)
-  await run(extension);
-}
-
+    const extension = new CoverageExtension(browser, page, 7000)
+    await run(extension);
+  }
+  
 await browser.close();
+      

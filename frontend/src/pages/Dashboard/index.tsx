@@ -6,6 +6,7 @@ import useToast from '../../context/ToastContext'
 
 export default function Dashboard() {
   const { loading, dao } = useDao()
+  // console.log('dao data is:', dao)
   const navigate = useNavigate()
   const { showToast } = useToast()
 

@@ -16,7 +16,7 @@ export class MemberController {
 
   @Post('list')
   @HttpCode(200)
-  @DaoAuth(Role.founder, Role.projectManager)
+  // @DaoAuth(Role.founder, Role.projectManager)
   list(@Param('daoId') daoId: string, @Body() query: MemberQueryDto): Promise<ExtendedMemberDto[]> {
     query.daoId = daoId
     return this.memberService.list(query)
