@@ -77,11 +77,11 @@ export const flow = {
         },
         {
             "type": "navigate",
-            "url": "http://localhost:3000/",
+            "url": "https://deploy-preview-67--sporosdaoapp-dev.netlify.app/",
             "assertedEvents": [
                 {
                     "type": "navigation",
-                    "url": "http://localhost:3000/",
+                    "url": "https://deploy-preview-67--sporosdaoapp-dev.netlify.app/",
                     "title": "SporosDAO App"
                 }
             ]
@@ -98,9 +98,6 @@ export const flow = {
             "selectors": [
                 [
                     "aria/SporosDAO"
-                ],
-                [
-                    "#root > div > main > div.MuiContainer-root.MuiContainer-maxWidthLg.css-1oifrf6 > div.MuiGrid-root.MuiGrid-container.css-1d3bbye > div:nth-child(2) > div > div:nth-child(2) > ul > li:nth-child(1) > a"
                 ]
             ],
             "offsetX": 25.125,
@@ -110,7 +107,7 @@ export const flow = {
             "type": "click",
             "selectors": [
                 [
-                    "#root > div > div > div > nav > div:nth-child(4) > div.MuiListItemText-root.css-1tsvksn > span"
+                    "aria/Legal"
                 ]
             ],
             "target": "main",
@@ -120,7 +117,7 @@ export const flow = {
         {
             "type": "waitForElement",
             "selectors": [
-                "#root > div > div > div > nav > div:nth-child(5) > div.MuiListItemText-root.css-1tsvksn > span"
+                "aria/Projects"
             ]
         },
         {
@@ -128,7 +125,7 @@ export const flow = {
             "target": "main",
             "selectors": [
                 [
-                    "#root > div > div > div > nav > div:nth-child(5) > div.MuiListItemText-root.css-1tsvksn > span"
+                    "aria/Projects"
                 ]
             ],
             "offsetX": 49,
@@ -146,9 +143,6 @@ export const flow = {
             "selectors": [
                 [
                     "aria/My New Project June 3 2022"
-                ],
-                [
-                    "#root > div > main > div.MuiContainer-root.MuiContainer-maxWidthLg.css-1oifrf6 > div > div:nth-child(1) > div > div:nth-child(2) > div > div.MuiGrid-root.MuiGrid-container.css-11ngdyu > div:nth-child(1) > div > div.jss6 > a"
                 ]
             ],
             "offsetX": 37,
@@ -156,11 +150,11 @@ export const flow = {
         },
         {
             "type": "navigate",
-            "url": "http://localhost:3000/dao/b32b9ebb-b4b1-4d12-9e55-2aa62178cdf8/projects",
+            "url": "https://deploy-preview-67--sporosdaoapp-dev.netlify.app/dao/b32b9ebb-b4b1-4d12-9e55-2aa62178cdf8/projects",
             "assertedEvents": [
                 {
                     "type": "navigation",
-                    "url": "http://localhost:3000/dao/b32b9ebb-b4b1-4d12-9e55-2aa62178cdf8/projects",
+                    "url": "https://deploy-preview-67--sporosdaoapp-dev.netlify.app/dao/b32b9ebb-b4b1-4d12-9e55-2aa62178cdf8/projects",
                     "title": "SporosDAO App"
                 }
             ]
