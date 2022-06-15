@@ -46,15 +46,13 @@ export default function MemberItem(props: MemberItemProps) {
   const { showToast } = useToast()
   const { account } = useWeb3()
   const { provider } = useWeb3()
-  const [ENS, setENS] = React.useState("")
+  const [ENS, setENS] = React.useState('')
 
   const userENS = async (address: string) => {
     const name = await provider?.lookupAddress(address)
-    console.log("name = ", name)
-    if(name && name !== undefined)
-      setENS(name as string)
-    else 
-      setENS("undefined")
+    console.log('name = ', name)
+    if (name && name !== undefined) setENS(name as string)
+    else setENS('undefined')
   }
 
   React.useEffect(() => {
