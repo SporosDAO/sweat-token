@@ -48,7 +48,7 @@ export default function Landing() {
                 <a href="https://app.kalidao.xyz/">Create</a> your first DAO with legal benefits.
               </span>
               <span>
-                Then add it to your <Link to="/dao/create">dashboard</Link> to manage projects and contributors.
+                Then add it to your <Link data-test='dashboard' to="/dao/create">dashboard</Link> to manage projects and contributors.
               </span>
             </p>
           </ContentBlock>
