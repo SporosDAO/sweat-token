@@ -8,7 +8,7 @@ import "solidity-coverage";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import "hardhat-watcher";
 import "hardhat-deploy";
-
+import "hardhat-dependency-compiler";
 dotenv.config();
 
 // This is a sample Hardhat task. To learn how to create your own go to
@@ -68,9 +68,18 @@ const config: HardhatUserConfig = {
   watcher: {
     test: {
       tasks: [{ command: "compile", params: { quiet: true } }, "test"],
-      files: ["./contracts", "./test"],
+      files: ["./src", "./test"],
       verbose: true,
     },
+  },
+  dependencyCompiler: {
+    // path to write temp compiled deps relative to ./src
+    path: "tmp",
+    // paths relative to './src/hardhat-dependency-compiler/
+    paths: [
+      "kalidao/contracts/KaliDAO.sol",
+      "kalidao/contracts/tokens/erc20/KaliERC20.sol",
+    ],
   },
   namedAccounts: {
     deployer: {

@@ -1,5 +1,5 @@
+
 const { BigNumber } = require("ethers")
-const { KaliDAO } = require("https://raw.githubusercontent.com/kalidao/kali-contracts/main/contracts/KaliDAO.sol")
 const chai = require("chai")
 const { expect } = require("chai")
 
@@ -32,7 +32,7 @@ describe("Crowdsale", function () {
     beforeEach(async () => {
       ;[proposer, alice, bob] = await ethers.getSigners()
 
-      Kali = await ethers.getContractFactory("ProjectManager")
+      Kali = await ethers.getContractFactory("KaliDAO")
       kali = await Kali.deploy()
       await kali.deployed()
 

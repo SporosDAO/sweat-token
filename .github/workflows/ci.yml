@@ -26,10 +26,6 @@ jobs:
       - name: Dump debug log in case there was an error above
         if: always()
         run: docker-compose logs frontend backend
-      - name: Checkout KaliDAO contracts for integration testing
-        uses: actions/checkout@v3
-        with:
-          repository: 'kalidao/kali-contracts'
       - name: Run E2E tests
         run: |
           cd e2e-tests

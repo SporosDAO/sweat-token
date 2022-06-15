@@ -1,0 +1,22 @@
+name: "Build and test frontend"
+
+on:
+  push:
+    paths:
+      - frontend/**
+  pull_request:
+    paths:
+      - frontend/**
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: frontend
+      - name: Run frontend tests
+        run: |
+          cd frontend
+          yarn install
+          yarn build
+          yarn test

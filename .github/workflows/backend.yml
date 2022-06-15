@@ -1,0 +1,22 @@
+name: "Build and test backend"
+
+on:
+  push:
+    paths:
+      - backend/**
+  pull_request:
+    paths:
+      - backend/**
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: backend
+      - name: Run backend tests
+        run: |
+          cd backend
+          yarn install
+          yarn build
+          yarn test

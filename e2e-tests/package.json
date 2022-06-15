@@ -6,7 +6,7 @@
     "test": "node src/*",
     "covreport": "nyc report --reporter=text",
     "covcheck": "nyc check-coverage --lines 40 --functions 40 --branches 40",
-    "coverage": "yarn covreport && yarn covcheck"
+    "coverage": "yarn covreport && yarn covcheck",
   },
   "dependencies": {
     "@puppeteer/replay": "^0.2.0",
