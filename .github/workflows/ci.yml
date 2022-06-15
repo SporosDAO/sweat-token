@@ -7,7 +7,7 @@ jobs:
     env:
       REACT_APP_SWEAT_TOKEN_API_BASEPATH: http://localhost:3001
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Build the stack
         run: docker-compose build
       - name: Update dependencies
@@ -26,6 +26,10 @@ jobs:
       - name: Dump debug log in case there was an error above
         if: always()
         run: docker-compose logs frontend backend
+      - name: Checkout KaliDAO contracts for integration testing
+        uses: actions/checkout@v3
+        with:
+          repository: 'kalidao/kali-contracts'
       - name: Run E2E tests
         run: |
           cd e2e-tests

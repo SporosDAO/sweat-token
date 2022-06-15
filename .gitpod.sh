@@ -20,3 +20,5 @@ sudo chown -hR gitpod.gitpod e2e-tests/node_modules/
 cd e2e-tests && yarn install && cd -
 sudo chown -hR gitpod.gitpod contracts/node_modules/
 cd contracts && yarn install && cd -
+# checkout kali contracts for integration testing
+git clone https://github.com/kalidao/kali-contracts.git

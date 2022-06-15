@@ -1,4 +1,5 @@
 const { BigNumber } = require("ethers")
+const { KaliDAO } = require("https://raw.githubusercontent.com/kalidao/kali-contracts/main/contracts/KaliDAO.sol")
 const chai = require("chai")
 const { expect } = require("chai")
 
