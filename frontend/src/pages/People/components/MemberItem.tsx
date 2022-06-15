@@ -42,10 +42,25 @@ const useStyles = makeStyles((theme) => ({
 export default function MemberItem(props: MemberItemProps) {
   const member = props.member
   const memberLength = member.publicAddress.length
-  // console.log('member', member)
   const classes = useStyles()
   const { showToast } = useToast()
   const { account } = useWeb3()
+  const { provider } = useWeb3()
+  const [ENS, setENS] = React.useState("")
+
+  const userENS = async (address: string) => {
+    const name = await provider?.lookupAddress(address)
+    console.log("name = ", name)
+    if(name && name !== undefined)
+      setENS(name as string)
+    else 
+      setENS("undefined")
+  }
+
+  React.useEffect(() => {
+    userENS(member.publicAddress)
+  }, [])
+  // const userProviderLength = userProvider.length
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -154,7 +169,7 @@ export default function MemberItem(props: MemberItemProps) {
             member.publicAddress?.substring(memberLength - 4, memberLength)}
         </div>
         <div className={classes.member_item}>Voting Power: </div>
-        <div className={classes.member_item}>ENS: </div>
+        <div className={classes.member_item}>ENS: {ENS} </div>
         <div className={classes.member_item}>Discord: </div>
         <div className={classes.member_item}>Twitter: </div>
         {(member.roles || []).map((role) => (
