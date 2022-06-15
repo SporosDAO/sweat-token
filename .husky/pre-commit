@@ -1,18 +1,17 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# Moved husky pre-commit logic to project sub-dirs
-# cd frontend/
-# yarn lint
-#
-#cd -
-#
-#cd backend
-#yarn lint
-#
-#cd -
-#
-#cd contracts
-#yarn lint
-#
-#cd -
+cd frontend/
+yarn lint
+
+cd -
+
+cd backend
+yarn lint
+
+cd -
+
+cd contracts
+yarn lint
+
+cd -

@@ -13,4 +13,3 @@ export function DaoAuth(...roles: Role[]) {
     ApiUnauthorizedResponse({ description: 'Unauthorized' }),
   )
 }
-//
