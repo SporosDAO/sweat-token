@@ -32,6 +32,7 @@ jobs:
           yarn install
           yarn test
           yarn coverage
+          yarn daoTest
       - name: Shutdown docker services
         if: always()
         run: docker-compose down
