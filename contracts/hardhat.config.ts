@@ -79,6 +79,8 @@ const config: HardhatUserConfig = {
     paths: [
       "kalidao/contracts/KaliDAO.sol",
       "kalidao/contracts/tokens/erc20/KaliERC20.sol",
+      "kalidao/contracts/access/KaliAccessManager.sol",
+      "kalidao/contracts/extensions/crowdsale/KaliDAOcrowdsale.sol",
     ],
   },
   namedAccounts: {
