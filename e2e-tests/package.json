@@ -3,10 +3,7 @@
   "type": "module",
   "license": "Apache-2.0",
   "scripts": {
-    "test": "node src/homepage-dashboard.js",
-    "daoTest": "node src/daoTest.js",
-    "projectTest": "node src/ProjectTest.js",
-    "sporosDaoTest": "node src/SporosDaoTest.js",
+    "test": "node src/*.js",
     "covreport": "nyc report --reporter=text",
     "covcheck": "nyc check-coverage --lines 40 --functions 40 --branches 40",
     "coverage": "yarn covreport && yarn covcheck"
