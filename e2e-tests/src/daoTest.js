@@ -75,11 +75,11 @@ export const flow = {
       },
       {
         "type": "navigate",
-        "url": "http://localhost:3000/",
+        "url": "https://deploy-preview-68--sporosdaoapp-dev.netlify.app/",
         "assertedEvents": [
           {
             "type": "navigation",
-            "url": "http://localhost:3000/",
+            "url": "https://deploy-preview-68--sporosdaoapp-dev.netlify.app/",
             "title": "SporosDAO App"
           }
         ]
