@@ -8,7 +8,7 @@ on:
     paths:
       - frontend/**
 jobs:
-  test:
+  frontend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -16,7 +16,7 @@ jobs:
           path: frontend
       - name: Run frontend tests
         run: |
-          cd frontend
+          ls -al
           yarn install
           yarn build
           yarn test

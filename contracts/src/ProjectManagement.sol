@@ -1,32 +1,33 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity >=0.8.14;
 
-import {IProjectManager} from "./interfaces/IProjectManager.sol";
-
+import {IProjectManagement} from "./interfaces/IProjectManagement.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "hardhat/console.sol";
 
 /**
     @notice Project management extension for KaliDAO
 
-    A project manager is given permission to issue DAO tokens to contributors in accordance with
-    the terms proposed to and approved by the DAO token holders:
-    - office term: A manager cannot order token mints after the office term expires.
+    DAO token holders aprove and activate Projects that authorize a specific project manager to
+    issue DAO tokens to contributors in accordance with
+    the terms of the project:
     - budget: A manager can order mint of DAO tokens up to a given budget.
+    - deadline: A manager cannot order token mints after the project deadline expires.
     - goals: A manager is expected to act in accordance with the goals outlined in the DAO project proposal.
 
     A project's manager, budget, deadline and goals can be updated via DAO proposal.
 
-    A project has exactly one manager. A manager may be assigned to 0, 1 or mutliple projects.
+    A project has exactly one manager. A manager may be assigned to 0, 1 or multiple projects.
 
     Modeled after KaliShareManager.sol
     https://github.com/kalidao/kali-contracts/blob/main/contracts/extensions/manager/KaliShareManager.sol
 
-    (c) 2022 SporosDAO.eth
+    (c) 2022 sporosdao.eth
 
     @author ivelin.eth
 
  */
-contract ProjectManager is ReentrancyGuard {
+contract ProjectManagement is ReentrancyGuard {
     /// -----------------------------------------------------------------------
     /// Events
     /// -----------------------------------------------------------------------
@@ -82,9 +83,12 @@ contract ProjectManager is ReentrancyGuard {
       @param extensionData : Contains DAO approved projects[]; either new or existing project updates. New projects have id of 0.
      */
     function setExtension(bytes calldata extensionData) external {
-        (Project[] memory projectUpdates) = abi.decode(
+
+        console.log("(EVM)---->: setExtension called");
+
+        ((uint256, address, address , uint256, uint256, string)[] memory projectUpdates) = abi.decode(
             extensionData,
-            (Project[])
+            ((uint256, address, address, uint256, uint256, string)[])
         );
 
         for (uint256 i; i < projectUpdates.length; ++i) {
@@ -142,7 +146,7 @@ contract ProjectManager is ReentrancyGuard {
 
             if (project.deadline < block.timestamp) revert ProjectExpired();
 
-            IProjectManager(dao).mintTokens(
+            IProjectManagement(dao).mintTokens(
                 toContributorAccount,
                 mintAmount
             );
@@ -151,4 +155,3 @@ contract ProjectManager is ReentrancyGuard {
         emit ExtensionCalled(dao, msg.sender, extensionData);
     }
 }
-   //

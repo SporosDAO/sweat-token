@@ -2,7 +2,7 @@
 pragma solidity >=0.8.14;
 
 /// @notice Sporos DAO project manager interface
-interface IProjectManager {
+interface IProjectManagement {
   /**
         @notice a DAO authorized manager can order mint of tokens to contributors within the project limits.
      */
