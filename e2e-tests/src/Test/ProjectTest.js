@@ -77,11 +77,11 @@ export const flow = {
         },
         {
             "type": "navigate",
-            "url": "https://deploy-preview-68--sporosdaoapp-dev.netlify.app/",
+            "url": "http://localhost:3000/",
             "assertedEvents": [
                 {
                     "type": "navigation",
-                    "url": "https://deploy-preview-68--sporosdaoapp-dev.netlify.app/",
+                    "url": "http://localhost:3000/",
                     "title": "SporosDAO App"
                 }
             ]
@@ -150,11 +150,11 @@ export const flow = {
         },
         {
             "type": "navigate",
-            "url": "https://deploy-preview-68--sporosdaoapp-dev.netlify.app/dao/b32b9ebb-b4b1-4d12-9e55-2aa62178cdf8/projects",
+            "url": "http://localhost:3000/dao/b32b9ebb-b4b1-4d12-9e55-2aa62178cdf8/projects",
             "assertedEvents": [
                 {
                     "type": "navigation",
-                    "url": "https://deploy-preview-68--sporosdaoapp-dev.netlify.app/dao/b32b9ebb-b4b1-4d12-9e55-2aa62178cdf8/projects",
+                    "url": "http://localhost:3000/dao/b32b9ebb-b4b1-4d12-9e55-2aa62178cdf8/projects",
                     "title": "SporosDAO App"
                 }
             ]
