@@ -99,16 +99,13 @@ describe("ProjectManger", function () {
         // Set up payload for extension proposal
         let payload = ethers.utils.defaultAbiCoder.encode(
             // Project struct encoding
-            [ "tuple(uint256, address, address, uint256, uint256, string)[]"],
+            [ "uint256", "address", "uint256", "uint256", "string"],
             [
-                [
-                    123, // project id == 0 means new project
-                    kali.address, // DAO address
-                    manager.address, // project manager address
-                    getBigNumber(200), // project budget
-                    projectDeadline, // project deadline
-                    "Website facelift" // project goal
-                ]
+              0, // project id == 0 means new project
+              manager.address, // project manager address
+              getBigNumber(200), // project budget
+              projectDeadline, // project deadline
+              "Website facelift" // project goal
             ]
         )
 
@@ -119,9 +116,36 @@ describe("ProjectManger", function () {
         await kali.vote(1, true)
         await advanceTime(35)
         await kali.processProposal(1)
-        const savedProject = await projectManagement.project(101);
-        console.log({ savedProject });
-        expect(savedProject).to.not.be.null();
+        const nextProjectId = await projectManagement.nextProjectId();
+        console.log({ nextProjectId });
+        expect(nextProjectId).equal(101);
+        const savedProject = await projectManagement.projects(100);
+        console.log({savedProject});
+        // expecting:
+        /*
+        savedProject: [
+          BigNumber { value: "100" },
+          '0x5FbDB2315678afecb367f032d93F642f64180aa3',
+          '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
+          BigNumber { value: "200000000000000000000" },
+          BigNumber { value: "27773667612398080" },
+          'Website facelift',
+          id: BigNumber { value: "100" },
+          dao: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
+          manager: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
+          budget: BigNumber { value: "200000000000000000000" },
+          deadline: BigNumber { value: "27773667612398080" },
+          goals: 'Website facelift'
+        ]
+        */
+        // check saved project data
+        expect(savedProject["id"]).equal(100);
+        expect(savedProject["dao"]).equal(kali.address);
+        expect(savedProject["manager"]).equal(manager.address);
+        expect(savedProject["budget"]).equal(getBigNumber(200));
+        expect(savedProject["deadline"]).equal(projectDeadline);
+        expect(savedProject["goals"]).equal("Website facelift");
+
         // await projectManagement
         //    .callExtension(kali.address, getBigNumber(50), {
         //         value: getBigNumber(50),
