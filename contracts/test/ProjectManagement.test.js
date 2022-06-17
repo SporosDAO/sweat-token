@@ -28,7 +28,7 @@ function hours(n) {
 // https://github.com/kalidao/kali-contracts/blob/c3b25ca762f083dfe88096a7a512b33607c0ac57/contracts/KaliDAO.sol#L111
 const PROPOSAL_TYPE_EXTENSION = 9;
 
-describe("ProjectManger", function () {
+describe("ProjectManagement", function () {
     let Kali // KaliDAO contract
     let kali // KaliDAO contract instance
     let ProjectManagement // SporosDAO Project Manager contract
@@ -37,10 +37,12 @@ describe("ProjectManger", function () {
     let alice // signerB
     let bob // signerC
     let manager
+    let contributor
 
     beforeEach(async () => {
       ;[proposer, alice, bob] = await ethers.getSigners()
       manager = proposer;
+      contributor = bob;
 
       console.log("proposer address", proposer.address)
       console.log("alice address", alice.address)
@@ -125,7 +127,7 @@ describe("ProjectManger", function () {
         expect(savedProject["goals"]).equal("Website facelift");
     })
 
-    it("Should revert a new project proposal without a manager", async function () {
+    it("Should revert a new project proposal with manager who is not a DAO token holder", async function () {
       let projectDeadline = await latestBlockTimestamp() + hours(72);
       // Set up payload for extension proposal
       let payload = ethers.utils.defaultAbiCoder.encode(
@@ -280,23 +282,67 @@ describe("ProjectManger", function () {
       )
 
       console.log("Submitting Second proposal with project update from kali2")
-      const propose = kali2.connect(alice).propose(9, "Update Project Proposal", [projectManagement.address], [1], [payload])
+      let propose = kali2.connect(alice).propose(9, "Update Project Proposal", [projectManagement.address], [1], [payload])
       await expect(await propose)
         .to.emit(kali2, "NewProposal")
           .withArgs(alice.address, 1, 9, "Update Project Proposal", [projectManagement.address], [1], [payload]);
       console.log("Submitted Second proposal for project update from kali2")
-      const savedProposal = await kali2.proposals(1)
+      let savedProposal = await kali2.proposals(1)
       console.log("Saved second proposal: ", { savedProposal })
       await kali2.connect(alice).vote(1, true)
       console.log("Voted for kali2 proposal")
       await advanceTime(35)
       await expect(kali2.connect(alice).processProposal(1))
         .to.be.revertedWith("ProjectManagerNeedsDaoTokens()")
+      // escape reverted proposal in order to be able to process the next proposal
+      console.debug("Escaping reverted project proposal");
+      await expect(await kali2.connect(alice).propose(10, "Escape reverted project proposal", [alice.address], [1], ["0x00"]))
+        .to.emit(kali2, "NewProposal")
+          .withArgs(alice.address, 2, 10, "Escape reverted project proposal", [alice.address], [1], ["0x00"]);
+      console.debug("Voting to approve escape");
+      await kali2.vote(2, true)
+      console.debug("Voted to approve escape");
+      await advanceTime(35)
+      await kali2.processProposal(2)
+      console.debug("Escaped reverted project proposal.");
+      // mint alice some tokens in kali DAO
+      await kali.propose(0, "Admin alice in kali DAO 1", [alice.address], [11], [0])
+      console.debug("Proposing mint for Alice in kali 1");
+      await kali.vote(2, true)
+      await advanceTime(35)
+      console.debug("Mint for Alice approved in kali 1");
+      await kali.processProposal(2)
+      const aliceTokens = await kali.balanceOf(alice.address)
+      expect(aliceTokens).eq(11)
+      console.debug("Alice now has some: tokens in kali 1: ", aliceTokens);
+      // try again to request mint in a kali 1 project via kali2 call
+      payload = ethers.utils.defaultAbiCoder.encode(
+        // Project struct encoding
+        [ "uint256", "address", "uint256", "uint256", "string"],
+        [
+          100, // project id == 0 means new project
+          alice.address, // project manager address
+          getBigNumber(500), // project budget
+          projectDeadline + hours(5), // new project deadline
+          "Next website facelift and blog setup" // updated project goals
+        ]
+      )
+      propose = kali2.connect(alice).propose(9, "Update Project Proposal", [projectManagement.address], [1], [payload])
+      await expect(await propose)
+        .to.emit(kali2, "NewProposal")
+          .withArgs(alice.address, 3, 9, "Update Project Proposal", [projectManagement.address], [1], [payload]);
+      console.log("Submitted Second proposal for project update from kali2")
+      savedProposal = await kali2.proposals(3)
+      console.log("Saved second proposal: ", { savedProposal })
+      await kali2.connect(alice).vote(3, true)
+      console.log("Voted for kali2 proposal")
+      await advanceTime(35)
+      await expect(kali2.connect(alice).processProposal(3))
+        .to.be.revertedWith("ForbiddenDifferentDao()")
     })
 
-    it("Should allow minting tokens by an authorized manager and an active project with sufficient budget.", async function () {
+  it("Should allow minting tokens by an authorized manager and an active project with sufficient budget.", async function () {
       let projectDeadline = await latestBlockTimestamp() + hours(72);
-      let contributor = bob;
       // Set up payload for extension proposal
       let payload = ethers.utils.defaultAbiCoder.encode(
           // Project struct encoding
@@ -339,7 +385,6 @@ describe("ProjectManger", function () {
 
   it("Should not allow spending over budget.", async function () {
     let projectDeadline = await latestBlockTimestamp() + hours(72);
-    let contributor = bob;
     // Set up payload for extension proposal
     let payload = ethers.utils.defaultAbiCoder.encode(
         // Project struct encoding
@@ -403,4 +448,88 @@ describe("ProjectManger", function () {
     await expect(projectManagement.connect(manager).callExtension(kali.address, [mintRequest]))
       .to.be.revertedWith("ProjectNotEnoughBudget()")
   })
+
+  it("Should not allow spending after deadline expired.", async function () {
+    // set deadline before the current block
+    let projectDeadline = await latestBlockTimestamp() - 1;
+    // Set up payload for extension proposal
+    let payload = ethers.utils.defaultAbiCoder.encode(
+        // Project struct encoding
+        [ "uint256", "address", "uint256", "uint256", "string"],
+        [
+          0, // project id == 0 means new project
+          manager.address, // project manager address
+          getBigNumber(200), // project budget
+          projectDeadline, // project deadline
+          "Website facelift" // project goal
+        ]
+    )
+    await kali.propose(9, "New Project Proposal", [projectManagement.address], [1], [payload])
+    console.debug("Proposal submitted on-chain");
+    await kali.vote(1, true)
+    await advanceTime(35)
+    await kali.processProposal(1)
+    let mintRequest = ethers.utils.defaultAbiCoder.encode(
+      // Project struct encoding
+      [ "uint256", "address", "uint256"],
+      [
+        100, // project id of the just activated project
+        contributor.address, // address of contributor to receive DAO tokens
+        getBigNumber(55) // mint amount in whole token units
+      ]
+    )
+    await expect(projectManagement.connect(manager).callExtension(kali.address, [mintRequest]))
+      .to.be.revertedWith("ProjectExpired()")
+    expect(await kali.balanceOf(contributor.address)).to.equal(getBigNumber(0))
+  })
+
+  it("Should not allow minting via unknown project.", async function () {
+    let mintRequest = ethers.utils.defaultAbiCoder.encode(
+      // Project struct encoding
+      [ "uint256", "address", "uint256"],
+      [
+        153, // project id that does not exist in the contract
+        contributor.address, // address of contributor to receive DAO tokens
+        getBigNumber(55) // mint amount in whole token units
+      ]
+    )
+    await expect(projectManagement.connect(alice).callExtension(kali.address, [mintRequest]))
+      .to.be.revertedWith("ProjectUnknown()")
+    expect(await kali.balanceOf(contributor.address)).to.equal(getBigNumber(0))
+  })
+
+  it("Should not allow minting by unauthorized project manager.", async function () {
+    let projectDeadline = await latestBlockTimestamp() + hours(3);
+    // Set up payload for extension proposal
+    let payload = ethers.utils.defaultAbiCoder.encode(
+        // Project struct encoding
+        [ "uint256", "address", "uint256", "uint256", "string"],
+        [
+          0, // project id == 0 means new project
+          manager.address, // project manager address
+          getBigNumber(200), // project budget
+          projectDeadline, // project deadline
+          "Website facelift" // project goal
+        ]
+    )
+    await kali.propose(9, "New Project Proposal", [projectManagement.address], [1], [payload])
+    console.debug("Proposal submitted on-chain");
+    await kali.vote(1, true)
+    await advanceTime(35)
+    await kali.processProposal(1)
+    let mintRequest = ethers.utils.defaultAbiCoder.encode(
+      // Project struct encoding
+      [ "uint256", "address", "uint256"],
+      [
+        100, // project id of the just activated project
+        contributor.address, // address of contributor to receive DAO tokens
+        getBigNumber(55) // mint amount in whole token units
+      ]
+    )
+    await expect(projectManagement.connect(alice).callExtension(kali.address, [mintRequest]))
+      .to.be.revertedWith("ForbiddenSenderNotManager()")
+    expect(await kali.balanceOf(contributor.address)).to.equal(getBigNumber(0))
+  })
+
+
 })

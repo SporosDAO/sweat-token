@@ -102,6 +102,7 @@ contract ProjectManagement is ReentrancyGuard {
 
         // A project maanger must be a trusted DAO token holder
         uint256 managerTokens = IERC20(msg.sender).balanceOf(manager);
+        console.log("(EVM)----> setExtension(dao, manager, managerTokens): ", msg.sender, manager, managerTokens);
         if ( managerTokens == 0) revert ProjectManagerNeedsDaoTokens();
 
         Project memory projectUpdate;
