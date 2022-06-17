@@ -80,7 +80,7 @@ contract ProjectManagement is ReentrancyGuard {
     /**
       @notice A DAO calls this method to activate an approved Project Proposal.
 
-      @param extensionData : Contains DAO approved projects[]; either new or existing project updates. New projects have id of 0.
+      @param extensionData : Contains DAO approved projects parameters; either new or existing project updates. New projects must have id of 0.
      */
     function setExtension(bytes calldata extensionData) external {
 
@@ -139,7 +139,10 @@ contract ProjectManagement is ReentrancyGuard {
         external
         nonReentrant
     {
+        console.log("(EVM)---->: callExtension called. DAO address:", dao);
+
         for (uint256 i; i < extensionData.length; ++i) {
+            console.log("(EVM)----> i = ", i);
             (
                 uint256 projectId,
                 address toContributorAccount,
@@ -147,6 +150,8 @@ contract ProjectManagement is ReentrancyGuard {
             ) = abi.decode(extensionData[i], (uint256, address, uint256));
 
             Project memory project = projects[projectId];
+
+            console.log("(EVM)----> projectId, toContributorAccount, mintAmount:", projectId, toContributorAccount, mintAmount);
 
             if (project.id == 0) revert ProjectUnknown();
 
@@ -156,7 +161,9 @@ contract ProjectManagement is ReentrancyGuard {
 
             if (project.deadline < block.timestamp) revert ProjectExpired();
 
-            IProjectManagement(dao).mintTokens(
+            project.budget -= mintAmount;
+
+            IProjectManagement(dao).mintShares(
                 toContributorAccount,
                 mintAmount
             );

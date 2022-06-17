@@ -51,6 +51,8 @@ describe("ProjectManger", function () {
       kali = await Kali.deploy()
       await kali.deployed()
 
+      console.log("KaliDAO address", kali.address)
+
       PurchaseToken = await ethers.getContractFactory("KaliERC20")
       purchaseToken = await PurchaseToken.deploy()
       await purchaseToken.deployed()
@@ -75,27 +77,25 @@ describe("ProjectManger", function () {
       ProjectManagement = await ethers.getContractFactory("ProjectManagement")
       projectManagement = await ProjectManagement.deploy()
       await projectManagement.deployed()
+
+      // Instantiate KaliDAO
+      await kali.init(
+        "KALI",
+        "KALI",
+        "DOCS",
+        false,
+        [],
+        [],
+        [proposer.address],
+        [getBigNumber(10)],
+        [30, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      )
+
     })
 
-    it.only("Should allow activating a new valid project", async function () {
-        // Instantiate KaliDAO
-        await kali.init(
-          "KALI",
-          "KALI",
-          "DOCS",
-          false,
-          [],
-          [],
-          [proposer.address],
-          [getBigNumber(10)],
-          [30, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        )
-
+    it("Should allow activating a new valid project", async function () {
         let projectDeadline = await latestBlockTimestamp() + hours(72);
-
         let manager = alice;
-        let contributor = bob;
-
         // Set up payload for extension proposal
         let payload = ethers.utils.defaultAbiCoder.encode(
             // Project struct encoding
@@ -108,11 +108,10 @@ describe("ProjectManger", function () {
               "Website facelift" // project goal
             ]
         )
-
+        // propose via Kali extension
+        // a project that authorizes the manager to call the extension and request minting
         await kali.propose(9, "New Project Proposal", [projectManagement.address], [1], [payload])
-
         console.debug("Proposal submitted on-chain");
-
         await kali.vote(1, true)
         await advanceTime(35)
         await kali.processProposal(1)
@@ -145,15 +144,85 @@ describe("ProjectManger", function () {
         expect(savedProject["budget"]).equal(getBigNumber(200));
         expect(savedProject["deadline"]).equal(projectDeadline);
         expect(savedProject["goals"]).equal("Website facelift");
-
-        // await projectManagement
-        //    .callExtension(kali.address, getBigNumber(50), {
-        //         value: getBigNumber(50),
-        // })
-        // expect(await ethers.provider.getBalance(kali.address)).to.equal(
-        //     getBigNumber(100)
-        // )
-        // expect(await kali.balanceOf(proposer.address)).to.equal(getBigNumber(110))
     })
 
+    it("Should allow minting tokens by an authorized manager and an active project with sufficient budget.", async function () {
+      let projectDeadline = await latestBlockTimestamp() + hours(72);
+      let manager = alice;
+      let contributor = bob;
+      // Set up payload for extension proposal
+      let payload = ethers.utils.defaultAbiCoder.encode(
+          // Project struct encoding
+          [ "uint256", "address", "uint256", "uint256", "string"],
+          [
+            0, // project id == 0 means new project
+            manager.address, // project manager address
+            getBigNumber(200), // project budget
+            projectDeadline, // project deadline
+            "Website facelift" // project goal
+          ]
+      )
+      await kali.propose(9, "New Project Proposal", [projectManagement.address], [1], [payload])
+      console.debug("Proposal submitted on-chain");
+      await kali.vote(1, true)
+      await advanceTime(35)
+      await kali.processProposal(1)
+      /*
+        (
+          uint256 projectId,
+          address toContributorAccount,
+          uint256 mintAmount
+        )
+      */
+      // Set up payload for extension call
+      let mintRequest = ethers.utils.defaultAbiCoder.encode(
+        // Project struct encoding
+        [ "uint256", "address", "uint256"],
+        [
+          100, // project id of the just activated project
+          contributor.address, // address of contributor to receive DAO tokens
+          getBigNumber(55) // mint amount in whole token units
+        ]
+      )
+      await projectManagement
+        .connect(manager)
+        .callExtension(kali.address, [mintRequest]);
+        expect(await kali.balanceOf(contributor.address)).to.equal(getBigNumber(55))
+  })
+
+
+  it("Should allow unrestricted ETH crowdsale", async function () {
+    // Set up payload for extension proposal
+    let payload = ethers.utils.defaultAbiCoder.encode(
+        ["uint256", "uint8", "address", "uint32", "uint96", "uint96", "string"],
+            [
+                0,
+                2,
+                "0x0000000000000000000000000000000000000000",
+                1672174799,
+                getBigNumber(200),
+                getBigNumber(100),
+                "DOCS"
+            ]
+    )
+
+    await kali.propose(9, "TEST", [crowdsale.address], [1], [payload])
+    await kali.vote(1, true)
+    await advanceTime(35)
+    await kali.processProposal(1)
+    await crowdsale
+        .callExtension(kali.address, getBigNumber(50), {
+            value: getBigNumber(50),
+    })
+    await crowdsale
+        .connect(alice)
+        .callExtension(kali.address, getBigNumber(50), {
+            value: getBigNumber(50),
+    })
+    expect(await ethers.provider.getBalance(kali.address)).to.equal(
+        getBigNumber(100)
+    )
+    expect(await kali.balanceOf(proposer.address)).to.equal(getBigNumber(110))
+    expect(await kali.balanceOf(alice.address)).to.equal(getBigNumber(100))
+  })
 })
