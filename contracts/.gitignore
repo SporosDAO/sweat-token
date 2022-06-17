@@ -8,3 +8,6 @@ typechain
 cache
 artifacts
 build
+
+# nyc coverage output
+.nyc_output/
