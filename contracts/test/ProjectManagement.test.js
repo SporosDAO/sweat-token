@@ -36,10 +36,11 @@ describe("ProjectManger", function () {
     let proposer // signerA
     let alice // signerB
     let bob // signerC
-
+    let manager
 
     beforeEach(async () => {
       ;[proposer, alice, bob] = await ethers.getSigners()
+      manager = proposer;
 
       Kali = await ethers.getContractFactory("KaliDAO")
       kali = await Kali.deploy()
@@ -68,7 +69,6 @@ describe("ProjectManger", function () {
 
     it("Should allow activating a new valid project", async function () {
         let projectDeadline = await latestBlockTimestamp() + hours(72);
-        let manager = alice;
         // Set up payload for extension proposal
         let payload = ethers.utils.defaultAbiCoder.encode(
             // Project struct encoding
@@ -121,9 +121,32 @@ describe("ProjectManger", function () {
         expect(savedProject["goals"]).equal("Website facelift");
     })
 
+    it("Should revert a new project proposal without a manager", async function () {
+      let projectDeadline = await latestBlockTimestamp() + hours(72);
+      // Set up payload for extension proposal
+      let payload = ethers.utils.defaultAbiCoder.encode(
+          // Project struct encoding
+          [ "uint256", "address", "uint256", "uint256", "string"],
+          [
+            0, // project id == 0 means new project
+            alice.address, // invalid manager address
+            getBigNumber(200), // project budget
+            projectDeadline, // project deadline
+            "Website facelift" // project goal
+          ]
+      )
+      // propose via Kali extension
+      // a project that authorizes the manager to call the extension and request minting
+      await kali.propose(9, "New Project Proposal without a manager", [projectManagement.address], [1], [payload])
+      console.log("Proposal submitted")
+      await kali.vote(1, true)
+      await advanceTime(35)
+      await expect(kali.processProposal(1))
+        .to.be.revertedWith("ProjectManagerNoDaoTokens()")
+    })
+
     it("Should not allow modifying a non existent project", async function () {
       let projectDeadline = await latestBlockTimestamp() + hours(72);
-      let manager = alice;
       // Set up payload for extension proposal
       let payload = ethers.utils.defaultAbiCoder.encode(
           // Project struct encoding
@@ -147,7 +170,6 @@ describe("ProjectManger", function () {
 
     it("Should allow modifying an existing project", async function () {
       let projectDeadline = await latestBlockTimestamp() + hours(72);
-      let manager = alice;
       // Set up payload for extension proposal
       let payload = ethers.utils.defaultAbiCoder.encode(
           // Project struct encoding
@@ -198,7 +220,6 @@ describe("ProjectManger", function () {
 
     it("Should allow minting tokens by an authorized manager and an active project with sufficient budget.", async function () {
       let projectDeadline = await latestBlockTimestamp() + hours(72);
-      let manager = alice;
       let contributor = bob;
       // Set up payload for extension proposal
       let payload = ethers.utils.defaultAbiCoder.encode(

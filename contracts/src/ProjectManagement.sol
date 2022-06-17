@@ -3,6 +3,7 @@ pragma solidity >=0.8.14;
 
 import {IProjectManagement} from "./interfaces/IProjectManagement.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "hardhat/console.sol";
 
 /**
@@ -48,9 +49,10 @@ contract ProjectManagement is ReentrancyGuard {
 
     error ProjectNotEnoughBudget();
     error ProjectExpired();
-    error ProjectManagerRequired();
+    error ProjectManagerNoDaoTokens();
     error ProjectUnknown();
-    error Forbidden();
+    error ForbiddenDifferentDao();
+    error ForbiddenSenderNotManager();
 
     /// -----------------------------------------------------------------------
     /// Project Management Storage
@@ -98,8 +100,9 @@ contract ProjectManagement is ReentrancyGuard {
             (uint256, address, uint256, uint256, string)
         );
 
-        // A project must have a manager
-        if (manager == address(0)) revert ProjectManagerRequired();
+        // A project maanger must be a trusted DAO token holder
+        uint256 managerTokens = IERC20(msg.sender).balanceOf(manager);
+        if ( managerTokens == 0) revert ProjectManagerNoDaoTokens();
 
         Project memory projectUpdate;
         projectUpdate.id = id;
@@ -119,7 +122,7 @@ contract ProjectManagement is ReentrancyGuard {
             if (savedProject.id == 0) revert ProjectUnknown();
             // someone is trying to update a project that belongs to a different DAO address
             // only the DAO that created a project can modify it
-            if (savedProject.dao != msg.sender) revert Forbidden();
+            if (savedProject.dao != msg.sender) revert ForbiddenDifferentDao();
         }
         // if all safety checks passed, create/update project
         projects[projectUpdate.id] = projectUpdate;
@@ -158,7 +161,7 @@ contract ProjectManagement is ReentrancyGuard {
 
             if (project.id == 0) revert ProjectUnknown();
 
-            if (project.manager != msg.sender) revert Forbidden();
+            if (project.manager != msg.sender) revert ForbiddenSenderNotManager();
 
             if (project.budget < mintAmount) revert ProjectNotEnoughBudget();
 
