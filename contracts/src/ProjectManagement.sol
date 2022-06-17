@@ -49,7 +49,7 @@ contract ProjectManagement is ReentrancyGuard {
 
     error ProjectNotEnoughBudget();
     error ProjectExpired();
-    error ProjectManagerNoDaoTokens();
+    error ProjectManagerNeedsDaoTokens();
     error ProjectUnknown();
     error ForbiddenDifferentDao();
     error ForbiddenSenderNotManager();
@@ -88,7 +88,7 @@ contract ProjectManagement is ReentrancyGuard {
      */
     function setExtension(bytes calldata extensionData) external payable {
 
-        console.log("(EVM)---->: setExtension called");
+        console.log("(EVM)---->: setExtension called by ", msg.sender);
         (
             uint256 id,
             address manager,
@@ -102,7 +102,7 @@ contract ProjectManagement is ReentrancyGuard {
 
         // A project maanger must be a trusted DAO token holder
         uint256 managerTokens = IERC20(msg.sender).balanceOf(manager);
-        if ( managerTokens == 0) revert ProjectManagerNoDaoTokens();
+        if ( managerTokens == 0) revert ProjectManagerNeedsDaoTokens();
 
         Project memory projectUpdate;
         projectUpdate.id = id;

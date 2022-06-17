@@ -42,15 +42,16 @@ describe("ProjectManger", function () {
       ;[proposer, alice, bob] = await ethers.getSigners()
       manager = proposer;
 
+      console.log("proposer address", proposer.address)
+      console.log("alice address", alice.address)
+      console.log("bob address", bob.address)
+
+
       Kali = await ethers.getContractFactory("KaliDAO")
       kali = await Kali.deploy()
       await kali.deployed()
 
       console.log("KaliDAO address", kali.address)
-
-      ProjectManagement = await ethers.getContractFactory("ProjectManagement")
-      projectManagement = await ProjectManagement.deploy()
-      await projectManagement.deployed()
 
       // Instantiate KaliDAO
       await kali.init(
@@ -65,6 +66,9 @@ describe("ProjectManger", function () {
         [30, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       )
 
+      ProjectManagement = await ethers.getContractFactory("ProjectManagement")
+      projectManagement = await ProjectManagement.deploy()
+      await projectManagement.deployed()
     })
 
     it("Should allow activating a new valid project", async function () {
@@ -142,7 +146,7 @@ describe("ProjectManger", function () {
       await kali.vote(1, true)
       await advanceTime(35)
       await expect(kali.processProposal(1))
-        .to.be.revertedWith("ProjectManagerNoDaoTokens()")
+        .to.be.revertedWith("ProjectManagerNeedsDaoTokens()")
     })
 
     it("Should not allow modifying a non existent project", async function () {
@@ -216,6 +220,78 @@ describe("ProjectManger", function () {
         .to.emit(projectManagement, "ExtensionSet")
           .withArgs(kali.address, [100, kali.address, manager.address, getBigNumber(300), projectDeadline+hours(3), "Website facelift and blog setup"]);
 
+    })
+
+
+    it("Should not allow modifying an existing project that belongs to a different DAO", async function () {
+      let projectDeadline = await latestBlockTimestamp() + hours(72);
+      // Set up payload for extension proposal
+      let payload = ethers.utils.defaultAbiCoder.encode(
+          // Project struct encoding
+          [ "uint256", "address", "uint256", "uint256", "string"],
+          [
+            0, // project id == 0 means new project
+            manager.address, // project manager address
+            getBigNumber(200), // project budget
+            projectDeadline, // project deadline
+            "Website facelift" // project goal
+          ]
+      )
+      // propose via Kali extension
+      // a project that authorizes the manager to call the extension and request minting
+      await kali.propose(9, "New Project Proposal", [projectManagement.address], [1], [payload])
+      console.debug("First proposal submitted on-chain");
+      await kali.vote(1, true)
+      console.debug("First proposal approved");
+      await advanceTime(35)
+      await expect(kali.processProposal(1))
+        .to.emit(projectManagement, "ExtensionSet")
+          // expect project id to be set to 100, which is the next id value in the contract
+          .withArgs(kali.address, [100, kali.address, manager.address, getBigNumber(200), projectDeadline, "Website facelift"]);
+      // next update project parameters
+      payload = ethers.utils.defaultAbiCoder.encode(
+        // Project struct encoding
+        [ "uint256", "address", "uint256", "uint256", "string"],
+        [
+          100, // project id == 0 means new project
+          manager.address, // project manager address
+          getBigNumber(300), // project budget
+          projectDeadline + hours(3), // new project deadline
+          "Website facelift and blog setup" // updated project goals
+        ]
+      )
+
+      const kali2 = await Kali.deploy()
+      await kali2.deployed()
+
+      console.log("KaliDAO2 address", kali2.address)
+
+      // Instantiate KaliDAO
+      await kali2.init(
+        "KALI2",
+        "KALI2",
+        "DOCS",
+        false,
+        [],
+        [],
+        [alice.address],
+        [getBigNumber(10)],
+        [30, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      )
+
+      console.log("Submitting Second proposal with project update from kali2")
+      const propose = kali2.connect(alice).propose(9, "Update Project Proposal", [projectManagement.address], [1], [payload])
+      await expect(await propose)
+        .to.emit(kali2, "NewProposal")
+          .withArgs(alice.address, 1, 9, "Update Project Proposal", [projectManagement.address], [1], [payload]);
+      console.log("Submitted Second proposal for project update from kali2")
+      const savedProposal = await kali2.proposals(1)
+      console.log("Saved second proposal: ", { savedProposal })
+      await kali2.connect(alice).vote(1, true)
+      console.log("Voted for kali2 proposal")
+      await advanceTime(35)
+      await expect(kali2.connect(alice).processProposal(1))
+        .to.be.revertedWith("ProjectManagerNeedsDaoTokens()")
     })
 
     it("Should allow minting tokens by an authorized manager and an active project with sufficient budget.", async function () {
