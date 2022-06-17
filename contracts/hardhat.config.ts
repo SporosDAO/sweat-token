@@ -46,7 +46,7 @@ const config: HardhatUserConfig = {
         settings: {
           optimizer: {
             enabled: true,
-            runs: 1000
+            runs: 1000,
           },
         },
       },
@@ -77,12 +77,7 @@ const config: HardhatUserConfig = {
     // path to write temp compiled deps relative to ./src
     path: "tmp",
     // paths relative to './src/hardhat-dependency-compiler/
-    paths: [
-      "kalidao/contracts/KaliDAO.sol",
-      "kalidao/contracts/tokens/erc20/KaliERC20.sol",
-      "kalidao/contracts/access/KaliAccessManager.sol",
-      "kalidao/contracts/extensions/crowdsale/KaliDAOcrowdsale.sol",
-    ],
+    paths: ["kalidao/contracts/KaliDAO.sol"],
   },
   namedAccounts: {
     deployer: {

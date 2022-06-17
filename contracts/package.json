@@ -9,7 +9,7 @@
     "build": "hardhat compile",
     "test": "hardhat test",
     "coverage": "hardhat coverage && yarn coverage:check",
-    "coverage:check": "npx istanbul check-coverage ./coverage.json --statements 99 --branches 37 --functions 99 --lines 99",
+    "coverage:check": "npx istanbul check-coverage ./coverage.json --statements 100 --branches 62 --functions 100 --lines 100",
     "lint": "yarn prettier:solidity",
     "solhint": "solhint -f table src/**/*.sol",
     "prettier:solidity": "./node_modules/.bin/prettier --write src/**/*.sol",

@@ -34,7 +34,7 @@ contract ProjectManagement is ReentrancyGuard {
 
     event ExtensionSet(
         address indexed dao,
-        Project projects
+        Project project
     );
     event ExtensionCalled(
         address indexed dao,
@@ -78,11 +78,13 @@ contract ProjectManagement is ReentrancyGuard {
     /// -----------------------------------------------------------------------
 
     /**
+
       @notice A DAO calls this method to activate an approved Project Proposal.
 
       @param extensionData : Contains DAO approved projects parameters; either new or existing project updates. New projects must have id of 0.
+
      */
-    function setExtension(bytes calldata extensionData) external {
+    function setExtension(bytes calldata extensionData) external payable {
 
         console.log("(EVM)---->: setExtension called");
         (
@@ -105,19 +107,19 @@ contract ProjectManagement is ReentrancyGuard {
         projectUpdate.budget = budget;
         projectUpdate.deadline = deadline;
         projectUpdate.goals = goals;
+        projectUpdate.dao = msg.sender;
 
         if (projectUpdate.id == 0) {
             // id == 0 means new Project creation
             // assign next id and auto increment id counter
             projectUpdate.id = nextProjectId++;
-            projectUpdate.dao = msg.sender;
         } else {
             Project memory savedProject = projects[projectUpdate.id];
             // someone is trying to update a non-existent project
             if (savedProject.id == 0) revert ProjectUnknown();
             // someone is trying to update a project that belongs to a different DAO address
             // only the DAO that created a project can modify it
-            if (projectUpdate.dao != msg.sender || savedProject.dao != msg.sender) revert Forbidden();
+            if (savedProject.dao != msg.sender) revert Forbidden();
         }
         // if all safety checks passed, create/update project
         projects[projectUpdate.id] = projectUpdate;
@@ -137,6 +139,7 @@ contract ProjectManagement is ReentrancyGuard {
      */
     function callExtension(address dao, bytes[] calldata extensionData)
         external
+        payable
         nonReentrant
     {
         console.log("(EVM)---->: callExtension called. DAO address:", dao);
