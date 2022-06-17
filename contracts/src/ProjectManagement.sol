@@ -155,7 +155,7 @@ contract ProjectManagement is ReentrancyGuard {
                 uint256 mintAmount
             ) = abi.decode(extensionData[i], (uint256, address, uint256));
 
-            Project memory project = projects[projectId];
+            Project storage project = projects[projectId];
 
             console.log("(EVM)----> projectId, toContributorAccount, mintAmount:", projectId, toContributorAccount, mintAmount);
 
@@ -163,11 +163,13 @@ contract ProjectManagement is ReentrancyGuard {
 
             if (project.manager != msg.sender) revert ForbiddenSenderNotManager();
 
-            if (project.budget < mintAmount) revert ProjectNotEnoughBudget();
-
             if (project.deadline < block.timestamp) revert ProjectExpired();
 
+            if (project.budget < mintAmount) revert ProjectNotEnoughBudget();
+
             project.budget -= mintAmount;
+
+            console.log("(EVM)----> updated project budget:", project.budget);
 
             IProjectManagement(dao).mintShares(
                 toContributorAccount,

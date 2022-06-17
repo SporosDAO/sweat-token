@@ -337,4 +337,70 @@ describe("ProjectManger", function () {
         expect(await kali.balanceOf(contributor.address)).to.equal(getBigNumber(55))
   })
 
+  it("Should not allow spending over budget.", async function () {
+    let projectDeadline = await latestBlockTimestamp() + hours(72);
+    let contributor = bob;
+    // Set up payload for extension proposal
+    let payload = ethers.utils.defaultAbiCoder.encode(
+        // Project struct encoding
+        [ "uint256", "address", "uint256", "uint256", "string"],
+        [
+          0, // project id == 0 means new project
+          manager.address, // project manager address
+          getBigNumber(200), // project budget
+          projectDeadline, // project deadline
+          "Website facelift" // project goal
+        ]
+    )
+    await kali.propose(9, "New Project Proposal", [projectManagement.address], [1], [payload])
+    console.debug("Proposal submitted on-chain");
+    await kali.vote(1, true)
+    await advanceTime(35)
+    await kali.processProposal(1)
+    /*
+      (
+        uint256 projectId,
+        address toContributorAccount,
+        uint256 mintAmount
+      )
+    */
+    // Set up payload for extension call
+    let mintRequest = ethers.utils.defaultAbiCoder.encode(
+      // Project struct encoding
+      [ "uint256", "address", "uint256"],
+      [
+        100, // project id of the just activated project
+        contributor.address, // address of contributor to receive DAO tokens
+        getBigNumber(55) // mint amount in whole token units
+      ]
+    )
+    await projectManagement
+      .connect(manager)
+      .callExtension(kali.address, [mintRequest]);
+      expect(await kali.balanceOf(contributor.address)).to.equal(getBigNumber(55))
+    mintRequest = ethers.utils.defaultAbiCoder.encode(
+    // Project struct encoding
+      [ "uint256", "address", "uint256"],
+      [
+        100, // project id of the just activated project
+        contributor.address, // address of contributor to receive DAO tokens
+        getBigNumber(30) // mint amount in whole token units
+      ]
+    )
+    await projectManagement
+    .connect(manager)
+    .callExtension(kali.address, [mintRequest]);
+    expect(await kali.balanceOf(contributor.address)).to.equal(getBigNumber(85))
+    mintRequest = ethers.utils.defaultAbiCoder.encode(
+      // Project struct encoding
+      [ "uint256", "address", "uint256"],
+      [
+        100, // project id of the just activated project
+        contributor.address, // address of contributor to receive DAO tokens
+        getBigNumber(120) // try to mint an amount that exceeds the budget
+      ]
+    )
+    await expect(projectManagement.connect(manager).callExtension(kali.address, [mintRequest]))
+      .to.be.revertedWith("ProjectNotEnoughBudget()")
+  })
 })
