@@ -20,3 +20,6 @@ jobs:
           yarn install
           yarn build
           yarn test
+      - name: Run coverage report and checks
+        run: |
+          yarn coverage

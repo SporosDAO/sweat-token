@@ -9,6 +9,7 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 import "hardhat-watcher";
 import "hardhat-deploy";
 import "hardhat-dependency-compiler";
+import "solidity-coverage";
 dotenv.config();
 
 // This is a sample Hardhat task. To learn how to create your own go to
@@ -45,7 +46,7 @@ const config: HardhatUserConfig = {
         settings: {
           optimizer: {
             enabled: true,
-            runs: 1000,
+            runs: 1000
           },
         },
       },
