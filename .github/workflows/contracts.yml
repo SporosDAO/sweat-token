@@ -15,14 +15,14 @@ jobs:
         with:
           path: contracts
       - name: Run contracts tests
-        run: >
-          ls -al
-          set -evx
-          cd contracts
-          pwd
-          ls -al
-          yarn install
-          yarn build --verbose
+        run: |
+          ls -al && \
+          set -evx && \
+          cd contracts && \
+          pwd && \
+          ls -al && \
+          yarn install && \
+          yarn build --verbose && \
           yarn test --verbose
       - name: Run coverage report and checks
         run: |
