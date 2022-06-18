@@ -12,11 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          path: frontend
       - name: Run frontend tests
         run: |
-          ls -al
           yarn install
           yarn build
           yarn test
+        working-directory: frontend

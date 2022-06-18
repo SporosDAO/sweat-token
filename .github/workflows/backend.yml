@@ -12,11 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          path: backend
       - name: Run backend tests
         run: |
-          cd backend
           yarn install
           yarn build
           yarn test
+        working-directory: ./backend

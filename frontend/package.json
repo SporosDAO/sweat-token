@@ -39,7 +39,7 @@
     "apigen": "openapi-generator-cli generate -i http://localhost:3001/api/docs-json -g typescript-axios -o src/api/openapi",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --watchAll=false",
+    "test": "react-scripts test --watchAll=false ",
     "eject": "react-scripts eject",
     "lint": "eslint './src/**/*.ts?'",
     "prepare": "cd ../ && husky install ./frontend/.husky"
