@@ -19,8 +19,10 @@ jobs:
           ls -al
           set -evx
           cd contracts
+          pwd
+          ls -al
           yarn install
-          # yarn build --verbose
+          yarn build --verbose
           yarn test --verbose
       - name: Run coverage report and checks
         run: |
