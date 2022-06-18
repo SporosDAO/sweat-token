@@ -15,7 +15,7 @@ jobs:
         with:
           path: contracts
       - name: Run contracts tests
-        run: |
+        run: >
           ls -al
           set -evx
           cd contracts
