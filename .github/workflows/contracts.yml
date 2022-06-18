@@ -17,6 +17,8 @@ jobs:
       - name: Run contracts tests
         run: |
           ls -al
+          set -evx
+          cd contracts
           yarn install
           yarn build
           yarn test
