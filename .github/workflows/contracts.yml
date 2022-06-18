@@ -20,8 +20,8 @@ jobs:
           set -evx
           cd contracts
           yarn install
-          yarn build --verbose
-          yarn test
+          # yarn build --verbose
+          yarn test --verbose
       - name: Run coverage report and checks
         run: |
           yarn coverage
