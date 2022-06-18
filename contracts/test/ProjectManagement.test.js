@@ -142,7 +142,7 @@ describe("ProjectManagement", function () {
           ]
       )
       // propose via Kali extension
-      // a project that authorizes the manager to call the extension and request minting
+      // a project that authorizes the manager to call the extension and request  minting
       await kali.propose(9, "New Project Proposal without a manager", [projectManagement.address], [1], [payload])
       console.log("Proposal submitted")
       await kali.vote(1, true)
