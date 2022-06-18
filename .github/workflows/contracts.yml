@@ -16,7 +16,7 @@ jobs:
           path: contracts
       - name: Run contracts tests
         run: |
-          cd contracts
+          ls -al
           yarn install
           yarn build
           yarn test
