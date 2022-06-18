@@ -14,14 +14,8 @@ jobs:
       - uses: actions/checkout@v3
       - name: Run contracts tests
         run: |
-          ls -al && \
-          set -evx && \
-          cd contracts && \
-          pwd && \
-          ls -al && \
-          yarn install && \
-          yarn build --verbose && \
-          yarn test --verbose
-      - name: Run coverage report and checks
-        run: |
+          yarn install
+          yarn build
+          yarn test
           yarn coverage
+        working-directory: ./contracts
