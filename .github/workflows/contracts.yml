@@ -12,8 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          path: contracts
       - name: Run contracts tests
         run: |
           ls -al && \
