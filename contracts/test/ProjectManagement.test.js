@@ -211,10 +211,10 @@ describe("ProjectManagement", function () {
           "Website facelift and blog setup" // updated project goals
         ]
       )
-      let propose = kali.propose(9, "Update Project Proposal", [projectManagement.address], [1], [payload])
+      let propose = kali.propose(9, "Update Project Proposal", [projectManagement.address], [0], [payload])
       await expect(await propose)
         .to.emit(kali, "NewProposal")
-          .withArgs(proposer.address, 2, 9, "Update Project Proposal", [projectManagement.address], [1], [payload]);
+          .withArgs(proposer.address, 2, 9, "Update Project Proposal", [projectManagement.address], [0], [payload]);
       console.log("Submitted proposal for project update")
       await kali.vote(2, true)
       await advanceTime(35)
@@ -327,10 +327,10 @@ describe("ProjectManagement", function () {
           "Next website facelift and blog setup" // updated project goals
         ]
       )
-      propose = kali2.connect(alice).propose(9, "Update Project Proposal", [projectManagement.address], [1], [payload])
+      propose = kali2.connect(alice).propose(9, "Update Project Proposal", [projectManagement.address], [0], [payload])
       await expect(await propose)
         .to.emit(kali2, "NewProposal")
-          .withArgs(alice.address, 3, 9, "Update Project Proposal", [projectManagement.address], [1], [payload]);
+          .withArgs(alice.address, 3, 9, "Update Project Proposal", [projectManagement.address], [0git ], [payload]);
       console.log("Submitted Second proposal for project update from kali2")
       savedProposal = await kali2.proposals(3)
       console.log("Saved second proposal: ", { savedProposal })
