@@ -330,7 +330,7 @@ describe("ProjectManagement", function () {
       propose = kali2.connect(alice).propose(9, "Update Project Proposal", [projectManagement.address], [0], [payload])
       await expect(await propose)
         .to.emit(kali2, "NewProposal")
-          .withArgs(alice.address, 3, 9, "Update Project Proposal", [projectManagement.address], [0git ], [payload]);
+          .withArgs(alice.address, 3, 9, "Update Project Proposal", [projectManagement.address], [0], [payload]);
       console.log("Submitted Second proposal for project update from kali2")
       savedProposal = await kali2.proposals(3)
       console.log("Saved second proposal: ", { savedProposal })
