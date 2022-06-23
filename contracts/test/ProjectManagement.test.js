@@ -1,34 +1,14 @@
 
-const { BigNumber } = require("ethers")
 const chai = require("chai")
 const { expect } = require("chai")
-
-const wethAddress = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+const { getBigNumber, latestBlockTimestamp, advanceTime, hours } = require("./helpers.js")
 
 chai.should()
-
-// Defaults to e18 using amount * 10^18
-function getBigNumber(amount, decimals = 18) {
-  return BigNumber.from(amount).mul(BigNumber.from(10).pow(decimals))
-}
-
-async function advanceTime(time) {
-    await ethers.provider.send("evm_increaseTime", [time])
-}
-
-async function latestBlockTimestamp() {
-    const blocktime = await ethers.provider.send('eth_getBlockByNumber', ['latest', false]);
-    return blocktime.timestamp;
-}
-
-function hours(n) {
-    return n * 60 * 60.
-}
 
 // https://github.com/kalidao/kali-contracts/blob/c3b25ca762f083dfe88096a7a512b33607c0ac57/contracts/KaliDAO.sol#L111
 const PROPOSAL_TYPE_EXTENSION = 9;
 
-describe("ProjectManagement", function () {
+describe("ProjectManagement test cases", function () {
     let Kali // KaliDAO contract
     let kali // KaliDAO contract instance
     let ProjectManagement // SporosDAO Project Manager contract
@@ -40,7 +20,7 @@ describe("ProjectManagement", function () {
     let contributor
 
     beforeEach(async () => {
-      ;[proposer, alice, bob] = await ethers.getSigners()
+      [proposer, alice, bob] = await ethers.getSigners()
       manager = proposer;
       contributor = bob;
 
@@ -530,6 +510,5 @@ describe("ProjectManagement", function () {
       .to.be.revertedWith("ForbiddenSenderNotManager()")
     expect(await kali.balanceOf(contributor.address)).to.equal(getBigNumber(0))
   })
-
 
 })

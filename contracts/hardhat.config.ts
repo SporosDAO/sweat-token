@@ -10,6 +10,8 @@ import "hardhat-watcher";
 import "hardhat-deploy";
 import "hardhat-dependency-compiler";
 import "solidity-coverage";
+import "xdeployer";
+
 dotenv.config();
 
 // This is a sample Hardhat task. To learn how to create your own go to
@@ -92,6 +94,16 @@ const config: HardhatUserConfig = {
     carol: {
       default: 3,
     },
+  },
+  xdeploy: {
+    contract: "ProjectManagement",
+    // constructorArgsPath: "./deploy-args.ts",
+    salt: "SporosDAO",
+    signer:
+      "0xe1904817e407877ea09135933f39121aa68ed0d9729d301084c544204171d100",
+    networks: ["hardhat"],
+    rpcUrls: ["hardhat"],
+    gasLimit: 1.2 * 10 ** 6,
   },
 };
 
