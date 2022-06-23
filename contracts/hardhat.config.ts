@@ -103,7 +103,7 @@ const config: HardhatUserConfig = {
       "0xe1904817e407877ea09135933f39121aa68ed0d9729d301084c544204171d100",
     networks: ["hardhat"],
     rpcUrls: ["hardhat"],
-    gasLimit: 1.2 * 10 ** 6,
+    gasLimit: 1.2 * 10 ** 7,
   },
 };
 

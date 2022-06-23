@@ -18,6 +18,7 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
   let bob; // signerC
   let manager;
   let contributor;
+  let create2Deployer;
 
   beforeEach(async () => {
     [proposer, alice, bob] = await ethers.getSigners();
@@ -47,18 +48,19 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
       [30, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     );
 
+    // deploy create2deploy on the local hardhat testnet
+    let hhcreate2Deployer = await hre.ethers.getContractFactory(
+      "Create2DeployerLocal"
+    );
+    create2Deployer = await hhcreate2Deployer.deploy();
+
   });
 
-  it.only("Should deploy ProjectManagement contract via create2deploy.", async function () {
-    // deploy create2deploy on the local hardhat testnet
+  it("Should deploy ProjectManagement contract via create2deploy.", async function () {
     const contract = await hre.ethers.getContractFactory(
       hre.config.xdeploy.contract
     );
     const initcode = contract.getDeployTransaction();
-    let hhcreate2Deployer = await hre.ethers.getContractFactory(
-      "Create2DeployerLocal"
-    );
-    let create2Deployer = await hhcreate2Deployer.deploy();
     computedContractAddress = await create2Deployer.computeAddress(
       hre.ethers.utils.id(hre.config.xdeploy.salt),
       hre.ethers.utils.keccak256(initcode.data)
@@ -80,7 +82,7 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
       AMOUNT,
       hre.ethers.utils.id(hre.config.xdeploy.salt),
       initcode.data,
-      { gasLimit: hre.config.xdeploy.gasLimit }
+      { gasLimit: hre.config.xdeploy.gasLimit * 1000 }
     );
     createReceipt = await createReceipt.wait();
     // ProposalType.CALL = 2
