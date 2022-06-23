@@ -13,8 +13,6 @@ const PROPOSAL_TYPE_EXTENSION = 9;
 describe("Deploy a new smart contract with counterfactual multi chain address via KaliDAO.ProposalType.CALL and CREATE2", function () {
   let Kali; // KaliDAO contract
   let kali; // KaliDAO contract instance
-  let ProjectManagement; // SporosDAO Project Manager contract
-  let projectManagement; // SporosDAO Project Manager contract instance
   let proposer; // signerA
   let alice; // signerB
   let bob; // signerC
@@ -51,7 +49,7 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
 
   });
 
-  it("Should deploy ProjectManagement contract via create2deploy.", async function () {
+  it.only("Should deploy ProjectManagement contract via create2deploy.", async function () {
     // deploy create2deploy on the local hardhat testnet
     const contract = await hre.ethers.getContractFactory(
       hre.config.xdeploy.contract
