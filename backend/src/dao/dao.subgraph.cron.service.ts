@@ -14,7 +14,8 @@ export class DaoSubgraphCronService implements OnModuleInit {
 
   private readonly subgraphUrl: string
   private readonly daoPublicKey: string
-  private readonly discordWebhook: string
+  private readonly discordWebhookUrl: string
+  private readonly discordWebhookName: string
 
   constructor(
     private readonly config: ConfigService,
@@ -22,7 +23,8 @@ export class DaoSubgraphCronService implements OnModuleInit {
   ) {
     this.subgraphUrl = this.config.get('SUBGRAPH_KALI_URL')
     this.daoPublicKey = this.config.get('SUBGRAPH_DAOID')
-    this.discordWebhook = this.config.get('SUBGRAPH_WEBHOOK')
+    this.discordWebhookUrl = this.config.get('SUBGRAPH_WEBHOOK_URL')
+    this.discordWebhookName = this.config.get('SUBGRAPH_WEBHOOK_NAME')
   }
 
   @Cron('0 0 6 * * *')
@@ -147,12 +149,15 @@ export class DaoSubgraphCronService implements OnModuleInit {
   async sendNotifiations(): Promise<void> {
     const proposals = await this.findUnsent()
     this.logger.debug(`Sending ${proposals.length} notifications`)
-    const Hook = new webhook.Webhook(this.discordWebhook)
+    const Hook = new webhook.Webhook(this.discordWebhookUrl)
     for (let i = 0; i < proposals.length; i++) {
       const proposal = proposals[i]
-      const msg = new webhook.MessageBuilder().setName('sporos-bot').setText(proposal.message)
-      // Hook.send(msg)
-      this.logger.log(`Send message: ${proposal.message}`)
+      Hook.info(this.discordWebhookName, proposal.message)
+      proposal.sent = new Date()
+      await proposal.save()
+      this.logger.debug(`Sent ${proposal.id} notification`)
+      // const msg = new webhook.MessageBuilder().setName('sporos-bot').setText(proposal.message)
+      // this.logger.log(`Send message: ${proposal.message}`)
     }
   }
 }
