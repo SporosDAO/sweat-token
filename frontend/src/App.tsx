@@ -19,10 +19,10 @@ import DaoCreate from './pages/DaoCreate'
 import Registration from './pages/Legal/registration'
 
 const mdTheme = createTheme({
-    palette: {
-      mode: 'dark',
-    },
-  });
+  palette: {
+    mode: 'dark'
+  }
+})
 
 function App() {
   return (
