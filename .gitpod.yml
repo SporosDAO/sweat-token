@@ -7,7 +7,6 @@ tasks:
       # builds the images from the dockerfiles
       docker-compose build
       gp sync-done build
-    command: |
       bash .gitpod.sh
   - name: Shell
     command: bash

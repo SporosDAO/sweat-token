@@ -3,7 +3,7 @@
   "type": "module",
   "license": "Apache-2.0",
   "scripts": {
-    "test": "node src/*",
+    "test": "node src/*.js",
     "covreport": "nyc report --reporter=text",
     "covcheck": "nyc check-coverage --lines 40 --functions 40 --branches 40",
     "coverage": "yarn covreport && yarn covcheck"
