@@ -72,6 +72,7 @@ export default function DaoCreate() {
                   required
                   fullWidth
                   onChange={onChange}
+                  data-test="Name"
                 />
                 <TextField
                   multiline
