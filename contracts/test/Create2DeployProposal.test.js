@@ -82,7 +82,7 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
       AMOUNT,
       hre.ethers.utils.id(hre.config.xdeploy.salt),
       initcode.data,
-      { gasLimit: hre.config.xdeploy.gasLimit * 1000 }
+      { gasLimit: hre.config.xdeploy.gasLimit }
     );
     createReceipt = await createReceipt.wait();
     // ProposalType.CALL = 2
