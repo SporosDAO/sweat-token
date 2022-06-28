@@ -27,6 +27,7 @@ export const menu: MenuItem[] = [
     icon: DashboardIcon,
     link: 'dashboard'
   },
+  /**
   {
     label: 'Legal',
     icon: GavelIcon,
@@ -42,6 +43,7 @@ export const menu: MenuItem[] = [
     icon: PieChartIcon,
     link: 'equity'
   },
+  */
   {
     label: 'Projects',
     icon: FactoryIcon,
@@ -86,9 +88,6 @@ export const MainListItems = () => {
 export const SecondaryListItems = () => {
   return (
     <React.Fragment>
-      <ListSubheader component="div" inset>
-        Support
-      </ListSubheader>
       <ListItemButton onClick={() => (document.location = OWNER.docsUrl)}>
         <ListItemIcon>
           <MenuBookIcon />
