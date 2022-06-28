@@ -1,3 +1,15 @@
+# Basic CLI
+
+```shell
+yarn clean
+yarn build
+yarn lint
+yarn test
+yarn test --trace
+yarn test --fulltrace
+yarn coverage
+```
+
 # Advanced Sample Hardhat Project
 
 This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.

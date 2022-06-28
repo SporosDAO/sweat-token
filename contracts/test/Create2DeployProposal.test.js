@@ -173,7 +173,9 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
     await kali.propose(2, "Proposal to deploy ProjectManagement contract via create2deploy.", [kali.address], [1], [deployProposalPayload])
     console.debug("CALL proposal for ProjectManagement deployment submitted on-chain");
     // approve proposal
-    await kali.vote(1, true)
+    await expect(await kali.vote(1, true))
+      .to.emit(kali, "VoteCast")
+        .withArgs(proposer.address, 1, true)
     await advanceTime(35)
     await expect(await await kali.processProposal(1, { gasLimit: hre.config.xdeploy.gasLimit }))
       .to.emit(kali, "ProposalProcessed")
