@@ -16,13 +16,10 @@ vscode:
   extensions:
     - ms-vscode.vscode-typescript-tslint-plugin
     - bungcip.better-toml
-
     - esbenp.prettier-vscode
-
     - juanblanco.solidity
 
 ports:
-
   # allow front end to access backend api
   # https://www.gitpod.io/docs/config-ports#cors
   - port: 3001
