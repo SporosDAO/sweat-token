@@ -97,9 +97,6 @@ export const flow = {
             "selectors": [
                 [
                     "aria/SporosDAO"
-                ],
-                [
-                    "#root > div > main > div.MuiContainer-root.MuiContainer-maxWidthLg.css-1oifrf6 > div.MuiGrid-root.MuiGrid-container.css-1d3bbye > div:nth-child(2) > div > div:nth-child(2) > ul > li:nth-child(1) > a"
                 ]
             ],
             "offsetX": 66,
@@ -109,7 +106,7 @@ export const flow = {
             "type": "click",
             "selectors": [
                 [
-                    "#root > div > div > div > nav > div.MuiListItemButton-root.MuiListItemButton-gutters.Mui-selected.MuiButtonBase-root.css-1uwabd6 > div.MuiListItemText-root.css-1tsvksn > span"
+                    "aria/Dashboard"
                 ]
             ],
             "target": "main",
@@ -121,9 +118,6 @@ export const flow = {
             "selectors": [
                 [
                     "aria/Legal"
-                ],
-                [
-                    "#root > div > div > div > nav > div:nth-child(2)"
                 ]
             ],
             "target": "main",
@@ -134,32 +128,7 @@ export const flow = {
             "type": "click",
             "selectors": [
                 [
-                    "#root > div > main > div.MuiContainer-root.MuiContainer-maxWidthLg.css-1oifrf6 > div > div > div > div > div:nth-child(1)"
-                ]
-            ],
-            "target": "main",
-            "offsetX": 48,
-            "offsetY": 9.1875
-        },
-        {
-            "type": "click",
-            "selectors": [
-                [
-                    "#root > div > div > div > nav > div.MuiListItemButton-root.MuiListItemButton-gutters.Mui-selected.MuiButtonBase-root.css-1uwabd6 > div.MuiListItemText-root.css-1tsvksn > span"
-                ]
-            ],
-            "target": "main",
-            "offsetX": 47,
-            "offsetY": 10
-        },
-        {
-            "type": "click",
-            "selectors": [
-                [
                     "aria/Taxes"
-                ],
-                [
-                    "#root > div > div > div > nav > div:nth-child(3)"
                 ]
             ],
             "target": "main",
@@ -170,7 +139,7 @@ export const flow = {
             "type": "click",
             "selectors": [
                 [
-                    "#root > div > div > div > nav > div:nth-child(4) > div.MuiListItemText-root.css-1tsvksn > span"
+                    "aria/Equity"
                 ]
             ],
             "target": "main",
@@ -180,6 +149,7 @@ export const flow = {
     ],
     "timeout": 30000
 };
+
 
 export async function run(extension) {
   const runner = await createRunner(flow, extension);
