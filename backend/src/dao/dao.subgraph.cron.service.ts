@@ -29,12 +29,19 @@ export class DaoSubgraphCronService implements OnModuleInit {
 
   @Cron('0 0 6 * * *')
   async handleCron() {
+    if (!this.discordWebhookUrl) {
+      return
+    }
     this.logger.debug('Running subgraph cron check')
-    this.checkProposals()
-    this.sendNotifiations()
+    await this.checkProposals()
+    await this.sendNotifiations()
   }
 
   async onModuleInit(): Promise<void> {
+    if (!this.discordWebhookUrl) {
+      this.logger.log(`Discord webhook url not set, cron disabled`)
+      return
+    }
     await this.handleCron()
   }
 
@@ -141,7 +148,7 @@ export class DaoSubgraphCronService implements OnModuleInit {
           deadline: new Date(+p.creationTime * 1000 + +p.dao.votingPeriod * 1000),
           quorum: +p.dao.quorum,
         })
-        return proposal.save()
+        return await proposal.save()
       }),
     )
   }
@@ -156,8 +163,7 @@ export class DaoSubgraphCronService implements OnModuleInit {
       proposal.sent = new Date()
       await proposal.save()
       this.logger.debug(`Sent ${proposal.id} notification`)
-      // const msg = new webhook.MessageBuilder().setName('sporos-bot').setText(proposal.message)
-      // this.logger.log(`Send message: ${proposal.message}`)
+      const msg = new webhook.MessageBuilder().setName('sporos-bot').setText(proposal.message)
     }
   }
 }
