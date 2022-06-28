@@ -11,6 +11,7 @@ import "hardhat-deploy";
 import "hardhat-dependency-compiler";
 import "solidity-coverage";
 import "xdeployer";
+require("hardhat-tracer");
 
 dotenv.config();
 
