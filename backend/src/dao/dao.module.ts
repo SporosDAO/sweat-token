@@ -11,21 +11,21 @@ import { ProjectModule } from 'src/project/project.module'
 import { TaskController } from './controller/task.controller'
 import { ProjectController } from './controller/project.controller'
 import { ScheduleModule } from '@nestjs/schedule'
-import { DaoSubgraphCronService } from './dao.subgraph.cron.service'
-import { DaoProposalNotification, DaoProposalNotificationSchema } from './dao.subgraph.schema'
+import { DaoProposalCronService } from './proposal/dao.proposal.cron.service'
+import { DaoProposal, DaoProposalSchema } from './proposal/dao.proposal.schema'
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Dao.name, schema: DaoSchema },
-      { name: DaoProposalNotification.name, schema: DaoProposalNotificationSchema },
+      { name: DaoProposal.name, schema: DaoProposalSchema },
     ]),
     ScheduleModule.forRoot(),
     MemberModule,
     TaskModule,
     ProjectModule,
   ],
-  providers: [DaoService, ProjectEventListenerService, DaoSubgraphCronService],
+  providers: [DaoService, ProjectEventListenerService, DaoProposalCronService],
   controllers: [DaoController, MemberController, TaskController, ProjectController],
   exports: [DaoService],
 })

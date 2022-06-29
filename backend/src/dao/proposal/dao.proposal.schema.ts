@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
 
-export type DaoProposalNotificationDocument = DaoProposalNotification & Document
+export type DaoProposalDocument = DaoProposal & Document
 
 @Schema()
-export class DaoProposalNotification {
+export class DaoProposal {
   @Prop({
     index: true,
     unique: true,
@@ -42,7 +42,7 @@ export class DaoProposalNotification {
   @Prop({
     required: false,
   })
-  sent?: Date
+  notified?: Date
 }
 
-export const DaoProposalNotificationSchema = SchemaFactory.createForClass(DaoProposalNotification)
+export const DaoProposalSchema = SchemaFactory.createForClass(DaoProposal)

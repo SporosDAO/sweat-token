@@ -5,12 +5,12 @@ import { Cron } from '@nestjs/schedule'
 import axios from 'axios'
 import { Model } from 'mongoose'
 import * as webhook from 'webhook-discord'
-import { SubgraphProposal, SubgraphResponse } from './dao.subgraph.dto'
-import { DaoProposalNotification, DaoProposalNotificationDocument } from './dao.subgraph.schema'
+import { SubgraphProposal, SubgraphResponse } from './dao.proposal.dto'
+import { DaoProposal, DaoProposalDocument } from './dao.proposal.schema'
 
 @Injectable()
-export class DaoSubgraphCronService implements OnModuleInit {
-  private readonly logger = new Logger(DaoSubgraphCronService.name)
+export class DaoProposalCronService implements OnModuleInit {
+  private readonly logger = new Logger(DaoProposalCronService.name)
 
   private readonly subgraphUrl: string
   private readonly daoPublicKey: string
@@ -19,7 +19,7 @@ export class DaoSubgraphCronService implements OnModuleInit {
 
   constructor(
     private readonly config: ConfigService,
-    @InjectModel(DaoProposalNotification.name) private notificationModel: Model<DaoProposalNotificationDocument>,
+    @InjectModel(DaoProposal.name) private notificationModel: Model<DaoProposalDocument>,
   ) {
     this.subgraphUrl = this.config.get('SUBGRAPH_KALI_URL')
     this.daoPublicKey = this.config.get('SUBGRAPH_DAOID')
@@ -114,7 +114,7 @@ export class DaoSubgraphCronService implements OnModuleInit {
     return null
   }
 
-  async findById(proposalsId: string[]): Promise<DaoProposalNotificationDocument[]> {
+  async findById(proposalsId: string[]): Promise<DaoProposalDocument[]> {
     return this.notificationModel
       .find({
         proposalId: {
@@ -124,15 +124,15 @@ export class DaoSubgraphCronService implements OnModuleInit {
       .exec()
   }
 
-  async findUnsent(): Promise<DaoProposalNotificationDocument[]> {
+  async findUnsent(): Promise<DaoProposalDocument[]> {
     return this.notificationModel
       .find({
-        sent: { $exists: false },
+        notified: { $exists: false },
       })
       .exec()
   }
 
-  async update(proposals: SubgraphProposal[]): Promise<DaoProposalNotificationDocument[]> {
+  async update(proposals: SubgraphProposal[]): Promise<DaoProposalDocument[]> {
     const proposalsId = proposals.map((p) => p.id)
     const savedProposals = (await this.findById(proposalsId)).map((p) => p.proposalId)
 
@@ -160,10 +160,9 @@ export class DaoSubgraphCronService implements OnModuleInit {
     for (let i = 0; i < proposals.length; i++) {
       const proposal = proposals[i]
       Hook.info(this.discordWebhookName, proposal.message)
-      proposal.sent = new Date()
+      proposal.notified = new Date()
       await proposal.save()
       this.logger.debug(`Sent ${proposal.id} notification`)
-      const msg = new webhook.MessageBuilder().setName('sporos-bot').setText(proposal.message)
     }
   }
 }
