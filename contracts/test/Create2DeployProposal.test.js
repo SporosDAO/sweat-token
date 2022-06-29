@@ -128,7 +128,7 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
     expect(savedProject["goals"]).equal("Website facelift");
   });
 
-  it.only("Should deploy ProjectManagement contract via proposal.", async function () {
+  it("Should deploy ProjectManagement contract via proposal.", async function () {
     const contract = await hre.ethers.getContractFactory(
       hre.config.xdeploy.contract
     );
