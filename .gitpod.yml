@@ -17,7 +17,6 @@ tasks:
       # sudo chown -hR gitpod.gitpod contracts/node_modules/
       cd contracts && yarn install && cd -
       gp sync-done build
-    command: |
       bash .gitpod.sh
   - name: Shell
     command: |
@@ -29,13 +28,10 @@ vscode:
   extensions:
     - ms-vscode.vscode-typescript-tslint-plugin
     - bungcip.better-toml
-
     - esbenp.prettier-vscode
-
     - juanblanco.solidity
 
 ports:
-
   # allow front end to access backend api
   # https://www.gitpod.io/docs/config-ports#cors
   - port: 3001
