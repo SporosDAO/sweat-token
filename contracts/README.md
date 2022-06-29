@@ -1,3 +1,26 @@
+# Repo Structure
+
+This repo containst SporosDAO smart contracts and their tests.
+Tests are executed in Hardhat environment.
+
+```ml
+ ├─ src - "SporosDAO smart contracts source code"
+ │  ├─ ProjectManagement
+ │─ test - "test cases for the smart contracts"
+```
+# Smart Contracts
+
+## Project Management
+
+`ProjectManagement.sol` provides DAOs with the ability to delegate project management to invidivudals within certain constraints: goals, budget, deadline.
+
+The contract is currently live on:
+| Network | Address | URL |
+----------|---------|-----|
+| Rinkeby | `0x18e83C08C8Ba92FdFcD02c9E644DEa54cae365A4` | https://rinkeby.etherscan.io/address/0x18e83C08C8Ba92FdFcD02c9E644DEa54cae365A4#code |
+---------------------------
+
+More EVM deployments will be added in the future as the contract is battle tested.
 # Basic CLI
 
 ```shell
@@ -10,7 +33,7 @@ yarn test --fulltrace
 yarn coverage
 ```
 
-# Advanced Sample Hardhat Project
+# Advanced Hardhat CLI
 
 This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
 
