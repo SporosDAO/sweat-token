@@ -163,10 +163,10 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
     // prepare ABI for Create2Deploy.deploy
     // https://github.com/pcaversaccio/xdeployer/blob/8b79b9ac5021ccfce7d1589947669d169af3d666/src/contracts/Create2Deployer.sol#L34
     let ABI = [
-      "function deploy( uint256 value, bytes32 salt, bytes memory code)"
+      "function deploy123( uint256 value, bytes32 salt, bytes memory code)"
     ];
     let iface = new ethers.utils.Interface(ABI);
-    const deployProposalPayload = iface.encodeFunctionData("deploy", [ AMOUNT, hre.ethers.utils.id(hre.config.xdeploy.salt), initcode.data ])
+    const deployProposalPayload = iface.encodeFunctionData("deploy123", [ AMOUNT, hre.ethers.utils.id(hre.config.xdeploy.salt), initcode.data ])
     // ProposalType.CALL = 2
     // https://github.com/kalidao/kali-contracts/blob/c3b25ca762f083dfe88096a7a512b33607c0ac57/contracts/KaliDAO.sol#L104
     console.log(`Processing CALL proposal to create2Deployer.address: ${ create2Deployer.address}`)
