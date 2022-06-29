@@ -18,7 +18,11 @@ import Taxes from './pages/Taxes'
 import DaoCreate from './pages/DaoCreate'
 import Registration from './pages/Legal/registration'
 
-const mdTheme = createTheme()
+const mdTheme = createTheme({
+  palette: {
+    mode: 'dark'
+  }
+})
 
 function App() {
   return (
