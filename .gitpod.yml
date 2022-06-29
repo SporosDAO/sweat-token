@@ -20,7 +20,7 @@ tasks:
       bash .gitpod.sh
   - name: Shell
     command: |
-      gp sync-wait build
+      gp sync-await build
       bash
     openMode: split-right
 
