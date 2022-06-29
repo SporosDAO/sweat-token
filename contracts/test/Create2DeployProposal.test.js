@@ -152,6 +152,7 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
     ];
     let iface = new ethers.utils.Interface(ABI);
     const deployProposalPayload = iface.encodeFunctionData("deploy", [ AMOUNT, hre.ethers.utils.id(hre.config.xdeploy.salt), initcode.data ])
+    console.log('ABI payload for ProposalType.CALL to deploy ProjectManagement contract:', deployProposalPayload)
     // ProposalType.CALL = 2
     // https://github.com/kalidao/kali-contracts/blob/c3b25ca762f083dfe88096a7a512b33607c0ac57/contracts/KaliDAO.sol#L104
     console.log(`Processing CALL proposal to create2Deployer.address: ${ create2Deployer.address}`)
