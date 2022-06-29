@@ -4,7 +4,7 @@ pragma solidity >=0.8.14;
 import {IProjectManagement} from "./interfaces/IProjectManagement.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "hardhat/console.sol";
+// import "hardhat/console.sol";
 
 /**
     @notice Project management extension for KaliDAO
@@ -88,7 +88,7 @@ contract ProjectManagement is ReentrancyGuard {
      */
     function setExtension(bytes calldata extensionData) external payable {
 
-        console.log("(EVM)---->: setExtension called by ", msg.sender);
+        // console.log("(EVM)---->: setExtension called by ", msg.sender);
         (
             uint256 id,
             address manager,
@@ -102,7 +102,7 @@ contract ProjectManagement is ReentrancyGuard {
 
         // A project maanger must be a trusted DAO token holder
         uint256 managerTokens = IERC20(msg.sender).balanceOf(manager);
-        console.log("(EVM)----> setExtension(dao, manager, managerTokens): ", msg.sender, manager, managerTokens);
+        // console.log("(EVM)----> setExtension(dao, manager, managerTokens): ", msg.sender, manager, managerTokens);
         if ( managerTokens == 0) revert ProjectManagerNeedsDaoTokens();
 
         Project memory projectUpdate;
@@ -113,12 +113,18 @@ contract ProjectManagement is ReentrancyGuard {
         projectUpdate.goals = goals;
         projectUpdate.dao = msg.sender;
 
+        Project memory savedProject;
+
         if (projectUpdate.id == 0) {
             // id == 0 means new Project creation
             // assign next id and auto increment id counter
-            projectUpdate.id = nextProjectId++;
+            projectUpdate.id = nextProjectId;
+            // cannot realistically overflow
+            unchecked {
+                ++nextProjectId;
+            }
         } else {
-            Project memory savedProject = projects[projectUpdate.id];
+            savedProject = projects[projectUpdate.id];
             // someone is trying to update a non-existent project
             if (savedProject.id == 0) revert ProjectUnknown();
             // someone is trying to update a project that belongs to a different DAO address
@@ -146,10 +152,10 @@ contract ProjectManagement is ReentrancyGuard {
         payable
         nonReentrant
     {
-        console.log("(EVM)---->: callExtension called. DAO address:", dao);
+        // console.log("(EVM)---->: callExtension called. DAO address:", dao);
 
-        for (uint256 i; i < extensionData.length; ++i) {
-            console.log("(EVM)----> i = ", i);
+        for (uint256 i; i < extensionData.length;) {
+            // console.log("(EVM)----> i = ", i);
             (
                 uint256 projectId,
                 address toContributorAccount,
@@ -158,7 +164,7 @@ contract ProjectManagement is ReentrancyGuard {
 
             Project storage project = projects[projectId];
 
-            console.log("(EVM)----> projectId, toContributorAccount, mintAmount:", projectId, toContributorAccount, mintAmount);
+            // console.log("(EVM)----> projectId, toContributorAccount, mintAmount:", projectId, toContributorAccount, mintAmount);
 
             if (project.id == 0) revert ProjectUnknown();
 
@@ -170,12 +176,17 @@ contract ProjectManagement is ReentrancyGuard {
 
             project.budget -= mintAmount;
 
-            console.log("(EVM)----> updated project budget:", project.budget);
+            // console.log("(EVM)----> updated project budget:", project.budget);
 
             IProjectManagement(dao).mintShares(
                 toContributorAccount,
                 mintAmount
             );
+
+            // cannot realistically overflow
+            unchecked {
+                ++i;
+            }
         }
 
         emit ExtensionCalled(dao, msg.sender, extensionData);
