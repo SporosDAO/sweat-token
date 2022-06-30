@@ -14,7 +14,7 @@ import React, { ReactNode, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { OWNER } from '../../constants'
 import usePage, { MainListItems, SecondaryListItems } from '../../context/PageContext'
-import useWeb3 from '../../context/Web3Context'
+import { useAccount } from '../../context/Web3Context'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 
 function Copyright(props: any) {
@@ -91,7 +91,7 @@ export function PageLayout(props: PageLayoutProps) {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const [open, setOpen] = useState(props.withDrawer !== false && !isMobile)
 
-  const { account, setAccount } = useWeb3()
+  const account = useAccount()
   const { title } = usePage()
 
   const toggleDrawer = () => {
@@ -130,16 +130,6 @@ export function PageLayout(props: PageLayoutProps) {
             {/* <Badge badgeContent={4} color="secondary">
               <NotificationsIcon />
             </Badge> */}
-          </IconButton>
-          <IconButton
-            color="inherit"
-            aria-label="connect"
-            onClick={() => (!account ? navigate(`/connect?redirect=${location.pathname}`) : setAccount(undefined))}
-          >
-            <Stack spacing={1} direction="row">
-              <AccountCircleIcon />
-              {!account ? <></> : <small>{`${account.substring(0, 8)}..`}</small>}
-            </Stack>
           </IconButton>
           <ConnectButton />
         </Toolbar>

@@ -11,7 +11,7 @@ import * as React from 'react'
 import { updateMember } from '../../../api'
 import { ExtendedMemberDto, ExtendedMemberDtoStatusEnum, MemberDto } from '../../../api/openapi'
 import useToast from '../../../context/ToastContext'
-import useWeb3 from '../../../context/Web3Context'
+import { useAccount, useProvider } from '../../../context/Web3Context'
 
 interface MemberItemProps {
   member: ExtendedMemberDto
@@ -44,8 +44,8 @@ export default function MemberItem(props: MemberItemProps) {
   const memberLength = member.publicAddress.length
   const classes = useStyles()
   const { showToast } = useToast()
-  const { account } = useWeb3()
-  const { provider } = useWeb3()
+  const account = useAccount()
+  const provider = useProvider()
   const [ENS, setENS] = React.useState('')
 
   const userENS = async (address: string) => {
@@ -69,7 +69,7 @@ export default function MemberItem(props: MemberItemProps) {
     setAnchorEl(null)
   }
 
-  const isUser = account === member.publicAddress
+  const isUser = account.address === member.publicAddress
   const isPending = member.status == 'pending'
 
   const updateInvite = React.useCallback(() => {
@@ -153,8 +153,8 @@ export default function MemberItem(props: MemberItemProps) {
                 <IconButton aria-label="share">
                   <ShareIcon />
                 </IconButton>
-              </CardActions> 
-            </Card> 
+              </CardActions>
+            </Card>
           */}
       <Box className={classes.each_member}>
         <div className={classes.member_title} style={{ marginBottom: '20px' }}>
