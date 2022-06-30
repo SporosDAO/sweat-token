@@ -15,6 +15,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { OWNER } from '../../constants'
 import usePage, { MainListItems, SecondaryListItems } from '../../context/PageContext'
 import useWeb3 from '../../context/Web3Context'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
 
 function Copyright(props: any) {
   return (
@@ -140,6 +141,7 @@ export function PageLayout(props: PageLayoutProps) {
               {!account ? <></> : <small>{`${account.substring(0, 8)}..`}</small>}
             </Stack>
           </IconButton>
+          <ConnectButton/>
         </Toolbar>
       </AppBar>
       {props.withDrawer !== false ? (

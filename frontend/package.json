@@ -7,11 +7,11 @@
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
-    "@metamask/providers": "^8.1.1",
     "@mui/icons-material": "^5.6.2",
     "@mui/material": "^5.7.0",
     "@mui/styles": "^5.8.3",
     "@openapitools/openapi-generator-cli": "^2.5.1",
+    "@rainbow-me/rainbowkit": "^0.4.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
@@ -24,7 +24,7 @@
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "ethers": "^5.6.6",
+    "ethers": "^5.6.9",
     "moment": "^2.29.3",
     "prettier": "^2.6.2",
     "react": "^18.1.0",
@@ -33,6 +33,7 @@
     "react-router-dom": "6",
     "react-scripts": "5.0.1",
     "typescript": "^4.4.2",
+    "wagmi": "^0.5.5",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
@@ -71,7 +72,7 @@
   },
   "husky": {
     "hooks": {
-       "pre-push": "yarn lint"
+      "pre-push": "yarn lint"
     }
   }
 }
