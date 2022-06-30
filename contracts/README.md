@@ -17,7 +17,7 @@ Tests are executed in Hardhat environment.
 The contract is currently live on:
 | Network | Address | URL |
 ----------|---------|-----|
-| Rinkeby | `0x18e83C08C8Ba92FdFcD02c9E644DEa54cae365A4` | https://rinkeby.etherscan.io/address/0x18e83C08C8Ba92FdFcD02c9E644DEa54cae365A4#code |
+| Rinkeby | `0x9f0ad778385a2c688533958c6ada56f201ffc246` | https://rinkeby.etherscan.io/address/0x9f0ad778385a2c688533958c6ada56f201ffc246#code |
 ---------------------------
 
 More EVM deployments will be added in the future as the contract is battle tested.

@@ -224,7 +224,6 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
       .to.emit(kali2, "ProposalProcessed")
         .withArgs(1, true) // expect proposal 2 to pass
     nextProjectId = await projectManagement.nextProjectId();
-    console.log(`ProjectManagement deployment address: ${projectManagement.address}`);
     console.log({ nextProjectId });
     expect(nextProjectId).equal(101);
     const savedProject = await projectManagement.projects(100);
@@ -238,11 +237,12 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
     // Make sure a project manager can mint to contributors
     let mintRequest = ethers.utils.defaultAbiCoder.encode(
       // Project struct encoding
-      [ "uint256", "address", "uint256"],
+      [ "uint256", "address", "uint256", "string"],
       [
         100, // project id of the just activated project
         contributor.address, // address of contributor to receive DAO tokens
-        getBigNumber(56) // mint amount in whole token units
+        getBigNumber(56), // mint amount in whole token units
+        "completed waitlist CTA"
       ]
     )
     await projectManagement

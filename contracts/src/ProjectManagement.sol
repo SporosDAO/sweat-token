@@ -4,6 +4,7 @@ pragma solidity >=0.8.14;
 import {IProjectManagement} from "./interfaces/IProjectManagement.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
 // import "hardhat/console.sol";
 
 /**
@@ -37,9 +38,9 @@ contract ProjectManagement is ReentrancyGuard {
         address indexed dao,
         Project project
     );
+
     event ExtensionCalled(
         address indexed dao,
-        address indexed project,
         bytes[] updates
     );
 
@@ -159,12 +160,14 @@ contract ProjectManagement is ReentrancyGuard {
             (
                 uint256 projectId,
                 address toContributorAccount,
-                uint256 mintAmount
-            ) = abi.decode(extensionData[i], (uint256, address, uint256));
+                uint256 mintAmount,
+                string memory tribute
+            ) = abi.decode(extensionData[i], (uint256, address, uint256, string));
 
             Project storage project = projects[projectId];
 
             // console.log("(EVM)----> projectId, toContributorAccount, mintAmount:", projectId, toContributorAccount, mintAmount);
+            // console.log("(EVM)----> projectId, toContributorAccount, deliverable:", projectId, toContributorAccount, tribute);
 
             if (project.id == 0) revert ProjectUnknown();
 
@@ -189,6 +192,8 @@ contract ProjectManagement is ReentrancyGuard {
             }
         }
 
-        emit ExtensionCalled(dao, msg.sender, extensionData);
+        // console.log("(EVM)----> firing event ExtensionCalled()");
+
+        emit ExtensionCalled(dao, extensionData);
     }
 }
