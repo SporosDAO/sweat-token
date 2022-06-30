@@ -10,7 +10,7 @@ export const useMetaMask = () => {
   const getConnectedAccount = useCallback(async (): Promise<string | undefined> => {
     if (connectedAccount) return connectedAccount
     if (!isInstalled()) return undefined
-    if (!window.ethereum.request) return undefined
+    // if (!window.ethereum.request) return undefined
     if (loading || pending) return
 
     setLoading(true)
