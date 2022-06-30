@@ -2,6 +2,6 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 cd contracts
-yarn lint
+yarn lint --fix
 
 cd -

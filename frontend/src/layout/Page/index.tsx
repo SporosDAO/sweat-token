@@ -141,7 +141,7 @@ export function PageLayout(props: PageLayoutProps) {
               {!account ? <></> : <small>{`${account.substring(0, 8)}..`}</small>}
             </Stack>
           </IconButton>
-          <ConnectButton/>
+          <ConnectButton />
         </Toolbar>
       </AppBar>
       {props.withDrawer !== false ? (

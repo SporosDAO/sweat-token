@@ -37,28 +37,12 @@ export default function Landing() {
   return (
     <PageLayout withDrawer={false}>
       <ContentBlock>
-        <h1>Your DevCo DAOs</h1>
+        <h1>The Launchpad of For-Profit DAOs</h1>
       </ContentBlock>
 
       <Grid container>
         <Grid item lg={6}>
-          <ContentBlock sx={{ ...blockStyle }} title="Create a DAO">
-            <p>
-              <span>
-                <a href="https://app.kalidao.xyz/">Create</a> your first DAO with legal benefits.
-              </span>
-              <span>
-                Then add it to your{' '}
-                <Link data-test="dashboard" to="/dao/create">
-                  dashboard
-                </Link>{' '}
-                to manage projects and contributors.
-              </span>
-            </p>
-          </ContentBlock>
-        </Grid>
-        <Grid item lg={6}>
-          <ContentBlock sx={{ ...blockStyle, ml: 1, mr: 0 }} title="Public DAOs">
+          <ContentBlock sx={{ ...blockStyle, ml: 1, mr: 0 }} title="Your DAOs">
             {failed ? (
               <p>
                 Failed to load list.{' '}
@@ -82,8 +66,18 @@ export default function Landing() {
                 ))}
               </List>
             ) : (
-              <p>No DAOs yet.</p>
+              <p>You do not participate in any for-profit Kali DAOs yet.</p>
             )}
+          </ContentBlock>
+        </Grid>
+        <Grid item lg={6}>
+          <ContentBlock sx={{ ...blockStyle }} title="Create a for-profit DAO">
+            <p>
+              <span>
+                <a href="https://app.kali.gg/">Create</a> a new for-profit Kali DAO with legal benefits. Make sure to
+                choose Company Series LLC template! Then return here to manage sweat equity projects and more.
+              </span>
+            </p>
           </ContentBlock>
         </Grid>
       </Grid>

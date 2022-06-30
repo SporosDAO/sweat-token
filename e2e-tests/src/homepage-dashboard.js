@@ -100,7 +100,7 @@ export const flow = {
             "target": "main",
             "selectors": [
                 [
-                    "aria/Your DevCo DAOs"
+                    "aria/The Launchpad of For-Profit DAOs"
                 ]
             ],
             "offsetX": 282,
@@ -112,7 +112,7 @@ export const flow = {
             "frame": [],
             "selectors": [
                 [
-                    "aria/Create a DAO"
+                    "aria/Create a for-profit DAO"
                 ]
             ]
         },
