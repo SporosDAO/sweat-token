@@ -6,10 +6,16 @@ tasks:
       eval $(gp env -e)
       # builds the images from the dockerfiles
       docker-compose build
+      cd backend && yarn install && cd -
+      cd frontend && yarn install && cd -
+      cd e2e-tests && yarn install && cd -
+      cd contracts && yarn install && cd -
       gp sync-done build
       bash .gitpod.sh
   - name: Shell
-    command: bash
+    command: |
+      gp sync-await build
+      bash
     openMode: split-right
 
 vscode:
