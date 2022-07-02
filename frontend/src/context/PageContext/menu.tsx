@@ -22,12 +22,12 @@ export interface MenuItem {
 }
 
 export const menu: MenuItem[] = [
+  /**
   {
     label: 'Dashboard',
     icon: DashboardIcon,
     link: 'dashboard'
   },
-  /**
   {
     label: 'Legal',
     icon: GavelIcon,

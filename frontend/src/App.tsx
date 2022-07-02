@@ -2,7 +2,6 @@ import { createTheme, ThemeProvider } from '@mui/material'
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
-import { Connect } from './pages/Connect'
 import Dao from './pages/Dao'
 import Dashboard from './pages/Dashboard'
 import Equity from './pages/Equity'
@@ -29,9 +28,8 @@ function App() {
     <ThemeProvider theme={mdTheme}>
       <Routes>
         <Route path="/" element={<Landing />} />
-        <Route path="/connect" element={<Connect />} />
         <Route path="dao/create" element={<DaoCreate />} />
-        <Route path="dao/:daoId" element={<Dao />}>
+        <Route path="dao/chain/:chainId/address/:daoId" element={<Dao />}>
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="legal" element={<Legal />} />

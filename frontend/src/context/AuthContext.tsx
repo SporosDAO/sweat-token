@@ -2,8 +2,7 @@ import React, { createContext, ReactNode, useCallback, useContext, useEffect, us
 import { useLocation, useNavigate } from 'react-router-dom'
 import * as api from '../api'
 import { JwtTokenDto, NonceDto, UserDto } from '../api/openapi'
-import useWeb3 from './Web3Context'
-import useToast from './ToastContext'
+import { useAccount, useSigner } from './Web3Context'
 
 export const CONNECT_PAGE = '/connect'
 export const REDIR_QUERY = '?redirect='
@@ -48,40 +47,36 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
   const location = useLocation()
   const navigate = useNavigate()
 
-  const { account, provider, setAccount } = useWeb3()
+  const account = useAccount()
   const ctoken = useMemo(() => getCookieToken(), [])
-
-  // useEffect(() => {
-  //   // account reset
-  //   if (account) return
-  //   if (!user && !token) return
-  //   console.log('no accout, reset user')
-  //   setUser(undefined)
-  //   setToken(undefined)
-  // }, [account, token, user])
+  const { data: signer, isError, isLoading } = useSigner()
 
   useEffect(() => {
     if (token || user) return
     if (signaturePending) return
-    if (!account || !provider) return
+    if (!account) return
     if (error) return
+    return // TODO cleanup auth flow
     api
-      .getUserByAddress(account)
+      .getUserByAddress(account.address!)
       .then(({ nonce, userId }: NonceDto) => {
-        const signer = provider.getSigner(account)
-        return signer
-          .signMessage(nonce)
-          .then((signature) =>
-            api.verifySignature({ userId, nonce, signature } as NonceDto).catch((e) => {
-              console.warn(`Invalid signature? ${e.stack}`)
-              setAccount(undefined)
-              return Promise.reject(e)
+        if (!signer) {
+          throw Error('Web3 Signer Not Available')
+        } else {
+          return signer
+            .signMessage(nonce)
+            .then((signature: any) =>
+              api.verifySignature({ userId, nonce, signature } as NonceDto).catch((e) => {
+                console.warn(`Invalid signature? ${e.stack}`)
+                // setAccount(undefined)
+                return Promise.reject(e)
+              })
+            )
+            .then((jwt: JwtTokenDto) => {
+              setToken(jwt.token)
+              document.cookie = `token=${jwt.token};expires=${new Date(Date.now() + 10 * 24 * 60 * 60 * 1000)};path=/`
             })
-          )
-          .then((jwt: JwtTokenDto) => {
-            setToken(jwt.token)
-            document.cookie = `token=${jwt.token};expires=${new Date(Date.now() + 10 * 24 * 60 * 60 * 1000)};path=/`
-          })
+        }
       })
       .catch((e: any) => {
         // user denied
@@ -94,7 +89,7 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
         console.error('failed to load account', e)
       })
     // .finally(() => {})
-  }, [account, error, provider, setAccount, signaturePending, token, user])
+  }, [account, error, signaturePending, token, user])
 
   useEffect(() => {
     if (!ctoken) return
@@ -161,4 +156,3 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
 export default function useAuth() {
   return useContext(AuthContext)
 }
-//
