@@ -88,13 +88,13 @@ export const flow = {
         "type": "click",
         "selectors": [
           [
-            "aria/dashboard"
+            "aria/The Launchpad of For-Profit DAOs"
           ]
         ],
         "target": "main",
         "offsetX": 15.796875,
         "offsetY": 6.3125
-      }      
+      }
     ],
     "timeout": 30000
   }
@@ -103,8 +103,8 @@ export async function run(extension) {
     const runner = await createRunner(flow, extension);
     await runner.run();
   }
-  
-  
+
+
 if (process && import.meta.url === url.pathToFileURL(process.argv[1]).href) {
     const extension = new CoverageExtension(browser, page, 7000)
     await run(extension);

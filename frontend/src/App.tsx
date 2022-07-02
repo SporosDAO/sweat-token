@@ -29,7 +29,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="dao/create" element={<DaoCreate />} />
-        <Route path="dao/:daoId" element={<Dao />}>
+        <Route path="dao/chain/:chainId/address/:daoId" element={<Dao />}>
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="legal" element={<Legal />} />
