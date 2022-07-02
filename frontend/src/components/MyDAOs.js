@@ -50,7 +50,7 @@ export default function MyDAOs() {
                 </CardContent>
                 <CardActions>
                   <Button size="small" href="{`dao/chain/${chain.id}/address/${dao['dao']['id']}/dashboard`}">
-                    Details
+                    Open
                   </Button>
                 </CardActions>
               </Card>
