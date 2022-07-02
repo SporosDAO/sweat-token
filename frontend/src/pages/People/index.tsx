@@ -52,7 +52,7 @@ export default function People() {
                         {useEnsName({ address: person['address'], chainId: Number(1), cacheTime: 60_000 }).data}
                       </Typography>
                       <div>
-                        {useEnsAvatar({ address: person['address'], chainId: Number(1), cacheTime: 60_000 }).data}
+                        {useEnsAvatar({ addressOrName: person['address'], chainId: Number(1), cacheTime: 60_000 }).data}
                       </div>
                       <Typography>{person['address']}</Typography>
                       <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
