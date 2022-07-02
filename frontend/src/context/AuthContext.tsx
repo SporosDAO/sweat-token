@@ -56,6 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
     if (signaturePending) return
     if (!account) return
     if (error) return
+    return // TODO cleanup auth flow
     api
       .getUserByAddress(account.address!)
       .then(({ nonce, userId }: NonceDto) => {
