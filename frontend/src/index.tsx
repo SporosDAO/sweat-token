@@ -10,9 +10,8 @@ import './index.css'
 import reportWebVitals from './reportWebVitals'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 
-import { QueryClient, QueryClientProvider } from "react-query";
-const queryClient = new QueryClient();
-
+import { QueryClient, QueryClientProvider } from 'react-query'
+const queryClient = new QueryClient()
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(

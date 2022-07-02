@@ -16,7 +16,6 @@ export default function Landing() {
     if (loading) return
     if (failed) return
     setLoading(true)
-
   }, [failed, loading, publicDaos])
 
   const blockStyle: SxProps<Theme> = {
