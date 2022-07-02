@@ -44,7 +44,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --watchAll=false ",
     "eject": "react-scripts eject",
-    "lint": "eslint './src/**/*.ts?'",
+    "lint": "eslint './src/**/*.js*' './src/**/*.ts*' --fix",
     "prepare": "cd ../ && husky install ./frontend/.husky"
   },
   "eslintConfig": {
