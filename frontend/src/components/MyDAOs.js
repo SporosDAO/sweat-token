@@ -8,7 +8,7 @@ import { GRAPH_URL } from '../graph'
 
 export function useGetUserDAOs(chainId, userAddress) {
   return useQuery([chainId, userAddress, USER_DAOS], async () => {
-    if (!chainId) return {} ;
+    if (!chainId) return {}
     const data = await request(GRAPH_URL[chainId], USER_DAOS, { address: userAddress })
     return data
   })
