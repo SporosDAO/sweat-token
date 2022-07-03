@@ -17,7 +17,7 @@ const daoPageTitle = (daoId?: string, subpath?: string, subpathId?: string, ...a
 
 export const getTitleFromPath = (pathname: string): string => {
   const parts = pathname.split('/')
-  const [, group, , subpath] = parts
+  const [, group, , , , subpath] = parts
   switch (group) {
     case 'dao':
       const matches = menu.filter(({ link }) => link === subpath)

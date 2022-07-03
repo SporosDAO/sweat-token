@@ -59,10 +59,10 @@ export const menu: MenuItem[] = [
 export const MainListItems = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const { daoId } = useParams()
+  const { daoId, chainId } = useParams()
 
   const goto = (path: string) => {
-    navigate(getDaoUrl(daoId, path))
+    navigate(getDaoUrl(chainId, daoId, path))
   }
 
   const currentPath = React.useMemo((): string => {
@@ -104,17 +104,24 @@ export const SecondaryListItems = () => {
   )
 }
 
-export const getDaoUrl = (daoId?: string, ...parts: (string | undefined)[]): string => {
+export const getDaoUrl = (chainId?: string, daoId?: string, ...parts: (string | undefined)[]): string => {
   if (!daoId) return '/'
-  return ['', 'dao', daoId, ...(parts.filter((p) => p !== undefined) as string[])].join('/')
+  return ['', 'dao', 'chain', chainId, 'address', daoId, ...(parts.filter((p) => p !== undefined) as string[])].join(
+    '/'
+  )
 }
 
-export const getProjectUrl = (daoId?: string, projectId?: string, ...parts: (string | undefined)[]): string => {
+export const getProjectUrl = (
+  chainId?: string,
+  daoId?: string,
+  projectId?: string,
+  ...parts: (string | undefined)[]
+): string => {
   if (!daoId) return '/'
   const subpath = ['projects']
   if (projectId) subpath.push(projectId)
   if (parts.length) subpath.push(...(parts.filter((p) => p !== undefined) as string[]))
-  return getDaoUrl(daoId, ...subpath)
+  return getDaoUrl(chainId, daoId, ...subpath)
 }
 
 interface LinkProjectProps {
@@ -134,17 +141,18 @@ export const LinkProject = ({ daoId, add, children, project, path }: LinkProject
 
 interface LinkDaoProps {
   add?: boolean
+  chainId?: string
   daoId?: string
   children: any
   path?: string
   onClick?: (e: any) => void
 }
 
-export const LinkDao = ({ children, daoId, path, add, onClick }: LinkDaoProps) => {
+export const LinkDao = ({ children, chainId, daoId, path, add, onClick }: LinkDaoProps) => {
   const { daoId: paramDaoId } = useParams()
   path = add === true ? 'add' : path || undefined
   return (
-    <Link to={getDaoUrl(daoId || paramDaoId, path)} onClick={onClick}>
+    <Link to={getDaoUrl(chainId, daoId || paramDaoId, path)} onClick={onClick}>
       {children}
     </Link>
   )
