@@ -1,5 +1,4 @@
 import { useNetwork, useAccount } from '../context/Web3Context'
-import { useGraph } from './hooks/useGraph'
 import { USER_DAOS } from '../graph'
 import { List, ListItem, Button, Card, CardContent, CardActionArea, Typography } from '@mui/material'
 import { useQuery } from 'react-query'
@@ -8,6 +7,7 @@ import { GRAPH_URL } from '../graph'
 
 export function useGetUserDAOs(chainId, userAddress) {
   return useQuery([chainId, userAddress, USER_DAOS], async () => {
+    if (!chainId) return {}
     const data = await request(GRAPH_URL[chainId], USER_DAOS, { address: userAddress })
     return data
   })
@@ -27,8 +27,12 @@ export default function MyDAOs() {
 
   return (
     <>
-      {isLoading || isConnecting || isDisconnected ? (
+      {isLoading ? (
         <div>Loading...</div>
+      ) : isConnecting ? (
+        <div>Connecting to your web3 wallet...</div>
+      ) : isDisconnected ? (
+        <div>Please connect your web3 wallet.</div>
       ) : daos && daos.length > 0 ? (
         <List>
           {daos.map((dao) => (
