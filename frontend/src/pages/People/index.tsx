@@ -25,13 +25,15 @@ export default function People() {
   console.debug({ people })
   console.debug({ tokenTotalSupply })
   const peopleEns: { [address: string]: { avatar: any; name: any } } = {}
-  people.map((person: any) => {
-    const paddr = person['address']
-    peopleEns[paddr] = {
-      name: useEnsName({ address: paddr, chainId: Number(1), cacheTime: 60_000 }).data,
-      avatar: useEnsAvatar({ addressOrName: paddr, chainId: Number(1), cacheTime: 60_000 }).data
-    }
-  })
+  if (people) {
+    people.map((person: any) => {
+      const paddr = person['address']
+      peopleEns[paddr] = {
+        name: useEnsName({ address: paddr, chainId: Number(1), cacheTime: 60_000 }).data,
+        avatar: useEnsAvatar({ addressOrName: paddr, chainId: Number(1), cacheTime: 60_000 }).data
+      }
+    })
+  }
 
   return (
     <ContentBlock title="People">

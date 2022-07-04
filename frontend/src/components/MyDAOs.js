@@ -1,5 +1,4 @@
 import { useNetwork, useAccount } from '../context/Web3Context'
-import { useGraph } from './hooks/useGraph'
 import { USER_DAOS } from '../graph'
 import { List, ListItem, Button, Card, CardContent, CardActionArea, Typography } from '@mui/material'
 import { useQuery } from 'react-query'
