@@ -5,6 +5,7 @@ import ContentBlock from '../../components/ContentBlock'
 import { getPeople } from '../../graph/getPeople'
 import { useQuery } from 'react-query'
 import { useEnsName, useEnsAvatar } from 'wagmi'
+import { ReactElement, JSXElementConstructor, ReactFragment, ReactPortal } from 'react'
 
 /* eslint react-hooks/rules-of-hooks: 0 */
 
@@ -23,6 +24,14 @@ export default function People() {
   const tokenTotalSupply = data?.data.daos[0]['token']['totalSupply']
   console.debug({ people })
   console.debug({ tokenTotalSupply })
+  const peopleEns: { [address: string]: { avatar: any, name: any } } = {}
+  people.map((person: any) => {
+    const paddr = person['address']
+    peopleEns[paddr] = {
+      name: useEnsName({ address: paddr, chainId: Number(1), cacheTime: 60_000 }).data,
+      avatar: useEnsAvatar({ addressOrName: paddr, chainId: Number(1), cacheTime: 60_000 }).data
+    }
+  })
 
   return (
     <ContentBlock title="People">
@@ -49,10 +58,10 @@ export default function People() {
                   <Card sx={{ minWidth: 400 }} raised={true}>
                     <CardContent>
                       <Typography variant="h5" component="div">
-                        {useEnsName({ address: person['address'], chainId: Number(1), cacheTime: 60_000 }).data}
+                        {peopleEns[person['address']].name}
                       </Typography>
                       <div>
-                        {useEnsAvatar({ addressOrName: person['address'], chainId: Number(1), cacheTime: 60_000 }).data}
+                        {peopleEns[person['address']].avatar}
                       </div>
                       <Typography>{person['address']}</Typography>
                       <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
