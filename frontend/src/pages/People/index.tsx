@@ -24,7 +24,7 @@ export default function People() {
   const tokenTotalSupply = data?.data.daos[0]['token']['totalSupply']
   console.debug({ people })
   console.debug({ tokenTotalSupply })
-  const peopleEns: { [address: string]: { avatar: any, name: any } } = {}
+  const peopleEns: { [address: string]: { avatar: any; name: any } } = {}
   people.map((person: any) => {
     const paddr = person['address']
     peopleEns[paddr] = {
@@ -60,9 +60,7 @@ export default function People() {
                       <Typography variant="h5" component="div">
                         {peopleEns[person['address']].name}
                       </Typography>
-                      <div>
-                        {peopleEns[person['address']].avatar}
-                      </div>
+                      <div>{peopleEns[person['address']].avatar}</div>
                       <Typography>{person['address']}</Typography>
                       <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                         stake: {((100 * person['shares']) / tokenTotalSupply).toFixed(2)}%
