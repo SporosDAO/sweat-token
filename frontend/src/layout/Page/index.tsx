@@ -1,4 +1,3 @@
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import MenuIcon from '@mui/icons-material/Menu'
 import { Box, CssBaseline, IconButton, Stack, Toolbar, useMediaQuery, useTheme } from '@mui/material'
@@ -10,12 +9,13 @@ import Link from '@mui/material/Link'
 import List from '@mui/material/List'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useState, useParams } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { OWNER } from '../../constants'
 import usePage, { MainListItems, SecondaryListItems } from '../../context/PageContext'
 import { useAccount } from '../../context/Web3Context'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { useGetDAO } from '../../graph/getDAO'
 
 function Copyright(props: any) {
   return (
@@ -92,7 +92,10 @@ export function PageLayout(props: PageLayoutProps) {
   const [open, setOpen] = useState(props.withDrawer !== false && !isMobile)
 
   const account = useAccount()
-  const { title } = usePage()
+  const { chainId, daoId } = useParams()
+  const {data: dao} = useGetDAO(chainId, daoId)
+  console.debug({dao})
+  const { title } = dao['token']['name']
 
   const toggleDrawer = () => {
     setOpen(!open)

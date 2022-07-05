@@ -1,4 +1,3 @@
-import React from 'react'
 import { GRAPH_URL } from './url'
 
 export const getPeople = async (chainId, address) => {
@@ -29,4 +28,11 @@ export const getPeople = async (chainId, address) => {
   } catch (e) {
     return e
   }
+}
+
+export function useGetPeople(chainId, userAddress) {
+  return useQuery(['getPeople', chainId, userAddress], async () => {
+    const data = await getPeople(chainId, userAddress)
+    return data
+  })
 }
