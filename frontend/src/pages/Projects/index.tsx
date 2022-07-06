@@ -1,4 +1,5 @@
-import { Button, CircularProgress, Grid, Card, CardContent, Typography, List, ListItem } from '@mui/material'
+import { Button, CircularProgress, Fab, Card, CardContent, Typography, List, ListItem } from '@mui/material'
+import { AddIcon } from '@mui/icons-material'
 import { Box } from '@mui/system'
 import { useParams } from 'react-router-dom'
 import ContentBlock from '../../components/ContentBlock'
@@ -11,10 +12,8 @@ export default function Projects() {
   const { chainId, daoId } = useParams()
 
   const { data, error, isLoading, isSuccess } = useGetProjects(chainId, daoId)
-  const projects = data?.data.daos[0]['members']
-  const tokenTotalSupply = data?.data.daos[0]['token']['totalSupply']
+  const projects = data?.projects
   console.debug({ projects })
-  console.debug({ tokenTotalSupply })
   const peopleEns: { [address: string]: { avatar: any; name: any } } = {}
   if (projects) {
     projects.map((project: any) => {
@@ -28,6 +27,10 @@ export default function Projects() {
 
   return (
     <ContentBlock title="Projects">
+      <Fab variant="extended" color="primary" aria-label="proposeProject">
+        <AddIcon />
+        Propose a New Project
+      </Fab>
       {isLoading ? (
         <CircularProgress />
       ) : error ? (

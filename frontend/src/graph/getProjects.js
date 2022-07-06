@@ -35,7 +35,7 @@ export const getProjects = async (chainId, daoAddress) => {
     // const data = await res.json()
     // in the meanwhile use mock data
     const data = {
-      "projects": [
+      projects: [
         {
           active: true,
           budget: 5000,
