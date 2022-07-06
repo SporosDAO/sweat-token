@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { OWNER } from '../../constants'
-import usePage, { MainListItems, SecondaryListItems } from '../../context/PageContext'
+import usePage, { MainMenuItems, DaoMenuItems, SecondaryMenuItems } from '../../context/PageContext'
 import { useAccount } from '../../context/Web3Context'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useGetDAO } from '../../graph/getDAO'
@@ -154,9 +154,11 @@ export function PageLayout(props: PageLayoutProps) {
           </Toolbar>
           <Divider />
           <List component="nav">
-            {MainListItems()}
+            {MainMenuItems()}
             <Divider sx={{ my: 1 }} />
-            {SecondaryListItems()}
+            {DaoMenuItems()}
+            <Divider sx={{ my: 1 }} />
+            {SecondaryMenuItems()}
           </List>
         </Drawer>
       ) : (

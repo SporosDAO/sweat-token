@@ -4,7 +4,6 @@ import { Box } from '@mui/system'
 import { useParams } from 'react-router-dom'
 import ContentBlock from '../../components/ContentBlock'
 import { useGetProjects } from '../../graph/getProjects'
-import { useEnsName, useEnsAvatar } from 'wagmi'
 import ProjectCard from './components/ProjectCard'
 
 /* eslint react-hooks/rules-of-hooks: 0 */
