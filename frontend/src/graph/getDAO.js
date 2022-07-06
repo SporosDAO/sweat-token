@@ -1,3 +1,4 @@
+import { useQuery } from 'react-query'
 import { GRAPH_URL } from './url'
 
 export const getDAO = async (chainId, daoAddress) => {
