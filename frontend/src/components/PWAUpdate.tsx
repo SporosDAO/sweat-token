@@ -30,7 +30,7 @@ export function ServiceWorkerWrapper(props: any) {
       message="A new version is available!"
       onClick={reloadPage}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      action= {
+      action={
         <Button color="inherit" size="small" onClick={reloadPage}>
           Reload
         </Button>

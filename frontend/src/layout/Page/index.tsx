@@ -93,9 +93,10 @@ export function PageLayout(props: PageLayoutProps) {
 
   const account = useAccount()
   const { chainId, daoId } = useParams()
-  const {data: dao} = useGetDAO(chainId, daoId)
-  console.debug({dao})
-  const { title } = daodao['token']['name']
+  const { data, error, isLoading, isSuccess } = useGetDAO(chainId, daoId)
+  console.debug('useGetDAO', { data, error, isLoading, isSuccess })
+  const { title } =
+    isSuccess && data && data['token'] && data['token']['name'] ? data['token']['name'] : 'Sporos DAO App'
 
   const toggleDrawer = () => {
     setOpen(!open)

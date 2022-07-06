@@ -40,26 +40,26 @@ export const getProjects = async (chainId, daoAddress) => {
           active: true,
           budget: 5000,
           deadline: 20220710,
-          goals: "New landing page",
-          id: "112312312312",
-          manager: "0xcc53685363e14914d28f2d37f226618451d4ef4c",
-          projectID: "100",
+          goals: 'New landing page',
+          id: '112312312312',
+          manager: '0xcc53685363e14914d28f2d37f226618451d4ef4c',
+          projectID: '100',
           dao: {
-            address: "0x60c03712765c1211d02c460b93cfe12d2bbee1dc"
-          },
+            address: '0x60c03712765c1211d02c460b93cfe12d2bbee1dc'
+          }
         },
         {
           active: true,
           budget: 10000,
           deadline: 20220810,
-          goals: "New Project Management UI flow",
-          id: "1123123156742",
-          manager: "0xf952a72F39c5Fa22a443200AbE7835128bCb7439",
-          projectID: "101",
+          goals: 'New Project Management UI flow',
+          id: '1123123156742',
+          manager: '0xf952a72F39c5Fa22a443200AbE7835128bCb7439',
+          projectID: '101',
           dao: {
-            address: "0x60c03712765c1211d02c460b93cfe12d2bbee1dc"
-          },
-        },
+            address: '0x60c03712765c1211d02c460b93cfe12d2bbee1dc'
+          }
+        }
       ]
     }
     return data
@@ -69,7 +69,7 @@ export const getProjects = async (chainId, daoAddress) => {
 }
 
 export function useGetProjects(chainId, daoAddress) {
-  return useQuery(['getPeople', chainId, daoAddress], async () => {
+  return useQuery(['getProjects', chainId, daoAddress], async () => {
     const data = await getProjects(chainId, daoAddress)
     return data
   })
