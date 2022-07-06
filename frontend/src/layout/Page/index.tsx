@@ -95,7 +95,7 @@ export function PageLayout(props: PageLayoutProps) {
   const { chainId, daoId } = useParams()
   const {data: dao} = useGetDAO(chainId, daoId)
   console.debug({dao})
-  const { title } = dao['token']['name']
+  const { title } = daodao['token']['name']
 
   const toggleDrawer = () => {
     setOpen(!open)
