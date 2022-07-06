@@ -1,7 +1,7 @@
 import { useNetwork, useAccount } from '../context/Web3Context'
 import { USER_DAOS } from '../graph'
-import { List, ListItem, Link, Card, CardContent, CardActionArea, Typography } from '@mui/material'
-import Launch from '@mui/icons-material/Launch'
+import { List, ListItem, Card, CardActions, Button, CardContent, CardActionArea, Typography } from '@mui/material'
+import { Launch, ReadMore } from '@mui/icons-material'
 import { useQuery } from 'react-query'
 import { request } from 'graphql-request'
 import { GRAPH_URL } from '../graph'
@@ -53,19 +53,28 @@ export default function MyDAOs() {
                     <Typography sx={{ mb: 1.5 }} color="text.secondary">
                       address: {dao['dao']['address']}
                     </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                      Kali dashboard
-                      <Link
-                        href={`https://app.kali.gg/daos/${chain.id}/${dao['dao']['address']}`}
-                        rel="noopener"
-                        target="_blank"
-                      >
-                        <Launch />
-                      </Link>
-                    </Typography>
-                    https://app.kali.gg/daos/4/0x60c03712765c1211d02c460b93cfe12d2bbee1dc
                   </CardContent>
                 </CardActionArea>
+                <CardActions sx={{ justifyContent: 'space-between' }}>
+                  <Button
+                    variant="text"
+                    endIcon={<ReadMore />}
+                    fontSize="inherit"
+                    href={`dao/chain/${chain.id}/address/${dao['dao']['id']}/people`}
+                  >
+                    Open
+                  </Button>
+                  <Button
+                    variant="text"
+                    endIcon={<Launch />}
+                    fontSize="inherit"
+                    href={`https://app.kali.gg/daos/${chain.id}/${dao['dao']['address']}`}
+                    rel="noopener"
+                    target="_blank"
+                  >
+                    Kali
+                  </Button>
+                </CardActions>
               </Card>
             </ListItem>
           ))}

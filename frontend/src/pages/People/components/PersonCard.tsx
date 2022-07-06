@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, ListItem, Divider } from '@mui/material'
+import { Card, CardContent, Typography, ListItem } from '@mui/material'
 import { useEnsName, useEnsAvatar } from 'wagmi'
 
 export default function PersonCard(props: any) {

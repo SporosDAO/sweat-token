@@ -5,4 +5,4 @@ export const GRAPH_URL = {
   5: 'https://api.thegraph.com/subgraphs/name/nerderlyne/kali-goerli',
   137: 'https://api.thegraph.com/subgraphs/name/nerderlyne/kali-matic',
   10: 'https://api.thegraph.com/subgraphs/name/nerderlyne/kali-optimism'
-
+}
