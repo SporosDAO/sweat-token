@@ -16,6 +16,7 @@ import ProjectDashboard from './pages/Projects/pages/ProjectDashboard'
 import Taxes from './pages/Taxes'
 import DaoCreate from './pages/DaoCreate'
 import Registration from './pages/Legal/registration'
+import Settings from './pages/Settings'
 
 const mdTheme = createTheme({
   palette: {
@@ -32,6 +33,7 @@ function App() {
         <Route path="dao/chain/:chainId/address/:daoId" element={<Dao />}>
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="settings" element={<Settings />} />
           <Route path="legal" element={<Legal />} />
           <Route path="legal/registration" element={<Registration />} />
           <Route path="taxes" element={<Taxes />} />

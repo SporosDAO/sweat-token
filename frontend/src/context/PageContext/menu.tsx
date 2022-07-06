@@ -3,6 +3,7 @@ import FactoryIcon from '@mui/icons-material/Factory'
 import PieChartIcon from '@mui/icons-material/PieChart'
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 import DashboardIcon from '@mui/icons-material/Dashboard'
+import Settings from '@mui/icons-material/Settings'
 import GavelIcon from '@mui/icons-material/Gavel'
 import HelpIcon from '@mui/icons-material/Help'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
@@ -53,6 +54,11 @@ export const menu: MenuItem[] = [
     label: 'People',
     icon: People,
     link: 'people'
+  },
+  {
+    label: 'Settings',
+    icon: Settings,
+    link: 'settings'
   }
 ]
 
