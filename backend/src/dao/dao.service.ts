@@ -6,11 +6,17 @@ import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { CreateDaoDto, DaoDto, DaoEvent } from './dao.dto'
 import { Dao, DaoDocument } from './dao.schema'
+import { DaoSettingsDto } from './settings/dao.settings.dto'
+import { DaoSettings, DaoSettingsDocument } from './settings/dao.settings.schema'
 
 @Injectable()
 export class DaoService {
   private readonly logger = new Logger(DaoService.name)
-  constructor(private eventEmitter: EventEmitter2, @InjectModel(Dao.name) private daoModel: Model<DaoDocument>) {}
+  constructor(
+    private eventEmitter: EventEmitter2,
+    @InjectModel(Dao.name) private daoModel: Model<DaoDocument>,
+    @InjectModel(DaoSettings.name) private daoSettingsModel: Model<DaoSettingsDocument>,
+  ) {}
 
   private emit(type: RecordEventType, dao: DaoDto | DaoDocument) {
     this.eventEmitter.emit('dao.changed', {
@@ -75,5 +81,32 @@ export class DaoService {
     if (!dao) return
     await this.daoModel.deleteOne({ daoId }).exec()
     this.emit('delete', dao)
+  }
+
+  async loadSettings(daoId: string): Promise<DaoSettingsDocument | null> {
+    const doc = await this.daoSettingsModel.findOne({ daoId }).exec()
+    return doc || null
+  }
+
+  async getSettings(daoId: string): Promise<DaoSettingsDto> {
+    const daoSettings = await this.loadSettings(daoId)
+    if (!daoSettings) return { daoId }
+    return toDTO<DaoSettingsDto>(daoSettings)
+  }
+
+  async setSettings(daoSettingsDto: DaoSettingsDto): Promise<DaoSettingsDto> {
+    if (!daoSettingsDto.daoId) throw new BadRequestException('Missing daoId')
+    let settingsDocument = await this.loadSettings(daoSettingsDto.daoId)
+    if (!settingsDocument) {
+      settingsDocument = new this.daoSettingsModel({
+        daoId: daoSettingsDto.daoId,
+      })
+    }
+
+    settingsDocument.discordWebhookBotName = daoSettingsDto.discordWebhookBotName
+    settingsDocument.discordWebhookUrl = daoSettingsDto.discordWebhookUrl
+    await settingsDocument.save()
+
+    return toDTO<DaoSettingsDto>(settingsDocument)
   }
 }

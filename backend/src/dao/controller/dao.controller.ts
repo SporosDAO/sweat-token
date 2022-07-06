@@ -6,6 +6,7 @@ import { Role, UserDto } from 'src/user/user.dto'
 import { DaoAuth } from '../dao.auth.decorator'
 import { CreateDaoDto, DaoDto } from '../dao.dto'
 import { DaoService } from '../dao.service'
+import { DaoSettingsDto } from '../settings/dao.settings.dto'
 
 @Controller('dao')
 @ApiTags('dao')
@@ -39,5 +40,17 @@ export class DaoController {
   @DaoAuth(Role.founder)
   update(@Param('daoId') daoId: string, @Body() daoDto: CreateDaoDto): Promise<DaoDto> {
     return this.daoService.update({ ...daoDto, daoId })
+  }
+
+  @Put(':daoId/settings')
+  @DaoAuth(Role.founder)
+  updateSettings(@Param('daoId') daoId: string, @Body() daoSettingsDto: DaoSettingsDto): Promise<DaoSettingsDto> {
+    return this.daoService.setSettings({ ...daoSettingsDto, daoId })
+  }
+
+  @Get(':daoId/settings')
+  @DaoAuth(Role.founder)
+  getSettings(@Param('daoId') daoId: string): Promise<DaoSettingsDto> {
+    return this.daoService.getSettings(daoId)
   }
 }
