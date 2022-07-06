@@ -20,7 +20,7 @@ export default function PersonCard(props: any) {
           <Typography variant="h5" component="div">
             {ensName}
           </Typography>
-          <Divider>{ensAvatar}</Divider>
+          <div>{ensAvatar}</div>
           <Typography>{person['address']}</Typography>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             stake: {((100 * person['shares']) / tokenTotalSupply).toFixed(2)}%
