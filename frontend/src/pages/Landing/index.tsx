@@ -6,7 +6,7 @@ import { PageLayout } from '../../layout/Page'
 
 export default function Landing() {
   const [loading, setLoading] = useState(false)
-  const [failed, setFailed] = useState(false)
+  const [failed] = useState(false)
 
   useEffect(() => {
     if (loading) return

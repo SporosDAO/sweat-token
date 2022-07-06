@@ -7,9 +7,8 @@ import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import * as React from 'react'
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { OWNER } from '../../constants'
-import { ProjectDto } from '../../api/openapi'
 
 export const MainMenuItems = () => {
   return (
@@ -75,7 +74,8 @@ export const DaoMenuItems = () => {
 
   const currentPath = React.useMemo((): string => {
     if (!daoId) return ''
-    const [, , , subpath] = location.pathname.split('/')
+    const parts = location.pathname.split('/')
+    const subpath = parts && parts.length > 0 ? parts[parts.length - 1] : ''
     return subpath
   }, [daoId, location.pathname])
 

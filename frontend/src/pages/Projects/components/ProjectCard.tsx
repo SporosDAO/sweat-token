@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, ListItem, Divider } from '@mui/material'
+import { Card, CardContent, Typography, ListItem } from '@mui/material'
 import { useEnsName, useEnsAvatar } from 'wagmi'
 
 export default function ProjectCard(props: any) {
@@ -29,7 +29,7 @@ export default function ProjectCard(props: any) {
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             manager: {ensName}
           </Typography>
-          <Divider>{ensAvatar}</Divider>
+          <div>{ensAvatar}</div>
         </CardContent>
       </Card>
     </ListItem>

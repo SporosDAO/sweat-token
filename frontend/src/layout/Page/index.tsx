@@ -1,6 +1,6 @@
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import MenuIcon from '@mui/icons-material/Menu'
-import { Box, CssBaseline, IconButton, Stack, Toolbar, useMediaQuery, useTheme } from '@mui/material'
+import { Box, CssBaseline, IconButton, Toolbar, useMediaQuery, useTheme } from '@mui/material'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
@@ -9,11 +9,10 @@ import Link from '@mui/material/Link'
 import List from '@mui/material/List'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
-import React, { ReactNode, useEffect, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { ReactNode, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { OWNER } from '../../constants'
-import usePage, { MainMenuItems, DaoMenuItems, SecondaryMenuItems } from '../../context/PageContext'
-import { useAccount } from '../../context/Web3Context'
+import { MainMenuItems, DaoMenuItems, SecondaryMenuItems } from '../../context/PageContext'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useGetDAO } from '../../graph/getDAO'
 
@@ -85,13 +84,10 @@ interface PageLayoutProps {
 
 export function PageLayout(props: PageLayoutProps) {
   const theme = useTheme()
-  const navigate = useNavigate()
-  const location = useLocation()
 
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const [open, setOpen] = useState(props.withDrawer !== false && !isMobile)
 
-  const account = useAccount()
   const { chainId, daoId } = useParams()
   const { data, error, isLoading, isSuccess } = useGetDAO(chainId, daoId)
   console.debug('useGetDAO', { data, error, isLoading, isSuccess })

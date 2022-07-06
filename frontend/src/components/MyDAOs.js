@@ -1,6 +1,6 @@
 import { useNetwork, useAccount } from '../context/Web3Context'
 import { USER_DAOS } from '../graph'
-import { List, ListItem, Button, Card, CardContent, CardActionArea, Typography } from '@mui/material'
+import { List, ListItem, Card, CardContent, CardActionArea, Typography } from '@mui/material'
 import { useQuery } from 'react-query'
 import { request } from 'graphql-request'
 import { GRAPH_URL } from '../graph'
@@ -18,9 +18,9 @@ export default function MyDAOs() {
   const { address, isConnecting, isDisconnected } = useAccount()
   console.log({ address, isConnecting, isDisconnected })
 
-  const { data, error, isLoading, isSuccess } = useGetUserDAOs(chain?.id, address)
+  const { data, isLoading, isSuccess } = useGetUserDAOs(chain?.id, address)
 
-  const daos = data?.['members']
+  const daos = isSuccess ? data?.['members'] : []
 
   console.log({ chain })
   console.log({ daos })
