@@ -24,7 +24,7 @@ export const getDAO = async (chainId, daoAddress) => {
   }
 }
 
-export function useGetDAO(chainId, daoAddress) => {
+export function useGetDAO(chainId, daoAddress) {
   return useQuery(['getDAO', chainId, daoAddress], async () => {
     const data = await getDAO(chainId, daoAddress)
     return data

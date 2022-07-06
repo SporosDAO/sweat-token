@@ -2,34 +2,32 @@ import { Button, CircularProgress, Grid, Card, CardContent, Typography, List, Li
 import { Box } from '@mui/system'
 import { useParams } from 'react-router-dom'
 import ContentBlock from '../../components/ContentBlock'
-import { useGetPeople } from '../../graph/getPeople'
-import { useQuery } from 'react-query'
+import { useGetProjects } from '../../graph/getProjects'
 import { useEnsName, useEnsAvatar } from 'wagmi'
-import { useEffect } from 'react'
 
 /* eslint react-hooks/rules-of-hooks: 0 */
 
-export default function People() {
+export default function Projects() {
   const { chainId, daoId } = useParams()
 
-  const { data, error, isLoading, isSuccess } = useGetPeople(chainId!, daoId!)
-  const people = data?.data.daos[0]['members']
+  const { data, error, isLoading, isSuccess } = useGetProjects(chainId, daoId)
+  const projects = data?.data.daos[0]['members']
   const tokenTotalSupply = data?.data.daos[0]['token']['totalSupply']
-  console.debug({ people })
+  console.debug({ projects })
   console.debug({ tokenTotalSupply })
   const peopleEns: { [address: string]: { avatar: any; name: any } } = {}
-  if (people) {
-    people.map((person: any) => {
-      const paddr = person['address']
-      peopleEns[paddr] = {
-        name: useEnsName({ address: paddr, chainId: Number(1), cacheTime: 60_000 }).data,
-        avatar: useEnsAvatar({ addressOrName: paddr, chainId: Number(1), cacheTime: 60_000 }).data
+  if (projects) {
+    projects.map((project: any) => {
+      const manager = project['manager']
+      peopleEns[manager] = {
+        name: useEnsName({ address: manager, chainId: Number(1), cacheTime: 60_000 }).data,
+        avatar: useEnsAvatar({ addressOrName: manager, chainId: Number(1), cacheTime: 60_000 }).data
       }
     })
   }
 
   return (
-    <ContentBlock title="People">
+    <ContentBlock title="Projects">
       {isLoading ? (
         <CircularProgress />
       ) : error ? (
@@ -46,19 +44,25 @@ export default function People() {
         </Box>
       ) : (
         <Box>
-          {people && people.length ? (
+          {projects && projects.length ? (
             <List>
-              {people.map((person: any) => (
-                <ListItem key={person['address']}>
+              {projects.map((project: any) => (
+                <ListItem key={project['projectId']}>
                   <Card sx={{ minWidth: 400 }} raised={true}>
                     <CardContent>
                       <Typography variant="h5" component="div">
-                        {peopleEns[person['address']]?.name}
+                        {peopleEns[project['manager']]?.name}
                       </Typography>
-                      <div>{peopleEns[person['address']]?.avatar}</div>
-                      <Typography>{person['address']}</Typography>
+                      <div>{peopleEns[project['manager']]?.avatar}</div>
+                      <Typography>#{project['projectId']}</Typography>
                       <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                        stake: {((100 * person['shares']) / tokenTotalSupply).toFixed(2)}%
+                        budget: {project['budget']}
+                      </Typography>
+                      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                        deadline: {project['deadline']}
+                      </Typography>
+                      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                        goals: {project['goals']}
                       </Typography>
                     </CardContent>
                   </Card>
