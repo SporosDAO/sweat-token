@@ -33,7 +33,7 @@ const ProjectsList = () => {
   const [projects, setProjects] = useState<ProjectDto[]>()
   const [loading, setLoading] = useState<boolean>(false)
   const [failed, setFailed] = useState<boolean>(false)
-  const { daoId } = useDao()
+  const { chainId, daoId } = useDao()
 
   const theme = useTheme()
   const classes = useStyles()
@@ -110,7 +110,7 @@ const ProjectsList = () => {
       )}
 
       <Box textAlign="right">
-        <LinkProject add daoId={daoId}>
+        <LinkProject add chainId={chainId} daoId={daoId}>
           Create new project
         </LinkProject>
       </Box>

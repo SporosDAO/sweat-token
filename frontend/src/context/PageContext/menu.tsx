@@ -126,17 +126,18 @@ export const getProjectUrl = (
 
 interface LinkProjectProps {
   add?: boolean
+  chainId?: string
   daoId?: string
   path?: string
   project?: ProjectDto | { daoId?: string; projectId?: string }
   children: any
 }
 
-export const LinkProject = ({ daoId, add, children, project, path }: LinkProjectProps) => {
+export const LinkProject = ({ chainId, daoId, add, children, project, path }: LinkProjectProps) => {
   project = project || {}
   daoId = daoId || project.daoId
   const projectId = add === true ? 'add' : project.projectId || undefined
-  return <Link to={getProjectUrl(daoId, projectId, path)}>{children}</Link>
+  return <Link to={getProjectUrl(chainId, daoId, projectId, path)}>{children}</Link>
 }
 
 interface LinkDaoProps {
