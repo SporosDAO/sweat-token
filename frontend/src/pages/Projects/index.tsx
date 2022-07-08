@@ -19,7 +19,7 @@ export default function Projects() {
   return (
     <ContentBlock title="Projects">
       <Box display="flex" justifyContent="right">
-        <Fab variant="extended" color="primary" aria-label="proposeProject">
+        <Fab variant="extended" color="primary" aria-label="proposeProject" href="projects/propose">
           <Add />
           Propose Project
         </Fab>

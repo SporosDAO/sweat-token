@@ -12,9 +12,7 @@ export const getProjects = async (chainId, daoAddress) => {
             orderBy: projectID,
             orderDirection: desc,
             where: {
-              dao {
-                address: "${daoAddress.toLowerCase()}"
-              }
+              dao : "${daoAddress.toLowerCase()}"
             }) {
             active
             budget
