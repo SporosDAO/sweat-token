@@ -16,10 +16,10 @@ export const addresses =
         crowdsale: '0xD76B629c528548582Af14c4D3a851830BB0c6978',
         crowdsale2: '0xB677FA3DD5C2C0472f7520b48AA3F642F9c4Af11',
         redemption: '0x3c9eB1c92b4063e6B9fA0531bC8966D3a09565D0',
-        manager: '0xeEffB992BE91B1FAC8C69bE4F2a8d5e334C02282',
+        manager: '0xeEffB992BE91B1FAC8C69bE4F2a8d5e334C02282'
       },
       blockExplorer: 'https://etherscan.io',
-      kaliMaster: '0xfc0Fd933D8ef5b7e552E67aCfc4c09711B413f30',
+      kaliMaster: '0xfc0Fd933D8ef5b7e552E67aCfc4c09711B413f30'
     },
     // Polygon
     137: {
@@ -35,10 +35,10 @@ export const addresses =
         crowdsale: '0x0AE06840C05bf261B1798571696F58F9Ac3b3174',
         crowdsale2: '0x77eC90818fD2116D29A7C39ea3D21808F09986EE',
         redemption: '0xC43AE97f12d979FCAe346E93b62d747963956d63',
-        manager: '0x54e2b96d6f23B5ec8244054816fe3B33412c8538',
+        manager: '0x54e2b96d6f23B5ec8244054816fe3B33412c8538'
       },
       blockExplorer: 'https://polygonscan.com',
-      kaliMaster: '0x93fd58eDAf318E03eD1941e593D74d88b8F4f599',
+      kaliMaster: '0x93fd58eDAf318E03eD1941e593D74d88b8F4f599'
     },
     // Arbitrum
     42161: {
@@ -54,10 +54,10 @@ export const addresses =
         crowdsale: '0x0bb3F43533FBf16d69dBdccf6AaAef81acd76FAB',
         crowdsale2: '0x36a40E0e1581F9a5a6D6B52f5d064F5c8031068f',
         redemption: '0x7452BDCED6f344e0E4e1169377D369aDE1cB0Ca0',
-        manager: '0xb47c9A6A494d344026C60c19C74f54f6AbA54fAa',
+        manager: '0xb47c9A6A494d344026C60c19C74f54f6AbA54fAa'
       },
       blockExplorer: 'https://arbiscan.io',
-      kaliMaster: '0xffe7e91f86fa2c6af0b3cddf0f0906d465e1d760',
+      kaliMaster: '0xffe7e91f86fa2c6af0b3cddf0f0906d465e1d760'
     },
     // Optimism
     10: {
@@ -67,11 +67,11 @@ export const addresses =
       extensions: {
         tribute: '0xc64F31b76FDc6B45d703B95A95a3A7F8A0B509aE',
         crowdsale2: '0x05622EF2b9290f19230FD10e80BB468c51e17b2d',
-        redemption: '0x2b8f116e4D9E73A3A9E7CAF1655B9FC01588Db8d',
+        redemption: '0x2b8f116e4D9E73A3A9E7CAF1655B9FC01588Db8d'
       },
       kaliMaster: '0x0D46996D55bB33D32D43E610aac5B64b477e9cBD',
       ricardian: '0x581b5E51fFBB742f92E818Fb177CAD8a30e43f3E',
-      blockExplorer: 'https://optimistic.etherscan.io',
+      blockExplorer: 'https://optimistic.etherscan.io'
     },
     // Rinkeby
     4: {
@@ -88,10 +88,10 @@ export const addresses =
         crowdsale2: '0x2DCA7b86564Ade753062D6Cd60fb3a61fF1f2f9a',
         redemption: '0x11f44975e1B204E50108Af6BCB6539798cb15F75',
         manager: '0xCFAEA98787d835D127863ED4127F42d00F3D267d',
-        projectmanagement: '0x9f0ad778385a2c688533958c6ada56f201ffc246',
+        projectmanagement: '0x9f0ad778385a2c688533958c6ada56f201ffc246'
       },
       blockExplorer: 'https://rinkeby.etherscan.io',
-      kaliMaster: '0x55967de5aE91F6E1D98b813b9Dca3946bE9f5C20',
+      kaliMaster: '0x55967de5aE91F6E1D98b813b9Dca3946bE9f5C20'
     },
     // Goerli
     5: {
@@ -106,8 +106,8 @@ export const addresses =
         tribute: '0xc64F31b76FDc6B45d703B95A95a3A7F8A0B509aE',
         crowdsale2: '0x8c183bf7f68F70104657C6446d638178cbd6Fd11',
         redemption: '0x2b8f116e4D9E73A3A9E7CAF1655B9FC01588Db8d',
-        projectmanagement: '0x9f0ad778385a2c688533958c6ada56f201ffc246',
+        projectmanagement: '0x9f0ad778385a2c688533958c6ada56f201ffc246'
       },
-      blockExplorer: 'https://goerli.etherscan.io/',
-    },
+      blockExplorer: 'https://goerli.etherscan.io/'
+    }
   }

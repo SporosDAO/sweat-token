@@ -14,7 +14,7 @@ export default function ProposeProject({ setProposal }) {
     control,
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }
   } = useForm()
 
   const {
@@ -23,18 +23,18 @@ export default function ProposeProject({ setProposal }) {
     isSuccess: isWriteSuccess,
     isError,
     error,
-    writeAsync,
+    writeAsync
   } = useContractWrite(
     {
       addressOrName: daoId,
-      contractInterface: KALIDAO_ABI,
+      contractInterface: KALIDAO_ABI
     },
     'propose',
     {
       onSuccess(data) {
         console.log('success!', data)
-      },
-    },
+      }
+    }
   )
 
   const onSubmit = async (data) => {
@@ -44,7 +44,7 @@ export default function ProposeProject({ setProposal }) {
       const abiCoder = ethers.utils.defaultAbiCoder
       payload = abiCoder.encode(
         ['uint256', 'address', 'uint256', 'uint256', 'string'],
-        [0, manager, ethers.utils.parseEther(budget), parseInt(new Date(deadline).getTime() / 1000), goals],
+        [0, manager, ethers.utils.parseEther(budget), parseInt(new Date(deadline).getTime() / 1000), goals]
       )
     } catch (e) {
       console.log('error', e)
@@ -54,8 +54,8 @@ export default function ProposeProject({ setProposal }) {
     const tx = await writeAsync({
       args: [9, description, [addresses[chainId]['extensions']['projectmanagement']], [1], [payload]],
       overrides: {
-        gasLimit: 1050000,
-      },
+        gasLimit: 1050000
+      }
     }).catch((e) => {
       console.log('error', e.code, e.reason)
     })
@@ -63,22 +63,13 @@ export default function ProposeProject({ setProposal }) {
 
   return (
     <Box
-        sx={{
-          maxWidth: 400,
-        }}
+      sx={{
+        maxWidth: 400
+      }}
     >
-      <List
-        component="form"
-        onSubmit={handleSubmit(onSubmit)}
-      >
+      <List component="form" onSubmit={handleSubmit(onSubmit)}>
         <ListItem>
-          <TextField
-            id="manager"
-            label="Manager"
-            helperText="0x..."
-            variant="filled"
-            fullWidth
-          />
+          <TextField id="manager" label="Manager" helperText="0x..." variant="filled" fullWidth />
         </ListItem>
         <ListItem>
           <TextField
@@ -96,19 +87,13 @@ export default function ProposeProject({ setProposal }) {
             label="Deadline"
             type="date"
             InputLabelProps={{
-              shrink: true,
+              shrink: true
             }}
             fullWidth
           />
         </ListItem>
         <ListItem>
-          <TextField
-            id="goal"
-            label="Goal"
-            helperText="Measurable goal of the project"
-            variant="filled"
-            fullWidth
-          />
+          <TextField id="goal" label="Goal" helperText="Measurable goal of the project" variant="filled" fullWidth />
         </ListItem>
         <ListItem>
           <Button type="submit" variant="contained">
