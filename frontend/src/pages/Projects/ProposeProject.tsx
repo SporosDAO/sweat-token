@@ -11,7 +11,7 @@ import { Navigate } from 'react-router-dom'
 export default function ProposeProject() {
   const { chainId, daoId } = useParams()
 
-  const cid = chainId as unknown as number
+  const cid = Number(chainId)
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
   const {
     control,
@@ -33,13 +33,12 @@ export default function ProposeProject() {
     contractInterface: KALIDAO_ABI,
     functionName: 'propose',
     onSuccess(data, variables, context) {
-      console.debug('success', data)
+      console.debug('success', { data, variables, context })
+      alert(`success: ${data}`)
     },
     onError(error, variables, context) {
       console.debug('error', { error, variables, context })
-    },
-    onSettled(data, error, variables, context) {
-      console.debug('settled', { data, error, variables, context })
+      alert(`error: ${error}`)
     }
   })
 
@@ -47,14 +46,15 @@ export default function ProposeProject() {
     console.log(data)
     const { id, manager, budget, deadline, goalTitle, goalLink } = data
     let payload
-    const goals = JSON.stringify([{ goalTitle, goalLink }])
+    const goals = [{ goalTitle, goalLink }]
+    const goalString = JSON.stringify(goals)
     const miliseconds = new Date(deadline).getTime()
     const dateInSecs = Math.floor(miliseconds / 1000)
     try {
       const abiCoder = ethers.utils.defaultAbiCoder
       payload = abiCoder.encode(
         ['uint256', 'address', 'uint256', 'uint256', 'string'],
-        [0, manager, ethers.utils.parseEther(budget), dateInSecs, goals]
+        [0, manager, ethers.utils.parseEther(budget), dateInSecs, goalString]
       )
     } catch (e) {
       console.log('Error while proposing project on chain', e)
@@ -66,8 +66,13 @@ export default function ProposeProject() {
 
     const NO_TOGGLE_EXTENSION_AVAILABILITY = 0
 
+    let description = 'New Project Proposal'
+    goals.map(
+      (goal) => (description = [description, `Goal: ${goal.goalTitle}`, `Goal Tracking Link: ${goalLink}`].join('\n'))
+    )
+    console.debug({ description })
     const tx = await writeAsync({
-      args: [PROPOSAL_TYPE_EXTENSION, goals, [pmAddress], [NO_TOGGLE_EXTENSION_AVAILABILITY], [payload]],
+      args: [PROPOSAL_TYPE_EXTENSION, description, [pmAddress], [NO_TOGGLE_EXTENSION_AVAILABILITY], [payload]],
       overrides: {
         gasLimit: 1050000
       }
