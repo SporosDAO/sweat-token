@@ -1,5 +1,30 @@
+// multi chain registry for Kali and Sporos DAO smart contract addresses
+export type OneChainKaliAddressSet = {
+  name: string
+  factory: string
+  ricardian?: string
+  erc20factory?: string
+  nft?: string
+  access?: string
+  access2: string
+  extensions: {
+    tribute: string
+    crowdsale?: string
+    crowdsale2: string
+    redemption: string
+    manager?: string
+    projectmanagement?: string
+  }
+  blockExplorer?: string
+  kaliMaster?: string
+}
+
+interface Dictionary<T> {
+  [key: number]: T
+}
+
 // extends Kali address set
-export const addresses =
+export const addresses: Dictionary<OneChainKaliAddressSet> =
   // organized by chainId
   {
     // Ethereum
