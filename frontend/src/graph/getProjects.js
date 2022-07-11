@@ -81,7 +81,7 @@ export const getProjects = async (chainId, daoAddress) => {
  * @param {*} daoAddress
  * @returns array of project records
  */
-function useGetProjectsRPC (chainId, daoAddress) {
+function useGetProjectsRPC(chainId, daoAddress) {
   console.log('getProjectsRPC', chainId, daoAddress)
   const cid = Number(chainId)
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
@@ -98,13 +98,12 @@ function useGetProjectsRPC (chainId, daoAddress) {
     onSuccess(data) {
       console.log({ data })
       const nextProjectId = Number(data)
-      console.log({nextProjectId})
-    },
+      console.log({ nextProjectId })
+    }
   })
   console.log('useContractRead result', result)
   return result
 }
-
 
 export function useGetProjects(chainId, daoAddress) {
   /**
