@@ -1650,6 +1650,49 @@ export const DaoApiAxiosParamCreator = function (configuration?: Configuration) 
         /**
          * 
          * @param {string} daoId 
+         * @param {DaoSettingsDto} daoSettingsDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        daoControllerSetSettings: async (daoId: string, daoSettingsDto: DaoSettingsDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'daoId' is not null or undefined
+            assertParamExists('daoControllerSetSettings', 'daoId', daoId)
+            // verify required parameter 'daoSettingsDto' is not null or undefined
+            assertParamExists('daoControllerSetSettings', 'daoSettingsDto', daoSettingsDto)
+            const localVarPath = `/api/dao/{daoId}/settings`
+                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(daoSettingsDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} daoId 
          * @param {CreateDaoDto} createDaoDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1684,49 +1727,6 @@ export const DaoApiAxiosParamCreator = function (configuration?: Configuration) 
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(createDaoDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} daoId 
-         * @param {DaoSettingsDto} daoSettingsDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        daoControllerUpdateSettings: async (daoId: string, daoSettingsDto: DaoSettingsDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'daoId' is not null or undefined
-            assertParamExists('daoControllerUpdateSettings', 'daoId', daoId)
-            // verify required parameter 'daoSettingsDto' is not null or undefined
-            assertParamExists('daoControllerUpdateSettings', 'daoSettingsDto', daoSettingsDto)
-            const localVarPath = `/api/dao/{daoId}/settings`
-                .replace(`{${"daoId"}}`, encodeURIComponent(String(daoId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(daoSettingsDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1795,23 +1795,23 @@ export const DaoApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} daoId 
+         * @param {DaoSettingsDto} daoSettingsDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async daoControllerSetSettings(daoId: string, daoSettingsDto: DaoSettingsDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DaoSettingsDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoControllerSetSettings(daoId, daoSettingsDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} daoId 
          * @param {CreateDaoDto} createDaoDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async daoControllerUpdate(daoId: string, createDaoDto: CreateDaoDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DaoDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.daoControllerUpdate(daoId, createDaoDto, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {string} daoId 
-         * @param {DaoSettingsDto} daoSettingsDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async daoControllerUpdateSettings(daoId: string, daoSettingsDto: DaoSettingsDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DaoSettingsDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.daoControllerUpdateSettings(daoId, daoSettingsDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -1871,22 +1871,22 @@ export const DaoApiFactory = function (configuration?: Configuration, basePath?:
         /**
          * 
          * @param {string} daoId 
+         * @param {DaoSettingsDto} daoSettingsDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        daoControllerSetSettings(daoId: string, daoSettingsDto: DaoSettingsDto, options?: any): AxiosPromise<DaoSettingsDto> {
+            return localVarFp.daoControllerSetSettings(daoId, daoSettingsDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} daoId 
          * @param {CreateDaoDto} createDaoDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         daoControllerUpdate(daoId: string, createDaoDto: CreateDaoDto, options?: any): AxiosPromise<DaoDto> {
             return localVarFp.daoControllerUpdate(daoId, createDaoDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} daoId 
-         * @param {DaoSettingsDto} daoSettingsDto 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        daoControllerUpdateSettings(daoId: string, daoSettingsDto: DaoSettingsDto, options?: any): AxiosPromise<DaoSettingsDto> {
-            return localVarFp.daoControllerUpdateSettings(daoId, daoSettingsDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1955,6 +1955,18 @@ export class DaoApi extends BaseAPI {
     /**
      * 
      * @param {string} daoId 
+     * @param {DaoSettingsDto} daoSettingsDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DaoApi
+     */
+    public daoControllerSetSettings(daoId: string, daoSettingsDto: DaoSettingsDto, options?: AxiosRequestConfig) {
+        return DaoApiFp(this.configuration).daoControllerSetSettings(daoId, daoSettingsDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} daoId 
      * @param {CreateDaoDto} createDaoDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1962,18 +1974,6 @@ export class DaoApi extends BaseAPI {
      */
     public daoControllerUpdate(daoId: string, createDaoDto: CreateDaoDto, options?: AxiosRequestConfig) {
         return DaoApiFp(this.configuration).daoControllerUpdate(daoId, createDaoDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} daoId 
-     * @param {DaoSettingsDto} daoSettingsDto 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DaoApi
-     */
-    public daoControllerUpdateSettings(daoId: string, daoSettingsDto: DaoSettingsDto, options?: AxiosRequestConfig) {
-        return DaoApiFp(this.configuration).daoControllerUpdateSettings(daoId, daoSettingsDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

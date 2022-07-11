@@ -7,11 +7,12 @@ import { DaoAuth } from '../dao.auth.decorator'
 import { CreateDaoDto, DaoDto } from '../dao.dto'
 import { DaoService } from '../dao.service'
 import { DaoSettingsDto } from '../settings/dao.settings.dto'
+import { DaoSettingsService } from '../settings/dao.settings.service'
 
 @Controller('dao')
 @ApiTags('dao')
 export class DaoController {
-  constructor(private daoService: DaoService) {}
+  constructor(private daoService: DaoService, private daoSettingsService: DaoSettingsService) {}
 
   @Get()
   list(): Promise<DaoDto[]> {
@@ -42,15 +43,19 @@ export class DaoController {
     return this.daoService.update({ ...daoDto, daoId })
   }
 
-  @Put(':daoId/settings')
+  @Put(':chainId/:daoId/settings')
   @DaoAuth(Role.founder)
-  updateSettings(@Param('daoId') daoId: string, @Body() daoSettingsDto: DaoSettingsDto): Promise<DaoSettingsDto> {
-    return this.daoService.setSettings({ ...daoSettingsDto, daoId })
+  setSettings(
+    @Param('daoId') daoId: string,
+    @Param('chainId') chainId: string,
+    @Body() daoSettingsDto: DaoSettingsDto,
+  ): Promise<DaoSettingsDto> {
+    return this.daoSettingsService.setSettings({ ...daoSettingsDto, chainId, daoId })
   }
 
-  @Get(':daoId/settings')
+  @Get(':chainId/:daoId/settings')
   @DaoAuth(Role.founder)
-  getSettings(@Param('daoId') daoId: string): Promise<DaoSettingsDto> {
-    return this.daoService.getSettings(daoId)
+  getSettings(@Param('chainId') chainId: string, @Param('daoId') daoId: string): Promise<DaoSettingsDto> {
+    return this.daoSettingsService.getSettings(chainId, daoId)
   }
 }

@@ -55,28 +55,24 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
     if (token || user) return
     if (signaturePending) return
     if (!account) return
+    if (!signer) return
     if (error) return
-    return // TODO cleanup auth flow
     api
       .getUserByAddress(account.address!)
       .then(({ nonce, userId }: NonceDto) => {
-        if (!signer) {
-          throw Error('Web3 Signer Not Available')
-        } else {
-          return signer
-            .signMessage(nonce)
-            .then((signature: any) =>
-              api.verifySignature({ userId, nonce, signature } as NonceDto).catch((e) => {
-                console.warn(`Invalid signature? ${e.stack}`)
-                // setAccount(undefined)
-                return Promise.reject(e)
-              })
-            )
-            .then((jwt: JwtTokenDto) => {
-              setToken(jwt.token)
-              document.cookie = `token=${jwt.token};expires=${new Date(Date.now() + 10 * 24 * 60 * 60 * 1000)};path=/`
+        return signer
+          .signMessage(nonce)
+          .then((signature: any) =>
+            api.verifySignature({ userId, nonce, signature } as NonceDto).catch((e) => {
+              console.warn(`Invalid signature? ${e.stack}`)
+              // setAccount(undefined)
+              return Promise.reject(e)
             })
-        }
+          )
+          .then((jwt: JwtTokenDto) => {
+            setToken(jwt.token)
+            document.cookie = `token=${jwt.token};expires=${new Date(Date.now() + 10 * 24 * 60 * 60 * 1000)};path=/`
+          })
       })
       .catch((e: any) => {
         // user denied

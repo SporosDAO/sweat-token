@@ -14,6 +14,7 @@ import { ScheduleModule } from '@nestjs/schedule'
 import { DaoProposalCronService } from './proposal/dao.proposal.cron.service'
 import { DaoProposal, DaoProposalSchema } from './proposal/dao.proposal.schema'
 import { DaoSettings, DaoSettingsSchema } from './settings/dao.settings.schema'
+import { DaoSettingsService } from './settings/dao.settings.service'
 
 @Module({
   imports: [
@@ -27,8 +28,8 @@ import { DaoSettings, DaoSettingsSchema } from './settings/dao.settings.schema'
     TaskModule,
     ProjectModule,
   ],
-  providers: [DaoService, ProjectEventListenerService, DaoProposalCronService],
+  providers: [DaoService, ProjectEventListenerService, DaoProposalCronService, DaoSettingsService],
   controllers: [DaoController, MemberController, TaskController, ProjectController],
-  exports: [DaoService],
+  exports: [DaoService, DaoSettingsService],
 })
 export class DaoModule {}

@@ -6,7 +6,11 @@ export type DaoSettingsDocument = DaoSettings & Document
 @Schema()
 export class DaoSettings {
   @Prop({
-    unique: true,
+    required: true,
+  })
+  chainId: string
+
+  @Prop({
     required: true,
   })
   daoId: string

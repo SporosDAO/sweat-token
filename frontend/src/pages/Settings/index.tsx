@@ -1,6 +1,12 @@
 import { Grid, Paper, useTheme, useMediaQuery, Input, TextField, Stack, Button } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { Box } from '@mui/system'
+import { useCallback, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { useMutation } from 'react-query'
+import { setSettings } from '../../api'
+import { DaoSettingsDto } from '../../api/openapi'
+import { couldStartTrivia } from 'typescript'
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -20,8 +26,27 @@ export default function Settings() {
   const classes = useStyles()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
+  const { daoId } = useParams()
+  const [formValues, setFormValues] = useState<DaoSettingsDto>({ daoId: daoId || '' })
+
+  const mutation = useMutation((daoSettingsDto: DaoSettingsDto) => {
+    return setSettings(daoSettingsDto)
+  })
+
+  const onChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+      setFormValues({
+        ...formValues,
+        [e.target.name]: e.target.value
+      })
+    },
+    [formValues]
+  )
+
   const saveDiscordWebhook = () => {
     console.log('save discord')
+    if (!formValues.discordWebhookBotName || !formValues.discordWebhookUrl) return
+    mutation.mutate(formValues)
   }
 
   return (
@@ -43,14 +68,18 @@ export default function Settings() {
               placeholder="Discord Webhook URL"
               fullWidth
               type="text"
-              name="webhook-url"
+              name="discordWebhookUrl"
+              onChange={onChange}
+              value={formValues.discordWebhookUrl || ''}
             />
             <TextField
               helperText="Name shown on the message"
               placeholder="Discord Bot Name"
               fullWidth
               type="text"
-              name="webhook-name"
+              name="discordWebhookBotName"
+              onChange={onChange}
+              value={formValues.discordWebhookBotName || ''}
             />
 
             <Box sx={{ mt: 2, textAlign: 'right' }}>

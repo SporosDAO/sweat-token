@@ -1,70 +1,63 @@
-import { CanActivate, ExecutionContext, Injectable, NotFoundException } from '@nestjs/common'
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { ROLES_KEY } from 'src/auth/auth.roles.decorator'
-import { checkUserRoles } from 'src/auth/auth.roles.guard'
-import { MemberDto } from 'src/member/member.dto'
+import axios from 'axios'
 import { MemberService } from 'src/member/member.service'
-import { Role, UserDto } from 'src/user/user.dto'
-import { DAO_ROLES_KEY } from './dao.auth.roles.decorator'
-import { DaoDto } from './dao.dto'
+import { UserDto } from 'src/user/user.dto'
 import { DaoService } from './dao.service'
 
 @Injectable()
 export class DaoRolesGuard implements CanActivate {
   constructor(private daoService: DaoService, private memberService: MemberService, private reflector: Reflector) {}
 
-  checkUserRoles(user: UserDto, context: ExecutionContext): boolean {
-    const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ])
-    if (!requiredRoles || !requiredRoles.length) return false
-    return checkUserRoles(user, requiredRoles)
-  }
-
-  checkDaoRoles(user: { roles: Role[] }, requiredDaoRoles: Role[]): boolean {
-    if (user.roles?.includes(Role.admin)) return true
-    const hasRole = requiredDaoRoles.some((role) => user.roles?.includes(role))
-    return hasRole
-  }
-
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest()
-    const { user, params } = req
+    const { params } = req
+    const user = req.user as UserDto
 
     if (!user) return false
 
-    const hasAdminRoles = this.checkUserRoles(user, context)
-    if (hasAdminRoles) return true
+    const res = await this.getPeople(params.chainId, params.daoId)
+    if (!res) return false
 
-    const requiredDaoRoles = this.reflector.getAllAndOverride<Role[]>(DAO_ROLES_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ])
-    if (!requiredDaoRoles || !requiredDaoRoles.length) return true
+    const { people, tokenTotalSupply } = res
 
-    if (!params) return false
+    const stakes = people
+      .filter((p) => p.address !== user.publicAddress)
+      .map(({ shares }) => (100 * +shares) / tokenTotalSupply)
 
-    if (!params.daoId) return false
+    if (!stakes.length) return false
 
-    const dao = await this.daoService.load({
-      daoId: params.daoId,
-    })
-    if (!dao) return false
+    const isAdmin = stakes[0] > +process.env.SHARES_ADMIN
+    return isAdmin
+  }
 
-    const member = await this.memberService.load({
-      userId: user.userId,
-      daoId: params.daoId,
-    })
-    if (!member) return false
-
-    const hasRoles = this.checkDaoRoles(member, requiredDaoRoles)
-    if (!hasRoles) return false
-
-    // store in req context
-    req.member = member
-    req.dao = dao
-
-    return true
+  async getPeople(
+    chainId,
+    address,
+  ): Promise<{ people: { address: string; shares: string }[]; tokenTotalSupply: number }> {
+    try {
+      const res = await axios.post(process.env.GRAPH_URL[chainId], {
+        query: `query {
+            daos(where: {
+              id: "${address.toLowerCase()}"
+            }) {
+                id
+                members {
+                    address
+                    shares
+                  }
+                  token {
+                    totalSupply
+                  }
+            }
+          }`,
+      })
+      const tokenTotalSupply = res.data.data.daos[0]['token']['totalSupply']
+      const people = res.data.data.daos[0]['members']
+      return { people, tokenTotalSupply }
+    } catch (e) {
+      console.error(e)
+      return null
+    }
   }
 }

@@ -7,6 +7,7 @@ import {
   CreateTaskDto,
   DaoApi,
   DaoDto,
+  DaoSettingsDto,
   ExtendedMemberDto,
   JwtTokenDto,
   MemberApi,
@@ -181,5 +182,15 @@ export const deleteMember = async (daoId: string, memberId: string): Promise<voi
 
 export const inviteMember = async (data: MemberInviteDto): Promise<MemberDto> => {
   const res = await client.member.memberControllerInvite(data.daoId, data)
+  return res.data
+}
+
+export const getSettings = async (daoId: string): Promise<DaoSettingsDto> => {
+  const res = await client.dao.daoControllerGetSettings(daoId)
+  return res.data
+}
+
+export const setSettings = async (s: DaoSettingsDto): Promise<DaoSettingsDto> => {
+  const res = await client.dao.daoControllerSetSettings(s.daoId, s)
   return res.data
 }
