@@ -39,7 +39,7 @@ export default function MyDAOs() {
           {daos.map((dao) => (
             <ListItem key={dao['dao']['id']}>
               <Card sx={{ minWidth: 275 }} raised={true}>
-                <CardActionArea href={`dao/chain/${chain.id}/address/${dao['dao']['id']}/people`}>
+                <CardActionArea href={`dao/chain/${chain.id}/address/${dao['dao']['id']}/projects`}>
                   <CardContent>
                     <Typography variant="h5" component="div">
                       {dao['dao']['token']['name']}

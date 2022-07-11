@@ -7,6 +7,9 @@ import { useParams } from 'react-router-dom'
 import { Box, TextField, Button, List, ListItem } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { Navigate } from 'react-router-dom'
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
+import { CircularProgress, Fab } from '@mui/material'
+import { Check, Error } from '@mui/icons-material'
 
 export default function ProposeProject() {
   const { chainId, daoId } = useParams()
@@ -24,8 +27,8 @@ export default function ProposeProject() {
     data,
     isLoading: isWritePending,
     isSuccess: isWriteSuccess,
-    isError,
-    error,
+    isError: isWriteError,
+    error: writeError,
     writeAsync
   } = useContractWrite({
     addressOrName: daoId || '',
@@ -34,15 +37,16 @@ export default function ProposeProject() {
     functionName: 'propose',
     onSuccess(data, variables, context) {
       console.debug('success', { data, variables, context })
-      alert(`success: ${data}`)
+      // alert(`Proposal successfully submitted on chain.`)
     },
     onError(error, variables, context) {
       console.debug('error', { error, variables, context })
-      alert(`error: ${error}`)
+      // alert(`Proposal failed with error: ${error}`)
     }
   })
 
   const onSubmit = async (data: any) => {
+    setDialogOpen(true)
     console.log(data)
     const { id, manager, budget, deadline, goalTitle, goalLink } = data
     let payload
@@ -68,7 +72,7 @@ export default function ProposeProject() {
 
     let description = 'New Project Proposal'
     goals.map(
-      (goal) => (description = [description, `Goal: ${goal.goalTitle}`, `Goal Tracking Link: ${goalLink}`].join('\n'))
+      (goal) => (description = [description, `Goal: ${goal.goalTitle}`, `Goal Tracking Link: ${goalLink}`].join('.\n'))
     )
     console.debug({ description })
     const tx = await writeAsync({
@@ -80,6 +84,22 @@ export default function ProposeProject() {
       console.log('error', e.code, e.reason)
     })
   }
+
+  const onDialogClose = async () => {
+    console.debug('onDialogClose', { isWriteSuccess, isWritePending })
+
+    if (isWritePending) {
+      console.debug('onDialogClose user escape ignored. Tx pending.')
+      return
+    }
+
+    if (isWriteSuccess) {
+      return <Navigate replace to="projects" />
+    }
+    setDialogOpen(false)
+  }
+
+  const [dialogOpen, setDialogOpen] = React.useState(false)
 
   if (!chainId || !daoId) {
     console.debug('chainId and daoId required', { chainId, daoId })
@@ -157,6 +177,57 @@ export default function ProposeProject() {
           </Button>
         </ListItem>
       </List>
+      <Dialog
+        open={dialogOpen}
+        onClose={onDialogClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Submitting Proposal
+          <Fab
+            aria-label="error"
+            color="error"
+            sx={{
+              visibility: isWriteError ? 'visible' : 'hidden',
+              position: 'absolute',
+              right: 8,
+              top: 8
+            }}
+          >
+            <Error />
+          </Fab>
+          <Fab
+            sx={{
+              visibility: isWriteSuccess ? 'visible' : 'hidden',
+              position: 'absolute',
+              right: 8,
+              top: 8
+            }}
+            id="alert-dialog-success"
+            color="primary"
+            aria-label="success"
+          >
+            <Check />
+          </Fab>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Please approve the transaction in your web3 wallet.
+          </DialogContentText>
+          <CircularProgress sx={{ visibility: isWritePending ? 'visible' : 'hidden' }} />
+          <Box id="alert-dialog-error" sx={{ visibility: isWriteError ? 'visible' : 'hidden' }}>
+            <DialogContentText>Error while submitting transaction.</DialogContentText>
+            <DialogContentText color="error">{writeError?.message}</DialogContentText>
+            <DialogContentText>Please check your web3 wallet for details.</DialogContentText>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button sx={{ visibility: isWritePending ? 'hidden' : 'visible' }} onClick={onDialogClose}>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   )
 }
