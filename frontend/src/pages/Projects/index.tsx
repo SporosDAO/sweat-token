@@ -13,7 +13,7 @@ export default function Projects() {
 
   const { data, error, isLoading, isSuccess } = useGetProjects(chainId, daoId)
   console.debug('useGetProjects', { data, error, isLoading, isSuccess })
-  const projects = isSuccess && data ? (data as { projects: [] }).projects : []
+  const projects = isSuccess && data ? (data as unknown as { projects: [] }).projects : []
   console.debug({ projects })
 
   return (

@@ -1,7 +1,12 @@
-import { Card, CardContent, Typography, ListItem } from '@mui/material'
+import { Card, CardContent, CardActions } from '@mui/material'
+import { Button, Typography, ListItem } from '@mui/material'
 import { useEnsName, useEnsAvatar } from 'wagmi'
+import { Work, Launch } from '@mui/icons-material'
+import { useParams } from 'react-router-dom'
 
 export default function ProjectCard(props: any) {
+  const { chainId, daoId } = useParams()
+
   const project = props.project
 
   const manager = project['manager']
@@ -31,6 +36,20 @@ export default function ProjectCard(props: any) {
           </Typography>
           <div>{ensAvatar}</div>
         </CardContent>
+        <CardActions sx={{ justifyContent: 'space-between' }}>
+          <Button variant="text" endIcon={<Work />} href={`projects/${project['projectID']}/tribute`}>
+            Tribute
+          </Button>
+          <Button
+            variant="text"
+            endIcon={<Launch />}
+            href={`https://app.kali.gg/daos/${chainId}/${daoId}`}
+            rel="noopener"
+            target="_blank"
+          >
+            Kali
+          </Button>
+        </CardActions>
       </Card>
     </ListItem>
   )

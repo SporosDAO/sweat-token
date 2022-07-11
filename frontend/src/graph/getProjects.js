@@ -1,5 +1,9 @@
 import { useQuery } from 'react-query'
 import { GRAPH_URL } from './url'
+import { useContractRead, useContractReads } from 'wagmi'
+import PM_ABI from '../abi/ProjectManagement.json'
+import { addresses } from '../constants/addresses'
+import { BigNumber } from 'ethers'
 
 export const getProjects = async (chainId, daoAddress) => {
   console.log('getProjects', chainId, daoAddress)
@@ -60,13 +64,53 @@ export const getProjects = async (chainId, daoAddress) => {
         }
       ]
     }
+    console.log({ data })
     return data
   } catch (e) {
+    console.error('Error fetching projects', { e })
     return e
   }
 }
 
+/**
+ *
+ * Alternative to theGraph function, which has intermittent data availability issues.
+ *
+ *
+ * @param {*} chainId
+ * @param {*} daoAddress
+ * @returns array of project records
+ */
+function useGetProjectsRPC (chainId, daoAddress) {
+  console.log('getProjectsRPC', chainId, daoAddress)
+  const cid = Number(chainId)
+  const pmAddress = addresses[cid]['extensions']['projectmanagement']
+  let result
+
+  const pmContract = {
+    addressOrName: pmAddress,
+    contractInterface: PM_ABI,
+    chainId: cid
+  }
+  result = useContractRead({
+    ...pmContract,
+    functionName: 'nextProjectId',
+    onSuccess(data) {
+      console.log({ data })
+      const nextProjectId = Number(data)
+      console.log({nextProjectId})
+    },
+  })
+  console.log('useContractRead result', result)
+  return result
+}
+
+
 export function useGetProjects(chainId, daoAddress) {
+  /**
+  const { data, error, isError, isLoading, isSuccess } = useGetProjectsRPC(chainId, daoAddress)
+  return { data, error, isError, isLoading, isSuccess }
+   */
   return useQuery(['getProjects', chainId, daoAddress], async () => {
     const data = await getProjects(chainId, daoAddress)
     return data

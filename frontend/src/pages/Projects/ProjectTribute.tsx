@@ -2,18 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { ethers } from 'ethers'
 import { useContractWrite } from 'wagmi'
 import { addresses } from '../../constants/addresses'
-import KALIDAO_ABI from '../../abi/KaliDAO.json'
+import PM_ABI from '../../abi/ProjectManagement.json'
 import { useParams } from 'react-router-dom'
 import { Box, TextField, Button, List, ListItem } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { Navigate } from 'react-router-dom'
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
-import { CircularProgress, IconButton } from '@mui/material'
-import { Check, Error } from '@mui/icons-material'
 import Web3Dialog from '../../components/Web3Dialog'
 
-export default function ProposeProject() {
-  const { chainId, daoId } = useParams()
+export default function ProjectTribute() {
+  const { chainId, daoId, projectId } = useParams()
 
   const cid = Number(chainId)
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
@@ -32,10 +29,10 @@ export default function ProposeProject() {
     error: writeError,
     writeAsync
   } = useContractWrite({
-    addressOrName: daoId || '',
+    addressOrName: pmAddress || '',
     chainId: cid,
-    contractInterface: KALIDAO_ABI,
-    functionName: 'propose',
+    contractInterface: PM_ABI,
+    functionName: 'callExtension',
     onSuccess(data, variables, context) {
       console.debug('success', { data, variables, context })
       // alert(`Proposal successfully submitted on chain.`)
@@ -49,40 +46,40 @@ export default function ProposeProject() {
   const onSubmit = async (data: any) => {
     setDialogOpen(true)
     console.log(data)
-    const { id, manager, budget, deadline, goalTitle, goalLink } = data
+    const { contributorAddress, mintAmount, tributeTitle, tributeLink } = data
+    const tribute = [{ tributeTitle, tributeLink }]
+    const tributeString = JSON.stringify(tribute)
+
     let payload
-    const goals = [{ goalTitle, goalLink }]
-    const goalString = JSON.stringify(goals)
-    const miliseconds = new Date(deadline).getTime()
-    const dateInSecs = Math.floor(miliseconds / 1000)
     try {
       const abiCoder = ethers.utils.defaultAbiCoder
       payload = abiCoder.encode(
-        ['uint256', 'address', 'uint256', 'uint256', 'string'],
-        [0, manager, ethers.utils.parseEther(budget), dateInSecs, goalString]
+        ['uint256', 'address', 'uint256', 'string'],
+        [
+          projectId, // project id of the just activated project
+          contributorAddress, // address of contributor to receive DAO tokens
+          ethers.utils.parseEther(mintAmount), // mint amount in whole token units similar to Ether with 18 decimal places
+          tributeString // reference to tribute that contributor makes to DAO in exchange for DAO tokens
+        ]
       )
     } catch (e) {
-      console.log('Error while encoding project proposal', e)
+      console.log('Error while encoding project tribute', e)
       return
     }
 
-    // https://github.com/kalidao/kali-contracts/blob/c3b25ca762f083dfe88096a7a512b33607c0ac57/contracts/KaliDAO.sol#L111
-    const PROPOSAL_TYPE_EXTENSION = 9
-
-    const TOGGLE_EXTENSION_AVAILABILITY = 1
-
-    let description = 'New Project Proposal'
-    goals.map(
-      (goal) => (description = [description, `Goal: ${goal.goalTitle}`, `Goal Tracking Link: ${goalLink}`].join('.\n'))
-    )
-    console.debug({ description })
+    console.debug({
+      projectId,
+      contributorAddress,
+      mintAmount,
+      tributeString
+    })
     const tx = await writeAsync({
-      args: [PROPOSAL_TYPE_EXTENSION, description, [pmAddress], [TOGGLE_EXTENSION_AVAILABILITY], [payload]],
+      args: [daoId, [payload]],
       overrides: {
         gasLimit: 1050000
       }
     }).catch((e) => {
-      console.log('error', e.code, e.reason)
+      console.log('writeAsync error', { e })
     })
   }
 
@@ -99,8 +96,8 @@ export default function ProposeProject() {
 
   const [dialogOpen, setDialogOpen] = React.useState(false)
 
-  if (!chainId || !daoId) {
-    console.debug('chainId and daoId required', { chainId, daoId })
+  if (!chainId || !daoId || !projectId) {
+    console.debug('chainId, daoId and projectId required', { chainId, daoId })
     return <Navigate replace to="/" />
   }
 
@@ -113,60 +110,47 @@ export default function ProposeProject() {
       <List component="form" onSubmit={handleSubmit(onSubmit)}>
         <ListItem>
           <TextField
-            id="manager"
-            label="Manager"
+            id="contributorAddress"
+            label="Contributor"
             helperText="ETH L1/L2 address: 0x..."
             variant="filled"
             fullWidth
             required
-            {...register('manager')}
+            {...register('contributorAddress')}
           />
         </ListItem>
         <ListItem>
           <TextField
-            id="budget"
-            label="Budget"
-            helperText="Amount in DAO sweat tokens"
+            id="mintAmount"
+            label="Mint Amount"
+            helperText="Amount in DAO sweat tokens to mint to contributor"
             variant="filled"
             type="number"
             fullWidth
             required
-            {...register('budget')}
+            {...register('mintAmount')}
           />
         </ListItem>
         <ListItem>
           <TextField
-            id="deadline"
-            label="Deadline"
-            type="date"
-            InputLabelProps={{
-              shrink: true
-            }}
-            fullWidth
-            required
-            {...register('deadline')}
-          />
-        </ListItem>
-        <ListItem>
-          <TextField
-            id="goalTitle"
-            label="Goal"
-            helperText="Describe a measurable goal of the project"
+            id="tributeTitle"
+            label="Tribute Title"
+            helperText="Describe the tribute to the project"
             variant="filled"
             fullWidth
             required
-            {...register('goalTitle')}
+            {...register('tributeTitle')}
           />
         </ListItem>
         <ListItem>
           <TextField
-            id="goalLink"
+            id="tributeLink"
             type="url"
-            label="Goal Tracking Link"
-            helperText="URL to project board where this goal is tracked."
+            label="Tribute Reference Link"
+            helperText="URL referencing tribute details."
             variant="filled"
             fullWidth
-            {...register('goalLink')}
+            {...register('tributeLink')}
           />
         </ListItem>
         <ListItem>
