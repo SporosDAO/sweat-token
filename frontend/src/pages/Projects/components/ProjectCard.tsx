@@ -18,13 +18,13 @@ export default function ProjectCard(props: any) {
   const ensAvatar = !ensAvatarResult.isError && !ensAvatarResult.isLoading ? ensAvatarResult.data : ''
 
   return (
-    <ListItem key={project['projectID']}>
+    <ListItem key={project['id']}>
       <Card sx={{ minWidth: 400 }} raised={true}>
         <CardContent>
           <Typography variant="h5" component="div">
-            {project['goals']}
+            {project['goals'][0]}
           </Typography>
-          <Typography>#{project['projectID']}</Typography>
+          <Typography>#{project['id']}</Typography>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             budget: {project['budget']}
           </Typography>

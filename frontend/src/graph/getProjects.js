@@ -4,6 +4,7 @@ import { useContractRead, useContractReads } from 'wagmi'
 import PM_ABI from '../abi/ProjectManagement.json'
 import { addresses } from '../constants/addresses'
 import { BigNumber } from 'ethers'
+import { useState } from 'react'
 
 export const getProjects = async (chainId, daoAddress) => {
   console.log('getProjects', chainId, daoAddress)
@@ -82,6 +83,9 @@ export const getProjects = async (chainId, daoAddress) => {
  * @returns array of project records
  */
 function useGetProjectsRPC(chainId, daoAddress) {
+
+  const [nextProjectId, setNextProjectId] = useState(100) // 100 is low watermark in the PM contract
+
   console.log('getProjectsRPC', chainId, daoAddress)
   const cid = Number(chainId)
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
@@ -97,21 +101,39 @@ function useGetProjectsRPC(chainId, daoAddress) {
     functionName: 'nextProjectId',
     onSuccess(data) {
       console.log({ data })
-      const nextProjectId = Number(data)
-      console.log({ nextProjectId })
+      const nextPid = Number(data)
+      console.log({ nextPid })
+      setNextProjectId(nextPid)
     }
   })
   console.log('useContractRead result', result)
+  const projectRequests = []
+  for (let pid = nextProjectId - 1; pid > 100; pid--) {
+      projectRequests.push({
+        ...pmContract,
+        functionName: 'projects',
+        args: [pid],
+      })
+  }
+  result = useContractReads({
+    contracts: projectRequests,
+    onSuccess(data) {
+      console.log({ data })
+      const projects = data
+      console.log({ projects })
+    }
+  })
+  console.log('useContractReads result', result)
   return result
 }
 
 export function useGetProjects(chainId, daoAddress) {
-  /**
   const { data, error, isError, isLoading, isSuccess } = useGetProjectsRPC(chainId, daoAddress)
   return { data, error, isError, isLoading, isSuccess }
-   */
+  /**
   return useQuery(['getProjects', chainId, daoAddress], async () => {
     const data = await getProjects(chainId, daoAddress)
     return data
   })
+  */
 }

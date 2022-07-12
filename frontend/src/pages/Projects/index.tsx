@@ -13,7 +13,7 @@ export default function Projects() {
 
   const { data, error, isLoading, isSuccess } = useGetProjects(chainId, daoId)
   console.debug('useGetProjects', { data, error, isLoading, isSuccess })
-  const projects = isSuccess && data ? (data as unknown as { projects: [] }).projects : []
+  const projects = isSuccess && data ? (data as unknown as []) : []
   console.debug({ projects })
 
   return (
@@ -43,7 +43,7 @@ export default function Projects() {
           {projects && projects.length ? (
             <List>
               {projects.map((project: any) => (
-                <ProjectCard key={project['projectID']} project={project} />
+                <ProjectCard key={project['id']} project={project} />
               ))}
             </List>
           ) : (
