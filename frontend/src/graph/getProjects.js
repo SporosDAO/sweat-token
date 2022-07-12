@@ -3,8 +3,7 @@ import { GRAPH_URL } from './url'
 import { useContractRead, useContractReads } from 'wagmi'
 import PM_ABI from '../abi/ProjectManagement.json'
 import { addresses } from '../constants/addresses'
-import { BigNumber } from 'ethers'
-import { useState } from 'react'
+import { ethers } from 'ethers'
 
 export const getProjects = async (chainId, daoAddress) => {
   console.log('getProjects', chainId, daoAddress)
@@ -83,9 +82,6 @@ export const getProjects = async (chainId, daoAddress) => {
  * @returns array of project records
  */
 function useGetProjectsRPC(chainId, daoAddress) {
-
-  const [nextProjectId, setNextProjectId] = useState(100) // 100 is low watermark in the PM contract
-
   console.log('getProjectsRPC', chainId, daoAddress)
   const cid = Number(chainId)
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
@@ -98,22 +94,18 @@ function useGetProjectsRPC(chainId, daoAddress) {
   }
   result = useContractRead({
     ...pmContract,
-    functionName: 'nextProjectId',
-    onSuccess(data) {
-      console.log({ data })
-      const nextPid = Number(data)
-      console.log({ nextPid })
-      setNextProjectId(nextPid)
-    }
+    functionName: 'nextProjectId'
   })
   console.log('useContractRead result', result)
+  const nextProjectId = result.data ? Number(result.data) : 100 // low watermark in PM contract
+  console.log({ nextProjectId })
   const projectRequests = []
   for (let pid = nextProjectId - 1; pid > 100; pid--) {
-      projectRequests.push({
-        ...pmContract,
-        functionName: 'projects',
-        args: [pid],
-      })
+    projectRequests.push({
+      ...pmContract,
+      functionName: 'projects',
+      args: [pid]
+    })
   }
   result = useContractReads({
     contracts: projectRequests,
@@ -129,7 +121,20 @@ function useGetProjectsRPC(chainId, daoAddress) {
 
 export function useGetProjects(chainId, daoAddress) {
   const { data, error, isError, isLoading, isSuccess } = useGetProjectsRPC(chainId, daoAddress)
-  return { data, error, isError, isLoading, isSuccess }
+  const projects = []
+  if (data) {
+    data.map((project) => {
+      const prj = {
+        projectID: project.id.toNumber(),
+        budget: ethers.utils.formatEther(project.budget, { commify: true }),
+        deadline: project.deadline,
+        manager: project.manager,
+        goals: JSON.parse(project.goals)
+      }
+      projects.push(prj)
+    })
+  }
+  return { projects, error, isError, isLoading, isSuccess }
   /**
   return useQuery(['getProjects', chainId, daoAddress], async () => {
     const data = await getProjects(chainId, daoAddress)

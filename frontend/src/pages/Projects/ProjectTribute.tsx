@@ -167,7 +167,7 @@ export default function ProjectTribute() {
           isWriteError,
           writeError,
           isWriteSuccess,
-          hrefAfterSuccess: '../'
+          hrefAfterSuccess: '..'
         }}
       />
     </Box>

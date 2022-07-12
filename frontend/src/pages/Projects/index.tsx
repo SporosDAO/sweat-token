@@ -11,15 +11,14 @@ import ProjectCard from './components/ProjectCard'
 export default function Projects() {
   const { chainId, daoId } = useParams()
 
-  const { data, error, isLoading, isSuccess } = useGetProjects(chainId, daoId)
-  console.debug('useGetProjects', { data, error, isLoading, isSuccess })
-  const projects = isSuccess && data ? (data as unknown as []) : []
+  const { projects, error, isLoading, isSuccess } = useGetProjects(chainId, daoId)
+  console.debug('useGetProjects', { projects, error, isLoading, isSuccess })
   console.debug({ projects })
 
   return (
     <ContentBlock title="Projects">
       <Box display="flex" justifyContent="right">
-        <Fab variant="extended" color="primary" aria-label="proposeProject" href="./projects/propose">
+        <Fab variant="extended" color="primary" aria-label="proposeProject" href="projects/propose">
           <Add />
           Propose Project
         </Fab>
@@ -43,7 +42,7 @@ export default function Projects() {
           {projects && projects.length ? (
             <List>
               {projects.map((project: any) => (
-                <ProjectCard key={project['id']} project={project} />
+                <ProjectCard key={project['projectID']} project={project} />
               ))}
             </List>
           ) : (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { ethers } from 'ethers'
-import { useContractWrite } from 'wagmi'
+import { useContractRead, useContractWrite } from 'wagmi'
 import { addresses } from '../../constants/addresses'
 import KALIDAO_ABI from '../../abi/KaliDAO.json'
 import { useParams } from 'react-router-dom'
@@ -22,6 +22,12 @@ export default function ProjectProposal() {
     formState: { errors }
   } = useForm()
 
+  const daoContract = {
+    addressOrName: daoId || '',
+    chainId: cid,
+    contractInterface: KALIDAO_ABI
+  }
+
   const {
     data,
     isLoading: isWritePending,
@@ -30,9 +36,7 @@ export default function ProjectProposal() {
     error: writeError,
     writeAsync
   } = useContractWrite({
-    addressOrName: daoId || '',
-    chainId: cid,
-    contractInterface: KALIDAO_ABI,
+    ...daoContract,
     functionName: 'propose',
     onSuccess(data, variables, context) {
       console.debug('success', { data, variables, context })
@@ -42,6 +46,12 @@ export default function ProjectProposal() {
       console.debug('error', { error, variables, context })
       // alert(`Proposal failed with error: ${error}`)
     }
+  })
+
+  const contractReadResult = useContractRead({
+    ...daoContract,
+    functionName: 'extensions',
+    args: [pmAddress]
   })
 
   const onSubmit = async (data: any) => {
@@ -67,12 +77,28 @@ export default function ProjectProposal() {
     // https://github.com/kalidao/kali-contracts/blob/c3b25ca762f083dfe88096a7a512b33607c0ac57/contracts/KaliDAO.sol#L111
     const PROPOSAL_TYPE_EXTENSION = 9
 
-    const TOGGLE_EXTENSION_AVAILABILITY = 1
+    let pmExtensionEnabled
+    if (contractReadResult.isSuccess) {
+      pmExtensionEnabled = contractReadResult.data
+    } else {
+      pmExtensionEnabled = await contractReadResult.refetch()
+    }
+    console.debug({ pmExtensionEnabled })
+
+    // if PM extension is not enabled yet, toggle it on
+    const TOGGLE_EXTENSION_AVAILABILITY = pmExtensionEnabled ? 0 : 1
+    console.debug({ TOGGLE_EXTENSION_AVAILABILITY })
 
     let description = 'New Project Proposal'
     goals.map(
       (goal) => (description = [description, `Goal: ${goal.goalTitle}`, `Goal Tracking Link: ${goalLink}`].join('.\n'))
     )
+    description = [
+      description,
+      `Manager: ${manager}`,
+      `Budget: ${budget}`,
+      `Deadline: ${new Date(deadline).toUTCString()}`
+    ].join('.\n')
     console.debug({ description })
     const tx = await writeAsync({
       args: [PROPOSAL_TYPE_EXTENSION, description, [pmAddress], [TOGGLE_EXTENSION_AVAILABILITY], [payload]],
