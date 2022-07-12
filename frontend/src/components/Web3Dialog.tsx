@@ -11,6 +11,7 @@ interface Web3DialogProps {
     isWriteError: boolean
     writeError: any
     isWriteSuccess: boolean
+    hrefAfterSuccess: string
   }
 }
 
@@ -18,7 +19,8 @@ export default function Web3Dialog(props: Web3DialogProps) {
   console.debug('Web3Dialog', {
     props
   })
-  const { dialogOpen, onDialogClose, isWritePending, isWriteError, writeError, isWriteSuccess } = props.web3tx
+  const { dialogOpen, onDialogClose, isWritePending, isWriteError, writeError, isWriteSuccess, hrefAfterSuccess } =
+    props.web3tx
   return (
     <Dialog
       open={dialogOpen}
@@ -76,14 +78,18 @@ export default function Web3Dialog(props: Web3DialogProps) {
           <DialogContentText>Please check your web3 wallet for details.</DialogContentText>
         </Box>
         <Box id="alert-dialog-message-success" sx={{ display: isWriteSuccess ? 'block' : 'none' }}>
-          <DialogContentText>Proposal successfully submitted.</DialogContentText>
+          <DialogContentText>Proposal successfully submitted!</DialogContentText>
+          <DialogContentText>
+            Note that it may take several minutes for the transaction to confirm on chain. Check your web3 wallet for
+            final tx status. Once tx is confirmed it may take several minutes for the tx data to propagate to the UI.
+          </DialogContentText>
         </Box>
       </DialogContent>
       <DialogActions>
         <Button sx={{ display: isWriteError ? 'block' : 'none' }} onClick={onDialogClose}>
           Close
         </Button>
-        <Button sx={{ display: isWriteSuccess ? 'block' : 'none' }} href="../">
+        <Button sx={{ display: isWriteSuccess ? 'block' : 'none' }} href={`${hrefAfterSuccess}`}>
           Return to Projects
         </Button>
       </DialogActions>

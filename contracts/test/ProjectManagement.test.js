@@ -204,7 +204,6 @@ describe("ProjectManagement test cases", function () {
 
     })
 
-
     it("Should not allow modifying an existing project that belongs to a different DAO", async function () {
       let projectDeadline = await latestBlockTimestamp() + hours(72);
       // Set up payload for extension proposal

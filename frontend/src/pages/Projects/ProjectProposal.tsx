@@ -7,16 +7,14 @@ import { useParams } from 'react-router-dom'
 import { Box, TextField, Button, List, ListItem } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { Navigate } from 'react-router-dom'
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
-import { CircularProgress, IconButton } from '@mui/material'
-import { Check, Error } from '@mui/icons-material'
 import Web3Dialog from '../../components/Web3Dialog'
 
-export default function ProposeProject() {
+export default function ProjectProposal() {
   const { chainId, daoId } = useParams()
 
   const cid = Number(chainId)
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
+  console.debug({ pmAddress })
   const {
     control,
     register,
@@ -49,7 +47,7 @@ export default function ProposeProject() {
   const onSubmit = async (data: any) => {
     setDialogOpen(true)
     console.log(data)
-    const { id, manager, budget, deadline, goalTitle, goalLink } = data
+    const { manager, budget, deadline, goalTitle, goalLink } = data
     let payload
     const goals = [{ goalTitle, goalLink }]
     const goalString = JSON.stringify(goals)
@@ -175,7 +173,17 @@ export default function ProposeProject() {
           </Button>
         </ListItem>
       </List>
-      <Web3Dialog web3tx={{ dialogOpen, onDialogClose, isWritePending, isWriteError, writeError, isWriteSuccess }} />
+      <Web3Dialog
+        web3tx={{
+          dialogOpen,
+          onDialogClose,
+          isWritePending,
+          isWriteError,
+          writeError,
+          isWriteSuccess,
+          hrefAfterSuccess: '../projects'
+        }}
+      />
     </Box>
   )
 }

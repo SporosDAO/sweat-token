@@ -159,7 +159,17 @@ export default function ProjectTribute() {
           </Button>
         </ListItem>
       </List>
-      <Web3Dialog web3tx={{ dialogOpen, onDialogClose, isWritePending, isWriteError, writeError, isWriteSuccess }} />
+      <Web3Dialog
+        web3tx={{
+          dialogOpen,
+          onDialogClose,
+          isWritePending,
+          isWriteError,
+          writeError,
+          isWriteSuccess,
+          hrefAfterSuccess: '../'
+        }}
+      />
     </Box>
   )
 }

@@ -6,7 +6,7 @@ import NotFound from './pages/NotFound'
 import People from './pages/People'
 import Projects from './pages/Projects'
 import Dao from './pages/Dao'
-import ProposeProject from './pages/Projects/ProposeProject'
+import ProjectProposal from './pages/Projects/ProjectProposal'
 import ProjectTribute from './pages/Projects/ProjectTribute'
 
 const mdTheme = createTheme({
@@ -22,7 +22,7 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="dao/chain/:chainId/address/:daoId" element={<Dao />}>
           <Route path="projects" element={<Projects />}></Route>
-          <Route path="projects/propose" element={<ProposeProject />}></Route>
+          <Route path="projects/propose" element={<ProjectProposal />}></Route>
           <Route path="projects/:projectId/tribute" element={<ProjectTribute />}></Route>
           <Route path="people" element={<People />} />
         </Route>
