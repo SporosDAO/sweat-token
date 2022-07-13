@@ -126,7 +126,7 @@ export function useGetProjects(chainId, daoAddress) {
     data.map((project) => {
       const prj = {
         projectID: project.id.toNumber(),
-        budget: ethers.utils.formatEther(project.budget, { commify: true }),
+        budget: ethers.utils.formatEther(project.budget),
         deadline: project.deadline,
         manager: project.manager,
         goals: JSON.parse(project.goals)

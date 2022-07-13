@@ -24,7 +24,7 @@ export default function PersonCard(props: any) {
           <div>{ensAvatar}</div>
           <Typography>{person['address']}</Typography>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            tokens: {ethers.utils.formatEther(person['shares'], { commify: true })}
+            tokens: {ethers.utils.formatEther(person['shares'])}
           </Typography>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             stake: {((100 * person['shares']) / tokenTotalSupply).toFixed(2)}%
