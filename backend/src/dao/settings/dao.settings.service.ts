@@ -10,6 +10,11 @@ export class DaoSettingsService {
   private readonly logger = new Logger(DaoSettingsService.name)
   constructor(@InjectModel(DaoSettings.name) private daoSettingsModel: Model<DaoSettingsDocument>) {}
 
+  async findAll(): Promise<DaoSettingsDto[]> {
+    const docs = await this.daoSettingsModel.find().exec()
+    return docs.map((doc) => toDTO<DaoSettingsDto>(doc))
+  }
+
   async loadSettings(chainId: string, daoId: string): Promise<DaoSettingsDocument | null> {
     const doc = await this.daoSettingsModel.findOne({ chainId, daoId }).exec()
     return doc || null
