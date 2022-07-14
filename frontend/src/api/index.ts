@@ -185,12 +185,12 @@ export const inviteMember = async (data: MemberInviteDto): Promise<MemberDto> =>
   return res.data
 }
 
-export const getSettings = async (daoId: string): Promise<DaoSettingsDto> => {
-  const res = await client.dao.daoControllerGetSettings(daoId)
+export const getSettings = async (chainId: string, daoId: string): Promise<DaoSettingsDto> => {
+  const res = await client.dao.daoSettingsControllerGetSettings(chainId, daoId)
   return res.data
 }
 
 export const setSettings = async (s: DaoSettingsDto): Promise<DaoSettingsDto> => {
-  const res = await client.dao.daoControllerSetSettings(s.daoId, s)
+  const res = await client.dao.daoSettingsControllerSetSettings(s.daoId, s.chainId, s)
   return res.data
 }

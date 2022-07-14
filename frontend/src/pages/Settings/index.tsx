@@ -1,12 +1,11 @@
-import { Grid, Paper, useTheme, useMediaQuery, Input, TextField, Stack, Button } from '@mui/material'
+import { Button, Grid, Paper, TextField, useMediaQuery, useTheme } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { Box } from '@mui/system'
 import { useCallback, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { useMutation } from 'react-query'
+import { useParams } from 'react-router-dom'
 import { setSettings } from '../../api'
 import { DaoSettingsDto } from '../../api/openapi'
-import { couldStartTrivia } from 'typescript'
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -26,8 +25,11 @@ export default function Settings() {
   const classes = useStyles()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
-  const { daoId } = useParams()
-  const [formValues, setFormValues] = useState<DaoSettingsDto>({ daoId: daoId || '' })
+  const { chainId, daoId } = useParams()
+  const [formValues, setFormValues] = useState<DaoSettingsDto>({
+    chainId: chainId || '',
+    daoId: daoId || ''
+  })
 
   const mutation = useMutation((daoSettingsDto: DaoSettingsDto) => {
     return setSettings(daoSettingsDto)

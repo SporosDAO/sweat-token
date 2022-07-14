@@ -15,6 +15,7 @@ import { DaoProposalCronService } from './proposal/dao.proposal.cron.service'
 import { DaoProposal, DaoProposalSchema } from './proposal/dao.proposal.schema'
 import { DaoSettings, DaoSettingsSchema } from './settings/dao.settings.schema'
 import { DaoSettingsService } from './settings/dao.settings.service'
+import { DaoSettingsController } from './settings/dao.settings.controller'
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import { DaoSettingsService } from './settings/dao.settings.service'
     ProjectModule,
   ],
   providers: [DaoService, ProjectEventListenerService, DaoProposalCronService, DaoSettingsService],
-  controllers: [DaoController, MemberController, TaskController, ProjectController],
+  controllers: [DaoController, MemberController, TaskController, ProjectController, DaoSettingsController],
   exports: [DaoService, DaoSettingsService],
 })
 export class DaoModule {}

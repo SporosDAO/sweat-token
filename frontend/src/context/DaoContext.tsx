@@ -32,17 +32,18 @@ export function DaoProvider({ children }: { children: ReactNode }): JSX.Element 
   }, [error, location.pathname])
 
   useEffect(() => {
-    if (daoId === undefined) {
-      setLoadingInitial(false)
-      return
-    }
-    api
-      .getDao(daoId)
-      .then((dao) => setDao(dao))
-      .catch((_error) => {
-        //
-      })
-      .finally(() => setLoadingInitial(false))
+    // if (daoId === undefined) {
+    //   setLoadingInitial(false)
+    //   return
+    // }
+    // api
+    //   .getDao(daoId)
+    //   .then((dao) => setDao(dao))
+    //   .catch((_error) => {
+    //     //
+    //   })
+    //   .finally(() => setLoadingInitial(false))
+    setLoadingInitial(false)
   }, [daoId])
 
   const load = useCallback(
