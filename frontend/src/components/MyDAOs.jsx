@@ -1,13 +1,14 @@
 import { useNetwork, useAccount } from '../context/Web3Context'
 import { USER_DAOS } from '../graph'
-import { List, ListItem, Button, Card, CardContent, CardActionArea, Typography } from '@mui/material'
+import { List, ListItem, Card, CardActions, Button, CardContent, CardActionArea, Typography } from '@mui/material'
+import { Launch, ReadMore } from '@mui/icons-material'
 import { useQuery } from 'react-query'
 import { request } from 'graphql-request'
 import { GRAPH_URL } from '../graph'
 
 export function useGetUserDAOs(chainId, userAddress) {
   return useQuery([chainId, userAddress, USER_DAOS], async () => {
-    if (!chainId) return {}
+    if (!chainId || !userAddress) return {}
     const data = await request(GRAPH_URL[chainId], USER_DAOS, { address: userAddress })
     return data
   })
@@ -18,9 +19,9 @@ export default function MyDAOs() {
   const { address, isConnecting, isDisconnected } = useAccount()
   console.log({ address, isConnecting, isDisconnected })
 
-  const { data, error, isLoading, isSuccess } = useGetUserDAOs(chain?.id, address)
+  const { data, isLoading, isSuccess } = useGetUserDAOs(chain?.id, address)
 
-  const daos = data?.['members']
+  const daos = isSuccess ? data?.['members'] : []
 
   console.log({ chain })
   console.log({ daos })
@@ -38,7 +39,7 @@ export default function MyDAOs() {
           {daos.map((dao) => (
             <ListItem key={dao['dao']['id']}>
               <Card sx={{ minWidth: 275 }} raised={true}>
-                <CardActionArea href={`dao/chain/${chain.id}/address/${dao['dao']['id']}/people`}>
+                <CardActionArea href={`dao/chain/${chain.id}/address/${dao['dao']['id']}/projects`}>
                   <CardContent>
                     <Typography variant="h5" component="div">
                       {dao['dao']['token']['name']}
@@ -54,6 +55,26 @@ export default function MyDAOs() {
                     </Typography>
                   </CardContent>
                 </CardActionArea>
+                <CardActions sx={{ justifyContent: 'space-between' }}>
+                  <Button
+                    variant="text"
+                    endIcon={<ReadMore />}
+                    fontSize="inherit"
+                    href={`dao/chain/${chain.id}/address/${dao['dao']['id']}/people`}
+                  >
+                    Open
+                  </Button>
+                  <Button
+                    variant="text"
+                    endIcon={<Launch />}
+                    fontSize="inherit"
+                    href={`https://app.kali.gg/daos/${chain.id}/${dao['dao']['address']}`}
+                    rel="noopener"
+                    target="_blank"
+                  >
+                    Kali
+                  </Button>
+                </CardActions>
               </Card>
             </ListItem>
           ))}

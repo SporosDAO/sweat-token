@@ -69,7 +69,7 @@ describe("ProjectManagement test cases", function () {
         )
         // propose via Kali extension
         // a project that authorizes the manager to call the extension and request minting
-        await kali.propose(9, "New Project Proposal", [projectManagement.address], [1], [payload])
+        await kali.propose(PROPOSAL_TYPE_EXTENSION, "New Project Proposal", [projectManagement.address], [1], [payload])
         console.debug("Proposal submitted on-chain");
         await kali.vote(1, true)
         await advanceTime(35)
@@ -123,7 +123,7 @@ describe("ProjectManagement test cases", function () {
       )
       // propose via Kali extension
       // a project that authorizes the manager to call the extension  and request minting
-      await kali.propose(9, "New Project Proposal without a manager", [projectManagement.address], [1], [payload])
+      await kali.propose(PROPOSAL_TYPE_EXTENSION, "New Project Proposal without a manager", [projectManagement.address], [1], [payload])
       console.log("Proposal submitted")
       await kali.vote(1, true)
       await advanceTime(35)
@@ -147,7 +147,7 @@ describe("ProjectManagement test cases", function () {
       )
       // propose via Kali extension
       // a project that authorizes the manager to call the extension and request minting
-      await kali.propose(9, "New Project Proposal", [projectManagement.address], [1], [payload])
+      await kali.propose(PROPOSAL_TYPE_EXTENSION, "New Project Proposal", [projectManagement.address], [1], [payload])
       console.debug("Proposal submitted on-chain");
       await kali.vote(1, true)
       await advanceTime(35)
@@ -170,7 +170,7 @@ describe("ProjectManagement test cases", function () {
       )
       // propose via Kali extension
       // a project that authorizes the manager to call the extension and request minting
-      await kali.propose(9, "New Project Proposal", [projectManagement.address], [1], [payload])
+      await kali.propose(PROPOSAL_TYPE_EXTENSION, "New Project Proposal", [projectManagement.address], [1], [payload])
       console.debug("Proposal submitted on-chain");
       await kali.vote(1, true)
       console.debug("Proposal approved");
@@ -191,10 +191,10 @@ describe("ProjectManagement test cases", function () {
           "Website facelift and blog setup" // updated project goals
         ]
       )
-      let propose = kali.propose(9, "Update Project Proposal", [projectManagement.address], [0], [payload])
+      let propose = kali.propose(PROPOSAL_TYPE_EXTENSION, "Update Project Proposal", [projectManagement.address], [0], [payload])
       await expect(await propose)
         .to.emit(kali, "NewProposal")
-          .withArgs(proposer.address, 2, 9, "Update Project Proposal", [projectManagement.address], [0], [payload]);
+          .withArgs(proposer.address, 2, PROPOSAL_TYPE_EXTENSION, "Update Project Proposal", [projectManagement.address], [0], [payload]);
       console.log("Submitted proposal for project update")
       await kali.vote(2, true)
       await advanceTime(35)
@@ -203,7 +203,6 @@ describe("ProjectManagement test cases", function () {
           .withArgs(kali.address, [100, kali.address, manager.address, getBigNumber(300), projectDeadline+hours(3), "Website facelift and blog setup"]);
 
     })
-
 
     it("Should not allow modifying an existing project that belongs to a different DAO", async function () {
       let projectDeadline = await latestBlockTimestamp() + hours(72);
@@ -221,7 +220,7 @@ describe("ProjectManagement test cases", function () {
       )
       // propose via Kali extension
       // a project that authorizes the manager to call the extension and request minting
-      await kali.propose(9, "New Project Proposal", [projectManagement.address], [1], [payload])
+      await kali.propose(PROPOSAL_TYPE_EXTENSION, "New Project Proposal", [projectManagement.address], [1], [payload])
       console.debug("First proposal submitted on-chain");
       await kali.vote(1, true)
       console.debug("First proposal approved");
@@ -262,10 +261,10 @@ describe("ProjectManagement test cases", function () {
       )
 
       console.log("Submitting Second proposal with project update from kali2")
-      let propose = kali2.connect(alice).propose(9, "Update Project Proposal", [projectManagement.address], [1], [payload])
+      let propose = kali2.connect(alice).propose(PROPOSAL_TYPE_EXTENSION, "Update Project Proposal", [projectManagement.address], [1], [payload])
       await expect(await propose)
         .to.emit(kali2, "NewProposal")
-          .withArgs(alice.address, 1, 9, "Update Project Proposal", [projectManagement.address], [1], [payload]);
+          .withArgs(alice.address, 1, PROPOSAL_TYPE_EXTENSION, "Update Project Proposal", [projectManagement.address], [1], [payload]);
       console.log("Submitted Second proposal for project update from kali2")
       let savedProposal = await kali2.proposals(1)
       console.log("Saved second proposal: ", { savedProposal })
@@ -307,10 +306,10 @@ describe("ProjectManagement test cases", function () {
           "Next website facelift and blog setup" // updated project goals
         ]
       )
-      propose = kali2.connect(alice).propose(9, "Update Project Proposal", [projectManagement.address], [0], [payload])
+      propose = kali2.connect(alice).propose(PROPOSAL_TYPE_EXTENSION, "Update Project Proposal", [projectManagement.address], [0], [payload])
       await expect(await propose)
         .to.emit(kali2, "NewProposal")
-          .withArgs(alice.address, 3, 9, "Update Project Proposal", [projectManagement.address], [0], [payload]);
+          .withArgs(alice.address, 3, PROPOSAL_TYPE_EXTENSION, "Update Project Proposal", [projectManagement.address], [0], [payload]);
       console.log("Submitted Second proposal for project update from kali2")
       savedProposal = await kali2.proposals(3)
       console.log("Saved second proposal: ", { savedProposal })
@@ -335,7 +334,7 @@ describe("ProjectManagement test cases", function () {
             "Website facelift" // project goal
           ]
       )
-      await kali.propose(9, "New Project Proposal", [projectManagement.address], [1], [payload])
+      await kali.propose(PROPOSAL_TYPE_EXTENSION, "New Project Proposal", [projectManagement.address], [1], [payload])
       console.debug("Proposal submitted on-chain");
       await kali.vote(1, true)
       await advanceTime(35)
@@ -381,7 +380,7 @@ describe("ProjectManagement test cases", function () {
           "Website facelift" // project goal
         ]
     )
-    await kali.propose(9, "New Project Proposal", [projectManagement.address], [1], [payload])
+    await kali.propose(PROPOSAL_TYPE_EXTENSION, "New Project Proposal", [projectManagement.address], [1], [payload])
     console.debug("Proposal submitted on-chain");
     await kali.vote(1, true)
     await advanceTime(35)
@@ -452,7 +451,7 @@ describe("ProjectManagement test cases", function () {
           "Website facelift" // project goal
         ]
     )
-    await kali.propose(9, "New Project Proposal", [projectManagement.address], [1], [payload])
+    await kali.propose(PROPOSAL_TYPE_EXTENSION, "New Project Proposal", [projectManagement.address], [1], [payload])
     console.debug("Proposal submitted on-chain");
     await kali.vote(1, true)
     await advanceTime(35)
@@ -502,7 +501,7 @@ describe("ProjectManagement test cases", function () {
           "Website facelift" // project goal
         ]
     )
-    await kali.propose(9, "New Project Proposal", [projectManagement.address], [1], [payload])
+    await kali.propose(PROPOSAL_TYPE_EXTENSION, "New Project Proposal", [projectManagement.address], [1], [payload])
     console.debug("Proposal submitted on-chain");
     await kali.vote(1, true)
     await advanceTime(35)

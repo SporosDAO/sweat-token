@@ -1,22 +1,18 @@
 import { Grid, SxProps, Theme } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { DaoDto } from '../../api/openapi'
 import ContentBlock from '../../components/ContentBlock'
 import MyDAOs from '../../components/MyDAOs'
 import { PageLayout } from '../../layout/Page'
 
 export default function Landing() {
   const [loading, setLoading] = useState(false)
-  const [failed, setFailed] = useState(false)
-  const [publicDaos, setPublicDaos] = useState<DaoDto[]>()
+  const [failed] = useState(false)
 
   useEffect(() => {
-    if (publicDaos !== undefined) return
     if (loading) return
     if (failed) return
     setLoading(true)
-  }, [failed, loading, publicDaos])
+  }, [failed, loading])
 
   const blockStyle: SxProps<Theme> = {
     m: 1,
