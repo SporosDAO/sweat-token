@@ -19,6 +19,12 @@ export class DaoProposal {
   daoId: string
 
   @Prop({
+    index: true,
+    required: false,
+  })
+  chainId?: string
+
+  @Prop({
     required: true,
   })
   message: string

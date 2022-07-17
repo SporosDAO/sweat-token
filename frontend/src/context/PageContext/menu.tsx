@@ -1,5 +1,6 @@
 import { People } from '@mui/icons-material'
 import FactoryIcon from '@mui/icons-material/Factory'
+import Settings from '@mui/icons-material/Settings'
 import HelpIcon from '@mui/icons-material/Help'
 import HomeIcon from '@mui/icons-material/Home'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
@@ -60,6 +61,11 @@ export const menu: DaoMenuItem[] = [
     label: 'People',
     icon: People,
     link: 'people'
+  },
+  {
+    label: 'Settings',
+    icon: Settings,
+    link: 'settings'
   }
 ]
 
@@ -118,3 +124,54 @@ export const getDaoUrl = (chainId?: string, daoId?: string, ...parts: (string | 
     '/'
   )
 }
+<<<<<<< HEAD
+=======
+
+export const getProjectUrl = (
+  chainId?: string,
+  daoId?: string,
+  projectId?: string,
+  ...parts: (string | undefined)[]
+): string => {
+  if (!daoId) return '/'
+  const subpath = ['projects']
+  if (projectId) subpath.push(projectId)
+  if (parts.length) subpath.push(...(parts.filter((p) => p !== undefined) as string[]))
+  return getDaoUrl(chainId, daoId, ...subpath)
+}
+
+interface LinkProjectProps {
+  add?: boolean
+  chainId?: string
+  daoId?: string
+  path?: string
+  project?: ProjectDto | { daoId?: string; projectId?: string }
+  children: any
+}
+
+export const LinkProject = ({ chainId, daoId, add, children, project, path }: LinkProjectProps) => {
+  project = project || {}
+  daoId = daoId || project.daoId
+  const projectId = add === true ? 'add' : project.projectId || undefined
+  return <Link to={getProjectUrl(chainId, daoId, projectId, path)}>{children}</Link>
+}
+
+interface LinkDaoProps {
+  add?: boolean
+  chainId?: string
+  daoId?: string
+  children: any
+  path?: string
+  onClick?: (e: any) => void
+}
+
+export const LinkDao = ({ children, chainId, daoId, path, add, onClick }: LinkDaoProps) => {
+  const { daoId: paramDaoId } = useParams()
+  path = add === true ? 'add' : path || undefined
+  return (
+    <Link to={getDaoUrl(chainId, daoId || paramDaoId, path)} onClick={onClick}>
+      {children}
+    </Link>
+  )
+}
+>>>>>>> 3e9c91317197455bc0d907be727ddf97df0824bf

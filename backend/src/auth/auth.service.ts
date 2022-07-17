@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
+import { BadRequestException, Injectable, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { JwtTokenDto, UserDto } from 'src/user/user.dto'
 import { UserService } from 'src/user/user.service'
@@ -10,6 +10,8 @@ import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name)
+
   constructor(
     private usersService: UserService,
     private jwtService: JwtService,
@@ -27,7 +29,10 @@ export class AuthService {
     if (!user) throw new NotFoundException()
 
     const messageAddress = ethers.utils.verifyMessage(nonce, signature)
-    if (messageAddress.toLowerCase() !== user.publicAddress) throw new UnauthorizedException()
+    if (messageAddress !== user.publicAddress) {
+      this.logger.log(`publicAddress not matching signature: ${messageAddress.toLowerCase()}`)
+      throw new UnauthorizedException()
+    }
 
     await this.usersService.update(userId, { ...user, nonce: randomString() })
 
