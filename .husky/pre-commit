@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+cd frontend/
+yarn lint --fix
+cd -
+
+cd backend
+yarn lint --fix
+cd -
+
+cd contracts
+yarn lint --fix
+cd -

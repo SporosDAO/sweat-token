@@ -1,9 +1,12 @@
 {
-    "solidity.defaultCompiler": "localNodeModule",
+    "solidity.defaultCompiler": "remote",
     "solidity.packageDefaultDependenciesDirectory": "./contracts/node_modules",
     "[typescript]": {
         "editor.tabSize": 2,
         "editor.formatOnSave": true,
+    },
+    "[solidity]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "eslint.format.enable": true,

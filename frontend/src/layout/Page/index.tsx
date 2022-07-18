@@ -1,7 +1,6 @@
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import MenuIcon from '@mui/icons-material/Menu'
-import { Box, CssBaseline, IconButton, Stack, Toolbar, useMediaQuery, useTheme } from '@mui/material'
+import { Box, CssBaseline, IconButton, Toolbar, useMediaQuery, useTheme } from '@mui/material'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
@@ -10,11 +9,12 @@ import Link from '@mui/material/Link'
 import List from '@mui/material/List'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
-import React, { ReactNode, useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { ReactNode, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { OWNER } from '../../constants'
-import usePage, { MainListItems, SecondaryListItems } from '../../context/PageContext'
-import useWeb3 from '../../context/Web3Context'
+import { MainMenuItems, DaoMenuItems, SecondaryMenuItems } from '../../context/PageContext'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { useGetDAO } from '../../graph/getDAO'
 
 function Copyright(props: any) {
   return (
@@ -84,14 +84,15 @@ interface PageLayoutProps {
 
 export function PageLayout(props: PageLayoutProps) {
   const theme = useTheme()
-  const navigate = useNavigate()
-  const location = useLocation()
 
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const [open, setOpen] = useState(props.withDrawer !== false && !isMobile)
 
-  const { account, setAccount } = useWeb3()
-  const { title } = usePage()
+  const { chainId, daoId } = useParams()
+  const { data, error, isLoading, isSuccess } = useGetDAO(chainId, daoId)
+  console.debug('useGetDAO', { data, error, isLoading, isSuccess })
+  const { title } =
+    isSuccess && data && data['token'] && data['token']['name'] ? data['token']['name'] : 'Sporos DAO App'
 
   const toggleDrawer = () => {
     setOpen(!open)
@@ -130,16 +131,7 @@ export function PageLayout(props: PageLayoutProps) {
               <NotificationsIcon />
             </Badge> */}
           </IconButton>
-          <IconButton
-            color="inherit"
-            aria-label="connect"
-            onClick={() => (!account ? navigate(`/connect?redirect=${location.pathname}`) : setAccount(undefined))}
-          >
-            <Stack spacing={1} direction="row">
-              <AccountCircleIcon />
-              {!account ? <></> : <small>{`${account.substring(0, 8)}..`}</small>}
-            </Stack>
-          </IconButton>
+          <ConnectButton />
         </Toolbar>
       </AppBar>
       {props.withDrawer !== false ? (
@@ -158,9 +150,11 @@ export function PageLayout(props: PageLayoutProps) {
           </Toolbar>
           <Divider />
           <List component="nav">
-            {MainListItems()}
+            {MainMenuItems()}
             <Divider sx={{ my: 1 }} />
-            {SecondaryListItems()}
+            {DaoMenuItems()}
+            <Divider sx={{ my: 1 }} />
+            {SecondaryMenuItems()}
           </List>
         </Drawer>
       ) : (

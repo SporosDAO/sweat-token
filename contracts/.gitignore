@@ -8,3 +8,9 @@ typechain
 cache
 artifacts
 build
+
+# nyc coverage output
+.nyc_output/
+
+# local create2deploy deployment data
+deployments

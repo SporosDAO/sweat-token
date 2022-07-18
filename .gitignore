@@ -3,3 +3,5 @@ dist
 build
 /data
 backend/data
+.env.dev*
+.vscode/*.log

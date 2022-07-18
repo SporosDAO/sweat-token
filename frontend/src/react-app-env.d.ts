@@ -1,5 +1,4 @@
 /// <reference types="react-scripts" />
-import { MetaMaskInpageProvider } from '@metamask/providers'
 
 import { ProviderMessage, ProviderRpcError, ProviderConnectInfo, RequestArguments } from 'hardhat/types'
 

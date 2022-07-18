@@ -15,6 +15,13 @@
   },
   "compilerOptions": {
     "webpack": true,
-    "plugins": ["@nestjs/swagger"]
+    "plugins": ["@nestjs/swagger"],
+    "assets": [
+      {
+        "include": "../assets",
+        "outDir": "dist/public",
+        "watchAssets": true
+      }
+    ]
   }
 }
