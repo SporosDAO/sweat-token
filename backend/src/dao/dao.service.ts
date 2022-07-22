@@ -6,11 +6,16 @@ import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { CreateDaoDto, DaoDto, DaoEvent } from './dao.dto'
 import { Dao, DaoDocument } from './dao.schema'
+import { DaoSettings, DaoSettingsDocument } from './settings/dao.settings.schema'
 
 @Injectable()
 export class DaoService {
   private readonly logger = new Logger(DaoService.name)
-  constructor(private eventEmitter: EventEmitter2, @InjectModel(Dao.name) private daoModel: Model<DaoDocument>) {}
+  constructor(
+    private eventEmitter: EventEmitter2,
+    @InjectModel(Dao.name) private daoModel: Model<DaoDocument>,
+    @InjectModel(DaoSettings.name) private daoSettingsModel: Model<DaoSettingsDocument>,
+  ) {}
 
   private emit(type: RecordEventType, dao: DaoDto | DaoDocument) {
     this.eventEmitter.emit('dao.changed', {

@@ -5,6 +5,7 @@ import App from './App'
 import { PageProvider } from './context/PageContext'
 import { ToastProvider } from './context/ToastContext'
 import { Web3ContextProvider } from './context/Web3Context'
+import { AuthProvider } from './context/AuthContext'
 import './index.css'
 import reportWebVitals from './reportWebVitals'
 import { ServiceWorkerWrapper } from './components/PWAUpdate'
@@ -20,9 +21,11 @@ root.render(
       <BrowserRouter>
         <ToastProvider>
           <Web3ContextProvider>
-            <PageProvider>
-              <App />
-            </PageProvider>
+            <AuthProvider>
+              <PageProvider>
+                <App />
+              </PageProvider>
+            </AuthProvider>
           </Web3ContextProvider>
         </ToastProvider>
       </BrowserRouter>

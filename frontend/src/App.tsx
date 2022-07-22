@@ -8,6 +8,7 @@ import Projects from './pages/Projects'
 import Dao from './pages/Dao'
 import ProjectProposal from './pages/Projects/ProjectProposal'
 import ProjectTribute from './pages/Projects/ProjectTribute'
+import Settings from './pages/Settings'
 
 const mdTheme = createTheme({
   palette: {
@@ -25,6 +26,7 @@ function App() {
           <Route path="projects/propose" element={<ProjectProposal />}></Route>
           <Route path="projects/:projectId/tribute" element={<ProjectTribute />}></Route>
           <Route path="people" element={<People />} />
+          <Route path="settings" element={<Settings />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
