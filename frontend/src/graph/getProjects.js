@@ -124,12 +124,19 @@ export function useGetProjects(chainId, daoAddress) {
   const projects = []
   if (data) {
     data.map((project) => {
+      let goals = {}
+      try {
+        goals = JSON.parse(project.goals)
+      } catch (err) {
+        console.warn("Unable to JSON parse project goals. Falling back to plaintext.", { err })
+        goals = [{goalTitle: project.goals, goalLink: '' }]
+      }
       const prj = {
         projectID: project.id.toNumber(),
         budget: ethers.utils.formatEther(project.budget),
         deadline: project.deadline,
         manager: project.manager,
-        goals: JSON.parse(project.goals)
+        goals
       }
       projects.push(prj)
     })
