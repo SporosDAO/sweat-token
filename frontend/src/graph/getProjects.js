@@ -128,8 +128,8 @@ export function useGetProjects(chainId, daoAddress) {
       try {
         goals = JSON.parse(project.goals)
       } catch (err) {
-        console.warn("Unable to JSON parse project goals. Falling back to plaintext.", { err })
-        goals = [{goalTitle: project.goals, goalLink: '' }]
+        console.warn('Unable to JSON parse project goals. Falling back to plaintext.', { err })
+        goals = [{ goalTitle: project.goals, goalLink: '' }]
       }
       const prj = {
         projectID: project.id.toNumber(),
