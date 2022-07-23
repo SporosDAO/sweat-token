@@ -1,12 +1,12 @@
-import { BadRequestException, Injectable, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common'
+import { randomString } from '@app/runtime/util'
+import { BadRequestException, Injectable, Logger, UnauthorizedException } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
+import { SiweMessage } from 'siwe'
 import { JwtTokenDto, UserDto } from 'src/user/user.dto'
 import { UserService } from 'src/user/user.service'
 import { v4 as uuidv4 } from 'uuid'
-import { NonceDto } from './auth.dto'
-import { ethers } from 'ethers'
-import { randomString } from '@app/runtime/util'
-import { ConfigService } from '@nestjs/config'
+import { NoncePayloadDto, SiwePayloadDto } from './auth.dto'
 
 @Injectable()
 export class AuthService {
@@ -23,14 +23,20 @@ export class AuthService {
     return user
   }
 
-  async verifySignature({ userId, nonce, signature }: NonceDto): Promise<JwtTokenDto> {
-    if (!userId || !nonce || !signature) throw new BadRequestException()
-    const user = await this.usersService.load({ userId, nonce })
-    if (!user) throw new NotFoundException()
+  async verifySignature({ userId, signature, message }: SiwePayloadDto): Promise<JwtTokenDto> {
+    if (!userId || !signature || !message) throw new BadRequestException()
 
-    const messageAddress = ethers.utils.verifyMessage(nonce, signature)
-    if (messageAddress !== user.publicAddress) {
-      this.logger.log(`publicAddress not matching signature: ${messageAddress.toLowerCase()}`)
+    const siweMessage = new SiweMessage(message)
+    const fields = await siweMessage.validate(signature)
+
+    const user = await this.usersService.load({ userId, nonce: fields.nonce })
+    if (!user) {
+      this.logger.log(`user not found by nonce: userId=${userId} nonce=${fields.nonce}`)
+      throw new UnauthorizedException()
+    }
+
+    if (fields.nonce !== user.nonce) {
+      this.logger.log(`publicAddress not matching signature: userId=${userId} nonce=${fields.nonce}`)
       throw new UnauthorizedException()
     }
 
@@ -38,7 +44,7 @@ export class AuthService {
 
     return {
       token: this.jwtService.sign(
-        { ...user, sub: userId },
+        { ...user, sub: userId, ...fields },
         {
           expiresIn: this.configService.get('JWT_EXPIRES_IN'),
         },
@@ -46,7 +52,7 @@ export class AuthService {
     }
   }
 
-  async getUserByAddress(publicAddress: string): Promise<NonceDto> {
+  async getUserByAddress(chainId: string, publicAddress: string): Promise<NoncePayloadDto> {
     if (!publicAddress) throw new BadRequestException()
 
     let user = await this.usersService.load({ publicAddress })
@@ -57,6 +63,7 @@ export class AuthService {
     if (!user) {
       user = await this.usersService.create({
         publicAddress,
+        chainId,
         userId,
         nonce,
         roles: [],

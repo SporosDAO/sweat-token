@@ -1,9 +1,9 @@
-import React, { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import * as api from '../api'
-import { JwtTokenDto, NonceDto, UserDto } from '../api/openapi'
-import { useAccount, useNetwork, useSignMessage } from 'wagmi'
+import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { SiweMessage } from 'siwe'
+import { useAccount, useNetwork, useSignMessage } from 'wagmi'
+import * as api from '../api'
+import { JwtTokenDto, NoncePayloadDto, SiwePayloadDto, UserDto } from '../api/openapi'
 
 export const CONNECT_PAGE = '/connect'
 export const REDIR_QUERY = '?redirect='
@@ -45,28 +45,24 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
   const [loading, setLoading] = useState(false)
   const [signaturePending, setSignaturePending] = useState(false)
 
-  const location = useLocation()
-  const navigate = useNavigate()
   const { signMessageAsync } = useSignMessage()
   const { chain: activeChain } = useNetwork()
   const chainId = activeChain?.id
-  const account = useAccount()
-  const address = account?.address
+  const { address, isReconnecting, isConnected } = useAccount()
 
   const ctoken = useMemo(() => getCookieToken(), [])
 
-  useEffect(() => {
+  const signin = useCallback(() => {
+    if (!isConnected || isReconnecting) return
     if (token || user) return
     if (signaturePending) return
     if (!chainId) return
     if (!address) return
     if (error) return
-    console.log('signin user')
-    api
-      .getUserByAddress(address)
-      .then(({ nonce, userId }: NonceDto) => {
-        console.log('got nonce')
 
+    api
+      .getUserByAddress(chainId, address)
+      .then(({ nonce, userId }: NoncePayloadDto) => {
         // generate SIWE message
         const message = new SiweMessage({
           domain: window.location.host,
@@ -82,7 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
           message: message.prepareMessage()
         })
           .then((signature: any) =>
-            api.verifySignature({ userId, nonce, signature } as NonceDto).catch((e) => {
+            api.verifySignature({ userId, message, signature } as SiwePayloadDto).catch((e) => {
               console.warn(`Invalid signature? ${e.stack}`)
               // setAccount(undefined)
               return Promise.reject(e)
@@ -101,11 +97,12 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
           setError('Please confirm the signature on your wallet to continue.')
           return
         }
-        setError(e.message)
+
+        setError('Authentication failed')
         console.error('failed to load account', e)
       })
     // .finally(() => {})
-  }, [account, chainId, error, signMessageAsync, signaturePending, token, user])
+  }, [address, chainId, error, isConnected, isReconnecting, signMessageAsync, signaturePending, token, user])
 
   useEffect(() => {
     if (!ctoken) return
@@ -146,9 +143,8 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
 
   const requireAuth = useCallback(() => {
     if (user) return
-    const destination = location.pathname === CONNECT_PAGE ? '/' : `${location.pathname}${location.search}`
-    navigate(`${CONNECT_PAGE}${REDIR_QUERY}${destination}`)
-  }, [location.pathname, location.search, navigate, user])
+    signin()
+  }, [signin, user])
 
   const memoedValue = useMemo(
     () => ({

@@ -793,27 +793,21 @@ export type MemberQueryDtoSkillsEnum = typeof MemberQueryDtoSkillsEnum[keyof typ
 /**
  * 
  * @export
- * @interface NonceDto
+ * @interface NoncePayloadDto
  */
-export interface NonceDto {
+export interface NoncePayloadDto {
     /**
      * 
      * @type {string}
-     * @memberof NonceDto
+     * @memberof NoncePayloadDto
      */
     'nonce': string;
     /**
      * 
      * @type {string}
-     * @memberof NonceDto
+     * @memberof NoncePayloadDto
      */
     'userId': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof NonceDto
-     */
-    'signature'?: string;
 }
 /**
  * 
@@ -961,6 +955,31 @@ export const ProjectQueryDtoStatusEnum = {
 
 export type ProjectQueryDtoStatusEnum = typeof ProjectQueryDtoStatusEnum[keyof typeof ProjectQueryDtoStatusEnum];
 
+/**
+ * 
+ * @export
+ * @interface SiwePayloadDto
+ */
+export interface SiwePayloadDto {
+    /**
+     * 
+     * @type {object}
+     * @memberof SiwePayloadDto
+     */
+    'message': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof SiwePayloadDto
+     */
+    'userId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SiwePayloadDto
+     */
+    'signature'?: string;
+}
 /**
  * 
  * @export
@@ -1228,6 +1247,12 @@ export interface UserDto {
      * @type {string}
      * @memberof UserDto
      */
+    'chainId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDto
+     */
     'nonce': string;
     /**
      * 
@@ -1284,11 +1309,14 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {string} chainId 
          * @param {string} publicAddress 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authControllerGetUser: async (publicAddress: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        authControllerGetUser: async (chainId: string, publicAddress: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'chainId' is not null or undefined
+            assertParamExists('authControllerGetUser', 'chainId', chainId)
             // verify required parameter 'publicAddress' is not null or undefined
             assertParamExists('authControllerGetUser', 'publicAddress', publicAddress)
             const localVarPath = `/api/auth/user`;
@@ -1302,6 +1330,10 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (chainId !== undefined) {
+                localVarQueryParameter['chainId'] = chainId;
+            }
 
             if (publicAddress !== undefined) {
                 localVarQueryParameter['publicAddress'] = publicAddress;
@@ -1320,13 +1352,13 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @param {NonceDto} nonceDto 
+         * @param {SiwePayloadDto} siwePayloadDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authControllerVerifySignature: async (nonceDto: NonceDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'nonceDto' is not null or undefined
-            assertParamExists('authControllerVerifySignature', 'nonceDto', nonceDto)
+        authControllerVerifySignature: async (siwePayloadDto: SiwePayloadDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'siwePayloadDto' is not null or undefined
+            assertParamExists('authControllerVerifySignature', 'siwePayloadDto', siwePayloadDto)
             const localVarPath = `/api/auth/user`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1346,7 +1378,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(nonceDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(siwePayloadDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1374,22 +1406,23 @@ export const AuthApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} chainId 
          * @param {string} publicAddress 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async authControllerGetUser(publicAddress: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NonceDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerGetUser(publicAddress, options);
+        async authControllerGetUser(chainId: string, publicAddress: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NoncePayloadDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerGetUser(chainId, publicAddress, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
-         * @param {NonceDto} nonceDto 
+         * @param {SiwePayloadDto} siwePayloadDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async authControllerVerifySignature(nonceDto: NonceDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JwtTokenDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerVerifySignature(nonceDto, options);
+        async authControllerVerifySignature(siwePayloadDto: SiwePayloadDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<JwtTokenDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerVerifySignature(siwePayloadDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -1412,21 +1445,22 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @param {string} chainId 
          * @param {string} publicAddress 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authControllerGetUser(publicAddress: string, options?: any): AxiosPromise<NonceDto> {
-            return localVarFp.authControllerGetUser(publicAddress, options).then((request) => request(axios, basePath));
+        authControllerGetUser(chainId: string, publicAddress: string, options?: any): AxiosPromise<NoncePayloadDto> {
+            return localVarFp.authControllerGetUser(chainId, publicAddress, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {NonceDto} nonceDto 
+         * @param {SiwePayloadDto} siwePayloadDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authControllerVerifySignature(nonceDto: NonceDto, options?: any): AxiosPromise<JwtTokenDto> {
-            return localVarFp.authControllerVerifySignature(nonceDto, options).then((request) => request(axios, basePath));
+        authControllerVerifySignature(siwePayloadDto: SiwePayloadDto, options?: any): AxiosPromise<JwtTokenDto> {
+            return localVarFp.authControllerVerifySignature(siwePayloadDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1450,24 +1484,25 @@ export class AuthApi extends BaseAPI {
 
     /**
      * 
+     * @param {string} chainId 
      * @param {string} publicAddress 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public authControllerGetUser(publicAddress: string, options?: AxiosRequestConfig) {
-        return AuthApiFp(this.configuration).authControllerGetUser(publicAddress, options).then((request) => request(this.axios, this.basePath));
+    public authControllerGetUser(chainId: string, publicAddress: string, options?: AxiosRequestConfig) {
+        return AuthApiFp(this.configuration).authControllerGetUser(chainId, publicAddress, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {NonceDto} nonceDto 
+     * @param {SiwePayloadDto} siwePayloadDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public authControllerVerifySignature(nonceDto: NonceDto, options?: AxiosRequestConfig) {
-        return AuthApiFp(this.configuration).authControllerVerifySignature(nonceDto, options).then((request) => request(this.axios, this.basePath));
+    public authControllerVerifySignature(siwePayloadDto: SiwePayloadDto, options?: AxiosRequestConfig) {
+        return AuthApiFp(this.configuration).authControllerVerifySignature(siwePayloadDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

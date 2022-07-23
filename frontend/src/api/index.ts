@@ -1,26 +1,14 @@
 import {
   AuthApi,
   Configuration,
-  CreateDaoDto,
-  CreateMemberDto,
-  CreateProjectDto,
-  CreateTaskDto,
   DaoApi,
-  DaoDto,
   DaoSettingsDto,
-  ExtendedMemberDto,
   JwtTokenDto,
   MemberApi,
-  MemberDto,
-  MemberInviteDto,
-  MemberQueryDto,
-  NonceDto,
+  NoncePayloadDto,
   ProjectApi,
-  ProjectDto,
-  ProjectQueryDto,
+  SiwePayloadDto,
   TaskApi,
-  TaskDto,
-  TaskQueryDto,
   UserDto
 } from './openapi'
 
@@ -89,7 +77,7 @@ export const setSettings = async (s: DaoSettingsDto): Promise<DaoSettingsDto> =>
   return res.data
 }
 
-export const verifySignature = async (sig: NonceDto): Promise<JwtTokenDto> => {
+export const verifySignature = async (sig: SiwePayloadDto): Promise<JwtTokenDto> => {
   const res = await client.auth.authControllerVerifySignature(sig)
   return res.data
 }
@@ -99,7 +87,7 @@ export const getCurrentUser = async (): Promise<UserDto> => {
   return res.data
 }
 
-export const getUserByAddress = async (publicAddress: string): Promise<NonceDto> => {
-  const res = await client.auth.authControllerGetUser(publicAddress)
+export const getUserByAddress = async (chainId: number, publicAddress: string): Promise<NoncePayloadDto> => {
+  const res = await client.auth.authControllerGetUser(`${chainId}`, publicAddress)
   return res.data
 }

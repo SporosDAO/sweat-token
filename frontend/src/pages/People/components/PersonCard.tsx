@@ -1,15 +1,22 @@
 import { Card, CardContent, Typography, ListItem } from '@mui/material'
 import { useEnsName, useEnsAvatar } from 'wagmi'
 import { ethers } from 'ethers'
+import { DaoPerson } from '..'
 
-export default function PersonCard(props: any) {
-  const person = props.person
-  const tokenTotalSupply = props.tokenTotalSupply
+interface PersonCardProps {
+  person: DaoPerson
+  tokenTotalSupply: number
+}
 
-  const paddr = person['address']
+export default function PersonCard(props: PersonCardProps) {
+  const { tokenTotalSupply, person } = props
+
+  const paddr = person.address
+
   const ensNameResult = useEnsName({ address: paddr, chainId: Number(1), cacheTime: 60_000 })
   console.debug('useEnsName', { ensNameResult })
   const ensName = !ensNameResult.isError && !ensNameResult.isLoading ? ensNameResult.data : ''
+
   const ensAvatarResult = useEnsAvatar({ addressOrName: paddr, chainId: Number(1), cacheTime: 60_000 })
   console.debug('useEnsAvatar', { ensAvatarResult })
   const ensAvatar = !ensAvatarResult.isError && !ensAvatarResult.isLoading ? ensAvatarResult.data : ''
@@ -24,10 +31,10 @@ export default function PersonCard(props: any) {
           <div>{ensAvatar}</div>
           <Typography>{person['address']}</Typography>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            tokens: {ethers.utils.formatEther(person['shares'])}
+            tokens: {ethers.utils.formatEther(person.shares)}
           </Typography>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            stake: {((100 * person['shares']) / tokenTotalSupply).toFixed(2)}%
+            stake: {((100 * person.shares) / tokenTotalSupply).toFixed(2)}%
           </Typography>
         </CardContent>
       </Card>

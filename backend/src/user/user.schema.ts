@@ -27,6 +27,11 @@ export class User {
 
   @Prop({
     required: false,
+  })
+  chainId: string
+
+  @Prop({
+    required: false,
     default: () => randomString(),
   })
   nonce: string
