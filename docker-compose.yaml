@@ -30,7 +30,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-      # target: deps
+      target: deps
     image: sweat-token/dev
     networks:
       - sweat-token
@@ -52,7 +52,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-      # target: deps
+      target: deps
     image: sweat-token/dev
     networks:
       - sweat-token
