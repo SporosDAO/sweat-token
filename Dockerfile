@@ -38,3 +38,6 @@ WORKDIR /app/frontend
 
 ADD ./frontend/ .
 RUN yarn build
+
+ENTRYPOINT [ "node" ]
+CMD ["/app/backend/dist/main"]
