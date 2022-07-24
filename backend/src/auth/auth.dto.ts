@@ -1,14 +1,26 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import { IsString, IsUUID } from 'class-validator'
+import { IsObject, IsString, IsUUID } from 'class-validator'
+import { SiweMessage } from 'siwe'
 
-export class NonceDto {
-  @ApiProperty()
-  @IsString()
-  nonce: string
+export class SiwePayloadDto {
+  @ApiProperty({
+    type: SiweMessage,
+  })
+  @IsObject()
+  message: SiweMessage
   @ApiProperty()
   @IsUUID()
   userId: string
   @ApiPropertyOptional()
   @IsString()
   signature?: string
+}
+
+export class NoncePayloadDto {
+  @ApiProperty()
+  @IsString()
+  nonce: string
+  @ApiProperty()
+  @IsUUID()
+  userId: string
 }

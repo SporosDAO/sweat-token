@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import { Box, Button, List, ListItem, TextField } from '@mui/material'
 import { ethers } from 'ethers'
-import { useContractRead, useContractWrite } from 'wagmi'
-import { addresses } from '../../constants/addresses'
-import KALIDAO_ABI from '../../abi/KaliDAO.json'
-import { useParams } from 'react-router-dom'
-import { Box, TextField, Button, List, ListItem } from '@mui/material'
+import React from 'react'
 import { useForm } from 'react-hook-form'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
+import { useContractRead, useContractWrite } from 'wagmi'
+import KALIDAO_ABI from '../../abi/KaliDAO.json'
 import Web3Dialog from '../../components/Web3Dialog'
+import { addresses } from '../../constants/addresses'
 
 export default function ProjectProposal() {
   const { chainId, daoId } = useParams()

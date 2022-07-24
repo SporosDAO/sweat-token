@@ -44,6 +44,9 @@ export class UserDto {
   publicAddress: string
 
   @IsAlphanumeric()
+  chainId: string
+
+  @IsAlphanumeric()
   nonce: string
 
   @IsDate()

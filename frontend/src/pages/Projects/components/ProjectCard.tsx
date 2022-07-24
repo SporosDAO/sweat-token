@@ -1,9 +1,8 @@
-import { Card, CardContent, CardActions } from '@mui/material'
-import { Button, Typography, ListItem, Link } from '@mui/material'
-import { useEnsName, useEnsAvatar } from 'wagmi'
-import { Work, Launch } from '@mui/icons-material'
+import { Launch, Work } from '@mui/icons-material'
+import { Button, Card, CardActions, CardContent, Link, ListItem, Typography } from '@mui/material'
+import { Key } from 'react'
 import { useParams } from 'react-router-dom'
-import { ReactElement, JSXElementConstructor, ReactFragment, ReactPortal, Key } from 'react'
+import { useEnsAvatar, useEnsName } from 'wagmi'
 
 export default function ProjectCard(props: any) {
   const { chainId, daoId } = useParams()

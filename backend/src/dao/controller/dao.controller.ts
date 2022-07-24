@@ -6,11 +6,12 @@ import { Role, UserDto } from 'src/user/user.dto'
 import { DaoAuth } from '../dao.auth.decorator'
 import { CreateDaoDto, DaoDto } from '../dao.dto'
 import { DaoService } from '../dao.service'
+import { DaoSettingsService } from '../settings/dao.settings.service'
 
 @Controller('dao')
 @ApiTags('dao')
 export class DaoController {
-  constructor(private daoService: DaoService) {}
+  constructor(private daoService: DaoService, private daoSettingsService: DaoSettingsService) {}
 
   @Get()
   list(): Promise<DaoDto[]> {

@@ -1,9 +1,8 @@
-import { useQuery } from 'react-query'
-import { GRAPH_URL } from './url'
+import { ethers } from 'ethers'
 import { useContractRead, useContractReads } from 'wagmi'
 import PM_ABI from '../abi/ProjectManagement.json'
 import { addresses } from '../constants/addresses'
-import { ethers } from 'ethers'
+import { GRAPH_URL } from './url'
 
 export const getProjects = async (chainId, daoAddress) => {
   console.log('getProjects', chainId, daoAddress)
@@ -123,7 +122,7 @@ export function useGetProjects(chainId, daoAddress) {
   const { data, error, isError, isLoading, isSuccess } = useGetProjectsRPC(chainId, daoAddress)
   const projects = []
   if (data) {
-    data.map((project) => {
+    data.forEach((project) => {
       let goals = {}
       try {
         goals = JSON.parse(project.goals)

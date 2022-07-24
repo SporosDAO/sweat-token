@@ -9,6 +9,7 @@ import ListItemText from '@mui/material/ListItemText'
 import * as React from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { OWNER } from '../../constants'
+import Settings from '@mui/icons-material/Settings'
 
 export const MainMenuItems = () => {
   return (
@@ -60,6 +61,11 @@ export const menu: DaoMenuItem[] = [
     label: 'People',
     icon: People,
     link: 'people'
+  },
+  {
+    label: 'Settings',
+    icon: Settings,
+    link: 'settings'
   }
 ]
 

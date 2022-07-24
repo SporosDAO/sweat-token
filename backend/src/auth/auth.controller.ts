@@ -1,6 +1,6 @@
-import { Body, Controller, Get, HttpCode, Post, Query, Request, UseGuards } from '@nestjs/common'
+import { BadRequestException, Body, Controller, Get, HttpCode, Post, Query, Request, UseGuards } from '@nestjs/common'
 import { ApiBearerAuth, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger'
-import { NonceDto } from './auth.dto'
+import { NoncePayloadDto, SiwePayloadDto } from './auth.dto'
 import { JwtAuthGuard } from './auth.jwt.guard'
 import { AuthService } from './auth.service'
 import { JwtTokenDto, UserDto } from 'src/user/user.dto'
@@ -12,13 +12,14 @@ export class AuthController {
 
   @Get('user')
   @HttpCode(200)
-  getUser(@Query('publicAddress') publicAddress: string): Promise<NonceDto> {
-    return this.authService.getUserByAddress(publicAddress)
+  getUser(@Query('chainId') chainId: string, @Query('publicAddress') publicAddress: string): Promise<NoncePayloadDto> {
+    if (!chainId || !publicAddress) throw new BadRequestException()
+    return this.authService.getUserByAddress(chainId, publicAddress)
   }
 
   @Post('user')
   @HttpCode(200)
-  verifySignature(@Body() sig: NonceDto): Promise<JwtTokenDto> {
+  verifySignature(@Body() sig: SiwePayloadDto): Promise<JwtTokenDto> {
     return this.authService.verifySignature(sig)
   }
 
