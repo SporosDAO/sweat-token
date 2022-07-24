@@ -1,6 +1,6 @@
-import { Button, Grid, Paper, TextField, useMediaQuery, useTheme } from '@mui/material'
-import { makeStyles } from '@mui/styles'
+import { Button, Grid, Paper, TextField } from '@mui/material'
 import { Box } from '@mui/system'
+import axios, { AxiosError } from 'axios'
 import { useCallback, useEffect, useState } from 'react'
 import { useMutation } from 'react-query'
 import { useParams } from 'react-router-dom'
@@ -8,26 +8,24 @@ import { setSettings } from '../../api'
 import { DaoSettingsDto } from '../../api/openapi'
 import useAuth from '../../context/AuthContext'
 import useToast from '../../context/ToastContext'
-import axios, { AxiosError } from 'axios'
-import { useGetPeople } from '../../graph/getPeople'
 
-const useStyles = makeStyles((theme) => ({
-  root: {},
-  legal_content: {
-    margin: '0 40px'
-    // textAlign: 'center'
-  },
-  legal_button: {
-    marginBottom: '10px',
-    fontSize: '16px',
-    lineHeight: '20px'
-  }
-}))
+// const useStyles = makeStyles((theme) => ({
+//   root: {},
+//   legal_content: {
+//     margin: '0 40px'
+//     // textAlign: 'center'
+//   },
+//   legal_button: {
+//     marginBottom: '10px',
+//     fontSize: '16px',
+//     lineHeight: '20px'
+//   }
+// }))
 
 export default function Settings() {
-  const theme = useTheme()
-  const classes = useStyles()
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  // const theme = useTheme()
+  // const classes = useStyles()
+  // const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const { showToast } = useToast()
   const { requireAuth, user, error: authError, resetError } = useAuth()
