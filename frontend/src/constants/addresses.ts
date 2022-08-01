@@ -79,7 +79,8 @@ export const addresses: Dictionary<OneChainKaliAddressSet> =
         crowdsale: '0x0bb3F43533FBf16d69dBdccf6AaAef81acd76FAB',
         crowdsale2: '0x36a40E0e1581F9a5a6D6B52f5d064F5c8031068f',
         redemption: '0x7452BDCED6f344e0E4e1169377D369aDE1cB0Ca0',
-        manager: '0xb47c9A6A494d344026C60c19C74f54f6AbA54fAa'
+        manager: '0xb47c9A6A494d344026C60c19C74f54f6AbA54fAa',
+        projectmanagement: '0x9f0ad778385a2c688533958c6ada56f201ffc246'
       },
       blockExplorer: 'https://arbiscan.io',
       kaliMaster: '0xffe7e91f86fa2c6af0b3cddf0f0906d465e1d760'

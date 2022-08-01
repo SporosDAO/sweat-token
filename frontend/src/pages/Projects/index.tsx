@@ -46,7 +46,7 @@ export default function Projects() {
               ))}
             </List>
           ) : (
-            <p>This DAO has no members yet.</p>
+            <p>This DAO has no projects yet.</p>
           )}
         </Box>
       )}
