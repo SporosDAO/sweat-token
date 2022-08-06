@@ -14,7 +14,6 @@ export default function ProjectProposal() {
 
   const cid = Number(chainId)
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
-  console.debug({ pmAddress })
   const {
     control,
     register,
@@ -56,7 +55,6 @@ export default function ProjectProposal() {
 
   const onSubmit = async (data: any) => {
     setDialogOpen(true)
-    console.log(data)
     const { manager, budget, deadline, goalTitle, goalLink } = data
     let payload
     const goals = [{ goalTitle, goalLink }]
@@ -87,7 +85,6 @@ export default function ProjectProposal() {
 
     // if PM extension is not enabled yet, toggle it on
     const TOGGLE_EXTENSION_AVAILABILITY = pmExtensionEnabled ? 0 : 1
-    console.debug({ TOGGLE_EXTENSION_AVAILABILITY })
 
     let description = 'New Project Proposal'
     goals.map(
@@ -99,7 +96,6 @@ export default function ProjectProposal() {
       `Budget: ${budget}`,
       `Deadline: ${new Date(deadline).toUTCString()}`
     ].join('.\n')
-    console.debug({ description })
     const tx = await writeAsync({
       args: [PROPOSAL_TYPE_EXTENSION, description, [pmAddress], [TOGGLE_EXTENSION_AVAILABILITY], [payload]],
       overrides: {
@@ -111,10 +107,7 @@ export default function ProjectProposal() {
   }
 
   const onDialogClose = async () => {
-    console.debug('onDialogClose', { isWriteSuccess, isWritePending })
-
     if (isWritePending) {
-      console.debug('onDialogClose user escape ignored. Tx pending.')
       return
     }
 

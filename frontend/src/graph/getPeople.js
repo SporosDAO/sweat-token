@@ -2,7 +2,6 @@ import { useQuery } from 'react-query'
 import { GRAPH_URL } from './url'
 
 export const getPeople = async (chainId, daoAddress) => {
-  console.log('getPeople', chainId, daoAddress)
   try {
     const res = await fetch(GRAPH_URL[chainId], {
       method: 'POST',
@@ -23,9 +22,7 @@ export const getPeople = async (chainId, daoAddress) => {
           }`
       })
     })
-    console.log('result', res)
     const data = await res.json()
-    console.log('data', data)
     return data
   } catch (e) {
     return e

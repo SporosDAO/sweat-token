@@ -34,7 +34,6 @@ export default function ProjectTribute() {
     contractInterface: PM_ABI,
     functionName: 'callExtension',
     onSuccess(data, variables, context) {
-      console.debug('success', { data, variables, context })
       // alert(`Proposal successfully submitted on chain.`)
     },
     onError(error, variables, context) {
@@ -45,7 +44,6 @@ export default function ProjectTribute() {
 
   const onSubmit = async (data: any) => {
     setDialogOpen(true)
-    console.log(data)
     const { contributorAddress, mintAmount, tributeTitle, tributeLink } = data
     const tribute = [{ tributeTitle, tributeLink }]
     const tributeString = JSON.stringify(tribute)
@@ -67,12 +65,6 @@ export default function ProjectTribute() {
       return
     }
 
-    console.debug({
-      projectId,
-      contributorAddress,
-      mintAmount,
-      tributeString
-    })
     const tx = await writeAsync({
       args: [daoId, [payload]],
       overrides: {
@@ -84,10 +76,8 @@ export default function ProjectTribute() {
   }
 
   const onDialogClose = async () => {
-    console.debug('onDialogClose', { isWriteSuccess, isWritePending })
 
     if (isWritePending) {
-      console.debug('onDialogClose user escape ignored. Tx pending.')
       return
     }
 
@@ -97,7 +87,6 @@ export default function ProjectTribute() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
 
   if (!chainId || !daoId || !projectId) {
-    console.debug('chainId, daoId and projectId required', { chainId, daoId })
     return <Navigate replace to="/" />
   }
 

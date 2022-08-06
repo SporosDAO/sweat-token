@@ -12,9 +12,6 @@ export default function Projects() {
   const { chainId, daoId } = useParams()
 
   const { projects, error, isLoading, isSuccess } = useGetProjects(chainId, daoId)
-  console.debug('useGetProjects', { projects, error, isLoading, isSuccess })
-  console.debug({ projects })
-
   return (
     <ContentBlock title="Projects">
       <Box display="flex" justifyContent="right">

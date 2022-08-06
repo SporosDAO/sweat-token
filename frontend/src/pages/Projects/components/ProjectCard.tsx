@@ -9,14 +9,10 @@ export default function ProjectCard(props: any) {
   const { chainId, daoId } = useParams()
 
   const project = props.project
-  console.debug({ project })
-
   const manager = project['manager']
   const ensNameResult = useEnsName({ address: manager, chainId: Number(1), cacheTime: 60_000 })
-  console.debug('useEnsName', { ensNameResult })
   const ensName = !ensNameResult.isError && !ensNameResult.isLoading ? ensNameResult.data : ''
   const ensAvatarResult = useEnsAvatar({ addressOrName: manager, chainId: Number(1), cacheTime: 60_000 })
-  console.debug('useEnsAvatar', { ensAvatarResult })
   const ensAvatar = !ensAvatarResult.isError && !ensAvatarResult.isLoading ? ensAvatarResult.data : ''
   const deadline = new Date()
   deadline.setTime(project['deadline'] * 1000)

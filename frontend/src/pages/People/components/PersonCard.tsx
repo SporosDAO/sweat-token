@@ -8,10 +8,8 @@ export default function PersonCard(props: any) {
 
   const paddr = person['address']
   const ensNameResult = useEnsName({ address: paddr, chainId: Number(1), cacheTime: 60_000 })
-  console.debug('useEnsName', { ensNameResult })
   const ensName = !ensNameResult.isError && !ensNameResult.isLoading ? ensNameResult.data : ''
   const ensAvatarResult = useEnsAvatar({ addressOrName: paddr, chainId: Number(1), cacheTime: 60_000 })
-  console.debug('useEnsAvatar', { ensAvatarResult })
   const ensAvatar = !ensAvatarResult.isError && !ensAvatarResult.isLoading ? ensAvatarResult.data : ''
 
   return (
