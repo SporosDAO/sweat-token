@@ -1,6 +1,12 @@
 # Sweat Token App
-
 Source code for the Sweat Token UI interface.
+
+
+## Getting Started
+1. Install dependencies: `yarn install`
+2. Create a .env based on the sample `cp .env.example .env`
+3. Start the app using: `yarn start`
+4. Visit http://localhost:3000 to view the app in the browser
 
 ## Available Scripts
 
@@ -8,7 +14,7 @@ In the project directory, you can run:
 
 ### `yarn start`
 
-Runs the app in the development mode.\
+Runs the app in the development mode.
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
