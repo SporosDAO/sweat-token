@@ -1,9 +1,9 @@
-import { Card, CardContent, CardActions } from '@mui/material'
-import { Button, Typography, ListItem, Link } from '@mui/material'
+import { Card, CardContent, CardActions, Box } from '@mui/material'
+import { Button, Typography, Link } from '@mui/material'
 import { useEnsName, useEnsAvatar } from 'wagmi'
 import { Work, Launch } from '@mui/icons-material'
 import { useParams } from 'react-router-dom'
-import { ReactElement, JSXElementConstructor, ReactFragment, ReactPortal, Key } from 'react'
+import { Key } from 'react'
 
 export default function ProjectCard(props: any) {
   const { chainId, daoId } = useParams()
@@ -19,56 +19,54 @@ export default function ProjectCard(props: any) {
   const deadlineString = deadline.toUTCString()
 
   return (
-    <ListItem>
-      <Card sx={{ minWidth: 400 }} raised={true}>
-        <CardContent>
-          <Typography>#{project['projectID']}</Typography>
-          {project['goals'] &&
-            project['goals'].map((goal: { goalTitle: string; goalLink: string }, idx: Key) => (
-              <div key={idx}>
-                <Typography variant="h5" component="div">
-                  {goal.goalTitle}
-                </Typography>
-                <Link href={goal.goalLink} target="_blank" rel="noopener" color="text.secondary">
-                  Tracking Link
-                </Link>
-              </div>
-            ))}
-          <Typography color="text.secondary" gutterBottom>
-            Budget: {project['budget']}
-          </Typography>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            Deadline: {deadlineString}
-          </Typography>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            Manager address: {manager}
-          </Typography>
-          {ensName ? (
-            <div>
-              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                Manager ENS: {ensName}
+    <Card sx={{ margin: '8px', width: '48.5%' }} raised={true}>
+      <CardContent>
+        <Typography>#{project['projectID']}</Typography>
+        {project['goals'] &&
+          project['goals'].map((goal: { goalTitle: string; goalLink: string }, idx: Key) => (
+            <div key={idx}>
+              <Typography variant="h5" component="div">
+                {goal.goalTitle}
               </Typography>
-              <div>{ensAvatar}</div>
+              <Link href={goal.goalLink} target="_blank" rel="noopener" color="text.secondary">
+                Tracking Link
+              </Link>
             </div>
-          ) : (
-            <div />
-          )}
-        </CardContent>
-        <CardActions sx={{ justifyContent: 'space-between' }}>
-          <Button variant="text" endIcon={<Work />} href={`projects/${project['projectID']}/tribute`}>
-            Tribute
-          </Button>
-          <Button
-            variant="text"
-            endIcon={<Launch />}
-            href={`https://app.kali.gg/daos/${chainId}/${daoId}`}
-            rel="noopener"
-            target="_blank"
-          >
-            Kali
-          </Button>
-        </CardActions>
-      </Card>
-    </ListItem>
+          ))}
+        <Typography color="text.secondary" gutterBottom>
+          Budget: {project['budget']}
+        </Typography>
+        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          Deadline: {deadlineString}
+        </Typography>
+        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          Manager address: {manager}
+        </Typography>
+        {ensName ? (
+          <div>
+            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+              Manager ENS: {ensName}
+            </Typography>
+            <div>{ensAvatar}</div>
+          </div>
+        ) : (
+          <div />
+        )}
+      </CardContent>
+      <CardActions sx={{ justifyContent: 'space-between' }}>
+        <Button variant="text" endIcon={<Work />} href={`projects/${project['projectID']}/tribute`}>
+          Tribute
+        </Button>
+        <Button
+          variant="text"
+          endIcon={<Launch />}
+          href={`https://app.kali.gg/daos/${chainId}/${daoId}`}
+          rel="noopener"
+          target="_blank"
+        >
+          Kali
+        </Button>
+      </CardActions>
+    </Card>
   )
 }

@@ -76,7 +76,6 @@ export default function ProjectTribute() {
   }
 
   const onDialogClose = async () => {
-
     if (isWritePending) {
       return
     }
