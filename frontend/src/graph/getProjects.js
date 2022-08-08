@@ -6,7 +6,6 @@ import { addresses } from '../constants/addresses'
 import { ethers } from 'ethers'
 
 export const getProjects = async (chainId, daoAddress) => {
-  console.log('getProjects', chainId, daoAddress)
   try {
     const res = await fetch(GRAPH_URL[chainId], {
       method: 'POST',
@@ -32,7 +31,6 @@ export const getProjects = async (chainId, daoAddress) => {
         }`
       })
     })
-    console.log('result', res)
     // uncomment when Kali subgraph restores access to projects
     // const data = await res.json()
     // in the meanwhile use mock data
@@ -64,7 +62,6 @@ export const getProjects = async (chainId, daoAddress) => {
         }
       ]
     }
-    console.log({ data })
     return data
   } catch (e) {
     console.error('Error fetching projects', { e })
@@ -82,7 +79,6 @@ export const getProjects = async (chainId, daoAddress) => {
  * @returns array of project records
  */
 function useGetProjectsRPC(chainId, daoAddress) {
-  console.log('getProjectsRPC', chainId, daoAddress)
   const cid = Number(chainId)
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
   let result
@@ -96,9 +92,7 @@ function useGetProjectsRPC(chainId, daoAddress) {
     ...pmContract,
     functionName: 'nextProjectId'
   })
-  console.log('useContractRead result', result)
   const nextProjectId = result.data ? Number(result.data) : 100 // low watermark in PM contract
-  console.log({ nextProjectId })
   const projectRequests = []
   for (let pid = nextProjectId - 1; pid > 100; pid--) {
     projectRequests.push({
@@ -110,12 +104,9 @@ function useGetProjectsRPC(chainId, daoAddress) {
   result = useContractReads({
     contracts: projectRequests,
     onSuccess(data) {
-      console.log({ data })
       const projects = data
-      console.log({ projects })
     }
   })
-  console.log('useContractReads result', result)
   return result
 }
 

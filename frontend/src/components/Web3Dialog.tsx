@@ -16,9 +16,6 @@ interface Web3DialogProps {
 }
 
 export default function Web3Dialog(props: Web3DialogProps) {
-  console.debug('Web3Dialog', {
-    props
-  })
   const { dialogOpen, onDialogClose, isWritePending, isWriteError, writeError, isWriteSuccess, hrefAfterSuccess } =
     props.web3tx
   return (
