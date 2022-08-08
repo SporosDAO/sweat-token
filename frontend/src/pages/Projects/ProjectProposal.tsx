@@ -38,7 +38,6 @@ export default function ProjectProposal() {
     ...daoContract,
     functionName: 'propose',
     onSuccess(data, variables, context) {
-      console.debug('success', { data, variables, context })
       // alert(`Proposal successfully submitted on chain.`)
     },
     onError(error, variables, context) {
@@ -81,7 +80,6 @@ export default function ProjectProposal() {
     } else {
       pmExtensionEnabled = await contractReadResult.refetch()
     }
-    console.debug({ pmExtensionEnabled })
 
     // if PM extension is not enabled yet, toggle it on
     const TOGGLE_EXTENSION_AVAILABILITY = pmExtensionEnabled ? 0 : 1
@@ -117,7 +115,6 @@ export default function ProjectProposal() {
   const [dialogOpen, setDialogOpen] = React.useState(false)
 
   if (!chainId || !daoId) {
-    console.debug('chainId and daoId required', { chainId, daoId })
     return <Navigate replace to="/" />
   }
 
