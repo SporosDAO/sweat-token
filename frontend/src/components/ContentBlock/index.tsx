@@ -9,23 +9,24 @@ interface ContentBlockProps {
 }
 
 export default function ContentBlock(props: ContentBlockProps) {
+  const { title, children, sx } = props
   return (
     <Paper
       sx={
-        props.sx || {
+        sx || {
           p: 2,
           mb: 2
         }
       }
     >
-      {props.title ? (
+      {title ? (
         <Box>
-          <h2>{props.title}</h2>
+          <h2>{title}</h2>
         </Box>
       ) : (
         <></>
       )}
-      {props.children ? <Box>{props.children}</Box> : <></>}
+      {children ? <Box>{children}</Box> : <></>}
     </Paper>
   )
 }

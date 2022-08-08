@@ -17,14 +17,9 @@ export function useGetUserDAOs(chainId, userAddress) {
 export default function MyDAOs() {
   const { chain } = useNetwork()
   const { address, isConnecting, isDisconnected } = useAccount()
-  console.log({ address, isConnecting, isDisconnected })
-
   const { data, isLoading, isSuccess } = useGetUserDAOs(chain?.id, address)
 
   const daos = isSuccess ? data?.['members'] : []
-
-  console.log({ chain })
-  console.log({ daos })
 
   return (
     <>
