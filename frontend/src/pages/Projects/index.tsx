@@ -11,13 +11,7 @@ export default function Projects() {
 
   const { projects, error, isLoading } = useGetProjects(chainId, daoId)
   return (
-    <ContentBlock title="Projects">
-      <Box display="flex" sx={{ margin: '0 0 20px 0' }} justifyContent="right">
-        <Fab variant="extended" color="primary" aria-label="proposeProject" href="projects/propose">
-          <Add />
-          Propose Project
-        </Fab>
-      </Box>
+    <ContentBlock title="Projects" cta={{ href: 'projects/propose', text: 'Propose Project' }}>
       {isLoading && <CircularProgress />}
       {!isLoading && error && (
         <Box>
