@@ -17,8 +17,9 @@ Tests are executed in Hardhat environment.
 The contract is currently live on:
 | Network | Address | URL |
 ----------|---------|-----|
-| Rinkeby | `0x9f0ad778385a2c688533958c6ada56f201ffc246` | https://rinkeby.etherscan.io/address/0x9f0ad778385a2c688533958c6ada56f201ffc246 |
-| Goerli | `0x9f0ad778385a2c688533958c6ada56f201ffc246` | https://goerli.etherscan.io/address/0x9F0AD778385A2C688533958C6ada56f201ffc246 |
+| Rinkeby Testnet | `0x9f0ad778385a2c688533958c6ada56f201ffc246` | https://rinkeby.etherscan.io/address/0x9f0ad778385a2c688533958c6ada56f201ffc246 |
+| Goerli Testnet | `0x9f0ad778385a2c688533958c6ada56f201ffc246` | https://goerli.etherscan.io/address/0x9F0AD778385A2C688533958C6ada56f201ffc246 |
+| Arbitrum One Mainnet | `0x9f0ad778385a2c688533958c6ada56f201ffc246` | https://goerli.etherscan.io/address/0x9F0AD778385A2C688533958C6ada56f201ffc246 | https://arbiscan.io/address/0x9F0AD778385A2C688533958C6ada56f201ffc246 |
 
 ---------------------------
 
