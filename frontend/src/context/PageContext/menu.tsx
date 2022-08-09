@@ -1,11 +1,5 @@
-import { People } from '@mui/icons-material'
-import FactoryIcon from '@mui/icons-material/Factory'
-import HelpIcon from '@mui/icons-material/Help'
-import HomeIcon from '@mui/icons-material/Home'
-import MenuBookIcon from '@mui/icons-material/MenuBook'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
+import { Factory, Help, Home, MenuBook, People } from '@mui/icons-material'
+import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 import * as React from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { OWNER } from '../../constants'
@@ -15,7 +9,7 @@ export const MainMenuItems = () => {
     <React.Fragment>
       <ListItemButton onClick={() => (document.location = '/')}>
         <ListItemIcon>
-          <HomeIcon />
+          <Home />
         </ListItemIcon>
         <ListItemText primary="Home" />
       </ListItemButton>
@@ -53,7 +47,7 @@ export const menu: DaoMenuItem[] = [
   */
   {
     label: 'Projects',
-    icon: FactoryIcon,
+    icon: Factory,
     link: 'projects'
   },
   {
@@ -75,8 +69,7 @@ export const DaoMenuItems = () => {
   const currentPath = React.useMemo((): string => {
     if (!daoId) return ''
     const parts = location.pathname.split('/')
-    const subpath = parts && parts.length > 0 ? parts[parts.length - 1] : ''
-    return subpath
+    return parts && parts.length > 0 ? parts[parts.length - 1] : ''
   }, [daoId, location.pathname])
 
   return (
@@ -98,13 +91,13 @@ export const SecondaryMenuItems = () => {
     <React.Fragment>
       <ListItemButton onClick={() => (document.location = OWNER.docsUrl)}>
         <ListItemIcon>
-          <MenuBookIcon />
+          <MenuBook />
         </ListItemIcon>
         <ListItemText primary="Docs" />
       </ListItemButton>
       <ListItemButton onClick={() => (document.location = OWNER.helpUrl)}>
         <ListItemIcon>
-          <HelpIcon />
+          <Help />
         </ListItemIcon>
         <ListItemText primary="Help" />
       </ListItemButton>
