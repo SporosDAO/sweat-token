@@ -26,7 +26,7 @@ import {
 let basePath = process.env.REACT_APP_SWEAT_TOKEN_API_BASEPATH
 
 if (!basePath) {
-  basePath = `${window.location.protocol}//${window.location.host}`
+  basePath = `${window.location.protocol}/${window.location.host}`
 }
 class ApiClient {
   public token: string | undefined = undefined
