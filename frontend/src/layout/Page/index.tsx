@@ -90,7 +90,6 @@ export function PageLayout(props: PageLayoutProps) {
 
   const { chainId, daoId } = useParams()
   const { data, error, isLoading, isSuccess } = useGetDAO(chainId, daoId)
-  console.debug('useGetDAO', { data, error, isLoading, isSuccess })
   const { title } =
     isSuccess && data && data['token'] && data['token']['name'] ? data['token']['name'] : 'Sporos DAO App'
 

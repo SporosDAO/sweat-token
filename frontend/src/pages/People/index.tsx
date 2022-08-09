@@ -11,16 +11,12 @@ export default function People() {
   const { chainId, daoId } = useParams()
 
   const { data, error, isLoading, isSuccess } = useGetPeople(chainId, daoId)
-  console.debug('useGetPeople', { data, error, isLoading, isSuccess })
   let people: any[] = []
   let tokenTotalSupply = 0
   if (isSuccess) {
     people = data.data.daos[0]['members']
     tokenTotalSupply = data.data.daos[0]['token']['totalSupply']
   }
-  console.debug({ people })
-  console.debug({ tokenTotalSupply })
-
   return (
     <ContentBlock title="People">
       {isLoading ? (
