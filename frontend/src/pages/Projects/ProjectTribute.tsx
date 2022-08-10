@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { ethers } from 'ethers'
 import { useContractWrite } from 'wagmi'
 import { addresses } from '../../constants/addresses'
@@ -14,15 +14,9 @@ export default function ProjectTribute() {
 
   const cid = Number(chainId)
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
-  const {
-    control,
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm()
+  const { register, handleSubmit } = useForm()
 
   const {
-    data,
     isLoading: isWritePending,
     isSuccess: isWriteSuccess,
     isError: isWriteError,
@@ -65,7 +59,7 @@ export default function ProjectTribute() {
       return
     }
 
-    const tx = await writeAsync({
+    await writeAsync({
       args: [daoId, [payload]],
       overrides: {
         gasLimit: 1050000
