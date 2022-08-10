@@ -1,5 +1,4 @@
-import { Button, CircularProgress, Fab } from '@mui/material'
-import { Add } from '@mui/icons-material'
+import { Button, CircularProgress } from '@mui/material'
 import { Box } from '@mui/system'
 import { useParams } from 'react-router-dom'
 import ContentBlock from '../../components/ContentBlock'
