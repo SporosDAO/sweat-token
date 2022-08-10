@@ -1,6 +1,6 @@
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import MenuIcon from '@mui/icons-material/Menu'
-import { Box, CssBaseline, IconButton, Toolbar, useMediaQuery, useTheme } from '@mui/material'
+import { Avatar, Box, CssBaseline, IconButton, Toolbar, useMediaQuery, useTheme } from '@mui/material'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
@@ -106,6 +106,7 @@ export function PageLayout(props: PageLayoutProps) {
             pr: '24px' // keep right padding when drawer closed
           }}
         >
+          <Avatar alt="Sporos DAO logo" src="/logo192.png" />
           {props.withDrawer !== false ? (
             <IconButton
               edge="start"

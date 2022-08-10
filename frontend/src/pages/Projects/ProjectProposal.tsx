@@ -166,7 +166,9 @@ export default function ProjectProposal() {
           </Button>
         </ListItem>
       </List>
-      <Web3SubmitDialog open={dialogOpen} onClose={onDialogClose} txInput={txInput} hrefAfterSuccess="../projects/" />
+      {dialogOpen && (
+        <Web3SubmitDialog open={dialogOpen} onClose={onDialogClose} txInput={txInput} hrefAfterSuccess="./" />
+      )}
     </Box>
   )
 }
