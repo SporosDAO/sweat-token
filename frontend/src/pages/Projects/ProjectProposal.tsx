@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { ethers } from 'ethers'
 import { useContractRead, useContractWrite } from 'wagmi'
 import { addresses } from '../../constants/addresses'
@@ -14,12 +14,7 @@ export default function ProjectProposal() {
 
   const cid = Number(chainId)
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
-  const {
-    control,
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm()
+  const { register, handleSubmit } = useForm()
 
   const daoContract = {
     addressOrName: daoId || '',
@@ -28,7 +23,6 @@ export default function ProjectProposal() {
   }
 
   const {
-    data,
     isLoading: isWritePending,
     isSuccess: isWriteSuccess,
     isError: isWriteError,
@@ -94,7 +88,7 @@ export default function ProjectProposal() {
       `Budget: ${budget}`,
       `Deadline: ${new Date(deadline).toUTCString()}`
     ].join('.\n')
-    const tx = await writeAsync({
+    await writeAsync({
       args: [PROPOSAL_TYPE_EXTENSION, description, [pmAddress], [TOGGLE_EXTENSION_AVAILABILITY], [payload]],
       overrides: {
         gasLimit: 1050000
