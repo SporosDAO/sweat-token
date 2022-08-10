@@ -16,12 +16,7 @@ export default function ProjectTribute() {
 
   const cid = Number(chainId)
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
-  const {
-    // control,
-    register,
-    handleSubmit
-    // formState
-  } = useForm()
+  const { register, handleSubmit } = useForm()
 
   const callArgs = ['uint256', 'address', 'uint256', 'string']
 

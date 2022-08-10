@@ -18,12 +18,7 @@ export default function ProjectProposal() {
 
   const cid = Number(chainId)
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
-  const {
-    control,
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm()
+  const { register, handleSubmit } = useForm()
 
   const daoContract = {
     addressOrName: daoId || '',

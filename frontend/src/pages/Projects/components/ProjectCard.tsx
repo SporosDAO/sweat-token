@@ -7,9 +7,9 @@ import { Key } from 'react'
 
 export default function ProjectCard(props: any) {
   const { chainId, daoId } = useParams()
+  const { project } = props
+  const { manager, projectID, budget, goals } = project
 
-  const project = props.project
-  const manager = project['manager']
   const ensNameResult = useEnsName({ address: manager, chainId: Number(1), cacheTime: 60_000 })
   const ensName = !ensNameResult.isError && !ensNameResult.isLoading ? ensNameResult.data : ''
   const ensAvatarResult = useEnsAvatar({ addressOrName: manager, chainId: Number(1), cacheTime: 60_000 })
@@ -21,26 +21,26 @@ export default function ProjectCard(props: any) {
   return (
     <Card sx={{ margin: '8px', width: '48.5%' }} raised={true}>
       <CardContent>
-        <Typography>#{project['projectID']}</Typography>
-        {project['goals'] &&
-          project['goals'].map((goal: { goalTitle: string; goalLink: string }, idx: Key) => (
+        <Typography>#{projectID}</Typography>
+        {goals &&
+          goals.map((goal: { goalTitle: string; goalLink: string }, idx: Key) => (
             <div key={idx}>
               <Typography variant="h5" component="div">
                 {goal.goalTitle}
               </Typography>
-              <Link href={goal.goalLink} target="_blank" rel="noopener" color="text.secondary">
+              <Link href={goal.goalLink} sx={{ fontSize: 14 }} target="_blank" rel="noopener" color="text.secondary">
                 Tracking Link
               </Link>
             </div>
           ))}
-        <Typography color="text.secondary" gutterBottom>
-          Budget: {project['budget']}
+        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          Budget: {budget}
         </Typography>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           Deadline: {deadlineString}
         </Typography>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Manager address: {manager}
+          Manager Address: {manager}
         </Typography>
         {ensName ? (
           <div>

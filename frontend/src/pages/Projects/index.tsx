@@ -1,5 +1,4 @@
-import { Button, CircularProgress, Fab } from '@mui/material'
-import { Add } from '@mui/icons-material'
+import { Button, CircularProgress } from '@mui/material'
 import { Box } from '@mui/system'
 import { useParams } from 'react-router-dom'
 import ContentBlock from '../../components/ContentBlock'
@@ -11,13 +10,7 @@ export default function Projects() {
 
   const { projects, error, isLoading } = useGetProjects(chainId, daoId)
   return (
-    <ContentBlock title="Projects">
-      <Box display="flex" sx={{ margin: '0 0 20px 0' }} justifyContent="right">
-        <Fab variant="extended" color="primary" aria-label="proposeProject" href="propose">
-          <Add />
-          Propose Project
-        </Fab>
-      </Box>
+    <ContentBlock title="Projects" cta={{ href: 'propose', text: 'Propose Project' }}>
       {isLoading && <CircularProgress />}
       {!isLoading && error && (
         <Box>

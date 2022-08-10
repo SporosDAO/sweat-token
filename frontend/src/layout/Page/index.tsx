@@ -89,7 +89,7 @@ export function PageLayout(props: PageLayoutProps) {
   const [open, setOpen] = useState(props.withDrawer !== false && !isMobile)
 
   const { chainId, daoId } = useParams()
-  const { data, error, isLoading, isSuccess } = useGetDAO(chainId, daoId)
+  const { data, isSuccess } = useGetDAO(chainId, daoId)
   const { title } =
     isSuccess && data && data['token'] && data['token']['name'] ? data['token']['name'] : 'Sporos DAO App'
 
