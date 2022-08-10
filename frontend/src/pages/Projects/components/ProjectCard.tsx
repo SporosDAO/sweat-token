@@ -54,7 +54,7 @@ export default function ProjectCard(props: any) {
         )}
       </CardContent>
       <CardActions sx={{ justifyContent: 'space-between' }}>
-        <Button variant="text" endIcon={<Work />} href={`projects/${project['projectID']}/tribute`}>
+        <Button variant="text" endIcon={<Work />} href={`${project['projectID']}/tribute`}>
           Tribute
         </Button>
         <Button

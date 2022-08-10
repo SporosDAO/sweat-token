@@ -13,7 +13,7 @@ export default function Projects() {
   return (
     <ContentBlock title="Projects">
       <Box display="flex" sx={{ margin: '0 0 20px 0' }} justifyContent="right">
-        <Fab variant="extended" color="primary" aria-label="proposeProject" href="projects/propose">
+        <Fab variant="extended" color="primary" aria-label="proposeProject" href="propose">
           <Add />
           Propose Project
         </Fab>

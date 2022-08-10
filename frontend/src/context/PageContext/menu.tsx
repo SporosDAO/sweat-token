@@ -54,7 +54,7 @@ export const menu: DaoMenuItem[] = [
   {
     label: 'Projects',
     icon: FactoryIcon,
-    link: 'projects'
+    link: 'projects/'
   },
   {
     label: 'People',

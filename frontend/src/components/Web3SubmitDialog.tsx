@@ -46,14 +46,15 @@ export default function Web3SubmitDialog(props: Web3SubmitDialogProps) {
     isSuccess: isWriteSuccess,
     isError: isWriteError,
     error: writeError,
-    writeAsync: write
+    isIdle,
+    write
   } = useContractWriteResult
 
-  let wrongChainWarning
   let daoChainName
-  if (isUserOnCorrectChain) {
+  let wrongChainWarning
+  if (isUserOnCorrectChain && isIdle && !isWritePending && !isWriteError && !isWriteSuccess && write) {
     try {
-      write && write()
+      write()
     } catch (writeError) {
       console.log({ writeError })
     }

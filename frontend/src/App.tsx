@@ -9,13 +9,31 @@ import Dao from './pages/Dao'
 import ProjectProposal from './pages/Projects/ProjectProposal'
 import ProjectTribute from './pages/Projects/ProjectTribute'
 
-const mdTheme = createTheme({
+const mdDarkTheme = createTheme({
   palette: {
     mode: 'dark'
   }
 })
+const mdLightTheme = createTheme({
+  palette: {
+    mode: 'light'
+  }
+})
 
 function App() {
+  function detectColorScheme() {
+    const newColorScheme =
+      window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? mdDarkTheme : mdLightTheme
+    return newColorScheme
+  }
+
+  const [mdTheme, setMdTheme] = useState(detectColorScheme())
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+    // sync with user's device color mode preference
+    setMdTheme(detectColorScheme())
+  })
+
   return (
     <ThemeProvider theme={mdTheme}>
       <Routes>
