@@ -1,6 +1,5 @@
 import { createTheme, ThemeProvider } from '@mui/material'
 import { Route, Routes } from 'react-router-dom'
-import './App.css'
 import Landing from './pages/Landing'
 import NotFound from './pages/NotFound'
 import People from './pages/People'
@@ -8,16 +7,11 @@ import Projects from './pages/Projects'
 import Dao from './pages/Dao'
 import ProjectProposal from './pages/Projects/ProjectProposal'
 import ProjectTribute from './pages/Projects/ProjectTribute'
-
-const mdTheme = createTheme({
-  palette: {
-    mode: 'dark'
-  }
-})
+import theme from './theme'
 
 function App() {
   return (
-    <ThemeProvider theme={mdTheme}>
+    <ThemeProvider theme={theme}>
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="dao/chain/:chainId/address/:daoId" element={<Dao />}>

@@ -5,8 +5,6 @@ import App from './App'
 import { PageProvider } from './context/PageContext'
 import { ToastProvider } from './context/ToastContext'
 import { Web3ContextProvider } from './context/Web3Context'
-import './index.css'
-import reportWebVitals from './reportWebVitals'
 import { ServiceWorkerWrapper } from './components/PWAUpdate'
 
 import { QueryClient, QueryClientProvider } from 'react-query'
