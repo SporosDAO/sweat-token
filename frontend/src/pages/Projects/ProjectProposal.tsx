@@ -1,16 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { ethers } from 'ethers'
-import { useContractRead, useContractWrite } from 'wagmi'
+import { useContractRead } from 'wagmi'
 import { addresses } from '../../constants/addresses'
 import KALIDAO_ABI from '../../abi/KaliDAO.json'
 import { useParams } from 'react-router-dom'
 import { Box, TextField, Button, List, ListItem } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { Navigate } from 'react-router-dom'
-import Web3Dialog from '../../components/Web3Dialog'
+import Web3SubmitDialog from '../../components/Web3SubmitDialog'
 
 export default function ProjectProposal() {
   const { chainId, daoId } = useParams()
+
+  // Web3SubmitDialog state vars
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [txInput, setTxInput] = useState({})
 
   const cid = Number(chainId)
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
@@ -26,25 +30,6 @@ export default function ProjectProposal() {
     chainId: cid,
     contractInterface: KALIDAO_ABI
   }
-
-  const {
-    data,
-    isLoading: isWritePending,
-    isSuccess: isWriteSuccess,
-    isError: isWriteError,
-    error: writeError,
-    writeAsync
-  } = useContractWrite({
-    ...daoContract,
-    functionName: 'propose',
-    onSuccess(data, variables, context) {
-      // alert(`Proposal successfully submitted on chain.`)
-    },
-    onError(error, variables, context) {
-      console.debug('error', { error, variables, context })
-      // alert(`Proposal failed with error: ${error}`)
-    }
-  })
 
   const contractReadResult = useContractRead({
     ...daoContract,
@@ -85,7 +70,7 @@ export default function ProjectProposal() {
     const TOGGLE_EXTENSION_AVAILABILITY = pmExtensionEnabled ? 0 : 1
 
     let description = 'New Project Proposal'
-    goals.map(
+    goals.forEach(
       (goal) => (description = [description, `Goal: ${goal.goalTitle}`, `Goal Tracking Link: ${goalLink}`].join('.\n'))
     )
     description = [
@@ -94,25 +79,17 @@ export default function ProjectProposal() {
       `Budget: ${budget}`,
       `Deadline: ${new Date(deadline).toUTCString()}`
     ].join('.\n')
-    const tx = await writeAsync({
-      args: [PROPOSAL_TYPE_EXTENSION, description, [pmAddress], [TOGGLE_EXTENSION_AVAILABILITY], [payload]],
-      overrides: {
-        gasLimit: 1050000
-      }
-    }).catch((e) => {
-      console.log('error', e.code, e.reason)
-    })
+    const txInput = {
+      ...daoContract,
+      functionName: 'propose',
+      args: [PROPOSAL_TYPE_EXTENSION, description, [pmAddress], [TOGGLE_EXTENSION_AVAILABILITY], [payload]]
+    }
+    setTxInput(txInput)
   }
 
   const onDialogClose = async () => {
-    if (isWritePending) {
-      return
-    }
-
     setDialogOpen(false)
   }
-
-  const [dialogOpen, setDialogOpen] = React.useState(false)
 
   if (!chainId || !daoId) {
     return <Navigate replace to="/" />
@@ -189,17 +166,7 @@ export default function ProjectProposal() {
           </Button>
         </ListItem>
       </List>
-      <Web3Dialog
-        web3tx={{
-          dialogOpen,
-          onDialogClose,
-          isWritePending,
-          isWriteError,
-          writeError,
-          isWriteSuccess,
-          hrefAfterSuccess: '../projects'
-        }}
-      />
+      <Web3SubmitDialog open={dialogOpen} onClose={onDialogClose} txInput={txInput} hrefAfterSuccess="../projects" />
     </Box>
   )
 }

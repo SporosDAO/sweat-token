@@ -20,5 +20,4 @@ jobs:
           # yarn test
         working-directory: frontend
         env:
-          # TODO: cleanup front end warnings and remove CI: false below
           CI: false

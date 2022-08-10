@@ -6,9 +6,9 @@ import '@rainbow-me/rainbowkit/styles.css'
 
 import { getDefaultWallets, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit'
 
-const { chains, provider } = configureChains(
+const { chains, provider, webSocketProvider } = configureChains(
   [chain.mainnet, chain.polygon, chain.arbitrum, chain.optimism, chain.rinkeby, chain.goerli],
-  [infuraProvider({ infuraId: process.env.NEXT_PUBLIC_INFURA_ID }), publicProvider()]
+  [infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_ID }), publicProvider()]
 )
 
 const { connectors } = getDefaultWallets({
@@ -17,9 +17,9 @@ const { connectors } = getDefaultWallets({
 })
 
 const wagmiClient = createClient({
-  autoConnect: true,
   connectors,
-  provider
+  provider,
+  webSocketProvider
 })
 
 export function Web3ContextProvider({ children }: any) {

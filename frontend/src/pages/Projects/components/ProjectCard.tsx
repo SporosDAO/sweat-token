@@ -1,4 +1,4 @@
-import { Card, CardContent, CardActions, Box } from '@mui/material'
+import { Card, CardContent, CardActions } from '@mui/material'
 import { Button, Typography, Link } from '@mui/material'
 import { useEnsName, useEnsAvatar } from 'wagmi'
 import { Work, Launch } from '@mui/icons-material'
