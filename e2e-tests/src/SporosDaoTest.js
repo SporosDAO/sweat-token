@@ -6,7 +6,8 @@ import puppeteer from 'puppeteer';
 // Note: Please run this test after creating a public DAO named SporosDao
 
 const browser = await puppeteer.launch({
-    headless: true,
+  headless: true,
+  args: ['--no-sandbox', '--disable-setuid-sandbox'],
 });
 
 const page = await browser.newPage();
@@ -161,6 +162,5 @@ if (process && import.meta.url === url.pathToFileURL(process.argv[1]).href) {
     const extension = new CoverageExtension(browser, page, 7000)
     await run(extension);
   }
-  
+
 await browser.close();
-      

@@ -5,7 +5,8 @@ import puppeteer from 'puppeteer';
 import { start } from 'repl';
 
 const browser = await puppeteer.launch({
-    headless: true,
+  headless: true,
+  args: ['--no-sandbox', '--disable-setuid-sandbox'],
 });
 
 const page = await browser.newPage();

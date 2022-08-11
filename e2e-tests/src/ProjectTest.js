@@ -7,8 +7,10 @@ import puppeteer from 'puppeteer';
 // And make sure that SporosDao has a project named 'My New Project June 3 2022'
 
 const browser = await puppeteer.launch({
-    headless: true,
+  headless: true,
+  args: ['--no-sandbox', '--disable-setuid-sandbox'],
 });
+
 
 const page = await browser.newPage();
 
@@ -172,6 +174,5 @@ if (process && import.meta.url === url.pathToFileURL(process.argv[1]).href) {
     const extension = new CoverageExtension(browser, page, 7000)
     await run(extension);
   }
-  
+
 await browser.close();
-      
