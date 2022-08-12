@@ -1,7 +1,11 @@
 #!/usr/bin/bash
 set -evx
 
-docker-compose run --rm e2e-tests src/daoTest.js
+# Runs puppeteer tests via docker container with pre-installed chrome
+docker-compose run --rm e2e-tests bash synpress-run.sh
 
-# to run e2e tests container in interactive mode use the following command
+# To run a single test file
+# docker-compose run --rm e2e-tests src/daoTest.js
+
+# To run in interactive mode
 # docker-compose run --rm e2e-tests bash

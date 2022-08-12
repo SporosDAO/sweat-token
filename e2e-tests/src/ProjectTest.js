@@ -79,11 +79,11 @@ export const flow = {
         },
         {
             "type": "navigate",
-            "url": "http://localhost:3000/",
+            "url": "http://frontend:3000/",
             "assertedEvents": [
                 {
                     "type": "navigation",
-                    "url": "http://localhost:3000/",
+                    "url": "http://frontend:3000/",
                     "title": "SporosDAO App"
                 }
             ]

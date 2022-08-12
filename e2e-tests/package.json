@@ -1,9 +1,8 @@
 {
   "name": "sporosdao-e2e-testsuite",
-  "type": "module",
   "license": "Apache-2.0",
   "scripts": {
-    "test": "node src/*.js",
+    "test": "synpress run --configFile synpress.json",
     "covreport": "nyc report --reporter=text",
     "covcheck": "nyc check-coverage --lines 40 --functions 40 --branches 40",
     "coverage": "yarn covreport && yarn covcheck"
@@ -11,8 +10,11 @@
   "dependencies": {
     "@chainsafe/dappeteer": "^3.0.0-rc.0",
     "@puppeteer/replay": "^0.2.0",
+    "@synthetixio/synpress": "^1.2.0",
+    "cypress": "^10.4.0",
     "nyc": "^15.1.0",
     "puppeteer": "^14.2.1",
-    "puppeteer-to-istanbul": "^1.4.0"
+    "puppeteer-to-istanbul": "^1.4.0",
+    "xvfb": "^0.4.0"
   }
 }
