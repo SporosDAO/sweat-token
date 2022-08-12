@@ -2,23 +2,16 @@ FROM node:lts as deps
 
 FROM deps as contracts
 WORKDIR /app/contracts
-ADD ./contracts/ .
-RUN echo "building contracts ..." && yarn install && yarn build
 
 FROM deps as backend
 WORKDIR /app/backend
-ADD ./backend/ .
-RUN yarn install && yarn build
 
 FROM deps as frontend
 WORKDIR /app/frontend
-ADD ./frontend/ .
-RUN yarn install && yarn build
 
 FROM deps as e2e-tests
 WORKDIR /app/e2e-tests
 # Install chrome dependencies in order to be able to run puppeteer
-ADD ./e2e-tests/ .
 # RUN apt-get update --fix-missing && \
 #    apt-get -y install ca-certificates fonts-liberation libappindicator3-1 libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils && \
 #    yarn install
@@ -46,23 +39,5 @@ RUN apt-get update  --fix-missing \
 #     browser.launch({executablePath: 'google-chrome-stable'})
 # ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 
-# Install puppeteer so it's available in the container.
-RUN yarn install \
-    && pwd \
-    && ls -al \
-    # Add user so we don't need --no-sandbox.
-    # same layer as npm install to keep re-chowned files from using up several hundred MBs more space
-    && groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
-    && mkdir -p /home/pptruser/Downloads \
-    && chown -R pptruser:pptruser /home/pptruser \
-    && chown -R pptruser:pptruser node_modules \
-    && chown -R pptruser:pptruser package.json \
-    && chown -R pptruser:pptruser yarn.lock \
-    && ls -al /home/pptruser/ \
-    && pwd \
-    && ls -al
-
-# Run everything after as non-privileged user.
-USER pptruser
 
 CMD ["google-chrome-stable"]
