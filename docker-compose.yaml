@@ -110,6 +110,7 @@ services:
     environment:
       - CYPRESS_baseUrl=http://frontend:3000
       - PRIVATE_KEY=6195271f32c13638e9756172edd671aaf2bbfa4fae2ab8dcf98b7686cc461c34
+      - FAIL_ON_ERROR=true
       # - DATA_DIR=/data
       # - LOG_LEVEL=info
       # - REACT_APP_SWEAT_TOKEN_API_BASEPATH=$REACT_APP_SWEAT_TOKEN_API_BASEPATH

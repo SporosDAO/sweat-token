@@ -1,3 +1,5 @@
+image:
+  file: .gitpod.Dockerfile
 
 tasks:
   - name: SporosDAO App
@@ -29,14 +31,24 @@ vscode:
 ports:
   # allow front end to access backend api
   # https://www.gitpod.io/docs/config-ports#cors
-  - port: 3001
-    visibility: public
-
+  # frontend web app service : Node.js, React
   - port: 3000
     onOpen: open-browser
     visibility: public
 
+  - port: 3001
+    visibility: public
+    onOpen: ignore
+
   - port: 3001-8999
+    onOpen: ignore
+
+  # Cypress service
+  - port: 5900
+    onOpen: ignore
+  - port: 6080
+    onOpen: open-browser
+  - port: 10000
     onOpen: ignore
 
 github:

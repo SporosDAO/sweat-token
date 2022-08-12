@@ -11,6 +11,7 @@
     "@chainsafe/dappeteer": "^3.0.0-rc.0",
     "@puppeteer/replay": "^0.2.0",
     "@synthetixio/synpress": "^1.2.0",
+    "browserslist": "^4.21.3",
     "cypress": "^10.4.0",
     "nyc": "^15.1.0",
     "puppeteer": "^14.2.1",
