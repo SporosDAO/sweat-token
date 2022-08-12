@@ -12,6 +12,9 @@ tasks:
       cd frontend && yarn install && cd -
       cd e2e-tests && yarn install && cd -
       cd contracts && yarn install && cd -
+      # install global dotenv for parsing .env files
+      export PATH=$PATH:"$(yarn global bin)"
+      yarn global add dotenv
       gp sync-done build
     command: |
       bash .gitpod.sh
@@ -40,15 +43,15 @@ ports:
     visibility: public
     onOpen: ignore
 
-  - port: 3001-8999
-    onOpen: ignore
-
   # Cypress service
   - port: 5900
     onOpen: ignore
   - port: 6080
     onOpen: open-browser
   - port: 10000
+    onOpen: ignore
+
+  - port: 3001-8999
     onOpen: ignore
 
 github:

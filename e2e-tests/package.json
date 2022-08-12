@@ -2,20 +2,16 @@
   "name": "sporosdao-e2e-testsuite",
   "license": "Apache-2.0",
   "scripts": {
-    "test": "synpress run --configFile synpress.json",
+    "test": "dotenv -c -- npx synpress run",
     "covreport": "nyc report --reporter=text",
     "covcheck": "nyc check-coverage --lines 40 --functions 40 --branches 40",
-    "coverage": "yarn covreport && yarn covcheck"
+    "coverage": "yarn covreport && yarn covcheck",
+    "synpress": "dotenv -c -- npx synpress open"
   },
   "dependencies": {
-    "@chainsafe/dappeteer": "^3.0.0-rc.0",
-    "@puppeteer/replay": "^0.2.0",
     "@synthetixio/synpress": "^1.2.0",
     "browserslist": "^4.21.3",
-    "cypress": "^10.4.0",
     "nyc": "^15.1.0",
-    "puppeteer": "^14.2.1",
-    "puppeteer-to-istanbul": "^1.4.0",
     "xvfb": "^0.4.0"
   }
 }
