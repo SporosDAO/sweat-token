@@ -1,3 +1,9 @@
+before(() => {
+  // root-level hook
+  // runs once before all tests
+})
+
+
 describe('Puppeteer', () => {
   context('Test commands', () => {
     it(`initPuppeteer should connect with cypress browser`, () => {

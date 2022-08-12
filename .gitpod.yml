@@ -4,6 +4,8 @@ image:
 tasks:
   - name: SporosDAO App
     init: |
+      # include yarn global installs in bin path
+      gp env PATH=$PATH:"$(yarn global bin)"
       # bring in secret access tokens from gitpod user dashboard
       eval $(gp env -e)
       # builds the images from the dockerfiles
@@ -13,8 +15,7 @@ tasks:
       cd e2e-tests && yarn install && cd -
       cd contracts && yarn install && cd -
       # install global dotenv for parsing .env files
-      export PATH=$PATH:"$(yarn global bin)"
-      yarn global add dotenv
+      yarn global add dotenv-cli
       gp sync-done build
     command: |
       bash .gitpod.sh
