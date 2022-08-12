@@ -5,12 +5,12 @@
     "test": "dotenv -c -- npx synpress run",
     "covreport": "nyc report --reporter=text",
     "covcheck": "nyc check-coverage --lines 40 --functions 40 --branches 40",
-    "coverage": "yarn covreport && yarn covcheck",
-    "synpress": "dotenv -c -- npx synpress open"
+    "coverage": "yarn covreport && yarn covcheck"
   },
   "dependencies": {
     "@synthetixio/synpress": "^1.2.0",
     "browserslist": "^4.21.3",
+    "dotenv-cli": "^6.0.0",
     "nyc": "^15.1.0",
     "xvfb": "^0.4.0"
   }

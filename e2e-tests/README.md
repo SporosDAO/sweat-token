@@ -6,7 +6,7 @@ _Note_: E2E tests require the full SporosDAO App stack to be running: frontend, 
 
 ## Gitpod Environment
 
-This repo is prepared for Gitpod deployment with Synpress pre-installed and ready to run.
+This repo is prepared for Gitpod deployment with Synpress pre-installed and ready to run. Read more [here](https://github.com/mikenikles/cypress-on-gitpod).
 
 ## Environment variables
 
@@ -26,18 +26,16 @@ In the project directory, you can run:
 
 Install all third party dependencies.
 
-### `yarn synpress`
-
-Run Synpress in interactive browser mode.
-
-__Note__ : In Gitpod, a web server will be available on port 6080. Go to the Gitpod/VSCode Remote Explorer menu and open a new browser tab.
-
 ### `yarn test`
 
 Before running tests, the full app stack needs to be running on localhost via
 `compose-docker up` from the main directory.
 
 Then run e2e tests via `yarn test`.
+
+__NOTE__: In Gitpod environment, the Synpress/Cypress interactive browser window is available via web service on port `6080`. You can watch the simulated user actions in the browser as tests are running.
+
+
 
 ### `yarn coverage`
 

@@ -31,7 +31,7 @@ jobs:
           cd e2e-tests
           yarn install
           yarn test
-          yarn coverage
+          # yarn coverage
       - name: Shutdown docker services
         if: always()
         run: docker-compose down
