@@ -25,5 +25,6 @@ yarn-error.log*
 .nyc_output/
 
 # cypress test run artifacts
-screenshots/
-videos/
+cypress/
+tests/e2e/screenshots/
+tests/e2e/videos/

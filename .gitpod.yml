@@ -49,7 +49,7 @@ ports:
   - port: 10000
     onOpen: ignore
 
-  - port: 3001-8999
+  - port: 3001-9999
     onOpen: ignore
 
 github:
