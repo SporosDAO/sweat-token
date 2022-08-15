@@ -2,7 +2,7 @@ import { Card, CardContent, CardActions } from '@mui/material'
 import { Button, Typography, Link } from '@mui/material'
 import { useEnsName, useEnsAvatar } from 'wagmi'
 import { Work, Launch } from '@mui/icons-material'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Key } from 'react'
 
 export default function ProjectCard(props: any) {
@@ -17,6 +17,9 @@ export default function ProjectCard(props: any) {
   const deadline = new Date()
   deadline.setTime(project['deadline'] * 1000)
   const deadlineString = deadline.toUTCString()
+  const isExpired = deadline < new Date()
+
+  const navigate = useNavigate()
 
   return (
     <Card sx={{ margin: '8px', width: '48.5%' }} raised={true}>
@@ -54,8 +57,15 @@ export default function ProjectCard(props: any) {
         )}
       </CardContent>
       <CardActions sx={{ justifyContent: 'space-between' }}>
-        <Button variant="text" endIcon={<Work />} href={`${project['projectID']}/tribute`}>
-          Tribute
+        <Button
+          disabled={isExpired}
+          variant="text"
+          endIcon={<Work />}
+          onClick={() => {
+            navigate(`${project['projectID']}/tribute`, { state: project })
+          }}
+        >
+          {isExpired ? 'Expired' : 'Tribute'}
         </Button>
         <Button
           variant="text"

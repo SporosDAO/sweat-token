@@ -24,12 +24,20 @@ export default function Web3SubmitDialog(props: Web3SubmitDialogProps) {
 
   console.log({ isUserOnCorrectChain, userChain, daoChainId, txInput })
 
-  const { config: prepCallExtensionConfig } = usePrepareContractWrite({
+  const usePrepareContractWriteResult = usePrepareContractWrite({
     ...txInput,
     onError(usePrepareContractWriteError) {
       console.error({ usePrepareContractWriteError })
     }
   })
+
+  const {
+    config: prepCallExtensionConfig,
+    isError: isPrepWriteError,
+    error: prepWriteError
+  } = usePrepareContractWriteResult
+
+  console.log({ usePrepareContractWriteResult })
 
   const useContractWriteResult = useContractWrite({
     ...prepCallExtensionConfig,
@@ -114,6 +122,13 @@ export default function Web3SubmitDialog(props: Web3SubmitDialogProps) {
         </IconButton>
       </DialogTitle>
       <DialogContent>
+        <Box id="alert-dialog-message-error" sx={{ display: isPrepWriteError ? 'block' : 'none' }}>
+          <DialogContentText color="error">Error preparing transaction!</DialogContentText>
+          <DialogContentText color="error">{prepWriteError?.message}</DialogContentText>
+          <DialogContentText>
+            Possibly reverting due to invalid arguments. Please report to support team.
+          </DialogContentText>
+        </Box>
         <Box id="alert-dialog-message-error" sx={{ display: isWriteError ? 'block' : 'none' }}>
           <DialogContentText color="error">ERROR!</DialogContentText>
           <DialogContentText color="error">{writeError?.message}</DialogContentText>
@@ -140,7 +155,7 @@ export default function Web3SubmitDialog(props: Web3SubmitDialogProps) {
       </DialogContent>
       <DialogActions>
         <Button
-          sx={{ display: !isUserOnCorrectChain || isWriteError ? 'block' : 'none' }}
+          sx={{ display: !isUserOnCorrectChain || isWriteError || isPrepWriteError ? 'block' : 'none' }}
           onClick={(event: object) => onClose(event, 'close-clicked', false)}
           autoFocus
         >
