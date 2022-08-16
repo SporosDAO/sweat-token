@@ -8,5 +8,8 @@ jobs:
       - uses: actions/checkout@v3
       - name: Run E2E tests
         run: |
+          set -evx
           cd e2e-tests
-          sudo docker-compose run --rm e2e-tests
+          pwd
+          ls -al
+          # sudo docker-compose run --rm e2e-tests
