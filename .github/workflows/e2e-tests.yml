@@ -14,4 +14,4 @@ jobs:
           cd e2e-tests
           pwd
           ls -al
-          docker-compose run -u $(id -u):$(id -g) --rm e2e-tests
+          docker-compose run --rm e2e-tests
