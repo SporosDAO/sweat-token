@@ -1,0 +1,12 @@
+name: "Build and test the full SporosDAO app stack"
+
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run E2E tests
+        run: |
+          cd e2e-tests
+          docker-compose run --rm e2e-tests

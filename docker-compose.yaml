@@ -6,19 +6,20 @@ networks:
     driver: bridge
 
 services:
-#  contracts:
-#    command: echo "TBD"
-#    working_dir: /app/contracts
-#    restart: unless-stopped
-#    build:
-#      context: ./
-#      dockerfile: Dockerfile
-#.     target: contracts
-#    image: sweat-token/dev
-#    networks:
-#      - sweat-token
-#    volumes:
-#      - ./contracts:/app/contracts
+  contracts:
+    command: yarn start
+    container_name: contracts
+    working_dir: /app/contracts
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: contracts
+    image: sweat-token/dev
+    networks:
+      - sweat-token
+    volumes:
+      - ./contracts:/app/contracts
   backend:
     command: yarn run start:debug
     container_name: backend
@@ -90,29 +91,24 @@ services:
       # ME_CONFIG_MONGODB_ADMINPASSWORD: root
       # ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo:27017/
   e2e-tests:
-    image: "cypress/included:9.5.3"
-    entrypoint: >
-      "/bin/bash" -c "yarn test"
-    # command: "ls -al"
+    command: bash -c "yarn install && yarn test"
     container_name: e2e-tests
     working_dir: /app/e2e-tests
     # stdin_open: true # docker run -i
     # tty: true        # docker run -t
     depends_on:
       - frontend
-    # build:
-    #   context: ./
-    #   dockerfile: Dockerfile
-    #   target: e2e-tests
-    # image: sweat-token/dev
+      - contracts
+    build:
+      context: ./
+      dockerfile: .gitpod.Dockerfile
     networks:
       - sweat-token
     environment:
-      - CYPRESS_baseUrl=http://localhost:3000
-      - PRIVATE_KEY=6195271f32c13638e9756172edd671aaf2bbfa4fae2ab8dcf98b7686cc461c34
+      - CYPRESS_baseUrl=http://frontend:3000
+      - CYPRESS_CACHE_FOLDER=/app/e2e-tests/.cypress-cache
+      # Throwaway private key for e2e testing only
+      - PRIVATE_KEY=32369ff8b87d4a918131a9a43da46e93669683e73d0e3169980d5c92bd33fff0
       - FAIL_ON_ERROR=true
-      # - DATA_DIR=/data
-      # - LOG_LEVEL=info
-      # - REACT_APP_SWEAT_TOKEN_API_BASEPATH=$REACT_APP_SWEAT_TOKEN_API_BASEPATH
     volumes:
       - ./e2e-tests:/app/e2e-tests

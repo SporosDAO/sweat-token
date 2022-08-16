@@ -1,5 +1,5 @@
-describe.only('Puppeteer', () => {
-  context.only('Sporos DAO App home page', () => {
+describe('Puppeteer', () => {
+  context('Sporos DAO App home page', () => {
     it(`Should connect to home page`, () => {
       cy.visit('/')
       cy.contains('The Launchpad of For-Profit DAOs')
@@ -8,14 +8,16 @@ describe.only('Puppeteer', () => {
       cy.visit('/')
       cy.contains('The Launchpad of For-Profit DAOs')
     })
-    it.only(`Should show DAOs on Goerli for account 0xf952a72F39c5Fa22a443200AbE7835128bCb7439`, () => {
+    it(`Should show DAOs on Goerli for account 0xf952a72F39c5Fa22a443200AbE7835128bCb7439`, () => {
       cy.visit('/')
       cy.contains('Connect Wallet').click()
       cy.contains('MetaMask').click()
       cy.acceptMetamaskAccess().then(connected => {
         expect(connected).to.be.true;
       });
-      cy.allowMetamaskToSwitchNetwork()
+      cy.changeMetamaskNetwork('rinkeby').then(networkChanged => {
+        expect(networkChanged).to.be.true;
+      });
       cy.changeMetamaskNetwork('goerli').then(networkChanged => {
         expect(networkChanged).to.be.true;
       });

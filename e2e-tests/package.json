@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "@synthetixio/synpress": "^1.2.0",
-    "browserslist": "^4.21.3",
     "dotenv-cli": "^6.0.0",
     "nyc": "^15.1.0",
     "xvfb": "^0.4.0"
