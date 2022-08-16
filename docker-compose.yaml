@@ -91,7 +91,7 @@ services:
       # ME_CONFIG_MONGODB_ADMINPASSWORD: root
       # ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo:27017/
   e2e-tests:
-    command: bash -c "yarn install && yarn test"
+    command: bash -c "sudo chown -R $(id -u):$(id -g) "/home/gitpod/ && yarn install && yarn test"
     container_name: e2e-tests
     working_dir: /app/e2e-tests
     # stdin_open: true # docker run -i
