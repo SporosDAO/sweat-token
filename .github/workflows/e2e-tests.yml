@@ -1,4 +1,4 @@
-name: "Build and test the full SporosDAO app stack"
+name: "End-to-end tests of the full SporosDAO app stack"
 
 on: [push, pull_request]
 jobs:
@@ -12,4 +12,4 @@ jobs:
           cd e2e-tests
           pwd
           ls -al
-          # sudo docker-compose run --rm e2e-tests
+          docker-compose run -u $(id -u):$(id -g) --rm e2e-tests
