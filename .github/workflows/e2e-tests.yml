@@ -9,4 +9,4 @@ jobs:
       - name: Run E2E tests
         run: |
           cd e2e-tests
-          docker-compose run --rm e2e-tests
+          sudo docker-compose run --rm e2e-tests
