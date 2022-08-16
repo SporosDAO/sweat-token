@@ -1,7 +1,7 @@
 import { Card, CardContent, CardActions } from '@mui/material'
 import { Button, Typography, Link } from '@mui/material'
-import { useEnsName, useEnsAvatar } from 'wagmi'
-import { Work, Launch } from '@mui/icons-material'
+import { useEnsName, useEnsAvatar, useAccount } from 'wagmi'
+import { Work, Launch, HourglassTop, HourglassDisabled } from '@mui/icons-material'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Key } from 'react'
 
@@ -18,6 +18,8 @@ export default function ProjectCard(props: any) {
   deadline.setTime(project['deadline'] * 1000)
   const deadlineString = deadline.toUTCString()
   const isExpired = deadline < new Date()
+  const { address: userAddress } = useAccount()
+  const isManager = userAddress === manager
 
   const navigate = useNavigate()
 
@@ -57,16 +59,25 @@ export default function ProjectCard(props: any) {
         )}
       </CardContent>
       <CardActions sx={{ justifyContent: 'space-between' }}>
-        <Button
-          disabled={isExpired}
-          variant="text"
-          endIcon={<Work />}
-          onClick={() => {
-            navigate(`${project['projectID']}/tribute`, { state: project })
-          }}
-        >
-          {isExpired ? 'Expired' : 'Tribute'}
-        </Button>
+        {isExpired ? (
+          <Button disabled variant="text" endIcon={<HourglassDisabled />}>
+            Expired
+          </Button>
+        ) : isManager ? (
+          <Button
+            variant="text"
+            endIcon={<Work />}
+            onClick={() => {
+              navigate(`${project['projectID']}/tribute`, { state: project })
+            }}
+          >
+            Tribute
+          </Button>
+        ) : (
+          <Button variant="text" endIcon={<HourglassTop />} color="success">
+            Active
+          </Button>
+        )}
         <Button
           variant="text"
           endIcon={<Launch />}

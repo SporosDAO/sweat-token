@@ -23,10 +23,12 @@ const wagmiClient = createClient({
   webSocketProvider
 })
 
+const initialChain = process.env.NODE_ENV === 'development' ? chain.goerli : chain.arbitrum
+
 export function Web3ContextProvider({ children }: any) {
   return (
     <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains} initialChain={chain.arbitrum} theme={darkTheme()}>
+      <RainbowKitProvider chains={chains} initialChain={initialChain} theme={darkTheme()}>
         {children}
       </RainbowKitProvider>
     </WagmiConfig>
