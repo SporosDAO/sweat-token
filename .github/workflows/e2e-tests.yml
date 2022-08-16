@@ -13,5 +13,6 @@ jobs:
           set -evx
           cd e2e-tests
           pwd
+          sudo chmod 777 ./
           ls -al
           docker-compose run --rm e2e-tests
