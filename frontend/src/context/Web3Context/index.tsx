@@ -26,7 +26,7 @@ const wagmiClient = createClient({
 export function Web3ContextProvider({ children }: any) {
   return (
     <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains} theme={darkTheme()}>
+      <RainbowKitProvider chains={chains} initialChain={chain.arbitrum} theme={darkTheme()}>
         {children}
       </RainbowKitProvider>
     </WagmiConfig>
