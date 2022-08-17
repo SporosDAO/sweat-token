@@ -35,13 +35,16 @@ jobs:
       - name: Shutdown docker services
         if: always()
         run: docker-compose down
-      - name: Save e2e test screenshots and videos
+      - name: Save screenshots
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: e2e-test-screenshots
           path: |
             tests/e2e/screenshots
-      - uses: actions/upload-artifact@v3
+      - name: Save videos
+        uses: actions/upload-artifact@v3
+        if: always()
         with:
           name: e2e-test-videos
           path: |
