@@ -1,7 +1,8 @@
 version: "3.9"
 
 networks:
-  default:
+  sweat-token:
+    name: sweat-token
     driver: bridge
 
 services:
@@ -9,6 +10,8 @@ services:
     command: yarn start
     container_name: contracts
     working_dir: /app/contracts
+    networks:
+      - sweat-token
     restart: unless-stopped
     build:
       context: ./
@@ -21,6 +24,8 @@ services:
     command: yarn run start:debug
     container_name: backend
     working_dir: /app/backend
+    networks:
+      - sweat-token
     depends_on:
       - mongo
     ports:
@@ -41,6 +46,8 @@ services:
     command: yarn start
     container_name: frontend
     working_dir: /app/frontend
+    networks:
+      - sweat-token
     # depends_on:
     #   - backend
     #   - mongo-express
@@ -83,6 +90,8 @@ services:
     command: bash -c "yarn install && yarn test"
     container_name: e2e-tests
     working_dir: /app/e2e-tests
+    networks:
+      - sweat-token
     # stdin_open: true # docker run -i
     # tty: true        # docker run -t
     depends_on:
