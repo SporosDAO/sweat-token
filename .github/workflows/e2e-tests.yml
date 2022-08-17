@@ -10,8 +10,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: Build the stack
         run: docker-compose build
-      - name: Update dependencies
-        run: docker-compose -f docker-compose.yaml -f docker-compose.install.yaml --profile install up --no-deps
       - name: Start containers
         run: docker-compose up -d
       - name: Test minimal frontend availability
