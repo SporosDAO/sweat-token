@@ -1,4 +1,4 @@
-name: "Build and test the full SporosDAO app stack"
+name: "End-to-end tests"
 
 on: [push, pull_request]
 jobs:
@@ -31,7 +31,7 @@ jobs:
           cd e2e-tests
           # docker-compose has an issue with docker network mappings
           # docker-compose run --rm e2e-tests
-          docker build ./ --file .gitpod.Dockerfile --tag e2e-tests
+          docker build ../ --file ../.gitpod.Dockerfile --tag e2e-tests
           docker run --network container:frontend --workdir "/app/e2e-tests" --volume "$(pwd):/app/e2e-tests" --env-file .env e2e-tests bash -c "yarn install && yarn test"
       - name: Shutdown docker services
         if: always()
