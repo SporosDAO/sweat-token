@@ -5,9 +5,10 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { OWNER } from '../../constants'
 
 export const MainMenuItems = () => {
+  const navigate = useNavigate()
   return (
     <React.Fragment>
-      <ListItemButton onClick={() => (document.location = '/')}>
+      <ListItemButton data-cy="home-button" onClick={() => navigate('/')}>
         <ListItemIcon>
           <Home />
         </ListItemIcon>

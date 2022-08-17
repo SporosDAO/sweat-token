@@ -24,7 +24,7 @@ export default function ProjectCard(props: any) {
   const navigate = useNavigate()
 
   return (
-    <Card sx={{ margin: '8px', width: '48.5%' }} raised={true}>
+    <Card sx={{ margin: '8px', width: '48.5%' }} data-cy={projectID} raised={true}>
       <CardContent>
         <Typography>#{projectID}</Typography>
         {goals &&
