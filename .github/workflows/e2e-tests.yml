@@ -57,3 +57,6 @@ jobs:
           name: e2e-test-videos
           path: |
             e2e-tests/tests/e2e/videos
+      - name: Dump debug log in case there was an error above
+        if: always()
+        run: docker-compose logs frontend backend contracts
