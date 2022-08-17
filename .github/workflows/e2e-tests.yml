@@ -37,6 +37,9 @@ jobs:
           sudo chmod -R 777 ./
           docker build ../ --file ../.gitpod.Dockerfile --tag e2e-tests
           docker run --network=sweat-token --workdir "/app/e2e-tests" --volume "$(pwd):/app/e2e-tests" --env-file .env e2e-tests bash -c "yarn install && yarn test"
+      - name: Dump debug log in case there was an error above
+        if: always()
+        run: docker-compose logs frontend backend contracts
       - name: Shutdown docker services
         if: always()
         run: |
@@ -57,6 +60,3 @@ jobs:
           name: e2e-test-videos
           path: |
             e2e-tests/tests/e2e/videos
-      - name: Dump debug log in case there was an error above
-        if: always()
-        run: docker-compose logs frontend backend contracts
