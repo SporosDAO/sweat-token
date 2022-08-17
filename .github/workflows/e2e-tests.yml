@@ -31,7 +31,7 @@ jobs:
           # docker-compose run --rm e2e-tests
           sudo chmod -R 777 ./
           docker build ../ --file ../.gitpod.Dockerfile --tag e2e-tests
-          docker run --network=sweat-token container:frontend --workdir "/app/e2e-tests" --volume "$(pwd):/app/e2e-tests" --env-file .env e2e-tests bash -c "yarn install && yarn test"
+          docker run --network=sweat-token --workdir "/app/e2e-tests" --volume "$(pwd):/app/e2e-tests" --env-file .env e2e-tests bash -c "yarn install && yarn test"
       - name: Shutdown docker services
         if: always()
         run: docker-compose down
