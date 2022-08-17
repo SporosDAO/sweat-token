@@ -92,10 +92,7 @@ services:
       context: ./
       dockerfile: .gitpod.Dockerfile
     environment:
-      - CYPRESS_baseUrl=http://frontend:3000
       - CYPRESS_CACHE_FOLDER=/app/e2e-tests/.cypress-cache
-      # Throwaway private key for e2e testing only
-      - PRIVATE_KEY=32369ff8b87d4a918131a9a43da46e93669683e73d0e3169980d5c92bd33fff0
       - FAIL_ON_ERROR=true
     volumes:
       - ./e2e-tests:/app/e2e-tests
