@@ -39,7 +39,8 @@ export default function MyDAOs() {
                 <CardActionArea
                   onClick={() => {
                     navigate(`dao/chain/${chain.id}/address/${dao['dao']['id']}/projects`)
-                  }}>
+                  }}
+                >
                   <CardContent>
                     <Typography variant="h5" component="div">
                       {dao['dao']['token']['name']}
