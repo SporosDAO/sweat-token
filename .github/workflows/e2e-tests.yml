@@ -44,11 +44,11 @@ jobs:
         with:
           name: e2e-test-screenshots
           path: |
-            tests/e2e/screenshots
+            e2e-tests/tests/e2e/screenshots
       - name: Save videos
         uses: actions/upload-artifact@v3
         if: always()
         with:
           name: e2e-test-videos
           path: |
-            tests/e2e/videos
+            e2e-tests/tests/e2e/videos
