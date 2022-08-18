@@ -1,4 +1,4 @@
-import { createTheme, ThemeProvider } from '@mui/material'
+import { ThemeProvider } from '@mui/material'
 import { Route, Routes } from 'react-router-dom'
 import Landing from './pages/Landing'
 import NotFound from './pages/NotFound'
@@ -7,9 +7,23 @@ import Projects from './pages/Projects'
 import Dao from './pages/Dao'
 import ProjectProposal from './pages/Projects/ProjectProposal'
 import ProjectTribute from './pages/Projects/ProjectTribute'
-import theme from './theme'
+import { darkTheme, lightTheme } from './theme'
+import { useState } from 'react'
 
 function App() {
+  function detectColorScheme() {
+    const newColorScheme =
+      window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? darkTheme : lightTheme
+    return newColorScheme
+  }
+
+  const [theme, setTheme] = useState(detectColorScheme())
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+    // sync with user's device color mode preference
+    setTheme(detectColorScheme())
+  })
+
   return (
     <ThemeProvider theme={theme}>
       <Routes>

@@ -3,24 +3,29 @@ version: "3.9"
 networks:
   sweat-token:
     name: sweat-token
+    driver: bridge
 
 services:
-#  contracts:
-#    command: echo "TBD"
-#    working_dir: /app/contracts
-#    restart: unless-stopped
-#    build:
-#      context: ./
-#      dockerfile: Dockerfile
-#    image: sweat-token/dev
-#    networks:
-#      - sweat-token
-#    volumes:
-#      - ./contracts:/app/contracts
+  contracts:
+    command: bash -c "yarn install && yarn start"
+    container_name: contracts
+    working_dir: /app/contracts
+    networks:
+      - sweat-token
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: contracts
+    image: sweat-token/dev
+    volumes:
+      - ./contracts:/app/contracts
   backend:
-    command: yarn run start:debug
+    command: bash -c "yarn install && yarn run start:debug"
     container_name: backend
     working_dir: /app/backend
+    networks:
+      - sweat-token
     depends_on:
       - mongo
     ports:
@@ -30,32 +35,30 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-      target: deps
+      target: backend
     image: sweat-token/dev
-    networks:
-      - sweat-token
     environment:
       - DATA_DIR=/data
       - LOG_LEVEL=info
     volumes:
       - ./backend:/app/backend
   frontend:
-    command: yarn start
+    command: bash -c "yarn install && yarn start"
     container_name: frontend
     working_dir: /app/frontend
-    depends_on:
-      - backend
-      - mongo-express
+    networks:
+      - sweat-token
+    # depends_on:
+    #   - backend
+    #   - mongo-express
     ports:
       - 3000:3000
     restart: unless-stopped
     build:
       context: ./
       dockerfile: Dockerfile
-      target: deps
+      target: frontend
     image: sweat-token/dev
-    networks:
-      - sweat-token
     environment:
       - DATA_DIR=/data
       - LOG_LEVEL=info
@@ -65,8 +68,6 @@ services:
   mongo:
     image: mongo
     restart: unless-stopped
-    networks:
-      - sweat-token
     # environment:
     #   MONGO_INITDB_ROOT_USERNAME: root
     #   MONGO_INITDB_ROOT_PASSWORD: root
@@ -77,8 +78,6 @@ services:
   mongo-express:
     image: mongo-express
     restart: unless-stopped
-    networks:
-      - sweat-token
     depends_on:
       - mongo
     ports:
@@ -87,3 +86,22 @@ services:
       # ME_CONFIG_MONGODB_ADMINUSERNAME: root
       # ME_CONFIG_MONGODB_ADMINPASSWORD: root
       # ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo:27017/
+  e2e-tests:
+    command: bash -c "yarn install && yarn test"
+    container_name: e2e-tests
+    working_dir: /app/e2e-tests
+    networks:
+      - sweat-token
+    # stdin_open: true # docker run -i
+    # tty: true        # docker run -t
+    depends_on:
+      - frontend
+      - contracts
+    build:
+      context: ./
+      dockerfile: .gitpod.Dockerfile
+    environment:
+      - CYPRESS_CACHE_FOLDER=/app/e2e-tests/.cypress-cache
+      - FAIL_ON_ERROR=true
+    volumes:
+      - ./e2e-tests:/app/e2e-tests

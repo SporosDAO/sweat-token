@@ -1,83 +1,78 @@
-import React from 'react'
+import { useState } from 'react'
 import { ethers } from 'ethers'
-import { useContractWrite } from 'wagmi'
 import { addresses } from '../../constants/addresses'
 import PM_ABI from '../../abi/ProjectManagement.json'
-import { useParams } from 'react-router-dom'
-import { Box, TextField, Button, List, ListItem } from '@mui/material'
+import { useLocation, useParams } from 'react-router-dom'
+import { Box, TextField, Button, List, ListItem, Typography, ListItemText } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { Navigate } from 'react-router-dom'
-import Web3Dialog from '../../components/Web3Dialog'
+import Web3SubmitDialog from '../../components/Web3SubmitDialog'
+import { ErrorMessage } from '@hookform/error-message'
 
 export default function ProjectTribute() {
   const { chainId, daoId, projectId } = useParams()
 
+  // Web3SubmitDialog state vars
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const location = useLocation()
+
+  console.log({ location })
+
+  const project = location?.state as any
+  const { manager, projectID, budget, goals } = project
+
   const cid = Number(chainId)
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
-  const { register, handleSubmit } = useForm()
-
+  const formResult = useForm({ criteriaMode: 'all' })
   const {
-    isLoading: isWritePending,
-    isSuccess: isWriteSuccess,
-    isError: isWriteError,
-    error: writeError,
-    writeAsync
-  } = useContractWrite({
-    addressOrName: pmAddress || '',
+    register,
+    handleSubmit,
+    formState: { isValid, errors }
+  } = formResult
+  console.log({ isValid, errors, formResult })
+
+  const callArgs = ['uint256', 'address', 'uint256', 'string']
+
+  const contractInfo = {
+    addressOrName: pmAddress,
     chainId: cid,
     contractInterface: PM_ABI,
-    functionName: 'callExtension',
-    onSuccess(data, variables, context) {
-      // alert(`Proposal successfully submitted on chain.`)
-    },
-    onError(error, variables, context) {
-      console.debug('error', { error, variables, context })
-      // alert(`Proposal failed with error: ${error}`)
-    }
-  })
+    functionName: 'callExtension'
+  }
 
-  const onSubmit = async (data: any) => {
-    setDialogOpen(true)
-    const { contributorAddress, mintAmount, tributeTitle, tributeLink } = data
+  const [txInput, setTxInput] = useState(undefined as any)
+
+  const onSubmit = async (formData: any) => {
+    if (!isValid) return
+
+    const { contributorAddress, mintAmount, tributeTitle, tributeLink } = formData
     const tribute = [{ tributeTitle, tributeLink }]
     const tributeString = JSON.stringify(tribute)
 
+    const abiCoder = ethers.utils.defaultAbiCoder
     let payload
     try {
-      const abiCoder = ethers.utils.defaultAbiCoder
-      payload = abiCoder.encode(
-        ['uint256', 'address', 'uint256', 'string'],
-        [
-          projectId, // project id of the just activated project
-          contributorAddress, // address of contributor to receive DAO tokens
-          ethers.utils.parseEther(mintAmount), // mint amount in whole token units similar to Ether with 18 decimal places
-          tributeString // reference to tribute that contributor makes to DAO in exchange for DAO tokens
-        ]
-      )
+      payload = abiCoder.encode(callArgs, [
+        projectId, // project id of the just activated project
+        contributorAddress, // address of contributor to receive DAO tokens
+        ethers.utils.parseEther(mintAmount), // mint amount in whole token units similar to Ether with 18 decimal places
+        tributeString // reference to tribute that contributor makes to DAO in exchange for DAO tokens
+      ])
     } catch (e) {
       console.log('Error while encoding project tribute', e)
       return
     }
 
-    await writeAsync({
-      args: [daoId, [payload]],
-      overrides: {
-        gasLimit: 1050000
-      }
-    }).catch((e) => {
-      console.log('writeAsync error', { e })
+    setTxInput({
+      ...contractInfo,
+      args: [daoId, [payload]]
     })
-  }
+    setIsDialogOpen(true)
+  } // onSubmit
 
   const onDialogClose = async () => {
-    if (isWritePending) {
-      return
-    }
-
-    setDialogOpen(false)
+    setIsDialogOpen(false)
   }
-
-  const [dialogOpen, setDialogOpen] = React.useState(false)
 
   if (!chainId || !daoId || !projectId) {
     return <Navigate replace to="/" />
@@ -103,15 +98,20 @@ export default function ProjectTribute() {
         </ListItem>
         <ListItem>
           <TextField
-            id="mintAmount"
             label="Mint Amount"
             helperText="Amount in DAO sweat tokens to mint to contributor"
             variant="filled"
             type="number"
             fullWidth
             required
-            {...register('mintAmount')}
+            {...register('mintAmount', {
+              min: { value: 0, message: 'Mint value must be positive.' },
+              max: { value: budget, message: `Mint value must be within budget: ${budget}.` }
+            })}
           />
+        </ListItem>
+        <ListItem>
+          <ErrorMessage as={<p />} errors={errors} name="mintAmount" />
         </ListItem>
         <ListItem>
           <TextField
@@ -122,7 +122,7 @@ export default function ProjectTribute() {
             fullWidth
             required
             {...register('tributeTitle')}
-          />
+          ></TextField>
         </ListItem>
         <ListItem>
           <TextField
@@ -141,17 +141,9 @@ export default function ProjectTribute() {
           </Button>
         </ListItem>
       </List>
-      <Web3Dialog
-        web3tx={{
-          dialogOpen,
-          onDialogClose,
-          isWritePending,
-          isWriteError,
-          writeError,
-          isWriteSuccess,
-          hrefAfterSuccess: '..'
-        }}
-      />
+      {isDialogOpen && ( // use check to prevent Web3SubmitDialog rendering before open due to wagmi bug in updating config when contract args update with form data
+        <Web3SubmitDialog open={isDialogOpen} onClose={onDialogClose} txInput={txInput} hrefAfterSuccess=".." />
+      )}
     </Box>
   )
 }

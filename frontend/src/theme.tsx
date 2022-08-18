@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material'
 
-export default createTheme({
+export const darkTheme = createTheme({
   palette: {
     mode: 'dark'
   },
@@ -17,5 +17,11 @@ export default createTheme({
           font-family: Roboto
         }`
     }
+  }
+})
+
+export const lightTheme = createTheme({
+  palette: {
+    mode: 'light'
   }
 })

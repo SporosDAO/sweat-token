@@ -6,3 +6,5 @@ backend/data
 .env.dev*
 .vscode/*.log
 .idea
+
+# Cypress 
