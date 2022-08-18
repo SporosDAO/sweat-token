@@ -2,6 +2,7 @@ import { Fab, Paper, SxProps, Theme } from '@mui/material'
 import { Box } from '@mui/system'
 import { ReactNode } from 'react'
 import { Add } from '@mui/icons-material'
+import { useNavigate } from 'react-router'
 
 interface ContentBlockProps {
   title?: string
@@ -15,6 +16,7 @@ interface ContentBlockProps {
 
 export default function ContentBlock(props: ContentBlockProps) {
   const { title, children, sx, cta } = props
+  const navigate = useNavigate()
   return (
     <Paper
       sx={
@@ -27,7 +29,12 @@ export default function ContentBlock(props: ContentBlockProps) {
       <Box display={'flex'}>
         {title && <h2>{title}</h2>}
         {cta?.href && (
-          <Fab sx={{ margin: '10px 0 0 auto', order: 2 }} variant="extended" color="primary" href={cta?.href}>
+          <Fab
+            sx={{ margin: '10px 0 0 auto', order: 2 }}
+            variant="extended"
+            color="primary"
+            onClick={() => navigate(cta?.href)}
+          >
             <Add />
             {cta?.text}
           </Fab>
@@ -37,4 +44,3 @@ export default function ContentBlock(props: ContentBlockProps) {
     </Paper>
   )
 }
-//
