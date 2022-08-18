@@ -38,7 +38,7 @@ export default function MyDAOs() {
               <Card sx={{ width: '100%' }} raised={true}>
                 <CardActionArea
                   onClick={() => {
-                    navigate(`dao/chain/${chain.id}/address/${dao['dao']['id']}/projects`)
+                    navigate(`dao/chain/${chain.id}/address/${dao['dao']['id']}/projects/`)
                   }}
                 >
                   <CardContent>
@@ -62,7 +62,7 @@ export default function MyDAOs() {
                     endIcon={<ReadMore />}
                     fontSize="inherit"
                     onClick={() => {
-                      navigate(`dao/chain/${chain.id}/address/${dao['dao']['id']}/projects`)
+                      navigate(`dao/chain/${chain.id}/address/${dao['dao']['id']}/projects/`)
                     }}
                   >
                     Open
