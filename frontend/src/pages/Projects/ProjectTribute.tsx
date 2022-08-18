@@ -3,11 +3,13 @@ import { ethers } from 'ethers'
 import { addresses } from '../../constants/addresses'
 import PM_ABI from '../../abi/ProjectManagement.json'
 import { useLocation, useParams } from 'react-router-dom'
-import { Box, TextField, Button, List, ListItem, Typography, ListItemText } from '@mui/material'
+import { Box, TextField, Button, List, ListItem, Alert, Typography, Link } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { Navigate } from 'react-router-dom'
 import Web3SubmitDialog from '../../components/Web3SubmitDialog'
 import { ErrorMessage } from '@hookform/error-message'
+import { useAccount } from 'wagmi'
+import { Key } from 'react'
 
 export default function ProjectTribute() {
   const { chainId, daoId, projectId } = useParams()
@@ -16,10 +18,18 @@ export default function ProjectTribute() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const location = useLocation()
 
-  console.log({ location })
-
   const project = location?.state as any
-  const { manager, projectID, budget, goals } = project
+  const { manager, projectID, budget, goals, deadline } = project
+
+  const { address: userAddress } = useAccount()
+  const isManager = userAddress === manager
+
+  const deadlineDate = new Date()
+  deadlineDate.setTime(deadline * 1000)
+  const deadlineString = deadlineDate.toUTCString()
+  const isExpired = deadlineDate < new Date()
+
+  const hasBudget = Number(budget) > 0
 
   const cid = Number(chainId)
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
@@ -29,7 +39,6 @@ export default function ProjectTribute() {
     handleSubmit,
     formState: { isValid, errors }
   } = formResult
-  console.log({ isValid, errors, formResult })
 
   const callArgs = ['uint256', 'address', 'uint256', 'string']
 
@@ -59,7 +68,7 @@ export default function ProjectTribute() {
         tributeString // reference to tribute that contributor makes to DAO in exchange for DAO tokens
       ])
     } catch (e) {
-      console.log('Error while encoding project tribute', e)
+      console.error('Error while encoding project tribute', e)
       return
     }
 
@@ -84,6 +93,28 @@ export default function ProjectTribute() {
         maxWidth: 400
       }}
     >
+      <Alert severity="info">
+        Submit tribute for project #{projectID}
+        {goals &&
+          goals.map((goal: { goalTitle: string; goalLink: string }, idx: Key) => (
+            <div key={idx}>
+              <Typography variant="h5" component="div">
+                {goal.goalTitle}
+              </Typography>
+              <Link href={goal.goalLink} sx={{ fontSize: 14 }} target="_blank" rel="noopener" color="text.secondary">
+                Tracking Link
+              </Link>
+            </div>
+          ))}
+      </Alert>
+      {!isManager && (
+        <Alert severity="error">
+          You are not the manager of this project. Your wallet account {userAddress} does not match the manager account{' '}
+          {manager}.
+        </Alert>
+      )}
+      {isExpired && <Alert severity="error">This project deadline expired on {deadlineString}.</Alert>}
+      {!hasBudget && <Alert severity="error">This project has no budget left.</Alert>}
       <List component="form" onSubmit={handleSubmit(onSubmit)}>
         <ListItem>
           <TextField
