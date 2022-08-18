@@ -1,8 +1,8 @@
 import { Card, CardContent, CardActions } from '@mui/material'
 import { Button, Typography, Link } from '@mui/material'
-import { useEnsName, useEnsAvatar } from 'wagmi'
-import { Work, Launch } from '@mui/icons-material'
-import { useParams } from 'react-router-dom'
+import { useEnsName, useEnsAvatar, useAccount } from 'wagmi'
+import { Work, Launch, HourglassTop, HourglassDisabled } from '@mui/icons-material'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Key } from 'react'
 
 export default function ProjectCard(props: any) {
@@ -17,9 +17,14 @@ export default function ProjectCard(props: any) {
   const deadline = new Date()
   deadline.setTime(project['deadline'] * 1000)
   const deadlineString = deadline.toUTCString()
+  const isExpired = deadline < new Date()
+  const { address: userAddress } = useAccount()
+  const isManager = userAddress === manager
+
+  const navigate = useNavigate()
 
   return (
-    <Card sx={{ margin: '8px', width: '48.5%' }} raised={true}>
+    <Card sx={{ margin: '8px', width: '48.5%' }} data-cy={projectID} raised={true}>
       <CardContent>
         <Typography>#{projectID}</Typography>
         {goals &&
@@ -54,9 +59,25 @@ export default function ProjectCard(props: any) {
         )}
       </CardContent>
       <CardActions sx={{ justifyContent: 'space-between' }}>
-        <Button variant="text" endIcon={<Work />} href={`projects/${projectID}/tribute`}>
-          Tribute
-        </Button>
+        {isExpired ? (
+          <Button disabled variant="text" endIcon={<HourglassDisabled />}>
+            Expired
+          </Button>
+        ) : isManager ? (
+          <Button
+            variant="text"
+            endIcon={<Work />}
+            onClick={() => {
+              navigate(`${project['projectID']}/tribute`, { state: project })
+            }}
+          >
+            Tribute
+          </Button>
+        ) : (
+          <Button variant="text" endIcon={<HourglassTop />} color="success">
+            Active
+          </Button>
+        )}
         <Button
           variant="text"
           endIcon={<Launch />}

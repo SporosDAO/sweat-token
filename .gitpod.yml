@@ -1,3 +1,5 @@
+image:
+  file: .gitpod.Dockerfile
 
 tasks:
   - name: SporosDAO App
@@ -5,14 +7,25 @@ tasks:
       # bring in secret access tokens from gitpod user dashboard
       eval $(gp env -e)
       # builds the images from the dockerfiles
-      docker-compose build
+      docker-compose build frontend backend contracts e2e-tests
       cd backend && yarn install && cd -
       cd frontend && yarn install && cd -
       cd e2e-tests && yarn install && cd -
       cd contracts && yarn install && cd -
+      # install global dotenv for parsing .env files
       gp sync-done build
     command: |
-      bash .gitpod.sh
+      set -evx
+      # shutdown any leftover containers from a previous session
+      docker-compose down
+      # update install deps
+      # docker-compose -f docker-compose.yaml -f docker-compose.install.yaml --profile install up --no-deps
+      # start app modules
+      # docker-compose up -d backend
+      # set API path
+      # gp ports await 3001 && \
+      # export REACT_APP_SWEAT_TOKEN_API_BASEPATH=$(gp url 3001)
+      docker-compose up frontend contracts
   - name: Shell
     command: |
       # gp sync-await build
@@ -29,14 +42,24 @@ vscode:
 ports:
   # allow front end to access backend api
   # https://www.gitpod.io/docs/config-ports#cors
-  - port: 3001
-    visibility: public
-
+  # frontend web app service : Node.js, React
   - port: 3000
     onOpen: open-browser
     visibility: public
 
-  - port: 3001-8999
+  - port: 3001
+    visibility: public
+    onOpen: ignore
+
+  # Cypress service
+  - port: 5900
+    onOpen: ignore
+  - port: 6080
+    onOpen: open-browser
+  - port: 10000
+    onOpen: ignore
+
+  - port: 3001-9999
     onOpen: ignore
 
 github:

@@ -10,7 +10,7 @@ export default function Projects() {
 
   const { projects, error, isLoading } = useGetProjects(chainId, daoId)
   return (
-    <ContentBlock title="Projects" cta={{ href: 'projects/propose', text: 'Propose Project' }}>
+    <ContentBlock title="Projects" cta={{ href: 'propose', text: 'Propose Project' }}>
       {isLoading && <CircularProgress />}
       {!isLoading && error && (
         <Box>
