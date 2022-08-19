@@ -32,6 +32,7 @@ jobs:
           cd e2e-tests
           # docker-compose has an issue with docker network mappings
           # docker-compose run --rm e2e-tests
+          cp .env.ci .env
           # allow binaries executing within docker to access local directory
           sudo chmod -R 777 ./
           docker build ../ --file ../.gitpod.Dockerfile --tag e2e-tests

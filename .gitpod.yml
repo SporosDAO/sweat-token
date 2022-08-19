@@ -9,10 +9,9 @@ tasks:
       # builds the images from the dockerfiles
       docker-compose build frontend backend contracts e2e-tests
       cd backend && yarn install && cd -
-      cd frontend && yarn install && cd -
-      cd e2e-tests && yarn install && cd -
-      cd contracts && yarn install && cd -
-      # install global dotenv for parsing .env files
+      cd frontend && yarn install && [ ! -f .env.local ] && cp .env.example .env.local && cd -
+      cd e2e-tests && yarn install && [ ! -f .env.local ] && cp .env.example .env.local && cd -
+      cd contracts && yarn install && [ ! -f .env.local ] && cp .env.example .env.local && cd -
       gp sync-done build
     command: |
       set -evx
