@@ -89,9 +89,8 @@ export function PageLayout(props: PageLayoutProps) {
   const [open, setOpen] = useState(props.withDrawer !== false && !isMobile)
 
   const { chainId, daoId } = useParams()
-  const { data, isSuccess } = useGetDAO(chainId, daoId)
-  const { title } =
-    isSuccess && data && data['token'] && data['token']['name'] ? data['token']['name'] : 'Sporos DAO App'
+  const { data: myDao, isSuccess: isMyDaoLoaded } = useGetDAO(chainId, daoId)
+  console.log({ isMyDaoLoaded, myDao })
 
   const toggleDrawer = () => {
     setOpen(!open)
@@ -123,8 +122,8 @@ export function PageLayout(props: PageLayoutProps) {
           ) : (
             <></>
           )}
-          <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-            {title}
+          <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1, ml: 2 }}>
+            {isMyDaoLoaded && myDao?.token && `${myDao?.token?.name} (${myDao?.token?.symbol})`}
           </Typography>
           <IconButton color="inherit" aria-label="account">
             {/* <Badge badgeContent={4} color="secondary">

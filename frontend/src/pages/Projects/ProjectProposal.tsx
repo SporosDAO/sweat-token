@@ -4,10 +4,11 @@ import { useContractRead } from 'wagmi'
 import { addresses } from '../../constants/addresses'
 import KALIDAO_ABI from '../../abi/KaliDAO.json'
 import { useParams } from 'react-router-dom'
-import { Box, TextField, Button, List, ListItem } from '@mui/material'
+import { Box, TextField, Button, List, ListItem, Typography, Alert } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { Navigate } from 'react-router-dom'
 import Web3SubmitDialog from '../../components/Web3SubmitDialog'
+import { useGetDAO } from '../../graph/getDAO'
 
 export default function ProjectProposal() {
   const { chainId, daoId } = useParams()
@@ -19,6 +20,8 @@ export default function ProjectProposal() {
   const cid = Number(chainId)
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
   const { register, handleSubmit } = useForm()
+
+  const { data: myDao, isSuccess: isMyDaoLoaded } = useGetDAO(chainId, daoId)
 
   const daoContract = {
     addressOrName: daoId || '',
@@ -96,6 +99,16 @@ export default function ProjectProposal() {
         maxWidth: 400
       }}
     >
+      {isMyDaoLoaded && (
+        <Alert severity="info">
+          Propose a new project for DAO
+          <div>
+            <Typography variant="h5" component="div">
+              {myDao?.token?.name} ({myDao?.token?.symbol})
+            </Typography>
+          </div>
+        </Alert>
+      )}
       <List component="form" onSubmit={handleSubmit(onSubmit)}>
         <ListItem>
           <TextField
