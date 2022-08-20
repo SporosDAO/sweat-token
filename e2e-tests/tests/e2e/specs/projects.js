@@ -9,7 +9,7 @@ describe('Project Management', () => {
       })
       cy.contains('Projects')
     });
-    it(`Should show Project #112 as Active`, () => {
+    it(`Should show Project #112 as Active but no Tribute button when user is not the project manager`, () => {
       cy.get('[data-cy="112"]').within(($projectCard) => {
         cy.contains('#112')
         cy.contains('PM testing')
@@ -39,21 +39,18 @@ describe('Project Management', () => {
         cy.contains('Expired')
       })
     })
-    it(`Should show Project #108 with Tribute button`, () => {
-      // set the app clock to a deterministic date
-      const now = new Date(2022, 6, 10) // month is 0-indexed
-      cy.clock(now)
-      cy.get('[data-cy="108"]').within(($projectCard) => {
-        cy.contains('#108')
-        cy.contains('Demo of PM MVP')
+    it(`Should show Project #113 with Tribute button when user is project manager`, () => {
+      cy.get('[data-cy="113"]').within(($projectCard) => {
+        cy.contains('#113')
+        cy.contains('e2e test aug 20 2022')
         cy.contains('Tracking Link')
-        cy.contains('Budget: 4098.0')
-        cy.contains('Deadline: Sat, 20 Aug 2022')
+        cy.contains('Budget: 2233.0')
+        cy.contains('Deadline: Wed, 12 Dec 2323')
         cy.contains('Manager Address: 0xf952a72F39c5Fa22a443200AbE7835128bCb7439')
-        cy.contains('Expired').should('not.exist')
         cy.contains('Tribute')
+        cy.contains('Expired').should('not.exist')
+        cy.contains('Active').should('not.exist')
       })
-      clock.restore()
     })
     it(`Should navigate to Propose Project page`, () => {
       cy.get('[data-cy="propose-project-button"]').click()
