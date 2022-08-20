@@ -7,7 +7,7 @@ tasks:
       # bring in secret access tokens from gitpod user dashboard
       eval $(gp env -e)
       # builds the images from the dockerfiles
-      docker-compose build frontend backend contracts e2e-tests
+      docker-compose build
       cd backend && yarn install && cd -
       cd frontend
       yarn install
