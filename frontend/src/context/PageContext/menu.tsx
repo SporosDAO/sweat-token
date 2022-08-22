@@ -21,6 +21,7 @@ export interface DaoMenuItem {
   label: string
   icon: any
   link: string
+  dataCy?: string
 }
 
 export const menu: DaoMenuItem[] = [
@@ -49,12 +50,14 @@ export const menu: DaoMenuItem[] = [
   {
     label: 'Projects',
     icon: Factory,
-    link: 'projects/'
+    link: 'projects/',
+    dataCy: 'projects-button'
   },
   {
     label: 'People',
     icon: People,
-    link: 'people'
+    link: 'people/',
+    dataCy: 'people-button'
   }
 ]
 
@@ -75,8 +78,8 @@ export const DaoMenuItems = () => {
 
   return (
     <React.Fragment>
-      {menu.map(({ icon: MenuIcon, label, link }) => (
-        <ListItemButton key={label} onClick={() => goto(link)} selected={currentPath === link}>
+      {menu.map(({ icon: MenuIcon, label, link, dataCy }) => (
+        <ListItemButton key={label} onClick={() => goto(link)} selected={currentPath === link} data-cy={dataCy}>
           <ListItemIcon>
             <MenuIcon />
           </ListItemIcon>

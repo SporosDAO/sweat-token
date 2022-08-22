@@ -1,9 +1,17 @@
 describe('Project Management', () => {
+  before(() => {
+    cy.visit('/')
+    cy.contains('Connect Wallet').click()
+    cy.contains('MetaMask').click()
+    cy.acceptMetamaskAccess().then(connected => {
+      expect(connected).to.be.true;
+    })
+  })
+  after(() => {
+    cy.disconnectMetamaskWalletFromDapp()
+  })
   context('Sporos DAO App Projects Pages', () => {
     it(`Should show DAO PMTest projects for account 0xf952a72F39c5Fa22a443200AbE7835128bCb7439`, () => {
-      cy.visit('/')
-      cy.contains('Connect Wallet').click()
-      cy.contains('MetaMask').click()
       cy.get('[data-cy="0xa9b81dbca829594aac0dcae766bb12543eb7b079"]').within(($daoCard) => {
         cy.contains('PMTest2').click()
       })
@@ -53,7 +61,18 @@ describe('Project Management', () => {
       })
     })
     it(`Should navigate to Propose Project page`, () => {
-      cy.get('[data-cy="propose-project-button"]').click()
+      cy.get('[data-cy="cta-button"]').contains("Propose Project").click({force: true})
+      cy.contains('Propose a new project for DAO')
+      cy.contains('PMTest (PMT)')
+      cy.contains('Manager')
+      cy.contains('Budget')
+      cy.contains('Deadline')
+      cy.contains('Goal')
+      cy.contains('Goal Tracking Link')
+      cy.contains('Submit')
+    })
+    it(`Should navigate to Propose Project page`, () => {
+      cy.get('[data-cy="cta-button"]').contains("Propose Project").click({force: true})
       cy.contains('Propose a new project for DAO')
       cy.contains('PMTest (PMT)')
       cy.contains('Manager')

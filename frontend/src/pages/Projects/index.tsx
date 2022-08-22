@@ -10,7 +10,7 @@ export default function Projects() {
 
   const { projects, error, isLoading } = useGetProjects(chainId, daoId)
   return (
-    <ContentBlock title="Projects" cta={{ href: 'propose', text: 'Propose Project' }} data-cy="propose-project-button">
+    <ContentBlock title="Projects" cta={{ href: 'propose', text: 'Propose Project' }}>
       {isLoading && <CircularProgress />}
       {!isLoading && error && (
         <Box>
@@ -20,7 +20,7 @@ export default function Projects() {
           </Button>
         </Box>
       )}
-      <Box display="flex" flexWrap={'wrap'}>
+      <Box display="flex" flexWrap={'wrap'} data-cy="projects-box">
         {projects &&
           projects.length > 0 &&
           projects.map((project: any) => <ProjectCard key={project['projectID']} project={project} />)}

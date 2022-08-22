@@ -34,6 +34,7 @@ export default function ContentBlock(props: ContentBlockProps) {
             variant="extended"
             color="primary"
             onClick={() => navigate(cta?.href)}
+            data-cy="cta-button"
           >
             <Add />
             {cta?.text}
