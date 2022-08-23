@@ -80,5 +80,30 @@ describe('Project Management', () => {
       cy.get('[data-cy="submit-button"]').click()
       cy.contains('Budget must be a positive number.')
     })
+    it(`Should require Goal`, () => {
+      cy.contains('Goal title is required.')
+    })
+    it(`Should allow a positive number for Budget`, () => {
+      cy.get('input[name="budget"]').type(12)
+      cy.get('[data-cy="submit-button"]').click()
+      cy.contains('Budget must be a positive number.').should('not.be.true')
+    })
+    it(`Should not allow a deadline in the past`, () => {
+      cy.get('input[name="deadline"]').type('1999-12-31')
+      cy.get('[data-cy="submit-button"]').click()
+      cy.contains('Deadline must be in the future.')
+    })
+    // it(`Should proceed to contract write via wallet`, () => {
+    //   cy.get('input[name="goalTitle"]').type('Complete Milestone 10')
+    //   cy.get('input[name="deadline"]').type('2222-12-31')
+    //   cy.get('[data-cy="submit-button"]').click()
+    //   cy.rejectMetamaskTransaction()
+    //   // cy.switchToCypressWindow()
+    //   // cy.contains('Submitting On-chain Transaction!')
+    // })
+    // it(`Should reject contract write transaction`, () => {
+    //   cy.rejectMetamaskTransaction()
+    //   cy.contains('User rejected request')
+    // })
   })
 })

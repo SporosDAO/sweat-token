@@ -32,7 +32,7 @@ export default function ProjectProposal() {
     defaultValues: {
       manager: proposedManagerAddress,
       budget: 0,
-      deadline: defaultDeadline,
+      deadline: defaultDeadline.toISOString().split('T')[0],
       goalTitle: '',
       goalLink: ''
     }
@@ -174,7 +174,7 @@ export default function ProjectProposal() {
         )}
         <ListItem>
           <TextField
-            id="budget"
+            data-cy="budget"
             label="Budget"
             helperText="Amount in DAO sweat tokens"
             variant="filled"
