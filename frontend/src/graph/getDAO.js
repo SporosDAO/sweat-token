@@ -21,7 +21,7 @@ export const getDAO = async (chainId, daoAddress) => {
     const data = await res.json()
     return data
   } catch (e) {
-    console.debug('getDAO error', { e })
+    console.error('getDAO error', { e })
     return e
   }
 }
@@ -29,6 +29,17 @@ export const getDAO = async (chainId, daoAddress) => {
 export function useGetDAO(chainId, daoAddress) {
   return useQuery(['getDAO', chainId, daoAddress], async () => {
     const data = await getDAO(chainId, daoAddress)
-    return data
+    // simplify structure and enrich subgraph result
+    // end result looks like this
+    // {
+    //     "id": "0xe237747055b12f4da323bc559ac8d5eb66aac2f7",
+    //     "chainId": "5"
+    //     "token": {
+    //         "name": "PMTest",
+    //         "symbol": "PMT"
+    //     },
+    // }
+    const myDao = { ...data?.data?.dao, chainId }
+    return myDao
   })
 }

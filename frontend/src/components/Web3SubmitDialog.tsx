@@ -22,8 +22,6 @@ export default function Web3SubmitDialog(props: Web3SubmitDialogProps) {
 
   const isUserOnCorrectChain = userChain?.id && Number(daoChainId) === userChain?.id ? true : false
 
-  console.log({ isUserOnCorrectChain, userChain, daoChainId, txInput })
-
   const usePrepareContractWriteResult = usePrepareContractWrite({
     ...txInput,
     onError(usePrepareContractWriteError) {
@@ -37,16 +35,12 @@ export default function Web3SubmitDialog(props: Web3SubmitDialogProps) {
     error: prepWriteError
   } = usePrepareContractWriteResult
 
-  console.log({ usePrepareContractWriteResult })
-
   const useContractWriteResult = useContractWrite({
     ...prepCallExtensionConfig,
     onError(useContractWriteError) {
       console.error({ useContractWriteError })
     }
   })
-
-  console.log({ useContractWriteResult })
 
   const {
     // data: writeResult,
@@ -64,11 +58,10 @@ export default function Web3SubmitDialog(props: Web3SubmitDialogProps) {
     try {
       write()
     } catch (writeError) {
-      console.log({ writeError })
+      console.error({ writeError })
     }
   } else {
     daoChainName = chains?.find((chain) => chain.id === Number(daoChainId))?.name
-    console.log({ chains, daoChainName })
     wrongChainWarning = userChain
       ? `Your Web3 wallet is connected to ${userChain?.name}.`
       : `Your Web3 wallet is disconnected.`

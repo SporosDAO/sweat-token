@@ -2,7 +2,7 @@
   "name": "sporosdao-e2e-testsuite",
   "license": "Apache-2.0",
   "scripts": {
-    "test": "dotenv -c -- npx synpress run",
+    "test": "dotenv -c -- synpress run",
     "covreport": "nyc report --reporter=text",
     "covcheck": "nyc check-coverage --lines 40 --functions 40 --branches 40",
     "coverage": "yarn covreport && yarn covcheck"

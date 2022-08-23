@@ -142,7 +142,7 @@ export default function ProjectTribute() {
           />
         </ListItem>
         <ListItem>
-          <ErrorMessage as={<p />} errors={errors} name="mintAmount" />
+          <ErrorMessage as={<Alert severity="error" />} errors={errors} name="mintAmount" />
         </ListItem>
         <ListItem>
           <TextField

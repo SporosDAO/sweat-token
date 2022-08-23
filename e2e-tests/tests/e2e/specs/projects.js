@@ -1,15 +1,23 @@
 describe('Project Management', () => {
+  before(() => {
+    cy.visit('/')
+    cy.contains('Connect Wallet').click()
+    cy.contains('MetaMask').click()
+    cy.acceptMetamaskAccess().then(connected => {
+      expect(connected).to.be.true;
+    })
+  })
+  after(() => {
+    cy.disconnectMetamaskWalletFromDapp()
+  })
   context('Sporos DAO App Projects Pages', () => {
     it(`Should show DAO PMTest projects for account 0xf952a72F39c5Fa22a443200AbE7835128bCb7439`, () => {
-      cy.visit('/')
-      cy.contains('Connect Wallet').click()
-      cy.contains('MetaMask').click()
       cy.get('[data-cy="0xa9b81dbca829594aac0dcae766bb12543eb7b079"]').within(($daoCard) => {
         cy.contains('PMTest2').click()
       })
       cy.contains('Projects')
     });
-    it(`Should show Project #112 as Active`, () => {
+    it(`Should show Project #112 as Active but no Tribute button when user is not the project manager`, () => {
       cy.get('[data-cy="112"]').within(($projectCard) => {
         cy.contains('#112')
         cy.contains('PM testing')
@@ -39,20 +47,29 @@ describe('Project Management', () => {
         cy.contains('Expired')
       })
     })
-    it(`Should show Project #108 with Tribute button`, () => {
-      // set the app clock to a deterministic date
-      const now = new Date(2022, 6, 10) // month is 0-indexed
-      cy.clock(now)
-      cy.get('[data-cy="108"]').within(($projectCard) => {
-        cy.contains('#108')
-        cy.contains('Demo of PM MVP')
+    it(`Should show Project #113 with Tribute button when user is project manager`, () => {
+      cy.get('[data-cy="113"]').within(($projectCard) => {
+        cy.contains('#113')
+        cy.contains('e2e test aug 20 2022')
         cy.contains('Tracking Link')
-        cy.contains('Budget: 4098.0')
-        cy.contains('Deadline: Sat, 20 Aug 2022')
+        cy.contains('Budget: 2223.0')
+        cy.contains('Deadline: Wed, 12 Dec 2323')
         cy.contains('Manager Address: 0xf952a72F39c5Fa22a443200AbE7835128bCb7439')
-        cy.contains('Expired').should('not.exist')
         cy.contains('Tribute')
+        cy.contains('Expired').should('not.exist')
+        cy.contains('Active').should('not.exist')
       })
+    })
+    it(`Should navigate to Propose Project page`, () => {
+      cy.get('[data-cy="cta-button"]').contains("Propose Project").click({force: true})
+      cy.contains('Propose a new project for DAO')
+      cy.contains('PMTest (PMT)')
+      cy.contains('Manager')
+      cy.contains('Budget')
+      cy.contains('Deadline')
+      cy.contains('Goal')
+      cy.contains('Goal Tracking Link')
+      cy.contains('Submit')
     })
   })
 })

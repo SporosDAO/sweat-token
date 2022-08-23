@@ -1,4 +1,7 @@
-describe('Puppeteer', () => {
+describe('SporosDAO App Home', () => {
+  after( () => {
+    cy.disconnectMetamaskWalletFromDapp()
+  })
   context('Sporos DAO App home page', () => {
     it(`Should connect to home page`, () => {
       cy.visit('/')

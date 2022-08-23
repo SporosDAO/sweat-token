@@ -8,6 +8,12 @@ _Note_: E2E tests require the full SporosDAO App stack to be running: frontend, 
 
 This repo is prepared for Gitpod deployment with Synpress pre-installed and ready to run. Read more [here](https://github.com/mikenikles/cypress-on-gitpod).
 
+Use `.env.example` as a starting point for your `.env.local` configuration.
+
+## CI runs
+
+All tests in this repo run as CI checks on pull request and push. See [Github Action Workflow file](../.github/workflows/e2e-tests.yml)
+
 ## Environment variables
 
 Install globally [`dotenv-cli`](https://www.npmjs.com/package/dotenv-cli) for parsing `.env` files
@@ -61,4 +67,3 @@ https://user-images.githubusercontent.com/2234901/185227575-de0621bc-af7d-4fd0-8
 When tests run within github actions, the resulting screenshots and videos are saved as workflow run artifacts. See example below:
 
 ![Screen Shot 2022-08-17 at 2 31 58 PM](https://user-images.githubusercontent.com/2234901/185227760-9c7ba623-4cd0-475c-b2a5-6adfd26ed2db.png)
-
