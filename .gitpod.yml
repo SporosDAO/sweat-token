@@ -7,12 +7,20 @@ tasks:
       # bring in secret access tokens from gitpod user dashboard
       eval $(gp env -e)
       # builds the images from the dockerfiles
-      docker-compose build frontend backend contracts e2e-tests
+      docker-compose build
       cd backend && yarn install && cd -
-      cd frontend && yarn install && cd -
-      cd e2e-tests && yarn install && cd -
-      cd contracts && yarn install && cd -
-      # install global dotenv for parsing .env files
+      cd frontend
+      yarn install
+      [ ! -f .env.local ] && cp .env.example .env.local
+      cd -
+      cd e2e-tests
+      yarn install
+      [ ! -f .env.local ] && cp .env.example .env.local
+      cd -
+      cd contracts && yarn install
+      [ ! -f .env.local ]
+      cp .env.example .env.local
+      cd -
       gp sync-done build
     command: |
       set -evx
@@ -37,7 +45,9 @@ vscode:
     - ms-vscode.vscode-typescript-tslint-plugin
     - bungcip.better-toml
     - esbenp.prettier-vscode
-    - juanblanco.solidity
+    - NomicFoundation.hardhat-solidity
+    # alternative solidity plugin
+    # - juanblanco.solidity
 
 ports:
   # allow front end to access backend api
@@ -51,7 +61,7 @@ ports:
     visibility: public
     onOpen: ignore
 
-  # Cypress service
+# Cypress service
   - port: 5900
     onOpen: ignore
   - port: 6080

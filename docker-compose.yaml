@@ -86,22 +86,3 @@ services:
       # ME_CONFIG_MONGODB_ADMINUSERNAME: root
       # ME_CONFIG_MONGODB_ADMINPASSWORD: root
       # ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo:27017/
-  e2e-tests:
-    command: bash -c "yarn install && yarn test"
-    container_name: e2e-tests
-    working_dir: /app/e2e-tests
-    networks:
-      - sweat-token
-    # stdin_open: true # docker run -i
-    # tty: true        # docker run -t
-    depends_on:
-      - frontend
-      - contracts
-    build:
-      context: ./
-      dockerfile: .gitpod.Dockerfile
-    environment:
-      - CYPRESS_CACHE_FOLDER=/app/e2e-tests/.cypress-cache
-      - FAIL_ON_ERROR=true
-    volumes:
-      - ./e2e-tests:/app/e2e-tests
