@@ -52,7 +52,7 @@ describe('Project Management', () => {
         cy.contains('#113')
         cy.contains('e2e test aug 20 2022')
         cy.contains('Tracking Link')
-        cy.contains('Budget: 2233.0')
+        cy.contains('Budget: 2223.0')
         cy.contains('Deadline: Wed, 12 Dec 2323')
         cy.contains('Manager Address: 0xf952a72F39c5Fa22a443200AbE7835128bCb7439')
         cy.contains('Tribute')
