@@ -93,13 +93,13 @@ export const DaoMenuItems = () => {
 export const SecondaryMenuItems = () => {
   return (
     <React.Fragment>
-      <ListItemButton onClick={() => (document.location = OWNER.docsUrl)}>
+      <ListItemButton href={OWNER.docsUrl} rel="noopener" target="_blank">
         <ListItemIcon>
           <MenuBook />
         </ListItemIcon>
         <ListItemText primary="Docs" />
       </ListItemButton>
-      <ListItemButton onClick={() => (document.location = OWNER.helpUrl)}>
+      <ListItemButton href={OWNER.helpUrl} rel="noopener" target="_blank">
         <ListItemIcon>
           <Help />
         </ListItemIcon>
