@@ -147,7 +147,7 @@ export default function ProjectProposal() {
       <List component="form" onSubmit={handleSubmit(onSubmit)}>
         <ListItem>
           <TextField
-            id="manager"
+            data-cy="manager"
             label="Manager"
             helperText="ETH L1/L2 address: 0x..."
             variant="filled"
@@ -180,8 +180,8 @@ export default function ProjectProposal() {
             variant="filled"
             type="number"
             fullWidth
-            required
             {...register('budget', {
+              required: true,
               validate: {
                 positive: (v) => v > 0
               }
@@ -202,19 +202,17 @@ export default function ProjectProposal() {
               shrink: true
             }}
             fullWidth
-            required
             {...register('deadline', {
+              required: 'Deadline is required.',
               validate: {
-                future: (v) => new Date(v) > new Date()
+                future: (v) => new Date(v) > new Date() || 'Deadline must be in the future.'
               }
             })}
           />
         </ListItem>
-        {formErrors.deadline && (
-          <ListItem>
-            <Alert severity="error">Deadline must be in the future.</Alert>
-          </ListItem>
-        )}
+        <ListItem>
+          <ErrorMessage as={<Alert severity="error" />} errors={formErrors} name="deadline" />
+        </ListItem>
         <ListItem>
           <TextField
             id="goalTitle"
@@ -222,9 +220,11 @@ export default function ProjectProposal() {
             helperText="Describe a measurable goal of the project"
             variant="filled"
             fullWidth
-            required
-            {...register('goalTitle')}
+            {...register('goalTitle', { required: 'Goal title is required.' })}
           />
+        </ListItem>
+        <ListItem>
+          <ErrorMessage as={<Alert severity="error" />} errors={formErrors} name="goalTitle" />
         </ListItem>
         <ListItem>
           <TextField
@@ -238,7 +238,12 @@ export default function ProjectProposal() {
           />
         </ListItem>
         <ListItem>
-          <Button type="submit" variant="contained" disabled={contractReadManagerResult.isLoading}>
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={contractReadManagerResult.isLoading}
+            data-cy="submit-button"
+          >
             Submit
           </Button>
         </ListItem>

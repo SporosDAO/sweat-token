@@ -61,7 +61,7 @@ describe('Project Management', () => {
       })
     })
     it(`Should navigate to Propose Project page`, () => {
-      cy.get('[data-cy="cta-button"]').contains("Propose Project").click({force: true})
+      cy.get('[data-cy="cta-button"]').contains("Propose Project").click({ force: true })
       cy.contains('Propose a new project for DAO')
       cy.contains('PMTest (PMT)')
       cy.contains('Manager')
@@ -70,6 +70,15 @@ describe('Project Management', () => {
       cy.contains('Goal')
       cy.contains('Goal Tracking Link')
       cy.contains('Submit')
+    })
+    it(`Should pre-populate manager field with current user address`, () => {
+      cy.get('[data-cy="manager"]').get('input').invoke('val').then(($manager) => {
+        cy.expect($manager).equal('0xf952a72F39c5Fa22a443200AbE7835128bCb7439')
+      })
+    })
+    it(`Should require Budget`, () => {
+      cy.get('[data-cy="submit-button"]').click()
+      cy.contains('Budget must be a positive number.')
     })
   })
 })
