@@ -34,7 +34,7 @@ export default function MyDAOs() {
       ) : daos && daos.length > 0 ? (
         <List>
           {daos.map((dao) => (
-            <ListItem key={dao.dao.id} data-cy={dao.dao.id}>
+            <ListItem key={dao.dao.id} data-testid={dao.dao.id}>
               <Card sx={{ width: '100%' }} raised={true}>
                 <CardActionArea
                   onClick={() => {

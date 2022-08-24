@@ -147,7 +147,7 @@ export default function ProjectProposal() {
       <List component="form" onSubmit={handleSubmit(onSubmit)}>
         <ListItem>
           <TextField
-            data-cy="manager"
+            data-testid="manager"
             label="Manager"
             helperText="ETH L1/L2 address: 0x..."
             variant="filled"
@@ -174,7 +174,7 @@ export default function ProjectProposal() {
         )}
         <ListItem>
           <TextField
-            data-cy="budget"
+            data-testid="budget"
             label="Budget"
             helperText="Amount in DAO sweat tokens"
             variant="filled"
@@ -242,7 +242,7 @@ export default function ProjectProposal() {
             type="submit"
             variant="contained"
             disabled={contractReadManagerResult.isLoading}
-            data-cy="submit-button"
+            data-testid="submit-button"
           >
             Submit
           </Button>

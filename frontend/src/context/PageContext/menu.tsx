@@ -8,7 +8,7 @@ export const MainMenuItems = () => {
   const navigate = useNavigate()
   return (
     <React.Fragment>
-      <ListItemButton data-cy="home-button" onClick={() => navigate('/')}>
+      <ListItemButton data-testid="home-button" onClick={() => navigate('/')}>
         <ListItemIcon>
           <Home />
         </ListItemIcon>
@@ -79,7 +79,7 @@ export const DaoMenuItems = () => {
   return (
     <React.Fragment>
       {menu.map(({ icon: MenuIcon, label, link, dataCy }) => (
-        <ListItemButton key={label} onClick={() => goto(link)} selected={currentPath === link} data-cy={dataCy}>
+        <ListItemButton key={label} onClick={() => goto(link)} selected={currentPath === link} data-testid={dataCy}>
           <ListItemIcon>
             <MenuIcon />
           </ListItemIcon>
