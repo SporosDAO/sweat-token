@@ -3,13 +3,14 @@ import { ethers } from 'ethers'
 import { addresses } from '../../constants/addresses'
 import PM_ABI from '../../abi/ProjectManagement.json'
 import { useLocation, useParams } from 'react-router-dom'
-import { Box, TextField, Button, List, ListItem, Alert, Typography, Link } from '@mui/material'
+import { Box, TextField, Button, List, ListItem, Alert, Typography, Link, InputAdornment } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { Navigate } from 'react-router-dom'
 import Web3SubmitDialog from '../../components/Web3SubmitDialog'
 import { ErrorMessage } from '@hookform/error-message'
 import { useAccount } from 'wagmi'
 import { Key } from 'react'
+import { useGetDAO } from '../../graph/getDAO'
 
 export default function ProjectTribute() {
   const { chainId, daoId, projectId } = useParams()
@@ -28,6 +29,8 @@ export default function ProjectTribute() {
   deadlineDate.setTime(deadline * 1000)
   const deadlineString = deadlineDate.toUTCString()
   const isExpired = deadlineDate < new Date()
+
+  const { data: myDao } = useGetDAO(chainId, daoId)
 
   const hasBudget = Number(budget) > 0
 
@@ -118,14 +121,15 @@ export default function ProjectTribute() {
       <List component="form" onSubmit={handleSubmit(onSubmit)}>
         <ListItem>
           <TextField
-            id="contributorAddress"
             label="Contributor"
             helperText="ETH L1/L2 address: 0x..."
             variant="filled"
             fullWidth
-            required
-            {...register('contributorAddress')}
+            {...register('contributorAddress', { required: 'Contributor address is required.' })}
           />
+        </ListItem>
+        <ListItem>
+          <ErrorMessage as={<Alert severity="error" />} errors={errors} name="contributorAddress" />
         </ListItem>
         <ListItem>
           <TextField
@@ -133,9 +137,12 @@ export default function ProjectTribute() {
             helperText="Amount in DAO sweat tokens to mint to contributor"
             variant="filled"
             type="number"
+            InputProps={{
+              startAdornment: <InputAdornment position="start">{myDao?.token?.symbol}</InputAdornment>
+            }}
             fullWidth
-            required
             {...register('mintAmount', {
+              required: 'Mint amount is required.',
               min: { value: 0, message: 'Mint value must be positive.' },
               max: { value: budget, message: `Mint value must be within budget: ${budget}.` }
             })}
@@ -146,18 +153,18 @@ export default function ProjectTribute() {
         </ListItem>
         <ListItem>
           <TextField
-            id="tributeTitle"
             label="Tribute Title"
             helperText="Describe the tribute to the project"
             variant="filled"
             fullWidth
-            required
-            {...register('tributeTitle')}
+            {...register('tributeTitle', { required: 'Tribute title is required.' })}
           ></TextField>
         </ListItem>
         <ListItem>
+          <ErrorMessage as={<Alert severity="error" />} errors={errors} name="tributeTitle" />
+        </ListItem>
+        <ListItem>
           <TextField
-            id="tributeLink"
             type="url"
             label="Tribute Reference Link"
             helperText="URL referencing tribute details."
@@ -167,7 +174,7 @@ export default function ProjectTribute() {
           />
         </ListItem>
         <ListItem>
-          <Button type="submit" variant="contained">
+          <Button type="submit" variant="contained" data-testid="submit-button">
             Submit
           </Button>
         </ListItem>

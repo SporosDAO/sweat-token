@@ -24,7 +24,7 @@ export default function ProjectCard(props: any) {
   const navigate = useNavigate()
 
   return (
-    <Card sx={{ margin: '8px', width: '48.5%' }} data-cy={projectID} raised={true}>
+    <Card sx={{ margin: '8px', width: '48.5%' }} data-testid={projectID} raised={true}>
       <CardContent>
         <Typography>#{projectID}</Typography>
         {goals &&
@@ -70,6 +70,7 @@ export default function ProjectCard(props: any) {
             onClick={() => {
               navigate(`${project['projectID']}/tribute`, { state: project })
             }}
+            data-testid="tribute-button"
           >
             Tribute
           </Button>

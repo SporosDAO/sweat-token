@@ -90,7 +90,6 @@ export function PageLayout(props: PageLayoutProps) {
 
   const { chainId, daoId } = useParams()
   const { data: myDao, isSuccess: isMyDaoLoaded } = useGetDAO(chainId, daoId)
-  console.log({ isMyDaoLoaded, myDao })
 
   const toggleDrawer = () => {
     setOpen(!open)

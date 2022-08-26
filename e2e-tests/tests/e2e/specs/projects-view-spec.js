@@ -1,5 +1,6 @@
 describe('Project Management', () => {
   before(() => {
+    // cy.window.localStorage.debug = 'cypress*'
     cy.visit('/')
     cy.contains('Connect Wallet').click()
     cy.contains('MetaMask').click()
@@ -12,13 +13,13 @@ describe('Project Management', () => {
   })
   context('Sporos DAO App Projects Pages', () => {
     it(`Should show DAO PMTest projects for account 0xf952a72F39c5Fa22a443200AbE7835128bCb7439`, () => {
-      cy.get('[data-cy="0xa9b81dbca829594aac0dcae766bb12543eb7b079"]').within(($daoCard) => {
+      cy.get('[data-testid="0xa9b81dbca829594aac0dcae766bb12543eb7b079"]').within(($daoCard) => {
         cy.contains('PMTest2').click()
       })
       cy.contains('Projects')
     });
     it(`Should show Project #112 as Active but no Tribute button when user is not the project manager`, () => {
-      cy.get('[data-cy="112"]').within(($projectCard) => {
+      cy.get('[data-testid="112"]').within(($projectCard) => {
         cy.contains('#112')
         cy.contains('PM testing')
         cy.contains('Tracking Link')
@@ -29,15 +30,15 @@ describe('Project Management', () => {
       })
     })
     it(`Should show DAO PMTest2 projects for account 0xf952a72F39c5Fa22a443200AbE7835128bCb7439`, () => {
-      cy.get('[data-cy="home-button"]').click()
-      cy.get('[data-cy="0xe237747055b12f4da323bc559ac8d5eb66aac2f7"]').within(($daoCard) => {
+      cy.get('[data-testid="home-button"]').click()
+      cy.get('[data-testid="0xe237747055b12f4da323bc559ac8d5eb66aac2f7"]').within(($daoCard) => {
         cy.contains('PMTest2').should('not.exist')
         cy.contains('PMTest').click()
       })
       cy.contains('Projects')
     });
     it(`Should show Project #109 as Expired`, () => {
-      cy.get('[data-cy="109"]').within(($projectCard) => {
+      cy.get('[data-testid="109"]').within(($projectCard) => {
         cy.contains('#109')
         cy.contains('Record a video')
         cy.contains('Tracking Link')
@@ -48,7 +49,7 @@ describe('Project Management', () => {
       })
     })
     it(`Should show Project #113 with Tribute button when user is project manager`, () => {
-      cy.get('[data-cy="113"]').within(($projectCard) => {
+      cy.get('[data-testid="113"]').within(($projectCard) => {
         cy.contains('#113')
         cy.contains('e2e test aug 20 2022')
         cy.contains('Tracking Link')
@@ -59,17 +60,6 @@ describe('Project Management', () => {
         cy.contains('Expired').should('not.exist')
         cy.contains('Active').should('not.exist')
       })
-    })
-    it(`Should navigate to Propose Project page`, () => {
-      cy.get('[data-cy="cta-button"]').contains("Propose Project").click({force: true})
-      cy.contains('Propose a new project for DAO')
-      cy.contains('PMTest (PMT)')
-      cy.contains('Manager')
-      cy.contains('Budget')
-      cy.contains('Deadline')
-      cy.contains('Goal')
-      cy.contains('Goal Tracking Link')
-      cy.contains('Submit')
     })
   })
 })
