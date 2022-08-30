@@ -4,7 +4,7 @@ import { addresses } from '../../constants/addresses'
 import PM_ABI from '../../abi/ProjectManagement.json'
 import { useLocation, useParams } from 'react-router-dom'
 import { Box, TextField, Button, List, ListItem, Alert, Typography, Link, InputAdornment } from '@mui/material'
-import { useForm } from 'react-hook-form'
+import { FieldErrors, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form'
 import { Navigate } from 'react-router-dom'
 import Web3SubmitDialog from '../../components/Web3SubmitDialog'
 import { ErrorMessage } from '@hookform/error-message'
@@ -36,12 +36,14 @@ export default function ProjectTribute() {
 
   const cid = Number(chainId)
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
-  const formResult = useForm({ criteriaMode: 'all' })
+  const formResult = useForm<ProjectTributeFormValues>({ criteriaMode: 'all' })
   const {
     register,
     handleSubmit,
     formState: { isValid, errors }
   } = formResult
+
+  // console.debug({ formResult })
 
   const callArgs = ['uint256', 'address', 'uint256', 'string']
 
@@ -54,10 +56,20 @@ export default function ProjectTribute() {
 
   const [txInput, setTxInput] = useState(undefined as any)
 
-  const onSubmit = async (formData: any) => {
-    if (!isValid) return
+  type ProjectTributeFormValues = {
+    contributorAddress: string
+    mintAmount: string
+    tributeTitle: string
+    tributeLink: string
+  }
+
+  const onSubmit: SubmitHandler<ProjectTributeFormValues> = (formData) => {
+    // console.debug({ formData })
 
     const { contributorAddress, mintAmount, tributeTitle, tributeLink } = formData
+
+    // console.debug('start onSubmit()', { formData })
+
     const tribute = [{ tributeTitle, tributeLink }]
     const tributeString = JSON.stringify(tribute)
 
@@ -80,7 +92,13 @@ export default function ProjectTribute() {
       args: [daoId, [payload]]
     })
     setIsDialogOpen(true)
+
+    // console.debug('end onSubmit()')
   } // onSubmit
+
+  const onSubmitError: SubmitErrorHandler<ProjectTributeFormValues> = (formErrors: FieldErrors) => {
+    console.error({ formErrors })
+  }
 
   const onDialogClose = async () => {
     setIsDialogOpen(false)
@@ -118,7 +136,7 @@ export default function ProjectTribute() {
       )}
       {isExpired && <Alert severity="error">This project deadline expired on {deadlineString}.</Alert>}
       {!hasBudget && <Alert severity="error">This project has no budget left.</Alert>}
-      <List component="form" onSubmit={handleSubmit(onSubmit)}>
+      <List component="form" onSubmit={handleSubmit(onSubmit, onSubmitError)}>
         <ListItem>
           <TextField
             label="Contributor"
@@ -172,6 +190,9 @@ export default function ProjectTribute() {
             fullWidth
             {...register('tributeLink')}
           />
+        </ListItem>
+        <ListItem>
+          <ErrorMessage as={<Alert severity="error" />} errors={errors} name="tributeLink" />
         </ListItem>
         <ListItem>
           <Button type="submit" variant="contained" data-testid="submit-button">
