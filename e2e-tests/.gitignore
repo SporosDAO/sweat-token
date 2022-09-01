@@ -23,3 +23,9 @@ yarn-debug.log*
 yarn-error.log*
 
 .nyc_output/
+
+# cypress test run artifacts
+cypress/
+.cypress-cache
+tests/e2e/screenshots/
+tests/e2e/videos/

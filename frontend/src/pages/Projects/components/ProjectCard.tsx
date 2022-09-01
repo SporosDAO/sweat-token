@@ -1,77 +1,94 @@
-import { Launch, Work } from '@mui/icons-material'
-import { Button, Card, CardActions, CardContent, Link, ListItem, Typography } from '@mui/material'
+import { Card, CardContent, CardActions } from '@mui/material'
+import { Button, Typography, Link } from '@mui/material'
+import { useEnsName, useEnsAvatar, useAccount } from 'wagmi'
+import { Work, Launch, HourglassTop, HourglassDisabled } from '@mui/icons-material'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Key } from 'react'
-import { useParams } from 'react-router-dom'
-import { useEnsAvatar, useEnsName } from 'wagmi'
 
 export default function ProjectCard(props: any) {
   const { chainId, daoId } = useParams()
+  const { project } = props
+  const { manager, projectID, budget, goals } = project
 
-  const project = props.project
-  console.debug({ project })
-
-  const manager = project['manager']
   const ensNameResult = useEnsName({ address: manager, chainId: Number(1), cacheTime: 60_000 })
-  console.debug('useEnsName', { ensNameResult })
   const ensName = !ensNameResult.isError && !ensNameResult.isLoading ? ensNameResult.data : ''
   const ensAvatarResult = useEnsAvatar({ addressOrName: manager, chainId: Number(1), cacheTime: 60_000 })
-  console.debug('useEnsAvatar', { ensAvatarResult })
   const ensAvatar = !ensAvatarResult.isError && !ensAvatarResult.isLoading ? ensAvatarResult.data : ''
   const deadline = new Date()
   deadline.setTime(project['deadline'] * 1000)
   const deadlineString = deadline.toUTCString()
+  const isExpired = deadline < new Date()
+  const { address: userAddress } = useAccount()
+  const isManager = userAddress === manager
+
+  const navigate = useNavigate()
 
   return (
-    <ListItem>
-      <Card sx={{ minWidth: 400 }} raised={true}>
-        <CardContent>
-          <Typography>#{project['projectID']}</Typography>
-          {project['goals'] &&
-            project['goals'].map((goal: { goalTitle: string; goalLink: string }, idx: Key) => (
-              <div key={idx}>
-                <Typography variant="h5" component="div">
-                  {goal.goalTitle}
-                </Typography>
-                <Link href={goal.goalLink} target="_blank" rel="noopener" color="text.secondary">
-                  Tracking Link
-                </Link>
-              </div>
-            ))}
-          <Typography color="text.secondary" gutterBottom>
-            Budget: {project['budget']}
-          </Typography>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            Deadline: {deadlineString}
-          </Typography>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            Manager address: {manager}
-          </Typography>
-          {ensName ? (
-            <div>
-              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                Manager ENS: {ensName}
+    <Card sx={{ margin: '8px', width: '48.5%' }} data-testid={projectID} raised={true}>
+      <CardContent>
+        <Typography>#{projectID}</Typography>
+        {goals &&
+          goals.map((goal: { goalTitle: string; goalLink: string }, idx: Key) => (
+            <div key={idx}>
+              <Typography variant="h5" component="div">
+                {goal.goalTitle}
               </Typography>
-              <div>{ensAvatar}</div>
+              <Link href={goal.goalLink} sx={{ fontSize: 14 }} target="_blank" rel="noopener" color="text.secondary">
+                Tracking Link
+              </Link>
             </div>
-          ) : (
-            <div />
-          )}
-        </CardContent>
-        <CardActions sx={{ justifyContent: 'space-between' }}>
-          <Button variant="text" endIcon={<Work />} href={`projects/${project['projectID']}/tribute`}>
-            Tribute
+          ))}
+        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          Budget: {budget}
+        </Typography>
+        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          Deadline: {deadlineString}
+        </Typography>
+        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          Manager Address: {manager}
+        </Typography>
+        {ensName ? (
+          <div>
+            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+              Manager ENS: {ensName}
+            </Typography>
+            <div>{ensAvatar}</div>
+          </div>
+        ) : (
+          <div />
+        )}
+      </CardContent>
+      <CardActions sx={{ justifyContent: 'space-between' }}>
+        {isExpired ? (
+          <Button disabled variant="text" endIcon={<HourglassDisabled />}>
+            Expired
           </Button>
+        ) : isManager ? (
           <Button
             variant="text"
-            endIcon={<Launch />}
-            href={`https://app.kali.gg/daos/${chainId}/${daoId}`}
-            rel="noopener"
-            target="_blank"
+            endIcon={<Work />}
+            onClick={() => {
+              navigate(`${project['projectID']}/tribute`, { state: project })
+            }}
+            data-testid="tribute-button"
           >
-            Kali
+            Tribute
           </Button>
-        </CardActions>
-      </Card>
-    </ListItem>
+        ) : (
+          <Button variant="text" endIcon={<HourglassTop />} color="success">
+            Active
+          </Button>
+        )}
+        <Button
+          variant="text"
+          endIcon={<Launch />}
+          href={`https://app.kali.gg/daos/${chainId}/${daoId}`}
+          rel="noopener"
+          target="_blank"
+        >
+          Kali
+        </Button>
+      </CardActions>
+    </Card>
   )
 }

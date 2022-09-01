@@ -1,3 +1,5 @@
+image:
+  file: .gitpod.Dockerfile
 
 tasks:
   - name: SporosDAO App
@@ -7,12 +9,31 @@ tasks:
       # builds the images from the dockerfiles
       docker-compose build
       cd backend && yarn install && cd -
-      cd frontend && yarn install && cd -
-      cd e2e-tests && yarn install && cd -
-      cd contracts && yarn install && cd -
+      cd frontend
+      yarn install
+      [ ! -f .env.local ] && cp .env.example .env.local
+      cd -
+      cd e2e-tests
+      yarn install
+      [ ! -f .env.local ] && cp .env.example .env.local
+      cd -
+      cd contracts && yarn install
+      [ ! -f .env.local ]
+      cp .env.example .env.local
+      cd -
       gp sync-done build
     command: |
-      bash .gitpod.sh
+      set -evx
+      # shutdown any leftover containers from a previous session
+      docker-compose down
+      # update install deps
+      # docker-compose -f docker-compose.yaml -f docker-compose.install.yaml --profile install up --no-deps
+      # start app modules
+      # docker-compose up -d backend
+      # set API path
+      # gp ports await 3001 && \
+      # export REACT_APP_SWEAT_TOKEN_API_BASEPATH=$(gp url 3001)
+      docker-compose up frontend contracts
   - name: Shell
     command: |
       # gp sync-await build
@@ -24,19 +45,31 @@ vscode:
     - ms-vscode.vscode-typescript-tslint-plugin
     - bungcip.better-toml
     - esbenp.prettier-vscode
-    - juanblanco.solidity
+    - NomicFoundation.hardhat-solidity
+    # alternative solidity plugin
+    # - juanblanco.solidity
 
 ports:
   # allow front end to access backend api
   # https://www.gitpod.io/docs/config-ports#cors
-  - port: 3001
-    visibility: public
-
+  # frontend web app service : Node.js, React
   - port: 3000
     onOpen: open-browser
     visibility: public
 
-  - port: 3001-8999
+  - port: 3001
+    visibility: public
+    onOpen: ignore
+
+# Cypress service
+  - port: 5900
+    onOpen: ignore
+  - port: 6080
+    onOpen: open-browser
+  - port: 10000
+    onOpen: ignore
+
+  - port: 3001-9999
     onOpen: ignore
 
 github:

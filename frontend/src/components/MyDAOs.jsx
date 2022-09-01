@@ -5,6 +5,7 @@ import { Launch, ReadMore } from '@mui/icons-material'
 import { useQuery } from 'react-query'
 import { request } from 'graphql-request'
 import { GRAPH_URL } from '../graph'
+import { useNavigate } from 'react-router-dom'
 
 export function useGetUserDAOs(chainId, userAddress) {
   return useQuery([chainId, userAddress, USER_DAOS], async () => {
@@ -15,16 +16,12 @@ export function useGetUserDAOs(chainId, userAddress) {
 }
 
 export default function MyDAOs() {
+  const navigate = useNavigate()
   const { chain } = useNetwork()
   const { address, isConnecting, isDisconnected } = useAccount()
-  console.log({ address, isConnecting, isDisconnected })
-
   const { data, isLoading, isSuccess } = useGetUserDAOs(chain?.id, address)
 
   const daos = isSuccess ? data?.['members'] : []
-
-  console.log({ chain })
-  console.log({ daos })
 
   return (
     <>
@@ -37,21 +34,25 @@ export default function MyDAOs() {
       ) : daos && daos.length > 0 ? (
         <List>
           {daos.map((dao) => (
-            <ListItem key={dao['dao']['id']}>
-              <Card sx={{ minWidth: 275 }} raised={true}>
-                <CardActionArea href={`dao/chain/${chain.id}/address/${dao['dao']['id']}/projects`}>
+            <ListItem key={dao.dao.id} data-testid={dao.dao.id}>
+              <Card sx={{ width: '100%' }} raised={true}>
+                <CardActionArea
+                  onClick={() => {
+                    navigate(`dao/chain/${chain.id}/address/${dao['dao']['id']}/projects/`)
+                  }}
+                >
                   <CardContent>
                     <Typography variant="h5" component="div">
                       {dao['dao']['token']['name']}
                     </Typography>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                      symbol: {dao['dao']['token']['symbol']}
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary">
+                      Symbol: {dao['dao']['token']['symbol']}
                     </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                      chain: {chain.name}
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary">
+                      Chain: {chain.name}
                     </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                      address: {dao['dao']['address']}
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary">
+                      Address: {dao['dao']['address']}
                     </Typography>
                   </CardContent>
                 </CardActionArea>
@@ -60,7 +61,9 @@ export default function MyDAOs() {
                     variant="text"
                     endIcon={<ReadMore />}
                     fontSize="inherit"
-                    href={`dao/chain/${chain.id}/address/${dao['dao']['id']}/people`}
+                    onClick={() => {
+                      navigate(`dao/chain/${chain.id}/address/${dao['dao']['id']}/projects/`)
+                    }}
                   >
                     Open
                   </Button>

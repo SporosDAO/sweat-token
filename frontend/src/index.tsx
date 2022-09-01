@@ -5,10 +5,8 @@ import App from './App'
 import { PageProvider } from './context/PageContext'
 import { ToastProvider } from './context/ToastContext'
 import { Web3ContextProvider } from './context/Web3Context'
-import { AuthProvider } from './context/AuthContext'
-import './index.css'
-import reportWebVitals from './reportWebVitals'
 import { ServiceWorkerWrapper } from './components/PWAUpdate'
+import { AuthProvider } from './context/AuthContext'
 
 import { QueryClient, QueryClientProvider } from 'react-query'
 const queryClient = new QueryClient()
@@ -36,4 +34,4 @@ root.render(
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals(console.log)
+// reportWebVitals(console.log)

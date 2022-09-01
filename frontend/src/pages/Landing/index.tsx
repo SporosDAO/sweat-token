@@ -28,16 +28,16 @@ export default function Landing() {
       </ContentBlock>
 
       <Grid container>
-        <Grid item lg={6}>
-          <ContentBlock sx={{ ...blockStyle, ml: 1, mr: 0 }} title="Your DAOs">
+        <Grid item sm={6}>
+          <ContentBlock sx={{ ...blockStyle }} title="Your DAOs">
             <MyDAOs />
           </ContentBlock>
         </Grid>
-        <Grid item lg={6}>
+        <Grid item sm={6}>
           <ContentBlock sx={{ ...blockStyle }} title="Create a for-profit DAO">
             <p>
               <span>
-                <a href="https://app.kali.gg/">Create</a> a new for-profit Kali DAO with legal benefits. Make sure to
+                <a href="https://app.kali.gg/">Create a new for-profit Kali DAO</a> with legal benefits. Make sure to
                 choose Company Series LLC template! Then return here to manage sweat equity projects and more.
               </span>
             </p>

@@ -2,9 +2,8 @@ import { useQuery } from 'react-query'
 import { GRAPH_URL } from './url'
 
 export const getDAO = async (chainId, daoAddress) => {
-  console.debug('getDAO', chainId, daoAddress)
+  if (!daoAddress) return null
   try {
-    console.debug('getDAO enter')
     const res = await fetch(GRAPH_URL[chainId], {
       method: 'POST',
       body: JSON.stringify({
@@ -19,22 +18,28 @@ export const getDAO = async (chainId, daoAddress) => {
         }`
       })
     })
-    console.debug('getDAO result', { res })
     const data = await res.json()
-    console.debug('getDAO data', { data })
     return data
   } catch (e) {
-    console.debug('getDAO error', { e })
+    console.error('getDAO error', { e })
     return e
   }
 }
 
 export function useGetDAO(chainId, daoAddress) {
-  console.debug('useGetDAO calling getDAO')
   return useQuery(['getDAO', chainId, daoAddress], async () => {
-    console.debug('useQuery calling getDAO')
     const data = await getDAO(chainId, daoAddress)
-    console.debug('useQuery after getDAO returns', { data })
-    return data
+    // simplify structure and enrich subgraph result
+    // end result looks like this
+    // {
+    //     "id": "0xe237747055b12f4da323bc559ac8d5eb66aac2f7",
+    //     "chainId": "5"
+    //     "token": {
+    //         "name": "PMTest",
+    //         "symbol": "PMT"
+    //     },
+    // }
+    const myDao = { ...data?.data?.dao, chainId }
+    return myDao
   })
 }

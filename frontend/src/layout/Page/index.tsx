@@ -1,6 +1,6 @@
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import MenuIcon from '@mui/icons-material/Menu'
-import { Box, CssBaseline, IconButton, Toolbar, useMediaQuery, useTheme } from '@mui/material'
+import { Avatar, Box, CssBaseline, IconButton, Toolbar, useMediaQuery, useTheme } from '@mui/material'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Container from '@mui/material/Container'
 import Divider from '@mui/material/Divider'
@@ -20,7 +20,7 @@ function Copyright(props: any) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href={OWNER.homepageUrl}>
+      <Link color="inherit" href={OWNER.homepageUrl} target="_blank" rel="noopener">
         {OWNER.name}
       </Link>{' '}
       {new Date().getFullYear()}
@@ -89,10 +89,7 @@ export function PageLayout(props: PageLayoutProps) {
   const [open, setOpen] = useState(props.withDrawer !== false && !isMobile)
 
   const { chainId, daoId } = useParams()
-  const { data, error, isLoading, isSuccess } = useGetDAO(chainId, daoId)
-  console.debug('useGetDAO', { data, error, isLoading, isSuccess })
-  const { title } =
-    isSuccess && data && data['token'] && data['token']['name'] ? data['token']['name'] : 'Sporos DAO App'
+  const { data: myDao, isSuccess: isMyDaoLoaded } = useGetDAO(chainId, daoId)
 
   const toggleDrawer = () => {
     setOpen(!open)
@@ -107,6 +104,7 @@ export function PageLayout(props: PageLayoutProps) {
             pr: '24px' // keep right padding when drawer closed
           }}
         >
+          <Avatar alt="Sporos DAO logo" src="/logo192.png" />
           {props.withDrawer !== false ? (
             <IconButton
               edge="start"
@@ -123,8 +121,8 @@ export function PageLayout(props: PageLayoutProps) {
           ) : (
             <></>
           )}
-          <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-            {title}
+          <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1, ml: 2 }}>
+            {isMyDaoLoaded && myDao?.token && `${myDao?.token?.name} (${myDao?.token?.symbol})`}
           </Typography>
           <IconButton color="inherit" aria-label="account">
             {/* <Badge badgeContent={4} color="secondary">

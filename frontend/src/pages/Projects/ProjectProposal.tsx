@@ -1,25 +1,44 @@
-import { Box, Button, List, ListItem, TextField } from '@mui/material'
+import { useState } from 'react'
 import { ethers } from 'ethers'
-import React from 'react'
-import { useForm } from 'react-hook-form'
-import { Navigate, useParams } from 'react-router-dom'
-import { useContractRead, useContractWrite } from 'wagmi'
-import KALIDAO_ABI from '../../abi/KaliDAO.json'
-import Web3Dialog from '../../components/Web3Dialog'
+import { useAccount, useContractRead } from 'wagmi'
 import { addresses } from '../../constants/addresses'
+import KALIDAO_ABI from '../../abi/KaliDAO.json'
+import { useParams } from 'react-router-dom'
+import { Box, TextField, Button, List, ListItem, Typography, Alert, CircularProgress } from '@mui/material'
+import { useForm } from 'react-hook-form'
+import { Navigate } from 'react-router-dom'
+import Web3SubmitDialog from '../../components/Web3SubmitDialog'
+import { useGetDAO } from '../../graph/getDAO'
+import { ErrorMessage } from '@hookform/error-message'
 
 export default function ProjectProposal() {
   const { chainId, daoId } = useParams()
 
+  // Web3SubmitDialog state vars
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [txInput, setTxInput] = useState({})
+  const { address: userAddress } = useAccount()
+  const [proposedManagerAddress, setProposedManagerAddress] = useState(userAddress)
+
   const cid = Number(chainId)
-  const pmAddress = addresses[cid]['extensions']['projectmanagement']
-  console.debug({ pmAddress })
+  const pmContractAddress = addresses[cid]['extensions']['projectmanagement']
+  const defaultDeadline = new Date() // Now
+  defaultDeadline.setDate(defaultDeadline.getDate() + 30) // Set now + 30 days as the new date
   const {
-    control,
     register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm()
+    formState: { errors: formErrors },
+    handleSubmit
+  } = useForm({
+    defaultValues: {
+      manager: proposedManagerAddress,
+      budget: 0,
+      deadline: defaultDeadline.toISOString().split('T')[0],
+      goalTitle: '',
+      goalLink: ''
+    }
+  })
+
+  const { data: myDao, isSuccess: isMyDaoLoaded } = useGetDAO(chainId, daoId)
 
   const daoContract = {
     addressOrName: daoId || '',
@@ -27,36 +46,32 @@ export default function ProjectProposal() {
     contractInterface: KALIDAO_ABI
   }
 
-  const {
-    data,
-    isLoading: isWritePending,
-    isSuccess: isWriteSuccess,
-    isError: isWriteError,
-    error: writeError,
-    writeAsync
-  } = useContractWrite({
-    ...daoContract,
-    functionName: 'propose',
-    onSuccess(data, variables, context) {
-      console.debug('success', { data, variables, context })
-      // alert(`Proposal successfully submitted on chain.`)
-    },
-    onError(error, variables, context) {
-      console.debug('error', { error, variables, context })
-      // alert(`Proposal failed with error: ${error}`)
-    }
-  })
-
-  const contractReadResult = useContractRead({
+  const contractReadExtensionResult = useContractRead({
     ...daoContract,
     functionName: 'extensions',
-    args: [pmAddress]
+    args: [pmContractAddress]
+  })
+
+  const contractReadManagerResult = useContractRead({
+    ...daoContract,
+    functionName: 'balanceOf',
+    args: [proposedManagerAddress]
   })
 
   const onSubmit = async (data: any) => {
-    setDialogOpen(true)
-    console.log(data)
     const { manager, budget, deadline, goalTitle, goalLink } = data
+    setProposedManagerAddress(manager)
+    try {
+      await contractReadManagerResult.refetch({
+        throwOnError: true,
+        cancelRefetch: true
+      })
+    } catch (refetchError) {
+      console.error({ refetchError })
+      return
+    }
+    if (contractReadManagerResult.isError || contractReadManagerResult.isLoading) return
+
     let payload
     const goals = [{ goalTitle, goalLink }]
     const goalString = JSON.stringify(goals)
@@ -69,7 +84,7 @@ export default function ProjectProposal() {
         [0, manager, ethers.utils.parseEther(budget), dateInSecs, goalString]
       )
     } catch (e) {
-      console.log('Error while encoding project proposal', e)
+      console.error('Error while encoding project proposal', e)
       return
     }
 
@@ -77,19 +92,17 @@ export default function ProjectProposal() {
     const PROPOSAL_TYPE_EXTENSION = 9
 
     let pmExtensionEnabled
-    if (contractReadResult.isSuccess) {
-      pmExtensionEnabled = contractReadResult.data
+    if (contractReadExtensionResult.isSuccess) {
+      pmExtensionEnabled = contractReadExtensionResult.data
     } else {
-      pmExtensionEnabled = await contractReadResult.refetch()
+      pmExtensionEnabled = await contractReadExtensionResult.refetch()
     }
-    console.debug({ pmExtensionEnabled })
 
     // if PM extension is not enabled yet, toggle it on
     const TOGGLE_EXTENSION_AVAILABILITY = pmExtensionEnabled ? 0 : 1
-    console.debug({ TOGGLE_EXTENSION_AVAILABILITY })
 
     let description = 'New Project Proposal'
-    goals.map(
+    goals.forEach(
       (goal) => (description = [description, `Goal: ${goal.goalTitle}`, `Goal Tracking Link: ${goalLink}`].join('.\n'))
     )
     description = [
@@ -98,32 +111,20 @@ export default function ProjectProposal() {
       `Budget: ${budget}`,
       `Deadline: ${new Date(deadline).toUTCString()}`
     ].join('.\n')
-    console.debug({ description })
-    const tx = await writeAsync({
-      args: [PROPOSAL_TYPE_EXTENSION, description, [pmAddress], [TOGGLE_EXTENSION_AVAILABILITY], [payload]],
-      overrides: {
-        gasLimit: 1050000
-      }
-    }).catch((e) => {
-      console.log('error', e.code, e.reason)
-    })
+    const txInput = {
+      ...daoContract,
+      functionName: 'propose',
+      args: [PROPOSAL_TYPE_EXTENSION, description, [pmContractAddress], [TOGGLE_EXTENSION_AVAILABILITY], [payload]]
+    }
+    setDialogOpen(true)
+    setTxInput(txInput)
   }
 
   const onDialogClose = async () => {
-    console.debug('onDialogClose', { isWriteSuccess, isWritePending })
-
-    if (isWritePending) {
-      console.debug('onDialogClose user escape ignored. Tx pending.')
-      return
-    }
-
     setDialogOpen(false)
   }
 
-  const [dialogOpen, setDialogOpen] = React.useState(false)
-
   if (!chainId || !daoId) {
-    console.debug('chainId and daoId required', { chainId, daoId })
     return <Navigate replace to="/" />
   }
 
@@ -133,30 +134,65 @@ export default function ProjectProposal() {
         maxWidth: 400
       }}
     >
+      {isMyDaoLoaded && (
+        <Alert severity="info">
+          Propose a new project for DAO
+          <div>
+            <Typography variant="h5" component="div">
+              {myDao?.token?.name} ({myDao?.token?.symbol})
+            </Typography>
+          </div>
+        </Alert>
+      )}
       <List component="form" onSubmit={handleSubmit(onSubmit)}>
         <ListItem>
           <TextField
-            id="manager"
+            data-testid="manager"
             label="Manager"
             helperText="ETH L1/L2 address: 0x..."
             variant="filled"
             fullWidth
             required
-            {...register('manager')}
+            {...register('manager', {
+              validate: {
+                isManagerMember: (v) =>
+                  contractReadManagerResult.isError || // if there was an RPC read error, use a different validation logic
+                  (contractReadManagerResult.isSuccess && Number(contractReadManagerResult?.data) > 0) ||
+                  'Manager must be an existing token holder.'
+              }
+            })}
           />
+          {contractReadManagerResult.isLoading && <CircularProgress />}
         </ListItem>
         <ListItem>
+          <ErrorMessage as={<Alert severity="error" />} errors={formErrors} name="manager" />
+        </ListItem>
+        {contractReadManagerResult.isError && (
+          <ListItem>
+            <Alert severity="error">{`Error verifying manager address: ${contractReadManagerResult.error}`}.</Alert>
+          </ListItem>
+        )}
+        <ListItem>
           <TextField
-            id="budget"
+            data-testid="budget"
             label="Budget"
             helperText="Amount in DAO sweat tokens"
             variant="filled"
             type="number"
             fullWidth
-            required
-            {...register('budget')}
+            {...register('budget', {
+              required: true,
+              validate: {
+                positive: (v) => v > 0
+              }
+            })}
           />
         </ListItem>
+        {formErrors.budget && (
+          <ListItem>
+            <Alert severity="error">Budget must be a positive number.</Alert>
+          </ListItem>
+        )}
         <ListItem>
           <TextField
             id="deadline"
@@ -166,9 +202,16 @@ export default function ProjectProposal() {
               shrink: true
             }}
             fullWidth
-            required
-            {...register('deadline')}
+            {...register('deadline', {
+              required: 'Deadline is required.',
+              validate: {
+                future: (v) => new Date(v) > new Date() || 'Deadline must be in the future.'
+              }
+            })}
           />
+        </ListItem>
+        <ListItem>
+          <ErrorMessage as={<Alert severity="error" />} errors={formErrors} name="deadline" />
         </ListItem>
         <ListItem>
           <TextField
@@ -177,9 +220,11 @@ export default function ProjectProposal() {
             helperText="Describe a measurable goal of the project"
             variant="filled"
             fullWidth
-            required
-            {...register('goalTitle')}
+            {...register('goalTitle', { required: 'Goal title is required.' })}
           />
+        </ListItem>
+        <ListItem>
+          <ErrorMessage as={<Alert severity="error" />} errors={formErrors} name="goalTitle" />
         </ListItem>
         <ListItem>
           <TextField
@@ -193,22 +238,19 @@ export default function ProjectProposal() {
           />
         </ListItem>
         <ListItem>
-          <Button type="submit" variant="contained">
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={contractReadManagerResult.isLoading}
+            data-testid="submit-button"
+          >
             Submit
           </Button>
         </ListItem>
       </List>
-      <Web3Dialog
-        web3tx={{
-          dialogOpen,
-          onDialogClose,
-          isWritePending,
-          isWriteError,
-          writeError,
-          isWriteSuccess,
-          hrefAfterSuccess: '../projects'
-        }}
-      />
+      {dialogOpen && (
+        <Web3SubmitDialog open={dialogOpen} onClose={onDialogClose} txInput={txInput} hrefAfterSuccess="./" />
+      )}
     </Box>
   )
 }

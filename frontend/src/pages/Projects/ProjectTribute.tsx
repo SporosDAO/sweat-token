@@ -1,102 +1,110 @@
-import { Box, Button, List, ListItem, TextField } from '@mui/material'
+import { useState } from 'react'
 import { ethers } from 'ethers'
-import React from 'react'
-import { useForm } from 'react-hook-form'
-import { Navigate, useParams } from 'react-router-dom'
-import { useContractWrite } from 'wagmi'
-import PM_ABI from '../../abi/ProjectManagement.json'
-import Web3Dialog from '../../components/Web3Dialog'
 import { addresses } from '../../constants/addresses'
+import PM_ABI from '../../abi/ProjectManagement.json'
+import { useLocation, useParams } from 'react-router-dom'
+import { Box, TextField, Button, List, ListItem, Alert, Typography, Link, InputAdornment } from '@mui/material'
+import { FieldErrors, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form'
+import { Navigate } from 'react-router-dom'
+import Web3SubmitDialog from '../../components/Web3SubmitDialog'
+import { ErrorMessage } from '@hookform/error-message'
+import { useAccount } from 'wagmi'
+import { Key } from 'react'
+import { useGetDAO } from '../../graph/getDAO'
 
 export default function ProjectTribute() {
   const { chainId, daoId, projectId } = useParams()
 
+  // Web3SubmitDialog state vars
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const location = useLocation()
+
+  const project = location?.state as any
+  const { manager, projectID, budget, goals, deadline } = project
+
+  const { address: userAddress } = useAccount()
+  const isManager = userAddress === manager
+
+  const deadlineDate = new Date()
+  deadlineDate.setTime(deadline * 1000)
+  const deadlineString = deadlineDate.toUTCString()
+  const isExpired = deadlineDate < new Date()
+
+  const { data: myDao } = useGetDAO(chainId, daoId)
+
+  const hasBudget = Number(budget) > 0
+
   const cid = Number(chainId)
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
+  const formResult = useForm<ProjectTributeFormValues>({ criteriaMode: 'all' })
   const {
-    control,
     register,
     handleSubmit,
-    formState: { errors }
-  } = useForm()
+    formState: { isValid, errors }
+  } = formResult
 
-  const {
-    data,
-    isLoading: isWritePending,
-    isSuccess: isWriteSuccess,
-    isError: isWriteError,
-    error: writeError,
-    writeAsync
-  } = useContractWrite({
-    addressOrName: pmAddress || '',
+  // console.debug({ formResult })
+
+  const callArgs = ['uint256', 'address', 'uint256', 'string']
+
+  const contractInfo = {
+    addressOrName: pmAddress,
     chainId: cid,
     contractInterface: PM_ABI,
-    functionName: 'callExtension',
-    onSuccess(data, variables, context) {
-      console.debug('success', { data, variables, context })
-      // alert(`Proposal successfully submitted on chain.`)
-    },
-    onError(error, variables, context) {
-      console.debug('error', { error, variables, context })
-      // alert(`Proposal failed with error: ${error}`)
-    }
-  })
+    functionName: 'callExtension'
+  }
 
-  const onSubmit = async (data: any) => {
-    setDialogOpen(true)
-    console.log(data)
-    const { contributorAddress, mintAmount, tributeTitle, tributeLink } = data
+  const [txInput, setTxInput] = useState(undefined as any)
+
+  type ProjectTributeFormValues = {
+    contributorAddress: string
+    mintAmount: string
+    tributeTitle: string
+    tributeLink: string
+  }
+
+  const onSubmit: SubmitHandler<ProjectTributeFormValues> = (formData) => {
+    // console.debug({ formData })
+
+    const { contributorAddress, mintAmount, tributeTitle, tributeLink } = formData
+
+    // console.debug('start onSubmit()', { formData })
+
     const tribute = [{ tributeTitle, tributeLink }]
     const tributeString = JSON.stringify(tribute)
 
+    const abiCoder = ethers.utils.defaultAbiCoder
     let payload
     try {
-      const abiCoder = ethers.utils.defaultAbiCoder
-      payload = abiCoder.encode(
-        ['uint256', 'address', 'uint256', 'string'],
-        [
-          projectId, // project id of the just activated project
-          contributorAddress, // address of contributor to receive DAO tokens
-          ethers.utils.parseEther(mintAmount), // mint amount in whole token units similar to Ether with 18 decimal places
-          tributeString // reference to tribute that contributor makes to DAO in exchange for DAO tokens
-        ]
-      )
+      payload = abiCoder.encode(callArgs, [
+        projectId, // project id of the just activated project
+        contributorAddress, // address of contributor to receive DAO tokens
+        ethers.utils.parseEther(mintAmount), // mint amount in whole token units similar to Ether with 18 decimal places
+        tributeString // reference to tribute that contributor makes to DAO in exchange for DAO tokens
+      ])
     } catch (e) {
-      console.log('Error while encoding project tribute', e)
+      console.error('Error while encoding project tribute', e)
       return
     }
 
-    console.debug({
-      projectId,
-      contributorAddress,
-      mintAmount,
-      tributeString
+    setTxInput({
+      ...contractInfo,
+      args: [daoId, [payload]]
     })
-    const tx = await writeAsync({
-      args: [daoId, [payload]],
-      overrides: {
-        gasLimit: 1050000
-      }
-    }).catch((e) => {
-      console.log('writeAsync error', { e })
-    })
+    setIsDialogOpen(true)
+
+    // console.debug('end onSubmit()')
+  } // onSubmit
+
+  const onSubmitError: SubmitErrorHandler<ProjectTributeFormValues> = (formErrors: FieldErrors) => {
+    console.error({ formErrors })
   }
 
   const onDialogClose = async () => {
-    console.debug('onDialogClose', { isWriteSuccess, isWritePending })
-
-    if (isWritePending) {
-      console.debug('onDialogClose user escape ignored. Tx pending.')
-      return
-    }
-
-    setDialogOpen(false)
+    setIsDialogOpen(false)
   }
 
-  const [dialogOpen, setDialogOpen] = React.useState(false)
-
   if (!chainId || !daoId || !projectId) {
-    console.debug('chainId, daoId and projectId required', { chainId, daoId })
     return <Navigate replace to="/" />
   }
 
@@ -106,44 +114,75 @@ export default function ProjectTribute() {
         maxWidth: 400
       }}
     >
-      <List component="form" onSubmit={handleSubmit(onSubmit)}>
+      <Alert severity="info">
+        Submit tribute for project #{projectID}
+        {goals &&
+          goals.map((goal: { goalTitle: string; goalLink: string }, idx: Key) => (
+            <div key={idx}>
+              <Typography variant="h5" component="div">
+                {goal.goalTitle}
+              </Typography>
+              <Link href={goal.goalLink} sx={{ fontSize: 14 }} target="_blank" rel="noopener" color="text.secondary">
+                Tracking Link
+              </Link>
+            </div>
+          ))}
+      </Alert>
+      {!isManager && (
+        <Alert severity="error">
+          You are not the manager of this project. Your wallet account {userAddress} does not match the manager account{' '}
+          {manager}.
+        </Alert>
+      )}
+      {isExpired && <Alert severity="error">This project deadline expired on {deadlineString}.</Alert>}
+      {!hasBudget && <Alert severity="error">This project has no budget left.</Alert>}
+      <List component="form" onSubmit={handleSubmit(onSubmit, onSubmitError)}>
         <ListItem>
           <TextField
-            id="contributorAddress"
             label="Contributor"
             helperText="ETH L1/L2 address: 0x..."
             variant="filled"
             fullWidth
-            required
-            {...register('contributorAddress')}
+            {...register('contributorAddress', { required: 'Contributor address is required.' })}
           />
         </ListItem>
         <ListItem>
+          <ErrorMessage as={<Alert severity="error" />} errors={errors} name="contributorAddress" />
+        </ListItem>
+        <ListItem>
           <TextField
-            id="mintAmount"
             label="Mint Amount"
             helperText="Amount in DAO sweat tokens to mint to contributor"
             variant="filled"
             type="number"
+            InputProps={{
+              startAdornment: <InputAdornment position="start">{myDao?.token?.symbol}</InputAdornment>
+            }}
             fullWidth
-            required
-            {...register('mintAmount')}
+            {...register('mintAmount', {
+              required: 'Mint amount is required.',
+              min: { value: 0, message: 'Mint value must be positive.' },
+              max: { value: budget, message: `Mint value must be within budget: ${budget}.` }
+            })}
           />
         </ListItem>
         <ListItem>
+          <ErrorMessage as={<Alert severity="error" />} errors={errors} name="mintAmount" />
+        </ListItem>
+        <ListItem>
           <TextField
-            id="tributeTitle"
             label="Tribute Title"
             helperText="Describe the tribute to the project"
             variant="filled"
             fullWidth
-            required
-            {...register('tributeTitle')}
-          />
+            {...register('tributeTitle', { required: 'Tribute title is required.' })}
+          ></TextField>
+        </ListItem>
+        <ListItem>
+          <ErrorMessage as={<Alert severity="error" />} errors={errors} name="tributeTitle" />
         </ListItem>
         <ListItem>
           <TextField
-            id="tributeLink"
             type="url"
             label="Tribute Reference Link"
             helperText="URL referencing tribute details."
@@ -153,22 +192,17 @@ export default function ProjectTribute() {
           />
         </ListItem>
         <ListItem>
-          <Button type="submit" variant="contained">
+          <ErrorMessage as={<Alert severity="error" />} errors={errors} name="tributeLink" />
+        </ListItem>
+        <ListItem>
+          <Button type="submit" variant="contained" data-testid="submit-button">
             Submit
           </Button>
         </ListItem>
       </List>
-      <Web3Dialog
-        web3tx={{
-          dialogOpen,
-          onDialogClose,
-          isWritePending,
-          isWriteError,
-          writeError,
-          isWriteSuccess,
-          hrefAfterSuccess: '..'
-        }}
-      />
+      {isDialogOpen && ( // use check to prevent Web3SubmitDialog rendering before open due to wagmi bug in updating config when contract args update with form data
+        <Web3SubmitDialog open={isDialogOpen} onClose={onDialogClose} txInput={txInput} hrefAfterSuccess=".." />
+      )}
     </Box>
   )
 }

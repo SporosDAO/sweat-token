@@ -61,8 +61,8 @@ export class DaoProposalCronService implements OnModuleInit {
   async fetchSubgraph(chainId: string, daoId: string): Promise<SubgraphProposal[] | null> {
     const query = `{
   proposals (
-    first:5, 
-    orderDirection: desc, 
+    first:5,
+    orderDirection: desc,
     orderBy:creationTime, where: {
     dao: "${daoId}",
     status:null

@@ -1,0 +1,62 @@
+name: "End-to-end tests"
+
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    # env:
+    #  REACT_APP_SWEAT_TOKEN_API_BASEPATH: http://localhost:3001
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the stack
+        run: docker-compose build
+      - name: Prepare frontend environment
+        run: |
+          cd frontend
+          cp .env.example .env.local
+      - name: Start containers
+        run: docker-compose up -d frontend contracts
+      - name: Test minimal frontend availability
+        run: wget -c http://localhost:3000/
+      # - name: Test minimal backend availability
+      #  if: always()
+      #  run: docker run --network container:backend appropriate/curl -s --retry 10 --retry-connrefused $REACT_APP_SWEAT_TOKEN_API_BASEPATH
+      - name: Check if all services are running
+        if: always()
+        run: docker-compose ps
+      - name: Dump debug log in case there was an error above
+        if: always()
+        run: docker-compose logs frontend backend contracts
+      - name: Run E2E tests
+        run: |
+          cd e2e-tests
+          # docker-compose has an issue with docker network mappings
+          # docker-compose run --rm e2e-tests
+          cp .env.ci .env
+          # allow binaries executing within docker to access local directory
+          sudo chmod -R 777 ./
+          docker build ../ --file ../.gitpod.Dockerfile --tag e2e-tests
+          docker run --ipc=host --network=sweat-token --workdir "/app/e2e-tests" --volume "$(pwd):/app/e2e-tests" --env-file .env e2e-tests bash -c "yarn install && yarn test"
+      - name: Dump debug log in case there was an error above
+        if: always()
+        run: docker-compose logs frontend backend contracts
+      - name: Shutdown docker services
+        if: always()
+        run: |
+          docker-compose down
+          pwd
+          ls -al
+      - name: Save screenshots
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: e2e-test-screenshots
+          path: |
+            e2e-tests/tests/e2e/screenshots
+      - name: Save videos
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: e2e-test-videos
+          path: |
+            e2e-tests/tests/e2e/videos

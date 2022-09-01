@@ -32,7 +32,8 @@ It uses NestJS backend (`backend` dir) hosted on Heroku and Mongodb Atlas cloud 
 
 - [Product Board](https://github.com/orgs/SporosDAO/projects/2)
 - [Sweat Token wiki](https://github.com/SporosDAO/sweat-token/wiki)
-- [Figma UX design](https://www.figma.com/file/4V3DBa9tF69vo1DWkR3jpB/SweatTokenV2?node-id=0%3A1)
+- [Figma UX design - PM Tool](https://www.figma.com/file/4V3DBa9tF69vo1DWkR3jpB/SweatTokenV2?node-id=0%3A1)
+- [Figma UX design - new flows](https://www.figma.com/file/HjgPX0qjMYgvDjeliS4EwD/Sporos-DAO-App)
 - [Concepts document](https://docs.google.com/document/d/1NA3czMIlXwXscIGnxf-IwOGBfgX03HJEUQWb-YxOybc/edit#heading=h.eqtjaae3omvc)
 
 ## Development
@@ -40,7 +41,6 @@ It uses NestJS backend (`backend` dir) hosted on Heroku and Mongodb Atlas cloud 
 The following steps will build and start docker containers and services for `mongodb`, `frontend`, `backend` and `contracts` mounting on the local directory.
 
 1. Build the development environment with `docker-compose build`
-1. Update package dependencies with `docker-compose -f docker-compose.yaml -f docker-compose.install.yaml --profile install up --no-deps`
 1. Start the development environment with `docker-compose up -d`
 1. Check the status of services with `docker-compose ps`. All should be in `running` state. If any service is in `restarting` or `exited` state then something went wrong with the setup.
 

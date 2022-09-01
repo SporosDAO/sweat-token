@@ -1,22 +1,21 @@
-import { People } from '@mui/icons-material'
-import FactoryIcon from '@mui/icons-material/Factory'
-import HelpIcon from '@mui/icons-material/Help'
-import HomeIcon from '@mui/icons-material/Home'
-import MenuBookIcon from '@mui/icons-material/MenuBook'
+import { MenuBook, People } from '@mui/icons-material'
+import Factory from '@mui/icons-material/Factory'
+import Help from '@mui/icons-material/Help'
+import Home from '@mui/icons-material/Home'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import * as React from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { OWNER } from '../../constants'
-import Settings from '@mui/icons-material/Settings'
 
 export const MainMenuItems = () => {
+  const navigate = useNavigate()
   return (
     <React.Fragment>
-      <ListItemButton onClick={() => (document.location = '/')}>
+      <ListItemButton data-testid="home-button" onClick={() => navigate('/')}>
         <ListItemIcon>
-          <HomeIcon />
+          <Home />
         </ListItemIcon>
         <ListItemText primary="Home" />
       </ListItemButton>
@@ -27,6 +26,7 @@ export interface DaoMenuItem {
   label: string
   icon: any
   link: string
+  dataCy?: string
 }
 
 export const menu: DaoMenuItem[] = [
@@ -54,18 +54,15 @@ export const menu: DaoMenuItem[] = [
   */
   {
     label: 'Projects',
-    icon: FactoryIcon,
-    link: 'projects'
+    icon: Factory,
+    link: 'projects/',
+    dataCy: 'projects-button'
   },
   {
     label: 'People',
     icon: People,
-    link: 'people'
-  },
-  {
-    label: 'Settings',
-    icon: Settings,
-    link: 'settings'
+    link: 'people/',
+    dataCy: 'people-button'
   }
 ]
 
@@ -81,14 +78,13 @@ export const DaoMenuItems = () => {
   const currentPath = React.useMemo((): string => {
     if (!daoId) return ''
     const parts = location.pathname.split('/')
-    const subpath = parts && parts.length > 0 ? parts[parts.length - 1] : ''
-    return subpath
+    return parts && parts.length > 0 ? parts[parts.length - 1] : ''
   }, [daoId, location.pathname])
 
   return (
     <React.Fragment>
-      {menu.map(({ icon: MenuIcon, label, link }) => (
-        <ListItemButton key={label} onClick={() => goto(link)} selected={currentPath === link}>
+      {menu.map(({ icon: MenuIcon, label, link, dataCy }) => (
+        <ListItemButton key={label} onClick={() => goto(link)} selected={currentPath === link} data-testid={dataCy}>
           <ListItemIcon>
             <MenuIcon />
           </ListItemIcon>
@@ -102,15 +98,15 @@ export const DaoMenuItems = () => {
 export const SecondaryMenuItems = () => {
   return (
     <React.Fragment>
-      <ListItemButton onClick={() => (document.location = OWNER.docsUrl)}>
+      <ListItemButton href={OWNER.docsUrl} rel="noopener" target="_blank">
         <ListItemIcon>
-          <MenuBookIcon />
+          <MenuBook />
         </ListItemIcon>
         <ListItemText primary="Docs" />
       </ListItemButton>
-      <ListItemButton onClick={() => (document.location = OWNER.helpUrl)}>
+      <ListItemButton href={OWNER.helpUrl} rel="noopener" target="_blank">
         <ListItemIcon>
-          <HelpIcon />
+          <Help />
         </ListItemIcon>
         <ListItemText primary="Help" />
       </ListItemButton>

@@ -14,3 +14,6 @@ build
 
 # local create2deploy deployment data
 deployments
+
+# loval dotenv files
+.env.local
