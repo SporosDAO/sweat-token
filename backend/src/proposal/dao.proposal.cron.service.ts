@@ -1,6 +1,5 @@
 import { graphEndpoints } from '@app/runtime/graph-endpoints'
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
 import { InjectModel } from '@nestjs/mongoose'
 import { Cron } from '@nestjs/schedule'
 import axios from 'axios'

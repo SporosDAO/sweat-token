@@ -1,11 +1,11 @@
 import { Body, Controller, Get, Param, Put } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { Role } from 'src/user/user.dto'
-import { DaoAuth } from '../dao.auth.decorator'
+import { DaoAuth } from '../../libs/dao/dao.auth.decorator'
 import { DaoSettingsDto } from './dao.settings.dto'
 import { DaoSettingsService } from './dao.settings.service'
 
-@Controller('dao/settings')
+@Controller('settings')
 @ApiTags('dao')
 export class DaoSettingsController {
   constructor(private daoSettingsService: DaoSettingsService) {}

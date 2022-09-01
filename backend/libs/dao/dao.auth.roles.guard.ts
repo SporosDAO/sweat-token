@@ -2,15 +2,13 @@ import { graphEndpoints } from '@app/runtime/graph-endpoints'
 import { CanActivate, ExecutionContext, Injectable, InternalServerErrorException, Logger } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import axios from 'axios'
-import { MemberService } from 'src/member/member.service'
 import { UserDto } from 'src/user/user.dto'
-import { DaoService } from './dao.service'
 
 @Injectable()
 export class DaoRolesGuard implements CanActivate {
   private readonly logger = new Logger(DaoRolesGuard.name)
 
-  constructor(private daoService: DaoService, private memberService: MemberService, private reflector: Reflector) {}
+  constructor(private reflector: Reflector) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest()
