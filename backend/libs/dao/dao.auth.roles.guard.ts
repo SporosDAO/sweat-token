@@ -28,6 +28,7 @@ export class DaoRolesGuard implements CanActivate {
     const stakes = userStake.map(({ shares }) => (100 * +shares) / tokenTotalSupply)
 
     const isAdmin = stakes[0] > +process.env.SHARES_ADMIN
+    this.logger.log(`User is ${isAdmin ? '' : 'NOT '} admin`)
     return isAdmin
   }
 
