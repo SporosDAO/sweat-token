@@ -41,8 +41,8 @@ export async function bootstrap(module: any): Promise<INestApplication> {
 
   const app = await NestFactory.create(module, { cors, logger })
 
-  bootstrapLogger.debug(`process.env.NODE_ENV=${process.env.NODE_ENV}`)
-  bootstrapLogger.debug('CORS:', cors)
+  // bootstrapLogger.debug(`process.env.NODE_ENV=${process.env.NODE_ENV}`)
+  // bootstrapLogger.debug('CORS:', cors)
 
   app.setGlobalPrefix('/api')
   app.useGlobalPipes(

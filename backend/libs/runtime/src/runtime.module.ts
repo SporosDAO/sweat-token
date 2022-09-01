@@ -24,7 +24,7 @@ import { join } from 'path'
       inject: [ConfigService],
       useFactory: (config: ConfigService) => [
         {
-          rootPath: join(config.get('HOME_PAGE_PATH')),
+          rootPath: join(config.get('HOME_PAGE_PATH') || '/app/public'),
         } as ServeStaticModuleOptions,
       ],
     }),
