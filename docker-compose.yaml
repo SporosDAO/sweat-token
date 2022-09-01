@@ -21,7 +21,7 @@ services:
     volumes:
       - ./contracts:/app/contracts
   backend:
-    command: bash -c "yarn install && yarn run start:debug"
+    command: yarn run start:debug
     container_name: backend
     working_dir: /app/backend
     networks:
@@ -48,9 +48,6 @@ services:
     working_dir: /app/frontend
     networks:
       - sweat-token
-    # depends_on:
-    #   - backend
-    #   - mongo-express
     ports:
       - 3000:3000
     restart: unless-stopped
@@ -65,6 +62,8 @@ services:
       - REACT_APP_SWEAT_TOKEN_API_BASEPATH=$REACT_APP_SWEAT_TOKEN_API_BASEPATH
     volumes:
       - ./frontend:/app/frontend
+    networks:
+      - sweat-token
   mongo:
     image: mongo
     restart: unless-stopped
@@ -75,6 +74,9 @@ services:
       - ./data/mongodb:/data/db
     ports:
       - 27017:27017
+    networks:
+      - sweat-token
+
   mongo-express:
     image: mongo-express
     restart: unless-stopped
@@ -82,6 +84,9 @@ services:
       - mongo
     ports:
       - 8081:8081
+    networks:
+      - sweat-token
+
     # environment:
       # ME_CONFIG_MONGODB_ADMINUSERNAME: root
       # ME_CONFIG_MONGODB_ADMINPASSWORD: root

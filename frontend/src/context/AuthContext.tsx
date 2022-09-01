@@ -43,6 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
   const [error, setError] = useState<string>()
   const [loading, setLoading] = useState(false)
   const [signaturePending, setSignaturePending] = useState(false)
+  const [isSignin, setIsSignin] = useState(false)
 
   const { signMessageAsync } = useSignMessage()
   const { chain: activeChain } = useNetwork()
@@ -52,12 +53,15 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
   const ctoken = useMemo(() => getCookieToken(), [])
 
   const signin = useCallback(() => {
+    if (isSignin) return
     if (!isConnected || isReconnecting) return
     if (token || user) return
     if (signaturePending) return
     if (!chainId) return
     if (!address) return
     if (error) return
+
+    setIsSignin(true)
 
     api
       .getUserByAddress(chainId, address)
@@ -100,8 +104,11 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
         setError('Authentication failed')
         console.error('failed to load account', e)
       })
+      .finally(() => {
+        setIsSignin(false)
+      })
     // .finally(() => {})
-  }, [address, chainId, error, isConnected, isReconnecting, signMessageAsync, signaturePending, token, user])
+  }, [address, chainId, error, isConnected, isReconnecting, isSignin, signMessageAsync, signaturePending, token, user])
 
   useEffect(() => {
     if (!ctoken) return

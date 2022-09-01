@@ -4,27 +4,24 @@ import {
   DaoApi,
   DaoSettingsDto,
   JwtTokenDto,
-  MemberApi,
   NoncePayloadDto,
-  ProjectApi,
   SiwePayloadDto,
-  TaskApi,
   UserDto
 } from './openapi'
 
 let basePath = process.env.REACT_APP_SWEAT_TOKEN_API_BASEPATH
 
 if (!basePath) {
-  basePath = `${window.location.protocol}/${window.location.host}`
+  basePath = `${window.location.protocol}//${window.location.host}`
 }
+
+console.log('API BASEPATH', basePath)
+
 class ApiClient {
   public token: string | undefined = undefined
 
   public auth: AuthApi = new AuthApi(undefined, basePath)
   public dao: DaoApi = new DaoApi(undefined, basePath)
-  public project: ProjectApi = new ProjectApi(undefined, basePath)
-  public task: TaskApi = new TaskApi(undefined, basePath)
-  public member: MemberApi = new MemberApi(undefined, basePath)
 
   constructor() {
     this.initClient()

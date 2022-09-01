@@ -1,4 +1,4 @@
-import { MenuBook, People } from '@mui/icons-material'
+import { MenuBook, People, Settings } from '@mui/icons-material'
 import Factory from '@mui/icons-material/Factory'
 import Help from '@mui/icons-material/Help'
 import Home from '@mui/icons-material/Home'
@@ -63,6 +63,12 @@ export const menu: DaoMenuItem[] = [
     icon: People,
     link: 'people/',
     dataCy: 'people-button'
+  },
+  {
+    label: 'Settings',
+    icon: Settings,
+    link: 'settings',
+    dataCy: 'settings-button'
   }
 ]
 

@@ -1,16 +1,16 @@
-import { createTheme, ThemeProvider } from '@mui/material'
+import { ThemeProvider } from '@mui/material'
+import { useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import './App.css'
+import Dao from './pages/Dao'
 import Landing from './pages/Landing'
 import NotFound from './pages/NotFound'
 import People from './pages/People'
 import Projects from './pages/Projects'
-import Dao from './pages/Dao'
 import ProjectProposal from './pages/Projects/ProjectProposal'
 import ProjectTribute from './pages/Projects/ProjectTribute'
-import { darkTheme, lightTheme } from './theme'
-import { useState } from 'react'
 import Settings from './pages/Settings'
+import { darkTheme, lightTheme } from './theme'
+
 function App() {
   function detectColorScheme() {
     const newColorScheme =
