@@ -149,8 +149,9 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
 
   const requireAuth = useCallback(() => {
     if (user) return
+    if (isSignin) return
     signin()
-  }, [signin, user])
+  }, [signin, user, isSignin])
 
   const memoedValue = useMemo(
     () => ({
