@@ -49,8 +49,9 @@ describe('Project Management', () => {
        cy.get('[data-testid="submit-button"]').click()
        cy.rejectMetamaskTransaction()
        // https://github.com/Synthetixio/synpress/issues/472
-       // ERROR: All steps pass to this point however metamask does not seem to communicate with wagmi any further and
-       // after awhile the browser tab with the app crashes with SIGTERM and core dump
+       // ERROR: All steps pass to this point. Apparently wagmi communicates with the app,
+       // which is evidenced by the app pop-up dialog updating its state.
+       // however synpress does not seem to be able to interact with metamask at this point.
     })
   })
 })
