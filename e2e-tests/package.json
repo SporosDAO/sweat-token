@@ -2,13 +2,14 @@
   "name": "sporosdao-e2e-testsuite",
   "license": "Apache-2.0",
   "scripts": {
-    "test": "dotenv -c -- synpress run --config numTestsKeptInMemory=1 ",
+    "test": "dotenv -c -- synpress run",
+    "synpress": "dotenv -c -- synpress open",
     "covreport": "nyc report --reporter=text",
     "covcheck": "nyc check-coverage --lines 40 --functions 40 --branches 40",
     "coverage": "yarn covreport && yarn covcheck"
   },
   "dependencies": {
-    "@synthetixio/synpress": "^1.2.0",
+    "@synthetixio/synpress": "^2.0.1",
     "dotenv-cli": "^6.0.0",
     "nyc": "^15.1.0",
     "xvfb": "^0.4.0"

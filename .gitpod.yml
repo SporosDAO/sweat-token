@@ -56,6 +56,7 @@ ports:
   - port: 3000
     onOpen: open-browser
     visibility: public
+    name: SporosDAO UI
 
   - port: 3001
     visibility: public
@@ -66,6 +67,7 @@ ports:
     onOpen: ignore
   - port: 6080
     onOpen: open-browser
+    name: Synpress UI
   - port: 10000
     onOpen: ignore
 

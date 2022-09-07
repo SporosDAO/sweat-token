@@ -40,17 +40,17 @@ describe('Project Management', () => {
       cy.contains('Mint amount is required.')
       cy.contains('Tribute title is required.')
     })
-  //   it(`Should require open wallet for Tribute contract write`, () => {
-  //     cy.get('[data-testid="submit-button"]').click()
-  //     cy.get('input[name="contributorAddress"]').type('0xf952a72F39c5Fa22a443200AbE7835128bCb7439')
-  //     cy.get('input[name="mintAmount"]').type('12')
-  //     cy.get('input[name="tributeTitle"]').type('Add e2e test')
-  //     cy.get('input[name="tributeLink"]').type('https://github.com/SporosDAO/sweat-token/issues/116')
-  //     cy.get('[data-testid="submit-button"]').click()
-  //     cy.rejectMetamaskTransaction()
-  //     // https://github.com/Synthetixio/synpress/issues/472
-  //     // ERROR: All steps pass to this point however metamask does not seem to communicate with wagmi any further and
-  //     // after awhile the browser tab with the app crashes with SIGTERM and core dump
-  //  })
+     it(`Should open wallet for Tribute contract write`, () => {
+       cy.get('[data-testid="submit-button"]').click()
+       cy.get('input[name="contributorAddress"]').type('0xf952a72F39c5Fa22a443200AbE7835128bCb7439')
+       cy.get('input[name="mintAmount"]').type('1')
+       cy.get('input[name="tributeTitle"]').type('Add e2e test')
+       cy.get('input[name="tributeLink"]').type('https://github.com/SporosDAO/sweat-token/issues/116')
+       cy.get('[data-testid="submit-button"]').click()
+       cy.rejectMetamaskTransaction()
+       // https://github.com/Synthetixio/synpress/issues/472
+       // ERROR: All steps pass to this point however metamask does not seem to communicate with wagmi any further and
+       // after awhile the browser tab with the app crashes with SIGTERM and core dump
+    })
   })
 })
