@@ -9,7 +9,7 @@
     "coverage": "yarn covreport && yarn covcheck"
   },
   "dependencies": {
-    "@synthetixio/synpress": "^2.0.1",
+    "@synthetixio/synpress": "^2.2.0",
     "dotenv-cli": "^6.0.0",
     "nyc": "^15.1.0",
     "xvfb": "^0.4.0"
