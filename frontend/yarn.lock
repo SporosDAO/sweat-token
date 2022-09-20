@@ -7795,6 +7795,11 @@ jss@10.9.0, jss@^10.8.2:
     array-includes "^3.1.4"
     object.assign "^4.1.2"
 
+kalidao-hooks@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/kalidao-hooks/-/kalidao-hooks-0.0.3.tgz#af9e5a4439955d6ff0c311d1170fa24d214e0c1c"
+  integrity sha512-nHEH1mSA7o/d8Uk6+QDQaMFzWwdxTAnTknTuZ8f0nYqmtwFk1A0kCroXWrhgQBXGeDy3GAoxGNRGwTRawG+M8w==
+
 keccak@^3.0.0, keccak@^3.0.1:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/keccak/-/keccak-3.0.2.tgz#4c2c6e8c54e04f2670ee49fa734eb9da152206e0"

@@ -2,9 +2,10 @@ import { Box } from '@mui/system'
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
 import { Button, CircularProgress, IconButton } from '@mui/material'
 import { Check, Error } from '@mui/icons-material'
-import { useNetwork } from 'wagmi'
+import { chain } from 'wagmi'
 import { useContractWrite, usePrepareContractWrite } from 'wagmi'
 import { useParams } from 'react-router-dom'
+import { useChainGuard } from 'kalidao-hooks'
 
 interface Web3SubmitDialogProps {
   open: boolean
@@ -18,9 +19,7 @@ export default function Web3SubmitDialog(props: Web3SubmitDialogProps) {
 
   const { chainId: daoChainId } = useParams()
 
-  const { chain: userChain, chains } = useNetwork()
-
-  const isUserOnCorrectChain = userChain?.id && Number(daoChainId) === userChain?.id ? true : false
+  const { isUserOnCorrectChain, isUserConnected, userChain } = useChainGuard({ chainId: Number(daoChainId) })
 
   // console.debug({ isUserOnCorrectChain })
 
@@ -67,11 +66,10 @@ export default function Web3SubmitDialog(props: Web3SubmitDialogProps) {
       console.error({ writeError })
     }
   } else {
-    daoChainName = chains?.find((chain) => chain.id === Number(daoChainId))?.name
-    wrongChainWarning =
-      !isUserOnCorrectChain && userChain
-        ? `Your Web3 wallet is connected to ${userChain?.name}.`
-        : `Your Web3 wallet is disconnected.`
+    daoChainName = Object.values(chain).find((chain) => chain.id === Number(daoChainId))?.name
+    wrongChainWarning = !isUserConnected
+      ? `Your Web3 wallet is disconnected.`
+      : `Your Web3 wallet is connected to ${userChain?.name}.`
   }
 
   // console.debug({ daoChainName, wrongChainWarning })
