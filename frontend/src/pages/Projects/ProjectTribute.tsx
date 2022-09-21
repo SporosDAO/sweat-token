@@ -40,7 +40,7 @@ export default function ProjectTribute() {
   const {
     register,
     handleSubmit,
-    formState: { isValid, errors }
+    formState: { errors }
   } = formResult
 
   // console.debug({ formResult })
