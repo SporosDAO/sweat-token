@@ -55,7 +55,7 @@ ports:
   # frontend web app service : Node.js, React
   - port: 3000
     name: SporosDAO UI
-    onOpen: open-browser
+    onOpen: ignore
     visibility: public
 
   - port: 3001
