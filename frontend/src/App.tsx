@@ -7,7 +7,7 @@ import Projects from './pages/Projects'
 import Dao from './pages/Dao'
 import ProjectProposal from './pages/Projects/ProjectProposal'
 import ProjectTribute from './pages/Projects/ProjectTribute'
-import { darkTheme, lightTheme } from './theme'
+import { darkTheme, lightTheme } from './theme/theme'
 import { useState } from 'react'
 
 function App() {

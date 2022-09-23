@@ -8,25 +8,33 @@ export const colors = {
     300: '#CDD5DF',
     200: '#E3E8EF',
     100: '#EEF2F6',
-    50: '#F8FAFC'
+    50: '#F8FAFC',
+    25: '#FCFCFD'
   },
   blue: {
-    700: '#175CD3'
+    700: '#175CD3',
+    50: '#EFF8FF'
   },
   purple: {
-    50: '#F4F3FF',
-    700: '#5925DC'
+    700: '#5925DC',
+    50: '#F4F3FF'
   },
   primary: {
-    50: '#F5FBEE',
-    100: '#E6F4D7',
-    500: '#4AB733',
+    900: '#2B5314',
+    700: '#3B7C0F',
     600: '#4CA30D',
-    700: `#3B7C0F`
+    500: '#4AB733',
+    300: '#ACDC79',
+    100: '#E6F4D7',
+    50: '#F5FBEE',
+    25: '#FAFDF7'
   },
   error: {
     700: '#B42318',
     600: '#D92D20',
+    500: '#F04438',
+    300: '#FDA29B',
+    50: '#FEF3F2',
     25: '#FFFBFA'
   },
   success: {
@@ -34,7 +42,7 @@ export const colors = {
     50: '#ECFDF3'
   },
   warning: {
-    50: '#FFFAEB',
-    700: '#B54708'
+    700: '#B54708',
+    50: '#FFFAEB'
   }
 }

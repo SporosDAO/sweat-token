@@ -1,4 +1,4 @@
-import { darkTheme, lightTheme } from '../src/theme'
+import { darkTheme, lightTheme } from '../src/theme/theme'
 import { ThemeProvider, CssBaseline } from '@mui/material'
 
 export const parameters = {
@@ -15,7 +15,7 @@ export const globalTypes = {
   theme: {
     name: 'Theme',
     description: 'Global theme for components',
-    defaultValue: 'dark',
+    defaultValue: 'light',
     toolbar: {
       icon: 'circlehollow',
       // Array of plain string values or MenuItem shape (see below)
