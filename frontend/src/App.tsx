@@ -1,43 +1,32 @@
-import { ThemeProvider } from '@mui/material'
 import { Route, Routes } from 'react-router-dom'
-import Landing from './pages/Landing'
-import NotFound from './pages/NotFound'
-import People from './pages/People'
-import Projects from './pages/Projects'
+import { CssBaseline, ThemeProvider } from '@mui/material'
+
 import Dao from './pages/Dao'
+import People from './pages/People'
+import DaoLanding from './pages/Dao/index'
+import CreateDao from './pages/Dao/create-dao'
+import NotFound from './pages/NotFound'
+import Projects from './pages/Projects'
 import ProjectProposal from './pages/Projects/ProjectProposal'
 import ProjectTribute from './pages/Projects/ProjectTribute'
-import { darkTheme, lightTheme } from './theme'
-import { useState } from 'react'
+import { useTheme } from './hooks/useTheme'
 
-function App() {
-  function detectColorScheme() {
-    const newColorScheme =
-      window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? darkTheme : lightTheme
-    return newColorScheme
-  }
-
-  const [theme, setTheme] = useState(detectColorScheme())
-
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
-    // sync with user's device color mode preference
-    setTheme(detectColorScheme())
-  })
-
-  return (
-    <ThemeProvider theme={theme}>
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="dao/chain/:chainId/address/:daoId" element={<Dao />}>
-          <Route path="projects" element={<Projects />}></Route>
-          <Route path="projects/propose" element={<ProjectProposal />}></Route>
-          <Route path="projects/:projectId/tribute" element={<ProjectTribute />}></Route>
-          <Route path="people" element={<People />} />
-        </Route>
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </ThemeProvider>
-  )
-}
+const App = () => (
+  <ThemeProvider theme={useTheme()}>
+    <CssBaseline />
+    <Routes>
+      <Route path="/" element={<DaoLanding />} />
+      {/* @todo - remove routes, only temporary for testing purposes */}
+      <Route path="/create-dao" element={<CreateDao />} />
+      <Route path="dao/chain/:chainId/address/:daoId" element={<Dao />}>
+        <Route path="projects" element={<Projects />}></Route>
+        <Route path="projects/propose" element={<ProjectProposal />}></Route>
+        <Route path="projects/:projectId/tribute" element={<ProjectTribute />}></Route>
+        <Route path="people" element={<People />} />
+      </Route>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  </ThemeProvider>
+)
 
 export default App

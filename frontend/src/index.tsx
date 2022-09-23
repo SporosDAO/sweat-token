@@ -1,17 +1,17 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from 'react-query'
+
 import App from './App'
 import { PageProvider } from './context/PageContext'
 import { ToastProvider } from './context/ToastContext'
 import { Web3ContextProvider } from './context/Web3Context'
 import { ServiceWorkerWrapper } from './components/PWAUpdate'
 
-import { QueryClient, QueryClientProvider } from 'react-query'
 const queryClient = new QueryClient()
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
-root.render(
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <ServiceWorkerWrapper />
     <QueryClientProvider client={queryClient}>
