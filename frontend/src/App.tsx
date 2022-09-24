@@ -7,25 +7,11 @@ import Projects from './pages/Projects'
 import Dao from './pages/Dao'
 import ProjectProposal from './pages/Projects/ProjectProposal'
 import ProjectTribute from './pages/Projects/ProjectTribute'
-import { darkTheme, lightTheme } from './theme/theme'
-import { useState } from 'react'
+import { lightTheme } from './theme/theme'
 
 function App() {
-  function detectColorScheme() {
-    const newColorScheme =
-      window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? darkTheme : lightTheme
-    return newColorScheme
-  }
-
-  const [theme, setTheme] = useState(detectColorScheme())
-
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
-    // sync with user's device color mode preference
-    setTheme(detectColorScheme())
-  })
-
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={lightTheme}>
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="dao/chain/:chainId/address/:daoId" element={<Dao />}>

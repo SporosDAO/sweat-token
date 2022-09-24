@@ -35,8 +35,6 @@ export const Contained = Template.bind({})
 export const ContainedDisabled = Template.bind({})
 export const ContainedSecondary = Template.bind({})
 export const ContainedSecondaryDisabled = Template.bind({})
-export const ContainedTertiary = Template.bind({})
-
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Outlined.args = {
   variant: 'outlined',
