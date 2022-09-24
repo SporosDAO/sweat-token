@@ -1,3 +1,12 @@
 {
-   "signedContributors": []
+  "signedContributors": [
+    {
+      "name": "ivelin",
+      "id": 2234901,
+      "comment_id": 1256991448,
+      "created_at": "2022-09-24T15:11:52Z",
+      "repoId": 484553983,
+      "pullRequestNo": 146
+    }
+  ]
 }
