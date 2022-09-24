@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
 
-const Payment: React.FC = () => (
+const Payment: React.FC<any> = ({ values, handleChange }) => (
   <>
     <Grid container>
       <Grid item md={8}>

@@ -1,6 +1,7 @@
 import React from 'react'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
+import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom'
 
@@ -29,35 +30,17 @@ const DaoLanding: React.FC = () => {
     <DaoLayout>
       <Box>
         <Typography variant="h1" sx={{ mb: '8px' }}>
-          Launch Your For-Profit DAO in Minutes
+          Launch Your LLC in Minutes
         </Typography>
         <Typography variant="body1" sx={{ mb: '24px' }}>
-          We make it easy to launch your DAO as a Delaware LLC and start rewarding contributors with sweat equity
-          tokens. It only takes a few minutes to fill out the form.{' '}
+          We make it easy to create a Delaware Series LLC for your project and start rewarding contributors with sweat
+          equity tokens. It only takes a few minutes from start to finish.
         </Typography>
         <Grid item alignItems="center" sx={{ display: 'flex', gap: '24px' }}>
-          <button
-            onClick={() => navigate('/create-dao')}
-            style={{
-              fontFamily: 'Inter',
-              fontWeight: 500,
-              fontSize: '16px',
-              lineHeight: '22px',
-              color: '#fff',
-              background: '#4AB733',
-              borderRadius: '8px',
-              border: '1px solid #4CA30D',
-              boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)',
-              height: '44px',
-              padding: '10px 18px',
-              display: 'flex',
-              cursor: 'pointer',
-              alignItems: 'center'
-            }}
-          >
+          <Button onClick={() => navigate('/dao/create')} className="cta">
             Let's go!
             <img style={{ marginLeft: '6px' }} src="/icons/chevron-right.svg" alt="Chevron Right Icon" />
-          </button>
+          </Button>
           <Typography variant="title" sx={{ fontStyle: 'italic', fontWeight: 400, color: '#697586' }}>
             Available only on Arbitrum.
           </Typography>

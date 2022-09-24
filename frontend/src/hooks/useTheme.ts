@@ -5,7 +5,7 @@ import { darkTheme, lightTheme } from '../theme/theme'
 const COLOR_SCHEME_QUERY = '(prefers-color-scheme: dark)'
 
 const detectColorScheme = () => {
-  return window?.matchMedia(COLOR_SCHEME_QUERY)?.matches ? lightTheme : lightTheme
+  return window?.matchMedia(COLOR_SCHEME_QUERY)?.matches ? darkTheme : lightTheme
 }
 
 export const useTheme = () => {

@@ -4,21 +4,22 @@ import Typography from '@mui/material/Typography'
 import Header from '../components/Header'
 import Input from '../components/Input'
 
-const Name = () => (
+const Name: React.FC<any> = ({ values, handleChange }) => (
   <>
     <Header title="Name" subtitle="Tell us the name of your DAO" />
+    <>{console.log('form', values)}</>
     <Box>
       <Typography component="div" variant="label" sx={{ mb: '6px' }}>
         On-Chain name
       </Typography>
-      <Input type="text" placeholder="Pick a name" />
-      <Typography variant="caption">This will be your DAO's on-chain name.</Typography>
+      <Input placeholder="Pick a name" type="text" name="name" onChange={handleChange} value={values.name} />
+      <Typography variant="caption">This will be your company's on-chain name.</Typography>
     </Box>
     <Box sx={{ mt: '32px' }}>
       <Typography component="div" variant="label" sx={{ mb: '6px' }}>
         Token Symbol
       </Typography>
-      <Input type="text" placeholder="ex: SPR" />
+      <Input placeholder="ex: SPR" type="text" name="symbol" onChange={handleChange} value={values.symbol} />
       <Typography variant="caption">This will be used as your token symbol.</Typography>
     </Box>
   </>

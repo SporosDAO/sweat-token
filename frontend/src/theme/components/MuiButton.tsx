@@ -6,6 +6,23 @@ export const MuiButtonConfig: Components['MuiButton'] = {
     root: {
       margin: 0,
       borderColor: '#E3E8EF', // replace with colors from color palette
+      '&.cta': {
+        fontFamily: 'Inter',
+        fontWeight: 500,
+        fontSize: '16px',
+        lineHeight: '22px',
+        color: '#fff',
+        background: '#4AB733',
+        borderRadius: '8px',
+        border: '1px solid #4CA30D',
+        boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)',
+        height: '44px',
+        padding: '10px 18px',
+        display: 'flex',
+        cursor: 'pointer',
+        alignItems: 'center',
+        textTransform: 'none'
+      },
       '&.founder-button': {
         padding: '8px 14px',
         textTransform: 'none',
@@ -32,7 +49,12 @@ export const MuiButtonConfig: Components['MuiButton'] = {
         boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)',
         borderRadius: '8px',
         cursor: 'pointer',
-        textTransform: 'none'
+        textTransform: 'none',
+        '&.Mui-disabled': {
+          color: '#fff !important',
+          border: '1px solid #E5E7EB !important',
+          backgroundColor: '#E3E8EF !important'
+        }
       },
       '&.pay-now': {
         background: '#4AB733',

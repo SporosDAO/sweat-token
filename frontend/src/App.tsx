@@ -4,7 +4,7 @@ import { CssBaseline, ThemeProvider } from '@mui/material'
 import Dao from './pages/Dao'
 import People from './pages/People'
 import DaoLanding from './pages/Dao/index'
-import CreateDao from './pages/Dao/create-dao'
+import CreateDao from './pages/Dao/create'
 import NotFound from './pages/NotFound'
 import Projects from './pages/Projects'
 import ProjectProposal from './pages/Projects/ProjectProposal'
@@ -17,7 +17,7 @@ const App = () => (
     <Routes>
       <Route path="/" element={<DaoLanding />} />
       {/* @todo - remove routes, only temporary for testing purposes */}
-      <Route path="/create-dao" element={<CreateDao />} />
+      <Route path="/dao/create" element={<CreateDao />} />
       <Route path="dao/chain/:chainId/address/:daoId" element={<Dao />}>
         <Route path="projects" element={<Projects />}></Route>
         <Route path="projects/propose" element={<ProjectProposal />}></Route>
