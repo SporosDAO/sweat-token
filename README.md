@@ -10,7 +10,7 @@ In other words sweat token is the early stage governance token that is gradually
 ```ml
  ├─ frontend - "ReactJs Progressive Web App"
  │─ backend - "Nesjs middleware API"
- │─ contracts - "smart contracts"
+ │─ contracts - "Solidity smart contracts"
  │─ e2e-tests - "end-to-end full stack tests"
 
 ```
@@ -28,7 +28,7 @@ It uses NestJS backend (`backend` dir) hosted on Heroku and Mongodb Atlas cloud 
 | Development staging | `dev` | [live](https://sporosdaoapp-dev.netlify.app/) | [admin](https://app.netlify.com/sites/sporosdaoapp-dev/overview) |
 
 
-## Resources
+# Project Resources
 
 - [Product Board](https://github.com/orgs/SporosDAO/projects/2)
 - [Sweat Token wiki](https://github.com/SporosDAO/sweat-token/wiki)
@@ -36,7 +36,7 @@ It uses NestJS backend (`backend` dir) hosted on Heroku and Mongodb Atlas cloud 
 - [Figma UX design - new flows](https://www.figma.com/file/HjgPX0qjMYgvDjeliS4EwD/Sporos-DAO-App)
 - [Concepts document](https://docs.google.com/document/d/1NA3czMIlXwXscIGnxf-IwOGBfgX03HJEUQWb-YxOybc/edit#heading=h.eqtjaae3omvc)
 
-## Development
+# Development
 
 The following steps will build and start docker containers and services for `mongodb`, `frontend`, `backend` and `contracts` mounting on the local directory.
 
@@ -49,15 +49,17 @@ You can obtain debug logs for each container while developing with
 - backend `docker-compose logs -f backend`
 - contracts `docker-compose logs -f contracts`
 
-### Gitpod
+## Gitpod
 
 In [gitpod](https://gitpod.io/) environment, the same dev setup described above still applies.
 
 For convenience Steps 1 & 2 are configured in [`.gitpod.yaml`](.gitpod.yml) and automatically run on workspace launch.
 
 
-## Contributing
+# Contributing
 
 We welcome your contributions. To provide your code please fork the project and create a PR against the `dev` branch.
 Request at least one review from the core team.
 `dev` will be merged in `main` branch when we reach a relevant milestone that will be then deployed via the CI/CD pipelines.
+
+All contributors are required to read and sign one time our [Contributor License Agreement](CLA.md) during their first Pull Request review and merge process.
