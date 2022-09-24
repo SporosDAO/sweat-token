@@ -35,6 +35,7 @@ export const Contained = Template.bind({})
 export const ContainedDisabled = Template.bind({})
 export const ContainedSecondary = Template.bind({})
 export const ContainedSecondaryDisabled = Template.bind({})
+export const TextButton = Template.bind({})
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Outlined.args = {
   variant: 'outlined',
@@ -65,6 +66,10 @@ ContainedSecondaryDisabled.args = {
   color: 'secondary',
   children: 'Hello',
   disabled: true
+}
+TextButton.args = {
+  variant: 'text',
+  children: 'Hello'
 }
 
 // More on args: https://storybook.js.org/docs/react/writing-stories/args

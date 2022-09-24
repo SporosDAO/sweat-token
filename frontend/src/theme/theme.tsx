@@ -34,6 +34,8 @@ export const lightTheme = createTheme({
         disableRipple: true
       }
     },
+    MuiAppBar: MuiComponentConfig.AppBar,
+    MuiToolbar: MuiComponentConfig.Toolbar,
     MuiButton: MuiComponentConfig.Button,
     MuiCard: MuiComponentConfig.Card,
     MuiChip: MuiComponentConfig.Chip,

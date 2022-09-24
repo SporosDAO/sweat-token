@@ -4,6 +4,8 @@ import { MuiChipConfig } from './MuiChip'
 import { MuiPaletteConfig } from './MuiPalette'
 import { MuiTextFieldConfig } from './MuiTextField'
 import { MuiTypographyConfig } from './MuiTypography'
+import { MuiAppBarConfig } from './MuiAppBar'
+import { MuiToolbarConfig } from './MuiToolbar'
 
 export const MuiComponentConfig = {
   Button: MuiButtonConfig,
@@ -11,5 +13,7 @@ export const MuiComponentConfig = {
   Chip: MuiChipConfig,
   TextField: MuiTextFieldConfig,
   Typography: MuiTypographyConfig,
-  Palette: MuiPaletteConfig
+  Palette: MuiPaletteConfig,
+  AppBar: MuiAppBarConfig,
+  Toolbar: MuiToolbarConfig
 }

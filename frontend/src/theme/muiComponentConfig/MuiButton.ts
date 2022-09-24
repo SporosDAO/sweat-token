@@ -18,24 +18,40 @@ export const MuiButtonConfig: Components['MuiButton'] = {
       },
       '&.MuiButton-sizeXl': {
         padding: '12px 20px',
-        height: '48px'
+        height: '48px',
+        fontSize: '16px'
       },
       '&.MuiButton-size2xl': {
         padding: '16px 28px',
-        height: '60px'
+        height: '60px',
+        fontSize: '18px'
       }
     },
     sizeMedium: {
       height: '40px',
-      padding: '10px 16px'
+      padding: '10px 16px',
+      fontSize: '14px'
     },
     sizeLarge: {
       height: '44px',
-      padding: '10px 16px'
+      padding: '10px 16px',
+      fontSize: '16px'
     },
     sizeSmall: {
       height: '36px',
-      padding: '8px 14px'
+      padding: '8px 14px',
+      fontSize: '14px'
+    },
+    text: {
+      boxShadow: 'none',
+      color: colors.gray[700],
+      '&:hover': {
+        boxShadow: 'none'
+      },
+      '&:active': {
+        backgroundColor: colors.primary[50],
+        color: colors.primary[700]
+      }
     },
     outlined: {
       color: colors.gray[700],
