@@ -45,38 +45,8 @@ export const lightTheme = createTheme({
       }
     },
     MuiTextField: MuiComponentConfig.TextField,
-    MuiPagination: {
-      styleOverrides: {
-        root: {
-          '& .MuiPaginationItem-root': {
-            color: colors.gray[500],
-            fontSize: '14px',
-            '&.Mui-selected': {
-              color: colors.gray[800],
-              fontWeight: 500,
-              backgroundColor: colors.gray[100]
-            }
-          }
-        }
-      }
-    },
-    MuiModal: {
-      styleOverrides: {
-        root: {
-          '& .MuiBackdrop-root': {
-            background: 'rgba(52, 64, 84, 0.7)',
-            backdropFilter: 'blur(8px)'
-          }
-        }
-      }
-    },
-    MuiDialog: {
-      styleOverrides: {
-        paper: {
-          borderRadius: '12px',
-          boxShadow: '0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)'
-        }
-      }
-    }
+    MuiPagination: MuiComponentConfig.Pagination,
+    MuiModal: MuiComponentConfig.Modal,
+    MuiDialog: MuiComponentConfig.Dialog
   }
 })
