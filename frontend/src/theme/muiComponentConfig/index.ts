@@ -6,6 +6,9 @@ import { MuiTextFieldConfig } from './MuiTextField'
 import { MuiTypographyConfig } from './MuiTypography'
 import { MuiAppBarConfig } from './MuiAppBar'
 import { MuiToolbarConfig } from './MuiToolbar'
+import { MuiDialogConfig } from './MuiDialog'
+import { MuiModalConfig } from './MuiModal'
+import { MuiPaginationConfig } from './MuiPagination'
 
 export const MuiComponentConfig = {
   Button: MuiButtonConfig,
@@ -15,5 +18,8 @@ export const MuiComponentConfig = {
   Typography: MuiTypographyConfig,
   Palette: MuiPaletteConfig,
   AppBar: MuiAppBarConfig,
-  Toolbar: MuiToolbarConfig
+  Toolbar: MuiToolbarConfig,
+  Dialog: MuiDialogConfig,
+  Modal: MuiModalConfig,
+  Pagination: MuiPaginationConfig
 }
