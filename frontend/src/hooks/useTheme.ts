@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react'
 
-import { darkTheme, lightTheme } from '../theme/theme'
+import { lightTheme } from '../theme/theme'
 
 const COLOR_SCHEME_QUERY = '(prefers-color-scheme: dark)'
 
 const detectColorScheme = () => {
-  return window?.matchMedia(COLOR_SCHEME_QUERY)?.matches ? darkTheme : lightTheme
+  // @todo - currently not using dark theme...
+  // return window?.matchMedia(COLOR_SCHEME_QUERY)?.matches ? lightTheme : lightTheme
+  return lightTheme
 }
 
 export const useTheme = () => {
