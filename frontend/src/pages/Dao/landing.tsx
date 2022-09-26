@@ -55,7 +55,6 @@ const DaoLanding: React.FC = () => {
               >
                 Learn More
                 <ArrowRight sx={{ ml: '12px', stroke: '#3B7C0F' }} />
-                {/* <img style={{ marginLeft: '12px' }} src="/icons/arrow-right.svg" alt="Arrow Right Icon" /> */}
               </AnchorLink>
             </Grid>
             <Grid item md={4}>
@@ -73,7 +72,6 @@ const DaoLanding: React.FC = () => {
               >
                 Learn More
                 <ArrowRight sx={{ ml: '12px', stroke: '#3B7C0F' }} />
-                {/* <img style={{ marginLeft: '12px' }} src="/icons/arrow-right.svg" alt="Arrow Right Icon" /> */}
               </AnchorLink>
             </Grid>
             <Grid item md={4}>
@@ -92,7 +90,6 @@ const DaoLanding: React.FC = () => {
               >
                 Learn More
                 <ArrowRight sx={{ ml: '12px', stroke: '#3B7C0F' }} />
-                {/* <img style={{ marginLeft: '12px' }} src="/icons/arrow-right.svg" alt="Arrow Right Icon" /> */}
               </AnchorLink>
             </Grid>
           </Grid>
