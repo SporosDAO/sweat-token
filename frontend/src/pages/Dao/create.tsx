@@ -14,25 +14,17 @@ import Payment from './views/Payment'
 import Structure from './views/Structure'
 import Confirmation from './views/Confirmation'
 import { DaoLayout } from '../../layout/dao-layout'
-import { ArrowRight, HelpIcon } from '../../components/Icons'
 import { AnchorLink } from './components/AnchorLink'
+import { a11yProps, TabPanel } from './components/TabPanel'
+import { ArrowRight, HelpIcon } from '../../components/Icons'
 
-const a11yProps = (index: number) => ({
-  id: `simple-tab-${index}`,
-  'aria-controls': `simple-tabpanel-${index}`
-})
-
-const TabPanel = ({ children, value, index, ...rest }: any) => (
-  <div
-    role="tabpanel"
-    hidden={value !== index}
-    id={`simple-tabpanel-${index}`}
-    aria-labelledby={`simple-tab-${index}`}
-    {...rest}
-  >
-    {value === index && <Box>{children}</Box>}
-  </div>
-)
+enum View {
+  Structure,
+  Name,
+  Founder,
+  Confirmation,
+  Payment
+}
 
 const schema: any = Nope.object().shape({
   name: Nope.string().min(5, 'Too Short!').max(50, 'Too Long!').required('Required'),
@@ -40,18 +32,23 @@ const schema: any = Nope.object().shape({
 })
 
 const Create: React.FC = () => {
-  const [value, setValue] = React.useState(1)
+  const [activeView, setActiveView] = React.useState(View.Name)
   return (
     // cleanup this check?
-    <DaoLayout hideSidebarBackground={[0, 3].includes(value)}>
+    <DaoLayout hideSidebar={[View.Structure, View.Confirmation].includes(activeView)}>
       <Grid container>
         <Grid item md={3}>
-          <Tabs value={value} sx={{ border: 'none' }} orientation="vertical" aria-label="scrollable force tabs example">
-            <Tab label="Structure" {...a11yProps(0)} />
-            <Tab label="Name" {...a11yProps(1)} />
-            <Tab label="Founder" {...a11yProps(2)} />
-            <Tab label="Confirmation" {...a11yProps(3)} />
-            <Tab label="Payment" {...a11yProps(4)} />
+          <Tabs
+            value={activeView}
+            sx={{ border: 'none' }}
+            orientation="vertical"
+            aria-label="scrollable force tabs example"
+          >
+            <Tab label="Structure" {...a11yProps(View.Structure)} />
+            <Tab label="Name" {...a11yProps(View.Name)} />
+            <Tab label="Founder" {...a11yProps(View.Founder)} />
+            <Tab label="Confirmation" {...a11yProps(View.Confirmation)} />
+            <Tab label="Payment" {...a11yProps(View.Payment)} />
           </Tabs>
           <Box sx={{ position: 'fixed', bottom: '40px' }}>
             {/* @Keith - update this href (no link shown in figma) */}
@@ -76,37 +73,37 @@ const Create: React.FC = () => {
           >
             {({ handleSubmit, ...formData }) => (
               <form onSubmit={handleSubmit}>
-                <TabPanel value={value} index={0}>
+                <TabPanel value={activeView} index={View.Structure}>
                   <Structure />
                 </TabPanel>
-                <TabPanel value={value} index={1}>
+                <TabPanel value={activeView} index={View.Name}>
                   <Name {...formData} />
                 </TabPanel>
-                <TabPanel value={value} index={2}>
+                <TabPanel value={activeView} index={View.Founder}>
                   <Founder {...formData} />
                 </TabPanel>
-                <TabPanel value={value} index={3}>
+                <TabPanel value={activeView} index={View.Confirmation}>
                   <Confirmation {...formData} />
                 </TabPanel>
-                <TabPanel value={value} index={4}>
+                <TabPanel value={activeView} index={View.Payment}>
                   <Payment {...formData} />
                 </TabPanel>
                 <Box sx={{ my: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  {value > 0 ? (
+                  {activeView > 0 ? (
                     <Button
                       // check not on the first step & hide *
                       // @todo Keith - fix alignment of icon
                       style={{ height: '36px' }}
                       className="bridge-button"
                       startIcon={<ArrowRight sx={{ mt: '4px', transform: 'scaleX(-1)', stroke: 'black' }} />}
-                      onClick={() => setValue((value) => (value -= 1))}
+                      onClick={() => setActiveView((activeView) => (activeView -= 1))}
                     >
                       Back
                     </Button>
                   ) : (
                     <Box />
                   )}
-                  {value < 4 && (
+                  {activeView < 4 && (
                     <Button
                       disabled={!formData.isValid}
                       // check not on the last step & hide
@@ -119,7 +116,7 @@ const Create: React.FC = () => {
                       }}
                       className="bridge-button"
                       endIcon={<ArrowRight sx={{ mt: '4px', stroke: 'white' }} />}
-                      onClick={() => setValue((value) => (value += 1))}
+                      onClick={() => setActiveView((activeView) => (activeView += 1))}
                     >
                       Continue
                     </Button>
@@ -131,7 +128,7 @@ const Create: React.FC = () => {
         </Grid>
       </Grid>
       <Box sx={{ maxWidth: '50%' }}>
-        {value === 1 && (
+        {activeView === View.Name && (
           <>
             <Box sx={{ mb: '32px' }}>
               <Typography component="div" variant="title" sx={{ mb: '8px' }}>
@@ -164,7 +161,7 @@ const Create: React.FC = () => {
             </Box>
           </>
         )}
-        {value === 2 && (
+        {activeView === View.Founder && (
           <>
             <Box sx={{ mb: '32px' }}>
               <Typography component="div" variant="title" sx={{ mb: '8px' }}>
@@ -185,7 +182,7 @@ const Create: React.FC = () => {
             </Box>
           </>
         )}
-        {value === 4 && (
+        {activeView === View.Payment && (
           <>
             <Box sx={{ mb: '32px' }}>
               <Typography component="div" variant="title" sx={{ mb: '8px' }}>

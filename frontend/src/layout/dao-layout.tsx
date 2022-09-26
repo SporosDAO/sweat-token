@@ -2,7 +2,7 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 
-export const DaoLayout: React.FC<{ children: Array<React.ReactNode>; hideSidebarBackground?: boolean }> = (props) => (
+export const DaoLayout: React.FC<{ children: Array<React.ReactNode>; hideSidebar?: boolean }> = (props) => (
   <Grid container spacing={0} sx={{ height: '100vh' }}>
     <Grid item xs={12} md={7}>
       <Box
@@ -27,8 +27,8 @@ export const DaoLayout: React.FC<{ children: Array<React.ReactNode>; hideSidebar
       md={5}
       sx={{
         p: '120px 32px',
-        background: props.hideSidebarBackground ? '#fff' : '#FAFCFF',
-        borderLeft: props.hideSidebarBackground ? 'none' : '1px solid #EEF2F6'
+        background: props.hideSidebar ? '#fff' : '#FAFCFF',
+        borderLeft: props.hideSidebar ? 'none' : '1px solid #EEF2F6'
       }}
     >
       {props.children[1]}
