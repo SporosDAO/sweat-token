@@ -10,10 +10,10 @@ import NotFound from './pages/NotFound'
 import Projects from './pages/Projects'
 import ProjectProposal from './pages/Projects/ProjectProposal'
 import ProjectTribute from './pages/Projects/ProjectTribute'
-import { useTheme } from './hooks/useTheme'
+import { lightTheme } from './theme/theme'
 
 const App = () => (
-  <ThemeProvider theme={useTheme()}>
+  <ThemeProvider theme={lightTheme}>
     <CssBaseline />
     <Routes>
       <Route path="/" element={<Landing />} />
