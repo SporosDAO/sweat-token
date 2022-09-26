@@ -27,8 +27,8 @@ export const DaoLayout: React.FC<{ children: Array<React.ReactNode>; hideSidebar
       md={5}
       sx={{
         p: '120px 32px',
-        background: props.hideSidebar ? '#fff' : '#FAFCFF',
-        borderLeft: props.hideSidebar ? 'none' : '1px solid #EEF2F6'
+        borderLeft: props.hideSidebar ? 'none' : '1px solid #EEF2F6',
+        background: props.hideSidebar ? '#fff' : '#FAFCFF url(/sporos.png) bottom right no-repeat'
       }}
     >
       {props.children[1]}
