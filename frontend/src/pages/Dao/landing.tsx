@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { DaoLayout } from '../../layout/dao-layout'
 import { AnchorLink } from './components/AnchorLink'
+import { ArrowRight } from '../../components/Icons'
 
 const DaoLanding: React.FC = () => {
   const navigate = useNavigate()
@@ -48,9 +49,13 @@ const DaoLanding: React.FC = () => {
                 Full on-chain governance including customizable settings, such as voting periods, quorum requirements,
                 and approval thresholds. Manage your business with complete transparency.
               </Typography>
-              <AnchorLink href="#/" sx={{ fontSize: '16px', textDecoration: 'none' }}>
+              <AnchorLink
+                href="#/"
+                sx={{ marginTop: '20px', display: 'flex', fontSize: '16px', textDecoration: 'none' }}
+              >
                 Learn More
-                <img style={{ marginLeft: '12px' }} src="/icons/arrow-right.svg" alt="Arrow Right Icon" />
+                <ArrowRight sx={{ ml: '12px', stroke: '#3B7C0F' }} />
+                {/* <img style={{ marginLeft: '12px' }} src="/icons/arrow-right.svg" alt="Arrow Right Icon" /> */}
               </AnchorLink>
             </Grid>
             <Grid item md={4}>
@@ -62,9 +67,13 @@ const DaoLanding: React.FC = () => {
                 Fully on-chain treasury support and management, including ETH, ERC-20, NFT and ERC-1155. Whitelist
                 assets for further customization such as ragequitting and payments.
               </Typography>
-              <AnchorLink href="#/" sx={{ fontSize: '16px', textDecoration: 'none' }}>
+              <AnchorLink
+                href="#/"
+                sx={{ marginTop: '20px', display: 'flex', fontSize: '16px', textDecoration: 'none' }}
+              >
                 Learn More
-                <img style={{ marginLeft: '12px' }} src="/icons/arrow-right.svg" alt="Arrow Right Icon" />
+                <ArrowRight sx={{ ml: '12px', stroke: '#3B7C0F' }} />
+                {/* <img style={{ marginLeft: '12px' }} src="/icons/arrow-right.svg" alt="Arrow Right Icon" /> */}
               </AnchorLink>
             </Grid>
             <Grid item md={4}>
@@ -77,9 +86,13 @@ const DaoLanding: React.FC = () => {
                 your company. Design your own distribution system using our on-chain proposals and project management
                 tools.
               </Typography>
-              <AnchorLink href="#/" sx={{ fontSize: '16px', textDecoration: 'none' }}>
+              <AnchorLink
+                href="#/"
+                sx={{ marginTop: '20px', display: 'flex', fontSize: '16px', textDecoration: 'none' }}
+              >
                 Learn More
-                <img style={{ marginLeft: '12px' }} src="/icons/arrow-right.svg" alt="Arrow Right Icon" />
+                <ArrowRight sx={{ ml: '12px', stroke: '#3B7C0F' }} />
+                {/* <img style={{ marginLeft: '12px' }} src="/icons/arrow-right.svg" alt="Arrow Right Icon" /> */}
               </AnchorLink>
             </Grid>
           </Grid>

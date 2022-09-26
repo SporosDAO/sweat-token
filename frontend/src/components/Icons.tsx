@@ -24,13 +24,13 @@ export const AlertIcon = (props: SvgIconProps) => (
 
 export const HelpIcon = (props: SvgIconProps) => (
   <SvgIcon {...props}>
-    <g clip-path="url(#clip0_998_22664)">
+    <g clipPath="url(#clip0_998_22664)">
       <path
         d="M7.57508 7.49984C7.771 6.94289 8.15771 6.47326 8.66671 6.17411C9.17571 5.87497 9.77416 5.76562 10.3561 5.86543C10.938 5.96524 11.4658 6.26777 11.846 6.71944C12.2262 7.17111 12.4343 7.74277 12.4334 8.33317C12.4334 9.99984 9.93342 10.8332 9.93342 10.8332M10.0001 14.1665H10.0084M18.3334 9.99984C18.3334 14.6022 14.6025 18.3332 10.0001 18.3332C5.39771 18.3332 1.66675 14.6022 1.66675 9.99984C1.66675 5.39746 5.39771 1.6665 10.0001 1.6665C14.6025 1.6665 18.3334 5.39746 18.3334 9.99984Z"
         stroke="#61787C"
-        stroke-width="1.67"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.67"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </g>
     <defs>

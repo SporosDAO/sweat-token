@@ -4,8 +4,9 @@ import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
+import { FormikValues, FormikHandlers } from 'formik'
 
-const Payment: React.FC<any> = ({ values, handleChange }) => (
+const Payment: React.FC<Partial<FormikValues & FormikHandlers>> = ({ values, handleChange }) => (
   <>
     <Grid container>
       <Grid item md={8}>

@@ -1,13 +1,13 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import { FormikValues, FormikHandlers } from 'formik'
 
 import Header from '../components/Header'
 import Input from '../components/Input'
 
-const Name: React.FC<any> = ({ values, handleChange }) => (
+const Name: React.FC<Partial<FormikValues & FormikHandlers>> = ({ values, handleChange }) => (
   <>
     <Header title="Name" subtitle="Tell us the name of your DAO" />
-    <>{console.log('form', values)}</>
     <Box>
       <Typography component="div" variant="label" sx={{ mb: '6px' }}>
         On-Chain name

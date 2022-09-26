@@ -2,11 +2,12 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
-import { AlertIcon } from '../../../components/Icons'
+import { FormikValues, FormikHandlers } from 'formik'
 
 import Header from '../components/Header'
+import { AlertIcon } from '../../../components/Icons'
 
-const Confirmation: React.FC<any> = ({ values, handleChange }) => (
+const Confirmation: React.FC<Partial<FormikValues & FormikHandlers>> = ({ values, handleChange }) => (
   <>
     <Header
       title="Confirmation"

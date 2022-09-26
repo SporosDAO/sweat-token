@@ -3,11 +3,12 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
+import { FormikValues, FormikHandlers } from 'formik'
 
 import Header from '../components/Header'
 import Input from '../components/Input'
 
-const Founder: React.FC<any> = ({ values, handleChange }) => {
+const Founder: React.FC<Partial<FormikValues & FormikHandlers>> = ({ values, handleChange }) => {
   const [noOfFounderCards, setNoOfFoundCards] = React.useState<number>(1)
   return (
     <>
