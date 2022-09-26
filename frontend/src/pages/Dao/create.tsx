@@ -14,7 +14,8 @@ import Payment from './views/Payment'
 import Structure from './views/Structure'
 import Confirmation from './views/Confirmation'
 import { DaoLayout } from '../../layout/dao-layout'
-import { ArrowRight } from '../../components/Icons'
+import { ArrowRight, HelpIcon } from '../../components/Icons'
+import { AnchorLink } from './components/AnchorLink'
 
 const a11yProps = (index: number) => ({
   id: `simple-tab-${index}`,
@@ -52,9 +53,22 @@ const Create: React.FC = () => {
             <Tab label="Confirmation" {...a11yProps(3)} />
             <Tab label="Payment" {...a11yProps(4)} />
           </Tabs>
+          <Box sx={{ position: 'fixed', bottom: '40px' }}>
+            {/* @Keith - update this href (no link shown in figma) */}
+            <AnchorLink href="https://medium.com/sporos-dao" sx={{ textDecoration: 'none' }}>
+              <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                <HelpIcon sx={{ mt: '2px', fill: 'none', stroke: '#61787C', fontSize: '20px', mr: '6px' }} />
+                Help &amp; Support
+              </Typography>
+            </AnchorLink>
+          </Box>
         </Grid>
         <Grid item md={9} p={3}>
           <Formik
+            // @Keith - May remove Formik and use React Context to handle this flow instead
+            // @Keith - may wire up each tab to the router (not sure it's needed yet though as you)
+            // shouldn't be able to advance to the next tab without completing the previous, so it
+            // would probably serve no purpose?
             validateOnMount
             initialValues={{ name: '', symbol: '' }}
             validate={(values) => schema.validate(values)}
@@ -84,7 +98,7 @@ const Create: React.FC = () => {
                       // @todo Keith - fix alignment of icon
                       style={{ height: '36px' }}
                       className="bridge-button"
-                      startIcon={<ArrowRight sx={{ transform: 'scaleX(-1)', stroke: 'black' }} />}
+                      startIcon={<ArrowRight sx={{ mt: '4px', transform: 'scaleX(-1)', stroke: 'black' }} />}
                       onClick={() => setValue((value) => (value -= 1))}
                     >
                       Back
@@ -92,15 +106,19 @@ const Create: React.FC = () => {
                   ) : (
                     <Box />
                   )}
-                  <>{console.log('formData', formData)}</>
                   {value < 4 && (
                     <Button
                       disabled={!formData.isValid}
                       // check not on the last step & hide
                       // @todo Keith - fix alignment of icon
-                      style={{ height: '36px', color: '#fff', background: '#4AB733', border: '1px solid #4CA30D' }}
+                      style={{
+                        height: '36px',
+                        color: '#fff',
+                        background: '#4AB733',
+                        border: '1px solid #4CA30D'
+                      }}
                       className="bridge-button"
-                      endIcon={<ArrowRight sx={{ stroke: 'white' }} />}
+                      endIcon={<ArrowRight sx={{ mt: '4px', stroke: 'white' }} />}
                       onClick={() => setValue((value) => (value += 1))}
                     >
                       Continue
@@ -162,7 +180,7 @@ const Create: React.FC = () => {
               </Typography>
               <Typography variant="subtitle1">
                 We only use your email to communicate directly with you. We do not share your email with any third
-                parties.{' '}
+                parties.
               </Typography>
             </Box>
           </>

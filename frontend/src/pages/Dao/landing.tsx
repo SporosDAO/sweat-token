@@ -6,23 +6,7 @@ import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom'
 
 import { DaoLayout } from '../../layout/dao-layout'
-
-const AnchorLink: React.FC<{ children: React.ReactNode; href: string; sx?: React.CSSProperties }> = ({
-  sx,
-  children,
-  href
-}) => (
-  <Typography
-    href={href}
-    component="a"
-    variant="label"
-    rel="noreferrer"
-    target="_blank"
-    sx={{ cursor: 'pointer', textDecoration: 'underline', color: '#3B7C0F', ...sx }}
-  >
-    {children}
-  </Typography>
-)
+import { AnchorLink } from './components/AnchorLink'
 
 const DaoLanding: React.FC = () => {
   const navigate = useNavigate()
