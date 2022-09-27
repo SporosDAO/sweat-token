@@ -1,22 +1,22 @@
-import React from 'react'
-import { render, screen, act } from '@testing-library/react'
-import { renderApp } from './RenderApp'
+import { screen, act } from '@testing-library/react'
 import ReactDOM from 'react-dom/client'
 
-test('renders learn react link', () => {
-  render(<div>learn react</div>)
-  const linkElement = screen.getByText(/learn react/i)
-  expect(linkElement).toBeInTheDocument()
+let container: Element | undefined
+
+beforeEach(() => {
+  container = document.createElement('div')
+  document.body.appendChild(container)
 })
 
-test('renders Sporos DAO landing page', () => {
-  // Test first render and componentDidMount
+afterEach(() => {
+  document.body.removeChild(container as Element)
+  container = undefined
+})
+
+test('renders learn react link', () => {
   act(() => {
-    const container = document.createElement('div')
-    document.body.appendChild(container)
-    const root = ReactDOM.createRoot(container)
-    renderApp(root)
+    ReactDOM.createRoot(container as Element).render(<div>learn react</div>)
   })
-  const linkElement = screen.getByText(/The Launchpad of For-Profit DAOs/i)
-  expect(linkElement).toBeInTheDocument()
+  const textElement = screen.getByText(/learn react/i)
+  expect(textElement).toBeInTheDocument()
 })

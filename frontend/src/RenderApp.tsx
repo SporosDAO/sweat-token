@@ -8,24 +8,27 @@ import { ServiceWorkerWrapper } from './components/PWAUpdate'
 
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { Root } from 'react-dom/client'
-const queryClient = new QueryClient()
 
 export function renderApp(root: Root) {
+  const queryClient = new QueryClient()
+
   root.render(
-    <React.StrictMode>
-      <ServiceWorkerWrapper />
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <ToastProvider>
-            <Web3ContextProvider>
-              <PageProvider>
-                <App />
-              </PageProvider>
-            </Web3ContextProvider>
-          </ToastProvider>
-        </BrowserRouter>
-      </QueryClientProvider>
-    </React.StrictMode>
+    <div>
+      <React.StrictMode>
+        <ServiceWorkerWrapper />
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <ToastProvider>
+              <Web3ContextProvider>
+                <PageProvider>
+                  <App />
+                </PageProvider>
+              </Web3ContextProvider>
+            </ToastProvider>
+          </BrowserRouter>
+        </QueryClientProvider>
+      </React.StrictMode>
+    </div>
   )
 }
 

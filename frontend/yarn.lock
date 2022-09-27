@@ -2084,6 +2084,11 @@
     "@json-rpc-tools/types" "^1.7.6"
     "@pedrouid/environment" "^1.0.1"
 
+"@kalidao/hooks@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@kalidao/hooks/-/hooks-0.0.5.tgz#bc5c89064bb9911548c1c5d624b51a7cdaea125f"
+  integrity sha512-cYrr0e1pzBtTPj31tBdI/q0aPmT7Uz6pB9JgbKI9RhLd0WlTC0f4i8XLMeseER8xHpUE9PcpWU6cb9IRwLU5FA==
+
 "@leichtgewicht/ip-codec@^2.0.1":
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
@@ -2332,10 +2337,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.5.tgz#db5a11bf66bdab39569719555b0f76e138d7bd64"
   integrity sha512-9X2obfABZuDVLCgPK9aX0a/x4jaOEweTTWE2+9sr0Qqqevj2Uv5XorvusThmc9XGYpS9yI+fhh8RTafBtGposw==
 
-"@rainbow-me/rainbowkit@^0.4.5":
-  version "0.4.8"
-  resolved "https://registry.yarnpkg.com/@rainbow-me/rainbowkit/-/rainbowkit-0.4.8.tgz#1efa3b05abc7f93129db0fe4bf8db13ad6ff3d48"
-  integrity sha512-xtrMSgbXmNtZXiehiBHx9cOslGXAYRnTIUQPAn13XTZjwwyJiwKHw6nSlKEb6OvIFaCBeu2htRAnxMnWNzagOA==
+"@rainbow-me/rainbowkit@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@rainbow-me/rainbowkit/-/rainbowkit-0.6.1.tgz#dd336871d64773a8ae39d2b4fd4d121c55894b88"
+  integrity sha512-qiYz93QT/dwqZs8PU3l6okJv4hTylaHd9mYKSU+4RKBnl1RFyV8V8RNkICVYTEV1Yq+eHxq8rTdtevsgRvRWYg==
   dependencies:
     "@vanilla-extract/css" "1.7.0"
     "@vanilla-extract/dynamic" "2.0.2"
@@ -7814,11 +7819,6 @@ jss@10.9.0, jss@^10.8.2:
   dependencies:
     array-includes "^3.1.4"
     object.assign "^4.1.2"
-
-kalidao-hooks@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/kalidao-hooks/-/kalidao-hooks-0.0.3.tgz#af9e5a4439955d6ff0c311d1170fa24d214e0c1c"
-  integrity sha512-nHEH1mSA7o/d8Uk6+QDQaMFzWwdxTAnTknTuZ8f0nYqmtwFk1A0kCroXWrhgQBXGeDy3GAoxGNRGwTRawG+M8w==
 
 keccak@^3.0.0, keccak@^3.0.1:
   version "3.0.2"
