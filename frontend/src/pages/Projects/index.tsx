@@ -9,6 +9,7 @@ export default function Projects() {
   const { chainId, daoId } = useParams()
 
   const { projects, error, isLoading } = useGetProjects(chainId, daoId)
+
   return (
     <ContentBlock title="Projects" cta={{ href: 'propose', text: 'Propose Project' }}>
       {isLoading && <CircularProgress />}
