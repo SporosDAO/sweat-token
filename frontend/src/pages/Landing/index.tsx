@@ -1,4 +1,4 @@
-import { Grid, SxProps, Theme } from '@mui/material'
+import { Grid, SxProps, Theme, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import ContentBlock from '../../components/ContentBlock'
 import MyDAOs from '../../components/MyDAOs'
@@ -15,19 +15,17 @@ export default function Landing() {
   }, [failed, loading])
 
   const blockStyle: SxProps<Theme> = {
-    m: 1,
-    ml: 0,
-    p: 2,
-    minHeight: '12em'
+    minHeight: '13em'
   }
 
   return (
     <PageLayout withDrawer={false}>
-      <ContentBlock>
-        <h1>The Launchpad of For-Profit DAOs</h1>
-      </ContentBlock>
-
       <Grid container>
+        <Grid item sm={12}>
+          <ContentBlock>
+            <Typography variant="h4">The Launchpad of For-Profit DAOs</Typography>
+          </ContentBlock>
+        </Grid>
         <Grid item sm={6}>
           <ContentBlock sx={{ ...blockStyle }} title="Your DAOs">
             <MyDAOs />
