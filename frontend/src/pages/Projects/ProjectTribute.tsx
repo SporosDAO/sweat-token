@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ethers } from 'ethers'
 import { addresses } from '../../constants/addresses'
 import PM_ABI from '../../abi/ProjectManagement.json'
@@ -28,12 +28,6 @@ export default function ProjectTribute() {
 
   const { address: userAddress, isDisconnected } = useAccount()
   const isManager = userAddress === manager
-
-  useEffect(() => {
-    if (isDisconnected) {
-      console.log('disconnected')
-    }
-  }, [isDisconnected])
 
   const deadlineDate = new Date()
   deadlineDate.setTime(deadline * 1000)
@@ -124,13 +118,6 @@ export default function ProjectTribute() {
         maxWidth: 400
       }}
     >
-      {!isManager && (
-        <Alert severity="error" sx={{ overflow: 'hidden', wordBreak: 'break-word' }}>
-          You are not the manager of this project. Your wallet account "{userAddress}" does not match the manager
-          account {manager}.
-        </Alert>
-      )}
-
       {isDisconnected && (
         <Alert severity="error" sx={{ overflow: 'hidden', wordBreak: 'break-word' }}>
           Your wallet has been disconnected. Click{' '}
@@ -138,6 +125,13 @@ export default function ProjectTribute() {
             here
           </Link>{' '}
           to connect again.
+        </Alert>
+      )}
+
+      {!isManager && (
+        <Alert severity="error" sx={{ overflow: 'hidden', wordBreak: 'break-word' }}>
+          You are not the manager of this project. Your wallet account "{userAddress}" does not match the manager
+          account {manager}.
         </Alert>
       )}
 
