@@ -67,7 +67,11 @@ const Confirmation: React.FC<Partial<FormikValues & FormikHandlers>> = ({ values
       <Typography display="flex" variant="caption" color={colors.gray[500]} m="0">
         Voting Period
         <Tooltip arrow title={<Typography variant="caption">Tooltip with HTML</Typography>}>
-          <img src="/icons/info-icon.svg" style={{ marginLeft: '9px', cursor: 'pointer', fill: 'none' }} />
+          <img
+            src="/icons/info-icon.svg"
+            alt="Information Tooltip Icon"
+            style={{ marginLeft: '9px', cursor: 'pointer', fill: 'none' }}
+          />
         </Tooltip>
       </Typography>
       <Typography variant="subtitle2" color={colors.gray[900]} m="0" fontWeight={500}>
@@ -77,7 +81,11 @@ const Confirmation: React.FC<Partial<FormikValues & FormikHandlers>> = ({ values
       <Typography display="flex" variant="caption" color={colors.gray[500]} m="0">
         Quorum
         <Tooltip arrow title={<Typography variant="caption">Tooltip with HTML</Typography>}>
-          <img src="/icons/info-icon.svg" style={{ marginLeft: '9px', cursor: 'pointer', fill: 'none' }} />
+          <img
+            src="/icons/info-icon.svg"
+            alt="Information Tooltip Icon"
+            style={{ marginLeft: '9px', cursor: 'pointer', fill: 'none' }}
+          />
         </Tooltip>
       </Typography>
       <Typography variant="subtitle2" color={colors.gray[900]} m="0" fontWeight={500}>
@@ -87,7 +95,11 @@ const Confirmation: React.FC<Partial<FormikValues & FormikHandlers>> = ({ values
       <Typography display="flex" variant="caption" color={colors.gray[500]} m="0">
         Approval Needed
         <Tooltip arrow title={<Typography variant="caption">Tooltip with HTML</Typography>}>
-          <img src="/icons/info-icon.svg" style={{ marginLeft: '9px', cursor: 'pointer', fill: 'none' }} />
+          <img
+            src="/icons/info-icon.svg"
+            alt="Information Tooltip Icon"
+            style={{ marginLeft: '9px', cursor: 'pointer', fill: 'none' }}
+          />
         </Tooltip>
       </Typography>
       <Typography variant="subtitle2" color={colors.gray[900]} m="0" fontWeight={500}>
@@ -102,13 +114,21 @@ const Confirmation: React.FC<Partial<FormikValues & FormikHandlers>> = ({ values
       <Typography display="flex" variant="subtitle2" color={colors.gray[900]} sx={{ mb: '16px' }}>
         Redemption
         <Tooltip arrow title={<Typography variant="caption">Tooltip with HTML</Typography>}>
-          <img src="/icons/info-icon.svg" style={{ marginLeft: '9px', cursor: 'pointer', fill: 'none' }} />
+          <img
+            src="/icons/info-icon.svg"
+            alt="Information Tooltip Icon"
+            style={{ marginLeft: '9px', cursor: 'pointer', fill: 'none' }}
+          />
         </Tooltip>
       </Typography>
       <Typography display="flex" variant="subtitle2" color={colors.gray[900]}>
         Transferrable
         <Tooltip arrow title={<Typography variant="caption">Tooltip with HTML</Typography>}>
-          <img src="/icons/info-icon.svg" style={{ marginLeft: '9px', cursor: 'pointer', fill: 'none' }} />
+          <img
+            src="/icons/info-icon.svg"
+            alt="Information Tooltip Icon"
+            style={{ marginLeft: '9px', cursor: 'pointer', fill: 'none' }}
+          />
         </Tooltip>
       </Typography>
     </Card>
