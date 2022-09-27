@@ -124,13 +124,6 @@ export default function ProjectTribute() {
         maxWidth: 400
       }}
     >
-      {!isManager && (
-        <Alert severity="error" sx={{ overflow: 'hidden', wordBreak: 'break-word' }}>
-          You are not the manager of this project. Your wallet account "{userAddress}" does not match the manager
-          account {manager}.
-        </Alert>
-      )}
-
       {isDisconnected && (
         <Alert severity="error" sx={{ overflow: 'hidden', wordBreak: 'break-word' }}>
           Your wallet has been disconnected. Click{' '}
@@ -138,6 +131,13 @@ export default function ProjectTribute() {
             here
           </Link>{' '}
           to connect again.
+        </Alert>
+      )}
+
+      {!isManager && (
+        <Alert severity="error" sx={{ overflow: 'hidden', wordBreak: 'break-word' }}>
+          You are not the manager of this project. Your wallet account "{userAddress}" does not match the manager
+          account {manager}.
         </Alert>
       )}
 
