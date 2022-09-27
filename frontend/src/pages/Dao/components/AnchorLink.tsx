@@ -1,5 +1,7 @@
 import Typography from '@mui/material/Typography'
 
+import { colors } from '../../../theme/colorPalette'
+
 export const AnchorLink: React.FC<{ children: React.ReactNode; href: string; sx?: React.CSSProperties }> = ({
   sx,
   children,
@@ -8,10 +10,10 @@ export const AnchorLink: React.FC<{ children: React.ReactNode; href: string; sx?
   <Typography
     href={href}
     component="a"
-    variant="label"
+    variant="subtitle2"
     rel="noreferrer"
     target="_blank"
-    sx={{ cursor: 'pointer', textDecoration: 'underline', color: '#3B7C0F', ...sx }}
+    sx={{ cursor: 'pointer', textDecoration: 'underline', color: colors.primary[700], ...sx }}
   >
     {children}
   </Typography>

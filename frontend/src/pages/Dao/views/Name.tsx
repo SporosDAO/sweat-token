@@ -1,26 +1,35 @@
 import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
+import TextField from '@mui/material/TextField'
 import { FormikValues, FormikHandlers } from 'formik'
 
 import Header from '../components/Header'
-import Input from '../components/Input'
 
 const Name: React.FC<Partial<FormikValues & FormikHandlers>> = ({ values, handleChange }) => (
   <>
-    <Header title="Name" subtitle="Tell us the name of your DAO" />
+    <Header title="Name" subtitle="Tell us the name of your company." />
     <Box>
-      <Typography component="div" variant="label" sx={{ mb: '6px' }}>
-        On-Chain name
-      </Typography>
-      <Input placeholder="Pick a name" type="text" name="name" onChange={handleChange} value={values.name} />
-      <Typography variant="caption">This will be your company's on-chain name.</Typography>
+      <TextField
+        fullWidth
+        type="text"
+        name="name"
+        label="On-Chain name"
+        value={values.name}
+        onChange={handleChange}
+        placeholder="Pick a name"
+        helperText="This will be your company's on-chain name."
+      />
     </Box>
-    <Box sx={{ mt: '32px' }}>
-      <Typography component="div" variant="label" sx={{ mb: '6px' }}>
-        Token Symbol
-      </Typography>
-      <Input placeholder="ex: SPR" type="text" name="symbol" onChange={handleChange} value={values.symbol} />
-      <Typography variant="caption">This will be used as your token symbol.</Typography>
+    <Box mt="32px">
+      <TextField
+        fullWidth
+        type="text"
+        name="symbol"
+        label="Token Symbol"
+        value={values.symbol}
+        onChange={handleChange}
+        placeholder="ex: SPR"
+        helperText="This will be used as your token symbol."
+      />
     </Box>
   </>
 )

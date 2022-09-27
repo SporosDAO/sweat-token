@@ -15,7 +15,7 @@ export const DaoLayout: React.FC<{ children: Array<React.ReactNode>; hideSidebar
       >
         <img src="/icons/x.svg" alt="X Icon" />
         <Box sx={{ m: '0 10px', background: '#EEF2F6', width: '1px', height: '20px' }} />
-        <Typography variant="subtitle1" sx={{ color: '#202939' }}>
+        <Typography variant="subtitle2" sx={{ color: '#202939', fontWeight: 500 }}>
           Start your Company with Sporos
         </Typography>
       </Box>

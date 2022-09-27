@@ -1,10 +1,12 @@
-import Box from '@mui/material/Box'
+import React from 'react'
 import Card from '@mui/material/Card'
 import Divider from '@mui/material/Divider'
+import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import { FormikValues, FormikHandlers } from 'formik'
 
 import Header from '../components/Header'
+import { colors } from '../../../theme/colorPalette'
 import { AlertIcon } from '../../../components/Icons'
 
 const Confirmation: React.FC<Partial<FormikValues & FormikHandlers>> = ({ values, handleChange }) => (
@@ -13,99 +15,130 @@ const Confirmation: React.FC<Partial<FormikValues & FormikHandlers>> = ({ values
       title="Confirmation"
       subtitle="Please make sure your name and token symbol are correct. Note: we know getting started can seem confusing, so we help take the guess work out of it by providing  default settings. All of these settings can be adjusted after you deploy your LLC."
     />
-
-    <Card className="founder-card">
-      <Box>
-        <Typography variant="body1" sx={{ fontWeight: 500, color: '#121926', mb: '20px' }}>
-          Structure
-        </Typography>
-        <Divider orientation="horizontal" />
-        <Typography variant="caption" sx={{ mb: 0 }}>
-          Structure
-        </Typography>
-        <Typography variant="subtitle1" sx={{ color: '#121926' }}>
-          Delaware Series LLC
-        </Typography>
-      </Box>
+    <Card sx={{ mb: '24px', background: colors.gray[50], boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)' }}>
+      <Typography variant="subtitle1" color={colors.gray[900]} fontWeight={500}>
+        Structure
+      </Typography>
+      <Divider orientation="horizontal" sx={{ m: '20px 0 16px' }} />
+      <Typography variant="caption" color={colors.gray[500]} m="0">
+        Structure
+      </Typography>
+      <Typography variant="subtitle2" color={colors.gray[900]} m="0">
+        Delaware Series LLC
+      </Typography>
     </Card>
-
-    <Card className="founder-card">
-      <Box>
-        <Typography variant="body1" sx={{ fontWeight: 500, color: '#121926', mb: '20px' }}>
-          Name
-        </Typography>
-        <Divider orientation="horizontal" />
-        <Typography variant="caption" sx={{ mb: 0 }}>
-          On-Chain name
-        </Typography>
-        <Typography variant="subtitle1" sx={{ color: '#121926' }}>
-          Netbee DAO
-        </Typography>
-        <Typography variant="subtitle1" sx={{ display: 'flex', fontWeight: 600, mt: '16px', color: '#B54708' }}>
-          <AlertIcon stroke="#B54708" sx={{ fill: '#fff', mr: '14px' }} /> DAO name cannot be changed later.
-        </Typography>
-        <Divider orientation="horizontal" sx={{ mt: '8px !important' }} />
-        <Typography variant="caption" sx={{ mb: 0 }}>
-          Token symbol
-        </Typography>
-        <Typography variant="subtitle1" sx={{ color: '#121926' }}>
-          NBE
-        </Typography>
-        <Typography variant="subtitle1" sx={{ display: 'flex', fontWeight: 600, mt: '16px', color: '#B54708' }}>
-          <AlertIcon stroke="#B54708" sx={{ fill: '#fff', mr: '14px' }} /> DAO Symbol cannot be changed later.
-        </Typography>
-        <Divider orientation="horizontal" sx={{ mt: '8px !important' }} />
-        <Typography variant="caption" sx={{ mb: 0 }}>
-          Deploying on
-        </Typography>
-        <Typography variant="subtitle1" sx={{ color: '#121926' }}>
-          Arbitrum
-        </Typography>
-      </Box>
+    <Card sx={{ mb: '24px', background: colors.gray[50], boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)' }}>
+      <Typography variant="subtitle1" color={colors.gray[900]} fontWeight={500}>
+        Name
+      </Typography>
+      <Divider orientation="horizontal" sx={{ m: '20px 0 16px' }} />
+      <Typography variant="caption" color={colors.gray[500]} m="0">
+        On-Chain name
+      </Typography>
+      <Typography m="0" variant="subtitle2" color={colors.gray[900]} fontWeight={500} sx={{ display: 'flex' }}>
+        Netbee DAO
+      </Typography>
+      <Typography variant="subtitle2" color={colors.warning[700]} fontWeight={600} sx={{ display: 'flex', mt: '16px' }}>
+        <AlertIcon stroke={colors.warning[700]} sx={{ fill: '#fff', mr: '14px' }} /> DAO Name cannot be changed later.
+      </Typography>
+      <Divider orientation="horizontal" sx={{ m: '16px 0' }} />
+      <Typography variant="caption" color={colors.gray[500]} m="0">
+        Token symbol
+      </Typography>
+      <Typography variant="subtitle2" color={colors.gray[900]} fontWeight={500}>
+        NBE
+      </Typography>
+      <Typography variant="subtitle2" color={colors.warning[700]} fontWeight={600} sx={{ display: 'flex', mt: '16px' }}>
+        <AlertIcon stroke={colors.warning[700]} sx={{ fill: '#fff', mr: '14px' }} /> DAO Symbol cannot be changed later.
+      </Typography>
+      <Divider orientation="horizontal" sx={{ m: '16px 0' }} />
+      <Typography variant="caption" color={colors.gray[500]} m="0">
+        Deploying on
+      </Typography>
+      <Typography variant="subtitle2" color={colors.gray[900]} fontWeight={500}>
+        Arbitrum
+      </Typography>
     </Card>
-
-    <Card className="founder-card">
-      <Box>
-        <Typography variant="body1" sx={{ fontWeight: 500, color: '#121926', mb: '20px' }}>
-          Governance
-        </Typography>
-        <Divider orientation="horizontal" />
-        <Typography variant="caption" sx={{ mb: 0 }}>
-          Voting Period
-        </Typography>
-        <Typography variant="subtitle1" sx={{ fontWeight: 500, color: '#121926' }}>
-          10 minutes
-        </Typography>
-        <Divider orientation="horizontal" />
-        <Typography variant="caption" sx={{ mb: 0 }}>
-          Quorum
-        </Typography>
-        <Typography variant="subtitle1" sx={{ fontWeight: 500, color: '#121926' }}>
-          20%
-        </Typography>
-        <Divider orientation="horizontal" />
-        <Typography variant="caption" sx={{ mb: 0 }}>
-          Approval Needed
-        </Typography>
-        <Typography variant="subtitle1" sx={{ fontWeight: 500, color: '#121926' }}>
-          60%
-        </Typography>
-      </Box>
+    <Card sx={{ mb: '24px', background: colors.gray[50], boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)' }}>
+      <Typography variant="subtitle1" color={colors.gray[900]} fontWeight={500}>
+        Governance
+      </Typography>
+      <Divider orientation="horizontal" sx={{ m: '20px 0 16px' }} />
+      <Typography display="flex" variant="caption" color={colors.gray[500]} m="0">
+        Voting Period
+        <Tooltip arrow title={<Typography variant="caption">Tooltip with HTML</Typography>}>
+          <img src="/icons/info-icon.svg" style={{ marginLeft: '9px', cursor: 'pointer', fill: 'none' }} />
+        </Tooltip>
+      </Typography>
+      <Typography variant="subtitle2" color={colors.gray[900]} m="0" fontWeight={500}>
+        10 minutes
+      </Typography>
+      <Divider orientation="horizontal" sx={{ m: '16px 0' }} />
+      <Typography display="flex" variant="caption" color={colors.gray[500]} m="0">
+        Quorum
+        <Tooltip arrow title={<Typography variant="caption">Tooltip with HTML</Typography>}>
+          <img src="/icons/info-icon.svg" style={{ marginLeft: '9px', cursor: 'pointer', fill: 'none' }} />
+        </Tooltip>
+      </Typography>
+      <Typography variant="subtitle2" color={colors.gray[900]} m="0" fontWeight={500}>
+        20%
+      </Typography>
+      <Divider orientation="horizontal" sx={{ m: '16px 0' }} />
+      <Typography display="flex" variant="caption" color={colors.gray[500]} m="0">
+        Approval Needed
+        <Tooltip arrow title={<Typography variant="caption">Tooltip with HTML</Typography>}>
+          <img src="/icons/info-icon.svg" style={{ marginLeft: '9px', cursor: 'pointer', fill: 'none' }} />
+        </Tooltip>
+      </Typography>
+      <Typography variant="subtitle2" color={colors.gray[900]} m="0" fontWeight={500}>
+        60%
+      </Typography>
     </Card>
-
-    <Card className="founder-card">
-      <Box>
-        <Typography variant="body1" sx={{ fontWeight: 500, color: '#121926', mb: '20px' }}>
-          Token Features
+    <Card sx={{ mb: '24px', background: colors.gray[50], boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)' }}>
+      <Typography variant="subtitle1" color={colors.gray[900]} fontWeight={500}>
+        Token Features
+      </Typography>
+      <Divider orientation="horizontal" sx={{ m: '20px 0 16px' }} />
+      <Typography display="flex" variant="subtitle2" color={colors.gray[900]} sx={{ mb: '16px' }}>
+        Redemption
+        <Tooltip arrow title={<Typography variant="caption">Tooltip with HTML</Typography>}>
+          <img src="/icons/info-icon.svg" style={{ marginLeft: '9px', cursor: 'pointer', fill: 'none' }} />
+        </Tooltip>
+      </Typography>
+      <Typography display="flex" variant="subtitle2" color={colors.gray[900]}>
+        Transferrable
+        <Tooltip arrow title={<Typography variant="caption">Tooltip with HTML</Typography>}>
+          <img src="/icons/info-icon.svg" style={{ marginLeft: '9px', cursor: 'pointer', fill: 'none' }} />
+        </Tooltip>
+      </Typography>
+    </Card>
+    <Card sx={{ mb: '24px', background: colors.gray[50], boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)' }}>
+      <Typography variant="subtitle1" color={colors.gray[900]} fontWeight={500}>
+        Founder
+      </Typography>
+      <Divider orientation="horizontal" sx={{ m: '20px 0 16px' }} />
+      <Card>
+        <Typography variant="caption" color={colors.gray[500]}>
+          Address
         </Typography>
-        <Divider orientation="horizontal" />
-        <Typography variant="subtitle1" sx={{ mb: '16px', color: '#121926' }}>
-          Redemption
+        <Typography variant="subtitle2" color={colors.gray[900]} fontWeight={500}>
+          0xdCE92c61B5faFB1289e3b56b6A65DCd26fED5E91
         </Typography>
-        <Typography variant="subtitle1" sx={{ color: '#121926' }}>
-          Transferrable
+        <Divider orientation="horizontal" sx={{ m: '20px 0 16px' }} />
+        <Typography variant="caption" color={colors.gray[500]}>
+          Tokens
         </Typography>
-      </Box>
+        <Typography variant="subtitle2" color={colors.gray[900]} fontWeight={500}>
+          1
+        </Typography>
+        <Divider orientation="horizontal" sx={{ m: '20px 0 16px' }} />
+        <Typography variant="caption" color={colors.gray[500]}>
+          Email
+        </Typography>
+        <Typography variant="subtitle2" color={colors.gray[900]} fontWeight={500}>
+          victor@netbee.ro
+        </Typography>
+      </Card>
     </Card>
   </>
 )

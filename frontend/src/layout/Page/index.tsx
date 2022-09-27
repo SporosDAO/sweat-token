@@ -104,7 +104,7 @@ export function PageLayout(props: PageLayoutProps) {
             pr: '24px' // keep right padding when drawer closed
           }}
         >
-          <Avatar alt="Sporos DAO logo" src="/logo192.png" />
+          <Avatar alt="Sporos DAO logo" src="/logo192.png" sx={{ width: '32px', height: '32px' }} />
           {props.withDrawer !== false ? (
             <IconButton
               edge="start"
@@ -121,6 +121,9 @@ export function PageLayout(props: PageLayoutProps) {
           ) : (
             <></>
           )}
+          <Typography variant="subtitle1" fontWeight={600} noWrap sx={{ ml: 2 }}>
+            Sporos DAO
+          </Typography>
           <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1, ml: 2 }}>
             {isMyDaoLoaded && myDao?.token && `${myDao?.token?.name} (${myDao?.token?.symbol})`}
           </Typography>
@@ -169,7 +172,7 @@ export function PageLayout(props: PageLayoutProps) {
         }}
       >
         <Toolbar />
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
           {props.children}
           <Copyright sx={{ pt: 4 }} />
         </Container>

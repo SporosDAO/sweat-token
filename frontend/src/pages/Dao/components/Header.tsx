@@ -1,5 +1,6 @@
 import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
+import { colors } from '../../../theme/colorPalette'
 
 type Props = {
   title: string
@@ -8,13 +9,13 @@ type Props = {
 
 const Header: React.FC<Props> = (props) => (
   <>
-    <Typography variant="h2" sx={{ mb: '4px' }}>
+    <Typography variant="h6" mb="4px">
       {props.title}
     </Typography>
-    <Typography variant="subtitle1" sx={{ color: '#364152' }}>
+    <Typography variant="subtitle2" color={colors.gray[700]}>
       {props.subtitle}
     </Typography>
-    <Divider orientation="horizontal" />
+    <Divider orientation="horizontal" sx={{ m: '20px 0 24px' }} />
   </>
 )
 
