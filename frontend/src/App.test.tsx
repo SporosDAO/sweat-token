@@ -1,5 +1,17 @@
-import { screen, act } from '@testing-library/react'
 import ReactDOM from 'react-dom/client'
+import App from './App'
+import {
+  Providers,
+  UserEvent,
+  act,
+  addressRegex,
+  getSigners,
+  render,
+  screen,
+  setupClient,
+  userEvent,
+  waitFor
+} from '../test'
 
 let container: Element | undefined
 
@@ -19,4 +31,24 @@ test('renders learn react link', () => {
   })
   const textElement = screen.getByText(/learn react/i)
   expect(textElement).toBeInTheDocument()
+})
+
+describe('<Connect />', () => {
+  let user: UserEvent
+  beforeEach(() => {
+    user = userEvent.setup()
+  })
+
+  it('render landing page', async () => {
+    render(<App />)
+    await act(async () => {
+      await expect(screen.getByText('The Launchpad of For-Profit DAOs')).toBeInTheDocument()
+      await expect(screen.queryByText('nonsense')).toBeNull()
+    })
+    // Connect to wallet
+    // const connectButton = screen.getByRole('button', { name: 'Mock' })
+    // act(() => {
+    //   user.click(connectButton)
+    // })
+  })
 })
