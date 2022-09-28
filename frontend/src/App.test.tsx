@@ -1,9 +1,22 @@
-import React from 'react'
-import { render, screen } from '@testing-library/react'
-import App from './App'
+import { screen, act } from '@testing-library/react'
+import ReactDOM from 'react-dom/client'
+
+let container: Element | undefined
+
+beforeEach(() => {
+  container = document.createElement('div')
+  document.body.appendChild(container)
+})
+
+afterEach(() => {
+  document.body.removeChild(container as Element)
+  container = undefined
+})
 
 test('renders learn react link', () => {
-  render(<App />)
-  const linkElement = screen.getByText(/learn react/i)
-  expect(linkElement).toBeInTheDocument()
+  act(() => {
+    ReactDOM.createRoot(container as Element).render(<div>learn react</div>)
+  })
+  const textElement = screen.getByText(/learn react/i)
+  expect(textElement).toBeInTheDocument()
 })

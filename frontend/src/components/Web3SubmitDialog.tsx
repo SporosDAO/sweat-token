@@ -5,7 +5,7 @@ import { Check, Error } from '@mui/icons-material'
 import { chain } from 'wagmi'
 import { useContractWrite, usePrepareContractWrite } from 'wagmi'
 import { useParams } from 'react-router-dom'
-import { useChainGuard } from 'kalidao-hooks'
+import { useChainGuard } from '@kalidao/hooks'
 
 interface Web3SubmitDialogProps {
   open: boolean
