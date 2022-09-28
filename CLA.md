@@ -1,15 +1,15 @@
 ### Sporos DAO Individual Contributor License Agreement
 
-Thank you for your interest in contributing to open source software projects (“Projects”) made available by Sporos DAO or its affiliates (“SPOROS”). This Individual Contributor License Agreement (“Agreement”) sets out the terms governing any source code, object code, bug fixes, configuration changes, tools, specifications, documentation, data, materials, feedback, information or other works of authorship that you submit or have submitted, in any form and in any manner, to SAP in respect of any of the Projects (collectively “Contributions”). If you have any questions respecting this Agreement, please contact opensource@sap.com.
+Thank you for your interest in contributing to open source software projects (“Projects”) made available by Sporos DAO or its affiliates (“SPOROS”). This Individual Contributor License Agreement (“Agreement”) sets out the terms governing any source code, object code, bug fixes, configuration changes, tools, specifications, documentation, data, materials, feedback, information or other works of authorship that you submit or have submitted, in any form and in any manner, to SPOROS in respect of any of the Projects (collectively “Contributions”). If you have any questions respecting this Agreement, please contact opensource@sap.com.
 
 
 You agree that the following terms apply to all of your past, present and future Contributions. Except for the licenses granted in this Agreement, you retain all of your right, title and interest in and to your Contributions.
 
 
-**Copyright License.** You hereby grant, and agree to grant, to SAP a non-exclusive, perpetual, irrevocable, worldwide, fully-paid, royalty-free, transferable copyright license to reproduce, prepare derivative works of, publicly display, publicly perform, and distribute your Contributions and such derivative works, with the right to sublicense the foregoing rights through multiple tiers of sublicensees.
+**Copyright License.** You hereby grant, and agree to grant, to SPOROS a non-exclusive, perpetual, irrevocable, worldwide, fully-paid, royalty-free, transferable copyright license to reproduce, prepare derivative works of, publicly display, publicly perform, and distribute your Contributions and such derivative works, with the right to sublicense the foregoing rights through multiple tiers of sublicensees.
 
 
-**Patent License.** You hereby grant, and agree to grant, to SAP a non-exclusive, perpetual, irrevocable,
+**Patent License.** You hereby grant, and agree to grant, to SPOROS a non-exclusive, perpetual, irrevocable,
 worldwide, fully-paid, royalty-free, transferable patent license to make, have made, use, offer to sell, sell,
 import, and otherwise transfer your Contributions, where such license applies only to those patent claims
 licensable by you that are necessarily infringed by your Contributions alone or by combination of your
@@ -18,7 +18,7 @@ foregoing rights through multiple tiers of sublicensees.
 
 
 **Moral Rights.** To the fullest extent permitted under applicable law, you hereby waive, and agree not to
-assert, all of your “moral rights” in or relating to your Contributions for the benefit of SAP, its assigns, and
+assert, all of your “moral rights” in or relating to your Contributions for the benefit of SPOROS, its assigns, and
 their respective direct and indirect sublicensees.
 
 
@@ -62,5 +62,5 @@ that any of the provisions of this Agreement shall be held by a court or other t
 to be unenforceable, the remaining portions hereof shall remain in full force and effect.
 
 
-**Assignment.** You agree that SAP may assign this Agreement, and all of its rights, obligations and licenses
+**Assignment.** You agree that SPOROS may assign this Agreement, and all of its rights, obligations and licenses
 hereunder.

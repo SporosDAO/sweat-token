@@ -16,8 +16,7 @@ jobs:
         run: |
           yarn install
           yarn build
-          # TODO: front end tests need to be prepared for ci
-          # yarn test
+          yarn test
         working-directory: frontend
         env:
           CI: false
