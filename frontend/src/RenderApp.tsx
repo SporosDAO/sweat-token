@@ -13,22 +13,20 @@ export function renderApp(root: Root) {
   const queryClient = new QueryClient()
 
   root.render(
-    <div>
-      <React.StrictMode>
-        <ServiceWorkerWrapper />
-        <QueryClientProvider client={queryClient}>
-          <BrowserRouter>
-            <ToastProvider>
-              <Web3ContextProvider>
-                <PageProvider>
-                  <App />
-                </PageProvider>
-              </Web3ContextProvider>
-            </ToastProvider>
-          </BrowserRouter>
-        </QueryClientProvider>
-      </React.StrictMode>
-    </div>
+    <React.StrictMode>
+      <ServiceWorkerWrapper />
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <ToastProvider>
+            <Web3ContextProvider>
+              <PageProvider>
+                <App />
+              </PageProvider>
+            </Web3ContextProvider>
+          </ToastProvider>
+        </BrowserRouter>
+      </QueryClientProvider>
+    </React.StrictMode>
   )
 }
 
