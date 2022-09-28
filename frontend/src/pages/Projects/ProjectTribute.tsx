@@ -20,7 +20,8 @@ export default function ProjectTribute() {
   const location = useLocation()
 
   const project = location?.state as any
-  const { manager, projectID, budget, goals, deadline } = project
+
+  const { manager, projectID, budget, goals, deadline } = project || {}
 
   const { address: userAddress } = useAccount()
   const isManager = userAddress === manager
@@ -114,92 +115,103 @@ export default function ProjectTribute() {
         maxWidth: 400
       }}
     >
-      <Alert severity="info">
-        Submit tribute for project #{projectID}
-        {goals &&
-          goals.map((goal: { goalTitle: string; goalLink: string }, idx: Key) => (
-            <div key={idx}>
-              <Typography variant="h5" component="div">
-                {goal.goalTitle}
-              </Typography>
-              <Link href={goal.goalLink} sx={{ fontSize: 14 }} target="_blank" rel="noopener" color="text.secondary">
-                Tracking Link
-              </Link>
-            </div>
-          ))}
-      </Alert>
       {!isManager && (
-        <Alert severity="error">
-          You are not the manager of this project. Your wallet account {userAddress} does not match the manager account{' '}
-          {manager}.
+        <Alert severity="error" sx={{ overflow: 'hidden', wordBreak: 'break-word' }}>
+          You are not the manager of this project. Your wallet account "{userAddress}" does not match the manager
+          account {manager}.
         </Alert>
       )}
-      {isExpired && <Alert severity="error">This project deadline expired on {deadlineString}.</Alert>}
-      {!hasBudget && <Alert severity="error">This project has no budget left.</Alert>}
-      <List component="form" onSubmit={handleSubmit(onSubmit, onSubmitError)}>
-        <ListItem>
-          <TextField
-            label="Contributor"
-            helperText="ETH L1/L2 address: 0x..."
-            variant="filled"
-            fullWidth
-            {...register('contributorAddress', { required: 'Contributor address is required.' })}
-          />
-        </ListItem>
-        <ListItem>
-          <ErrorMessage as={<Alert severity="error" />} errors={errors} name="contributorAddress" />
-        </ListItem>
-        <ListItem>
-          <TextField
-            label="Mint Amount"
-            helperText="Amount in DAO sweat tokens to mint to contributor"
-            variant="filled"
-            type="number"
-            InputProps={{
-              startAdornment: <InputAdornment position="start">{myDao?.token?.symbol}</InputAdornment>
-            }}
-            fullWidth
-            {...register('mintAmount', {
-              required: 'Mint amount is required.',
-              min: { value: 0, message: 'Mint value must be positive.' },
-              max: { value: budget, message: `Mint value must be within budget: ${budget}.` }
-            })}
-          />
-        </ListItem>
-        <ListItem>
-          <ErrorMessage as={<Alert severity="error" />} errors={errors} name="mintAmount" />
-        </ListItem>
-        <ListItem>
-          <TextField
-            label="Tribute Title"
-            helperText="Describe the tribute to the project"
-            variant="filled"
-            fullWidth
-            {...register('tributeTitle', { required: 'Tribute title is required.' })}
-          ></TextField>
-        </ListItem>
-        <ListItem>
-          <ErrorMessage as={<Alert severity="error" />} errors={errors} name="tributeTitle" />
-        </ListItem>
-        <ListItem>
-          <TextField
-            type="url"
-            label="Tribute Reference Link"
-            helperText="URL referencing tribute details."
-            variant="filled"
-            fullWidth
-            {...register('tributeLink')}
-          />
-        </ListItem>
-        <ListItem>
-          <ErrorMessage as={<Alert severity="error" />} errors={errors} name="tributeLink" />
-        </ListItem>
-        <ListItem>
-          <Button type="submit" variant="contained" data-testid="submit-button">
-            Submit
-          </Button>
-        </ListItem>
-      </List>
+
+      {isManager && (
+        <>
+          <Alert severity="info">
+            Submit tribute for project #{projectID}
+            {goals &&
+              goals.map((goal: { goalTitle: string; goalLink: string }, idx: Key) => (
+                <div key={idx}>
+                  <Typography variant="h5" component="div">
+                    {goal.goalTitle}
+                  </Typography>
+                  <Link
+                    href={goal.goalLink}
+                    sx={{ fontSize: 14 }}
+                    target="_blank"
+                    rel="noopener"
+                    color="text.secondary"
+                  >
+                    Tracking Link
+                  </Link>
+                </div>
+              ))}
+          </Alert>
+          {isExpired && <Alert severity="error">This project deadline expired on {deadlineString}.</Alert>}
+          {!hasBudget && <Alert severity="error">This project has no budget left.</Alert>}
+          <List component="form" onSubmit={handleSubmit(onSubmit, onSubmitError)}>
+            <ListItem>
+              <TextField
+                label="Contributor"
+                helperText="ETH L1/L2 address: 0x..."
+                variant="filled"
+                fullWidth
+                {...register('contributorAddress', { required: 'Contributor address is required.' })}
+              />
+            </ListItem>
+            <ListItem>
+              <ErrorMessage as={<Alert severity="error" />} errors={errors} name="contributorAddress" />
+            </ListItem>
+            <ListItem>
+              <TextField
+                label="Mint Amount"
+                helperText="Amount in DAO sweat tokens to mint to contributor"
+                variant="filled"
+                type="number"
+                InputProps={{
+                  startAdornment: <InputAdornment position="start">{myDao?.token?.symbol}</InputAdornment>
+                }}
+                fullWidth
+                {...register('mintAmount', {
+                  required: 'Mint amount is required.',
+                  min: { value: 0, message: 'Mint value must be positive.' },
+                  max: { value: budget, message: `Mint value must be within budget: ${budget}.` }
+                })}
+              />
+            </ListItem>
+            <ListItem>
+              <ErrorMessage as={<Alert severity="error" />} errors={errors} name="mintAmount" />
+            </ListItem>
+            <ListItem>
+              <TextField
+                label="Tribute Title"
+                helperText="Describe the tribute to the project"
+                variant="filled"
+                fullWidth
+                {...register('tributeTitle', { required: 'Tribute title is required.' })}
+              ></TextField>
+            </ListItem>
+            <ListItem>
+              <ErrorMessage as={<Alert severity="error" />} errors={errors} name="tributeTitle" />
+            </ListItem>
+            <ListItem>
+              <TextField
+                type="url"
+                label="Tribute Reference Link"
+                helperText="URL referencing tribute details."
+                variant="filled"
+                fullWidth
+                {...register('tributeLink')}
+              />
+            </ListItem>
+            <ListItem>
+              <ErrorMessage as={<Alert severity="error" />} errors={errors} name="tributeLink" />
+            </ListItem>
+            <ListItem>
+              <Button type="submit" variant="contained" data-testid="submit-button">
+                Submit
+              </Button>
+            </ListItem>
+          </List>
+        </>
+      )}
       {isDialogOpen && ( // use check to prevent Web3SubmitDialog rendering before open due to wagmi bug in updating config when contract args update with form data
         <Web3SubmitDialog open={isDialogOpen} onClose={onDialogClose} txInput={txInput} hrefAfterSuccess=".." />
       )}
