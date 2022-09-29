@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 describe('Project Tribute Page', () => {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   beforeEach(() => {})

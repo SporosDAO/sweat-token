@@ -1,5 +1,4 @@
 import '@testing-library/jest-dom'
-import * as rainbowkit from '@rainbow-me/rainbowkit'
 import { MockConnect } from './components/MockConnect'
 
 global.CSS = { supports: jest.fn() }
