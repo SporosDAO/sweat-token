@@ -115,14 +115,14 @@ export default function ProjectTribute() {
         maxWidth: 400
       }}
     >
-      {!isManager && (
+      {isManager && (
         <Alert severity="error" sx={{ overflow: 'hidden', wordBreak: 'break-word' }}>
           You are not the manager of this project. Your wallet account "{userAddress}" does not match the manager
           account {manager}.
         </Alert>
       )}
 
-      {isManager && (
+      {!isManager && (
         <>
           <Alert severity="info">
             Submit tribute for project #{projectID}

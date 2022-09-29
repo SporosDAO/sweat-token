@@ -1,13 +1,14 @@
-import { useNetwork, useAccount } from '../context/Web3Context'
-import { USER_DAOS } from '../graph'
-import { List, ListItem, Card, CardActions, Button, CardContent, CardActionArea, Typography } from '@mui/material'
-import { Launch, ReadMore } from '@mui/icons-material'
-import { useQuery } from 'react-query'
+// @todo Keith - fix types
 import { request } from 'graphql-request'
-import { GRAPH_URL } from '../graph'
+import { useQuery } from 'react-query'
 import { useNavigate } from 'react-router-dom'
+import { Launch, ReadMore } from '@mui/icons-material'
+import { List, ListItem, Card, CardActions, Button, CardContent, CardActionArea, Typography } from '@mui/material'
 
-export function useGetUserDAOs(chainId, userAddress) {
+import { GRAPH_URL, USER_DAOS } from '../../../graph'
+import { useNetwork, useAccount } from '../../../context/Web3Context'
+
+export const useGetUserDAOs = (chainId: any, userAddress: string) => {
   return useQuery([chainId, userAddress, USER_DAOS], async () => {
     if (!chainId || !userAddress) return {}
     const data = await request(GRAPH_URL[chainId], USER_DAOS, { address: userAddress })
@@ -15,10 +16,10 @@ export function useGetUserDAOs(chainId, userAddress) {
   })
 }
 
-export default function MyDAOs() {
+const MyDAOs: React.FC = () => {
   const navigate = useNavigate()
-  const { chain } = useNetwork()
-  const { address, isConnecting, isDisconnected } = useAccount()
+  const { chain }: any = useNetwork()
+  const { address, isConnecting, isDisconnected }: any = useAccount()
   const { data, isLoading, isSuccess } = useGetUserDAOs(chain?.id, address)
 
   const daos = isSuccess ? data?.['members'] : []
@@ -33,7 +34,7 @@ export default function MyDAOs() {
         <div>Please connect your web3 wallet.</div>
       ) : daos && daos.length > 0 ? (
         <List>
-          {daos.map((dao) => (
+          {daos.map((dao: any) => (
             <ListItem key={dao.dao.id} data-testid={dao.dao.id}>
               <Card sx={{ width: '100%' }} raised={true}>
                 <CardActionArea
@@ -60,7 +61,6 @@ export default function MyDAOs() {
                   <Button
                     variant="text"
                     endIcon={<ReadMore />}
-                    fontSize="inherit"
                     onClick={() => {
                       navigate(`dao/chain/${chain.id}/address/${dao['dao']['id']}/projects/`)
                     }}
@@ -70,7 +70,6 @@ export default function MyDAOs() {
                   <Button
                     variant="text"
                     endIcon={<Launch />}
-                    fontSize="inherit"
                     href={`https://app.kali.gg/daos/${chain.id}/${dao['dao']['address']}`}
                     rel="noopener"
                     target="_blank"
@@ -88,3 +87,5 @@ export default function MyDAOs() {
     </>
   )
 }
+
+export default MyDAOs

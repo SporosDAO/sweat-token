@@ -56,7 +56,9 @@ const Create: React.FC = () => {
         </Grid>
         <Grid item width="70%" p={3}>
           <Formik
-            // @Keith - May remove Formik and use React Context to handle this flow instead
+            // @Keith - @todo - remove Formik and use react-hook-form instead as this is already used
+            // in the project.
+
             // @Keith - may wire up each tab to the router (not sure it's needed yet though as you)
             // shouldn't be able to advance to the next tab without completing the previous, so it
             // would probably serve no purpose?
@@ -92,7 +94,7 @@ const Create: React.FC = () => {
                   ) : (
                     <Box />
                   )}
-                  {activeView < 4 && (
+                  {activeView < 3 && (
                     <Button
                       size="small"
                       variant="contained"
