@@ -11,6 +11,7 @@ import { ErrorMessage } from '@hookform/error-message'
 import { useAccount } from 'wagmi'
 import { Key } from 'react'
 import { useGetDAO } from '../../graph/getDAO'
+import { useConnectModal } from '@rainbow-me/rainbowkit'
 
 export default function ProjectTribute() {
   const { chainId, daoId, projectId } = useParams()
@@ -23,7 +24,9 @@ export default function ProjectTribute() {
 
   const { manager, projectID, budget, goals, deadline } = project || {}
 
-  const { address: userAddress } = useAccount()
+  const { openConnectModal } = useConnectModal()
+
+  const { address: userAddress, isDisconnected } = useAccount()
   const isManager = userAddress === manager
 
   const deadlineDate = new Date()
@@ -115,14 +118,24 @@ export default function ProjectTribute() {
         maxWidth: 400
       }}
     >
-      {!isManager && (
+      {isDisconnected && (
+        <Alert severity="error" sx={{ overflow: 'hidden', wordBreak: 'break-word' }}>
+          Your wallet has been disconnected. Click{' '}
+          <Link onClick={openConnectModal} color={'#0000EE'} sx={{ cursor: 'pointer' }}>
+            here
+          </Link>{' '}
+          to connect again.
+        </Alert>
+      )}
+
+      {!isManager && !isDisconnected && (
         <Alert severity="error" sx={{ overflow: 'hidden', wordBreak: 'break-word' }}>
           You are not the manager of this project. Your wallet account "{userAddress}" does not match the manager
           account {manager}.
         </Alert>
       )}
 
-      {isManager && (
+      {isManager && !isDisconnected && (
         <>
           <Alert severity="info">
             Submit tribute for project #{projectID}
