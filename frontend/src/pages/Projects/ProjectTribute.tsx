@@ -128,7 +128,7 @@ export default function ProjectTribute() {
         </Alert>
       )}
 
-      {!isManager && (
+      {!isManager && !isDisconnected && (
         <Alert severity="error" sx={{ overflow: 'hidden', wordBreak: 'break-word' }}>
           You are not the manager of this project. Your wallet account "{userAddress}" does not match the manager
           account {manager}.
