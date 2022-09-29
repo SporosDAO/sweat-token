@@ -1,4 +1,5 @@
 import React from 'react'
+import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import Divider from '@mui/material/Divider'
 import Tooltip from '@mui/material/Tooltip'
@@ -8,8 +9,6 @@ import { FormikValues, FormikHandlers } from 'formik'
 import Header from '../components/Header'
 import { colors } from '../../../theme/colorPalette'
 import { AlertIcon, CheckIcon } from '../../../components/Icons'
-import Grid from '@mui/material/Grid'
-import Box from '@mui/material/Box'
 
 const Confirmation: React.FC<Partial<FormikValues & FormikHandlers>> = ({ values, handleChange }) => (
   <>
