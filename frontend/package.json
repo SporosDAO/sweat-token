@@ -48,7 +48,7 @@
     "apigen": "openapi-generator-cli generate -i http://localhost:3001/api/docs-json -g typescript-axios -o src/api/openapi",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --watchAll=false --detectOpenHandles --forceExit",
+    "test": "react-scripts test --watchAll=false --detectOpenHandles --forceExit --coverage",
     "test:dev": "react-scripts test --detectOpenHandles",
     "eject": "react-scripts eject",
     "lint": "eslint './src/**/*.js' './src/**/*.ts*' --fix",
@@ -111,5 +111,13 @@
     }
   },
   "jest": {
-  }
+    "coverageThreshold": {
+          "global": {
+            "branches": 8,
+            "functions": 8,
+            "lines": 8,
+            "statements": 8
+          }
+      }
+    }
 }
