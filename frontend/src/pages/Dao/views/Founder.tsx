@@ -3,6 +3,7 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
+import InputAdornment from '@mui/material/InputAdornment'
 import { FormikValues, FormikHandlers } from 'formik'
 
 import Header from '../components/Header'
@@ -54,6 +55,17 @@ const Founder: React.FC<Partial<FormikValues & FormikHandlers>> = ({ values, han
                 value={values.email}
                 onChange={handleChange}
                 helperText="This email is for Sporos' use only and will not be made public."
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <img
+                        src="/icons/mail-icon.svg"
+                        alt="Mail Tooltip Icon"
+                        style={{ cursor: 'pointer', fill: 'none' }}
+                      />
+                    </InputAdornment>
+                  )
+                }}
               />
             </Box>
           </Card>

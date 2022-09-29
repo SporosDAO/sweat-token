@@ -40,6 +40,7 @@ export const lightTheme = createTheme({
     MuiButton: MuiComponentConfig.Button,
     MuiCard: MuiComponentConfig.Card,
     MuiChip: MuiComponentConfig.Chip,
+    MuiCheckbox: MuiComponentConfig.Checkbox,
     MuiDivider: MuiComponentConfig.Divider,
     MuiTooltip: MuiComponentConfig.Tooltip,
     MuiPaper: {

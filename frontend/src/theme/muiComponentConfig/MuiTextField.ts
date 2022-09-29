@@ -25,6 +25,9 @@ export const MuiTextFieldConfig: Components['MuiTextField'] = {
           color: 'inherit'
         }
       },
+      '& .MuiInputAdornment-root': {
+        marginRight: 0
+      },
       '& .MuiFormHelperText-root': {
         marginLeft: '0px',
         fontSize: '12px',
@@ -66,12 +69,15 @@ export const MuiTextFieldConfig: Components['MuiTextField'] = {
 
       '& .MuiOutlinedInput-notchedOutline': {
         border: `1px solid ${colors.gray[300]}`,
-        boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)'
+        boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)',
+        '& > legend': {
+          width: 0
+        }
       },
       '& input': {
         padding: '10px 14px',
         '&.Mui-disabled': {
-          '-webkitTextFillColor': colors.gray[500],
+          WebkitTextFillColor: colors.gray[500],
           color: colors.gray[500]
         }
       }

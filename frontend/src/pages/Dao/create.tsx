@@ -11,7 +11,6 @@ import { Formik } from 'formik'
 import Name from './views/Name'
 import Founder from './views/Founder'
 import Payment from './views/Payment'
-import Structure from './views/Structure'
 import Confirmation from './views/Confirmation'
 import { colors } from '../../theme/colorPalette'
 import { DaoLayout } from '../../layout/dao-layout'
@@ -19,7 +18,6 @@ import { a11yProps, TabPanel } from './components/TabPanel'
 import { ArrowRight, HelpIcon } from '../../components/Icons'
 
 enum View {
-  Structure,
   Name,
   Founder,
   Confirmation,
@@ -34,7 +32,7 @@ const schema: any = Nope.object().shape({
 const Create: React.FC = () => {
   const [activeView, setActiveView] = React.useState(View.Name)
   return (
-    <DaoLayout hideSidebar={[View.Structure, View.Confirmation].includes(activeView)}>
+    <DaoLayout hideSidebar={[View.Confirmation].includes(activeView)}>
       <Grid container>
         <Grid item width="30%">
           <Tabs
@@ -44,7 +42,6 @@ const Create: React.FC = () => {
             aria-label="scrollable force tabs example"
             TabIndicatorProps={{ sx: { left: 0, backgroundColor: colors.primary[600] } }}
           >
-            <Tab label="Structure" {...a11yProps(View.Structure)} />
             <Tab label="Name" {...a11yProps(View.Name)} />
             <Tab label="Founder" {...a11yProps(View.Founder)} />
             <Tab label="Confirmation" {...a11yProps(View.Confirmation)} />
@@ -70,9 +67,6 @@ const Create: React.FC = () => {
           >
             {({ handleSubmit, ...formData }) => (
               <form onSubmit={handleSubmit}>
-                <TabPanel value={activeView} index={View.Structure}>
-                  <Structure />
-                </TabPanel>
                 <TabPanel value={activeView} index={View.Name}>
                   <Name {...formData} />
                 </TabPanel>
