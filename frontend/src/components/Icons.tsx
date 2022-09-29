@@ -40,3 +40,10 @@ export const HelpIcon = (props: SvgIconProps) => (
     </defs>
   </SvgIcon>
 )
+
+export const CheckIcon = (props: SvgIconProps) => (
+  <SvgIcon {...props}>
+    <rect width="20" height="20" rx="10" fill="#FEE4E2" />
+    <path d="M12.5 7.5L7.5 12.5M7.5 7.5L12.5 12.5" stroke="#F04438" strokeLinecap="round" strokeLinejoin="round" />
+  </SvgIcon>
+)

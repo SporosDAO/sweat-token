@@ -7,7 +7,9 @@ import { FormikValues, FormikHandlers } from 'formik'
 
 import Header from '../components/Header'
 import { colors } from '../../../theme/colorPalette'
-import { AlertIcon } from '../../../components/Icons'
+import { AlertIcon, CheckIcon } from '../../../components/Icons'
+import Grid from '@mui/material/Grid'
+import Box from '@mui/material/Box'
 
 const Confirmation: React.FC<Partial<FormikValues & FormikHandlers>> = ({ values, handleChange }) => (
   <>
@@ -66,7 +68,14 @@ const Confirmation: React.FC<Partial<FormikValues & FormikHandlers>> = ({ values
       <Divider orientation="horizontal" sx={{ m: '20px 0 16px' }} />
       <Typography display="flex" variant="caption" color={colors.gray[500]} m="0">
         Voting Period
-        <Tooltip arrow title={<Typography variant="caption">Tooltip with HTML</Typography>}>
+        <Tooltip
+          arrow
+          title={
+            <Typography variant="caption">
+              This is the time period proposals for your company will be live for.
+            </Typography>
+          }
+        >
           <img
             src="/icons/info-icon.svg"
             alt="Information Tooltip Icon"
@@ -80,7 +89,14 @@ const Confirmation: React.FC<Partial<FormikValues & FormikHandlers>> = ({ values
       <Divider orientation="horizontal" sx={{ m: '16px 0' }} />
       <Typography display="flex" variant="caption" color={colors.gray[500]} m="0">
         Quorum
-        <Tooltip arrow title={<Typography variant="caption">Tooltip with HTML</Typography>}>
+        <Tooltip
+          arrow
+          title={
+            <Typography variant="caption">
+              This is the percentage of your LLC's tokens that need to vote on a proposal for it to be valid
+            </Typography>
+          }
+        >
           <img
             src="/icons/info-icon.svg"
             alt="Information Tooltip Icon"
@@ -94,7 +110,14 @@ const Confirmation: React.FC<Partial<FormikValues & FormikHandlers>> = ({ values
       <Divider orientation="horizontal" sx={{ m: '16px 0' }} />
       <Typography display="flex" variant="caption" color={colors.gray[500]} m="0">
         Approval Needed
-        <Tooltip arrow title={<Typography variant="caption">Tooltip with HTML</Typography>}>
+        <Tooltip
+          arrow
+          title={
+            <Typography variant="caption">
+              This is the percentage of tokens that need to vote 'Yes' on a proposal for it to pass
+            </Typography>
+          }
+        >
           <img
             src="/icons/info-icon.svg"
             alt="Information Tooltip Icon"
@@ -111,26 +134,56 @@ const Confirmation: React.FC<Partial<FormikValues & FormikHandlers>> = ({ values
         Token Features
       </Typography>
       <Divider orientation="horizontal" sx={{ m: '20px 0 16px' }} />
-      <Typography display="flex" variant="subtitle2" color={colors.gray[900]} sx={{ mb: '16px' }}>
-        Redemption
-        <Tooltip arrow title={<Typography variant="caption">Tooltip with HTML</Typography>}>
-          <img
-            src="/icons/info-icon.svg"
-            alt="Information Tooltip Icon"
-            style={{ marginLeft: '9px', cursor: 'pointer', fill: 'none' }}
-          />
-        </Tooltip>
-      </Typography>
-      <Typography display="flex" variant="subtitle2" color={colors.gray[900]}>
-        Transferrable
-        <Tooltip arrow title={<Typography variant="caption">Tooltip with HTML</Typography>}>
-          <img
-            src="/icons/info-icon.svg"
-            alt="Information Tooltip Icon"
-            style={{ marginLeft: '9px', cursor: 'pointer', fill: 'none' }}
-          />
-        </Tooltip>
-      </Typography>
+      <Grid item display="flex" alignItems="center" justifyContent="space-between" mb="5px">
+        <Typography display="flex" variant="subtitle2" color={colors.gray[900]}>
+          Redemption
+          <Tooltip
+            arrow
+            title={
+              <Typography variant="caption">
+                Allows token holders to burn or 'ragequit' their LLC's tokens for a proportionate share of whitelisted
+                treasury assets.
+              </Typography>
+            }
+          >
+            <img
+              src="/icons/info-icon.svg"
+              alt="Information Tooltip Icon"
+              style={{ marginLeft: '9px', cursor: 'pointer', fill: 'none' }}
+            />
+          </Tooltip>
+        </Typography>
+        <Grid item display="flex" alignItems="center" gap="10px">
+          <CheckIcon sx={{ mt: '4px' }} />
+          <Typography variant="caption">No</Typography>
+        </Grid>
+      </Grid>
+      <Grid item display="flex" alignItems="center" justifyContent="space-between">
+        <Typography display="flex" variant="subtitle2" color={colors.gray[900]}>
+          Transferrable
+          <Tooltip
+            arrow
+            title={
+              <Typography variant="caption">
+                Tokens will be locked to the original recipient and will not be transferable until a proposal making
+                such a change is approved. Sporos requires your tokens be non-transferrable for U.S. compliance reasons.
+                While this setting can be changed after you create your LLC, we recommend consulting with an attorney as
+                it may change the legal standing of your entity.
+              </Typography>
+            }
+          >
+            <img
+              src="/icons/info-icon.svg"
+              alt="Information Tooltip Icon"
+              style={{ marginLeft: '9px', cursor: 'pointer', fill: 'none' }}
+            />
+          </Tooltip>
+        </Typography>
+        <Grid item display="flex" alignItems="center" gap="10px">
+          <CheckIcon sx={{ mt: '4px' }} />
+          <Typography variant="caption">No</Typography>
+        </Grid>
+      </Grid>
     </Card>
     <Card sx={{ mb: '24px', background: colors.gray[50], boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)' }}>
       <Typography variant="subtitle1" color={colors.gray[900]} fontWeight={500}>

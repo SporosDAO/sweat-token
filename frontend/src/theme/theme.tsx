@@ -41,6 +41,7 @@ export const lightTheme = createTheme({
     MuiCard: MuiComponentConfig.Card,
     MuiChip: MuiComponentConfig.Chip,
     MuiDivider: MuiComponentConfig.Divider,
+    MuiTooltip: MuiComponentConfig.Tooltip,
     MuiPaper: {
       defaultProps: {
         elevation: 0

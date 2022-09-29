@@ -8,6 +8,7 @@ import { MuiAppBarConfig } from './MuiAppBar'
 import { MuiToolbarConfig } from './MuiToolbar'
 import { MuiDialogConfig } from './MuiDialog'
 import { MuiDividerConfig } from './MuiDivider'
+import { MuiTooltipConfig } from './MuiTooltip'
 import { MuiModalConfig } from './MuiModal'
 import { MuiTabConfig } from './MuiTab'
 import { MuiPaginationConfig } from './MuiPagination'
@@ -23,6 +24,7 @@ export const MuiComponentConfig = {
   Toolbar: MuiToolbarConfig,
   Dialog: MuiDialogConfig,
   Divider: MuiDividerConfig,
+  Tooltip: MuiTooltipConfig,
   Modal: MuiModalConfig,
   Tab: MuiTabConfig,
   Pagination: MuiPaginationConfig
