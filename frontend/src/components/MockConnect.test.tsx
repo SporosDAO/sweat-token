@@ -13,7 +13,7 @@ import {
   userEvent,
   waitFor
 } from '../../test'
-import { Connect } from './Connect'
+import { MockConnect as Connect } from './MockConnect'
 
 describe('<Connect />', () => {
   let user: UserEvent

@@ -1,27 +1,34 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { BrowserRouter } from 'react-router-dom'
-import App from './App'
 import { PageProvider } from './context/PageContext'
 import { ToastProvider } from './context/ToastContext'
 import { Web3ContextProvider } from './context/Web3Context'
 import { ServiceWorkerWrapper } from './components/PWAUpdate'
 
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { Root } from 'react-dom/client'
+import { Chain, Client } from 'wagmi'
 
-export function renderApp(root: Root) {
+export function AppWrapper({
+  wagmiClient = undefined,
+  chains,
+  initialChain,
+  children
+}: {
+  wagmiClient?: Client
+  chains?: Chain[]
+  initialChain?: Chain
+  children: ReactNode
+}) {
   const queryClient = new QueryClient()
 
-  root.render(
+  return (
     <React.StrictMode>
       <ServiceWorkerWrapper />
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <ToastProvider>
-            <Web3ContextProvider>
-              <PageProvider>
-                <App />
-              </PageProvider>
+            <Web3ContextProvider wagmiClient={wagmiClient} chains={chains} initialChain={initialChain}>
+              <PageProvider>{children}</PageProvider>
             </Web3ContextProvider>
           </ToastProvider>
         </BrowserRouter>

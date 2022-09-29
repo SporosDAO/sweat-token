@@ -1,13 +1,10 @@
 import { RenderOptions, render } from '@testing-library/react'
 import { default as userEvent } from '@testing-library/user-event'
 import * as React from 'react'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { BrowserRouter } from 'react-router-dom'
 
-import { CreateClientConfig, WagmiConfig, WagmiConfigProps, createClient, defaultChains } from 'wagmi'
+import { CreateClientConfig, WagmiConfigProps, createClient, defaultChains, chain } from 'wagmi'
 import { MockConnector } from 'wagmi/connectors/mock'
-import { PageProvider } from '../src/context/PageContext'
-import { ToastProvider } from '../src/context/ToastContext'
+import { AppWrapper } from '../src/AppWrapper'
 
 import { WalletSigner, getProvider, getSigners } from './utils'
 
@@ -25,17 +22,10 @@ type ProvidersProps = {
   client?: WagmiConfigProps['client']
 }
 export function Providers({ children, client = setupClient() }: ProvidersProps) {
-  const queryClient = new QueryClient()
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <ToastProvider>
-          <WagmiConfig client={client}>
-            <PageProvider>{children}</PageProvider>
-          </WagmiConfig>
-        </ToastProvider>
-      </BrowserRouter>
-    </QueryClientProvider>
+    <AppWrapper wagmiClient={client} chains={defaultChains} initialChain={chain.goerli}>
+      {children}
+    </AppWrapper>
   )
 }
 

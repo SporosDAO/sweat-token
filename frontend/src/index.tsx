@@ -1,6 +1,11 @@
 import ReactDOM from 'react-dom/client'
-import { renderApp } from './RenderApp'
+import App from './App'
+import { AppWrapper } from './AppWrapper'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
-renderApp(root)
+root.render(
+  <AppWrapper>
+    <App />
+  </AppWrapper>
+)

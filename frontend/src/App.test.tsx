@@ -1,17 +1,6 @@
 import ReactDOM from 'react-dom/client'
 import App from './App'
-import {
-  Providers,
-  UserEvent,
-  act,
-  addressRegex,
-  getSigners,
-  render,
-  screen,
-  setupClient,
-  userEvent,
-  waitFor
-} from '../test'
+import { UserEvent, act, render, screen, userEvent, waitFor, addressRegex } from '../test'
 
 let container: Element | undefined
 
@@ -33,7 +22,7 @@ test('renders learn react link', () => {
   expect(textElement).toBeInTheDocument()
 })
 
-describe('<Connect />', () => {
+describe('Landing page', () => {
   let user: UserEvent
   beforeEach(() => {
     user = userEvent.setup()
@@ -45,10 +34,23 @@ describe('<Connect />', () => {
       await expect(screen.getByText('The Launchpad of For-Profit DAOs')).toBeInTheDocument()
       await expect(screen.queryByText('nonsense')).toBeNull()
     })
+  })
+
+  it('connects and disconnects web3 wallet', async () => {
+    render(<App />)
+
     // Connect to wallet
-    // const connectButton = screen.getByRole('button', { name: 'Mock' })
-    // act(() => {
-    //   user.click(connectButton)
-    // })
+    const connectButton = screen.getByTestId('btn-mock-connect')
+    await act(async () => {
+      await user.click(connectButton)
+    })
+    await waitFor(() => expect(screen.getByText(addressRegex)).toBeInTheDocument(), { timeout: 3000 })
+    // Disconnect
+    const disconnectButton = screen.getByTestId('btn-mock-disconnect')
+    expect(disconnectButton).toHaveTextContent(/disconnect/i)
+    await act(async () => {
+      await user.click(disconnectButton)
+    })
+    expect(screen.getByTestId('btn-mock-connect')).toHaveTextContent('Mock')
   })
 })
