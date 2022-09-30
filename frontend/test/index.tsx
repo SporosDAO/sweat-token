@@ -4,6 +4,7 @@ import * as React from 'react'
 
 import { CreateClientConfig, WagmiConfigProps, createClient, defaultChains, chain } from 'wagmi'
 import { MockConnector } from 'wagmi/connectors/mock'
+import App from '../src/App'
 import { AppWrapper } from '../src/AppWrapper'
 
 import { WalletSigner, getProvider, getSigners } from './utils'
@@ -29,7 +30,19 @@ export function Providers({ children, client = setupClient() }: ProvidersProps) 
   )
 }
 
-const customRender = (ui: React.ReactElement, options?: RenderOptions) => render(ui, { wrapper: Providers, ...options })
+const customRender = (
+  { ui, route, options }: { ui?: React.ReactElement; route?: string; options?: RenderOptions } = {
+    ui: <App />,
+    route: '/'
+  }
+) => {
+  window.history.pushState({}, 'Test page', route)
+
+  return {
+    user: userEvent.setup(),
+    ...render(ui || <App />, { wrapper: Providers, ...options })
+  }
+}
 
 export * from '@testing-library/react'
 export { customRender as render }

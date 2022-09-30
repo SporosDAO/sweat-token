@@ -22,11 +22,12 @@ export default function ProjectTribute() {
 
   const project = location?.state as any
 
-  const { manager, projectID, budget, goals, deadline } = project || {}
+  const { manager, budget, goals, deadline } = project || {}
 
   const { openConnectModal } = useConnectModal()
 
   const { address: userAddress, isDisconnected } = useAccount()
+
   const isManager = userAddress === manager
 
   const deadlineDate = new Date()
@@ -47,8 +48,6 @@ export default function ProjectTribute() {
     formState: { errors }
   } = formResult
 
-  // console.debug({ formResult })
-
   const callArgs = ['uint256', 'address', 'uint256', 'string']
 
   const contractInfo = {
@@ -68,11 +67,7 @@ export default function ProjectTribute() {
   }
 
   const onSubmit: SubmitHandler<ProjectTributeFormValues> = (formData) => {
-    // console.debug({ formData })
-
     const { contributorAddress, mintAmount, tributeTitle, tributeLink } = formData
-
-    // console.debug('start onSubmit()', { formData })
 
     const tribute = [{ tributeTitle, tributeLink }]
     const tributeString = JSON.stringify(tribute)
@@ -96,8 +91,6 @@ export default function ProjectTribute() {
       args: [daoId, [payload]]
     })
     setIsDialogOpen(true)
-
-    // console.debug('end onSubmit()')
   } // onSubmit
 
   const onSubmitError: SubmitErrorHandler<ProjectTributeFormValues> = (formErrors: FieldErrors) => {
@@ -127,18 +120,16 @@ export default function ProjectTribute() {
           to connect again.
         </Alert>
       )}
-
       {!isManager && !isDisconnected && (
         <Alert severity="error" sx={{ overflow: 'hidden', wordBreak: 'break-word' }}>
           You are not the manager of this project. Your wallet account "{userAddress}" does not match the manager
           account {manager}.
         </Alert>
       )}
-
       {isManager && !isDisconnected && (
         <>
           <Alert severity="info">
-            Submit tribute for project #{projectID}
+            Submit tribute for project #{projectId}
             {goals &&
               goals.map((goal: { goalTitle: string; goalLink: string }, idx: Key) => (
                 <div key={idx}>

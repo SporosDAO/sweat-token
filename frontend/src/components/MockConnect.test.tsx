@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { MockConnector } from 'wagmi/connectors/mock'
 
 import {
@@ -22,7 +21,7 @@ describe('<Connect />', () => {
   })
 
   it('connects and disconnects wallet', async () => {
-    render(<Connect />)
+    render({ ui: <Connect /> })
 
     // Connect to wallet
     const connectButton = screen.getByRole('button', { name: 'Mock' })
@@ -52,8 +51,11 @@ describe('<Connect />', () => {
       ]
     })
 
-    render(<Connect />, {
-      wrapper: ({ children }: { children: React.ReactNode }) => <Providers client={client}>{children}</Providers>
+    render({
+      ui: <Connect />,
+      options: {
+        wrapper: ({ children }: { children: React.ReactNode }) => <Providers client={client}>{children}</Providers>
+      }
     })
 
     // Try to connect and check for error message

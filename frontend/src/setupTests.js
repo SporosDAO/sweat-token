@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom'
 import { MockConnect } from './components/MockConnect'
+import { d } from '@testing-library/react'
 
 global.CSS = { supports: jest.fn() }
 
@@ -17,6 +18,7 @@ jest.mock('@rainbow-me/rainbowkit', () => {
     darkTheme: jest.fn().mockReturnValue({}),
     lightTheme: jest.fn().mockReturnValue({}),
     ConnectButton: () => <MockConnect />,
-    getDefaultWallets: jest.fn().mockReturnValue({})
+    getDefaultWallets: jest.fn().mockReturnValue({}),
+    useConnectModal: () => ({ openConnectModal: jest.fn() })
   }
 })

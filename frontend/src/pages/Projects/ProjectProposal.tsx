@@ -75,8 +75,8 @@ export default function ProjectProposal() {
     let payload
     const goals = [{ goalTitle, goalLink }]
     const goalString = JSON.stringify(goals)
-    const miliseconds = new Date(deadline).getTime()
-    const dateInSecs = Math.floor(miliseconds / 1000)
+    const milliseconds = new Date(deadline).getTime()
+    const dateInSecs = Math.floor(milliseconds / 1000)
     try {
       const abiCoder = ethers.utils.defaultAbiCoder
       payload = abiCoder.encode(

@@ -43,3 +43,6 @@ export function useGetDAO(chainId, daoAddress) {
     return myDao
   })
 }
+
+const defaultExport = { getDAO, useGetDAO }
+export default defaultExport
