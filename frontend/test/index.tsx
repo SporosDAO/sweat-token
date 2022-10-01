@@ -31,12 +31,13 @@ export function Providers({ children, client = setupClient() }: ProvidersProps) 
 }
 
 const customRender = (
-  { ui, route, options }: { ui?: React.ReactElement; route?: string; options?: RenderOptions } = {
+  { ui, route, state, options }: { ui?: React.ReactElement; route?: string; state?: any; options?: RenderOptions } = {
     ui: <App />,
-    route: '/'
+    route: '/',
+    state: {}
   }
 ) => {
-  window.history.pushState({}, 'Test page', route)
+  window.history.pushState(state, 'Test page', route)
 
   return {
     user: userEvent.setup(),

@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom'
 import { MockConnect } from './components/MockConnect'
-import { d } from '@testing-library/react'
 
 global.CSS = { supports: jest.fn() }
 

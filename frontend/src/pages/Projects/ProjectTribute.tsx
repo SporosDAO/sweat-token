@@ -101,7 +101,7 @@ export default function ProjectTribute() {
     setIsDialogOpen(false)
   }
 
-  if (!chainId || !daoId || !projectId) {
+  if (!chainId || !daoId || !projectId || !manager) {
     return <Navigate replace to="/" />
   }
 
