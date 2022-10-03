@@ -79,3 +79,16 @@ export function useGetProjects(chainId, daoAddress) {
   })
   */
 }
+
+export async function getProjectTributes(chainId, daoAdress) {
+  const cid = Number(chainId)
+  const pmAddress = addresses[cid]['extensions']['projectmanagement']
+
+  const pmContract = new ethers.Contract(pmAddress, PM_ABI)
+
+  const filter = pmContract.filters.ExtensionCalled(daoAdress, null)
+
+  const results = await pmContract.queryFilter(filter, 7218098, 'latest')
+
+  console.log(results)
+}

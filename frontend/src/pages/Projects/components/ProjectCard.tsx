@@ -4,6 +4,7 @@ import { useEnsName, useEnsAvatar, useAccount } from 'wagmi'
 import { Work, Launch, HourglassTop, HourglassDisabled } from '@mui/icons-material'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Key } from 'react'
+import { getProjectTributes } from '../../../graph/getProjects'
 
 export default function ProjectCard(props: any) {
   const { chainId, daoId } = useParams()
@@ -21,10 +22,19 @@ export default function ProjectCard(props: any) {
   const { address: userAddress } = useAccount()
   const isManager = userAddress === manager
 
+  const handleCardClick = async () => {
+    await getProjectTributes(chainId, daoId)
+  }
+
   const navigate = useNavigate()
 
   return (
-    <Card sx={{ margin: '8px', width: '48.5%' }} data-testid={projectID} raised={true}>
+    <Card
+      sx={{ margin: '8px', width: '48.5%', cursor: 'pointer' }}
+      data-testid={projectID}
+      raised={true}
+      onClick={handleCardClick}
+    >
       <CardContent>
         <Typography>#{projectID}</Typography>
         {goals &&
