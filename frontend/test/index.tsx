@@ -1,12 +1,11 @@
+import { createTheme } from '@mui/material'
 import { RenderOptions, render } from '@testing-library/react'
 import { default as userEvent } from '@testing-library/user-event'
 import * as React from 'react'
-
 import { CreateClientConfig, WagmiConfigProps, createClient, defaultChains, chain } from 'wagmi'
 import { MockConnector } from 'wagmi/connectors/mock'
 import App from '../src/App'
 import { AppWrapper } from '../src/AppWrapper'
-
 import { WalletSigner, getProvider, getSigners } from './utils'
 
 type SetupClient = Partial<CreateClientConfig> & { signer?: WalletSigner }
@@ -24,7 +23,7 @@ type ProvidersProps = {
 }
 export function Providers({ children, client = setupClient() }: ProvidersProps) {
   return (
-    <AppWrapper wagmiClient={client} chains={defaultChains} initialChain={chain.goerli}>
+    <AppWrapper theme={createTheme()} wagmiClient={client} chains={defaultChains} initialChain={chain.goerli}>
       {children}
     </AppWrapper>
   )

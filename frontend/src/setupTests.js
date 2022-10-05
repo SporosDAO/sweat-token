@@ -17,7 +17,7 @@ jest.mock('@rainbow-me/rainbowkit', () => {
     darkTheme: jest.fn().mockReturnValue({}),
     lightTheme: jest.fn().mockReturnValue({}),
     ConnectButton: () => <MockConnect />,
-    getDefaultWallets: jest.fn().mockReturnValue({}),
+    getDefaultWallets: () => ({}),
     useConnectModal: () => ({ openConnectModal: jest.fn() })
   }
 })

@@ -16,9 +16,10 @@ export default function ProjectProposal() {
 
   // Web3SubmitDialog state vars
   const [dialogOpen, setDialogOpen] = useState(false)
+
   const [txInput, setTxInput] = useState({})
-  const { address: userAddress } = useAccount()
-  const [proposedManagerAddress, setProposedManagerAddress] = useState(userAddress)
+  const { address: userAddress, isConnected } = useAccount()
+  const [proposedManagerAddress, setProposedManagerAddress] = useState(isConnected ? userAddress : '')
 
   const cid = Number(chainId)
   const pmContractAddress = addresses[cid]['extensions']['projectmanagement']
@@ -55,7 +56,10 @@ export default function ProjectProposal() {
   const contractReadManagerResult = useContractRead({
     ...daoContract,
     functionName: 'balanceOf',
-    args: [proposedManagerAddress]
+    args: [proposedManagerAddress],
+    onError(error) {
+      console.warn('Error reading default manager balance', { proposedManagerAddress, error })
+    }
   })
 
   const onSubmit = async (data: any) => {
@@ -196,6 +200,7 @@ export default function ProjectProposal() {
         <ListItem>
           <TextField
             id="deadline"
+            data-testid="deadline"
             label="Deadline"
             type="date"
             InputLabelProps={{
@@ -216,6 +221,7 @@ export default function ProjectProposal() {
         <ListItem>
           <TextField
             id="goalTitle"
+            data-testid="goalTitle"
             label="Goal"
             helperText="Describe a measurable goal of the project"
             variant="filled"
@@ -229,6 +235,7 @@ export default function ProjectProposal() {
         <ListItem>
           <TextField
             id="goalLink"
+            data-testid="goalLink"
             type="url"
             label="Goal Tracking Link"
             helperText="URL to project board where this goal is tracked."

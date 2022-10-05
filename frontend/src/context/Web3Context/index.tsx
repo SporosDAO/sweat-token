@@ -45,7 +45,6 @@ export function Web3ContextProvider({
       webSocketProvider
     })
 
-    console.warn('No wagmiClient provided. Using defaultWagmiClient!')
     wagmiClient = defaultWagmiClient
   }
 

@@ -7,17 +7,20 @@ import { ServiceWorkerWrapper } from './components/PWAUpdate'
 
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { Chain, Client } from 'wagmi'
+import { Theme, ThemeProvider } from '@mui/material'
 
 export function AppWrapper({
   wagmiClient = undefined,
   chains,
   initialChain,
-  children
+  children,
+  theme
 }: {
   wagmiClient?: Client
   chains?: Chain[]
   initialChain?: Chain
   children: ReactNode
+  theme: Theme
 }) {
   const queryClient = new QueryClient()
 
@@ -28,7 +31,9 @@ export function AppWrapper({
         <BrowserRouter>
           <ToastProvider>
             <Web3ContextProvider wagmiClient={wagmiClient} chains={chains} initialChain={initialChain}>
-              <PageProvider>{children}</PageProvider>
+              <PageProvider>
+                <ThemeProvider theme={theme}>{children}</ThemeProvider>
+              </PageProvider>
             </Web3ContextProvider>
           </ToastProvider>
         </BrowserRouter>
