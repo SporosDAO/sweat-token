@@ -10,7 +10,7 @@ import { Chain, Client } from 'wagmi'
 import { Theme, ThemeProvider } from '@mui/material'
 
 export function AppWrapper({
-  wagmiClient = undefined,
+  wagmiClient,
   chains,
   initialChain,
   children,
