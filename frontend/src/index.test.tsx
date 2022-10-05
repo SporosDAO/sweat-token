@@ -1,7 +1,5 @@
-import * as ReactDOM from 'react-dom/client'
 import { unmountComponentAtNode } from 'react-dom'
 import { rootRender } from './index'
-import { Root } from 'react-dom/client'
 import { AppWrapper } from './AppWrapper'
 
 jest.mock('react-dom/client', () => ({
