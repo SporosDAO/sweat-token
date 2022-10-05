@@ -1,4 +1,4 @@
-import { act, screen, render, renderHook, waitFor } from '../../../test'
+import { act, screen, render, waitFor } from '../../../test'
 import * as projects from '../../graph/getProjects'
 import * as daos from '../../graph/getDAO'
 
