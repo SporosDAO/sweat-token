@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router-dom'
-import { CssBaseline, ThemeProvider } from '@mui/material'
 
 import Dao from './pages/Dao'
 import People from './pages/People'
@@ -10,11 +9,9 @@ import NotFound from './pages/NotFound'
 import Projects from './pages/Projects'
 import ProjectProposal from './pages/Projects/ProjectProposal'
 import ProjectTribute from './pages/Projects/ProjectTribute'
-import { lightTheme } from './theme/theme'
 
-const App = () => (
-  <ThemeProvider theme={lightTheme}>
-    <CssBaseline />
+function App() {
+  return (
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="dao" element={<DaoLanding />} />
@@ -27,7 +24,7 @@ const App = () => (
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
-  </ThemeProvider>
-)
+  )
+}
 
 export default App
