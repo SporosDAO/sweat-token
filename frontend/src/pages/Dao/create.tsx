@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography'
 import { Formik } from 'formik'
 
 import Name from './views/Name'
+import Terms from './views/Terms'
 import Founder from './views/Founder'
 import Payment from './views/Payment'
 import Confirmation from './views/Confirmation'
@@ -21,6 +22,7 @@ enum View {
   Name,
   Founder,
   Confirmation,
+  Terms,
   Payment
 }
 
@@ -32,7 +34,7 @@ const schema: any = Nope.object().shape({
 const Create: React.FC = () => {
   const [activeView, setActiveView] = React.useState(View.Name)
   return (
-    <DaoLayout hideSidebar={[View.Confirmation].includes(activeView)}>
+    <DaoLayout hideSidebar={[View.Confirmation, View.Terms].includes(activeView)}>
       <Grid container>
         <Grid item width="30%">
           <Tabs
@@ -45,6 +47,7 @@ const Create: React.FC = () => {
             <Tab label="Name" {...a11yProps(View.Name)} />
             <Tab label="Founder" {...a11yProps(View.Founder)} />
             <Tab label="Confirmation" {...a11yProps(View.Confirmation)} />
+            <Tab label="Terms & conditions" {...a11yProps(View.Terms)} />
             <Tab label="Payment" {...a11yProps(View.Payment)} />
           </Tabs>
           <Box sx={{ cursor: 'pointer', position: 'fixed', bottom: '40px' }}>
@@ -78,6 +81,9 @@ const Create: React.FC = () => {
                 <TabPanel value={activeView} index={View.Confirmation}>
                   <Confirmation {...formData} />
                 </TabPanel>
+                <TabPanel value={activeView} index={View.Terms}>
+                  <Terms {...formData} />
+                </TabPanel>
                 <TabPanel value={activeView} index={View.Payment}>
                   <Payment {...formData} />
                 </TabPanel>
@@ -94,7 +100,7 @@ const Create: React.FC = () => {
                   ) : (
                     <Box />
                   )}
-                  {activeView < 3 && (
+                  {activeView < 4 && (
                     <Button
                       size="small"
                       variant="contained"
