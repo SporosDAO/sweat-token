@@ -1,7 +1,3 @@
-/**
- *
- * To enable reporting of web vitals, uncomment the code below and corresponding reference to reportWebVitals in AppWrapper
- *
 import { ReportHandler } from 'web-vitals'
 
 const reportWebVitals = (onPerfEntry?: ReportHandler) => {
@@ -17,4 +13,3 @@ const reportWebVitals = (onPerfEntry?: ReportHandler) => {
 }
 
 export default reportWebVitals
- */
