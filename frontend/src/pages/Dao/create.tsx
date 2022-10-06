@@ -1,12 +1,11 @@
 import React from 'react'
-import Nope from 'nope-validator'
 import Box from '@mui/material/Box'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
-import { Formik } from 'formik'
+import { useForm } from 'react-hook-form'
 
 import Name from './views/Name'
 import Terms from './views/Terms'
@@ -26,13 +25,14 @@ enum View {
   Payment
 }
 
-const schema: any = Nope.object().shape({
-  name: Nope.string().min(5, 'Too Short!').max(50, 'Too Long!').required('Required'),
-  symbol: Nope.string().min(2, 'Too Short!').max(10, 'Too Long!').required('Required')
-})
-
 const Create: React.FC = () => {
+  const { handleSubmit, ...formData } = useForm({ mode: 'onChange' })
   const [activeView, setActiveView] = React.useState(View.Name)
+
+  const onSubmit = async (data: any) => console.log({ data })
+
+  console.log('formState', formData)
+
   return (
     <DaoLayout hideSidebar={[View.Confirmation, View.Terms].includes(activeView)}>
       <Grid container>
@@ -58,63 +58,48 @@ const Create: React.FC = () => {
           </Box>
         </Grid>
         <Grid item width="70%" p={3}>
-          <Formik
-            // @Keith - @todo - remove Formik and use react-hook-form instead as this is already used
-            // in the project.
-
-            // @Keith - may wire up each tab to the router (not sure it's needed yet though as you)
-            // shouldn't be able to advance to the next tab without completing the previous, so it
-            // would probably serve no purpose?
-            validateOnMount
-            initialValues={{ name: '', symbol: '' }}
-            validate={(values) => schema.validate(values)}
-            onSubmit={(values) => console.log('ssss', values)}
-          >
-            {({ handleSubmit, ...formData }) => (
-              <form onSubmit={handleSubmit}>
-                <TabPanel value={activeView} index={View.Name}>
-                  <Name {...formData} />
-                </TabPanel>
-                <TabPanel value={activeView} index={View.Founder}>
-                  <Founder {...formData} />
-                </TabPanel>
-                <TabPanel value={activeView} index={View.Confirmation}>
-                  <Confirmation {...formData} />
-                </TabPanel>
-                <TabPanel value={activeView} index={View.Terms}>
-                  <Terms {...formData} />
-                </TabPanel>
-                <TabPanel value={activeView} index={View.Payment}>
-                  <Payment {...formData} />
-                </TabPanel>
-                <Box sx={{ my: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  {activeView > 0 ? (
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      startIcon={<ArrowRight sx={{ mt: '4px', transform: 'scaleX(-1)', stroke: 'black' }} />}
-                      onClick={() => setActiveView((activeView) => (activeView -= 1))}
-                    >
-                      Back
-                    </Button>
-                  ) : (
-                    <Box />
-                  )}
-                  {activeView < 4 && (
-                    <Button
-                      size="small"
-                      variant="contained"
-                      disabled={!formData.isValid}
-                      endIcon={<ArrowRight sx={{ mt: '4px', stroke: 'white' }} />}
-                      onClick={() => setActiveView((activeView) => (activeView += 1))}
-                    >
-                      Continue
-                    </Button>
-                  )}
-                </Box>
-              </form>
-            )}
-          </Formik>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <TabPanel value={activeView} index={View.Name}>
+              <Name {...formData} />
+            </TabPanel>
+            <TabPanel value={activeView} index={View.Founder}>
+              <Founder {...formData} />
+            </TabPanel>
+            <TabPanel value={activeView} index={View.Confirmation}>
+              <Confirmation {...formData} />
+            </TabPanel>
+            <TabPanel value={activeView} index={View.Terms}>
+              <Terms />
+            </TabPanel>
+            <TabPanel value={activeView} index={View.Payment}>
+              <Payment />
+            </TabPanel>
+            <Box sx={{ my: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              {activeView > 0 ? (
+                <Button
+                  size="small"
+                  variant="outlined"
+                  startIcon={<ArrowRight sx={{ mt: '4px', transform: 'scaleX(-1)', stroke: 'black' }} />}
+                  onClick={() => setActiveView((activeView) => (activeView -= 1))}
+                >
+                  Back
+                </Button>
+              ) : (
+                <Box />
+              )}
+              {activeView < 4 && (
+                <Button
+                  size="small"
+                  variant="contained"
+                  disabled={!formData.formState.isValid}
+                  endIcon={<ArrowRight sx={{ mt: '4px', stroke: 'white' }} />}
+                  onClick={() => setActiveView((activeView) => (activeView += 1))}
+                >
+                  Continue
+                </Button>
+              )}
+            </Box>
+          </form>
         </Grid>
       </Grid>
       <Box maxWidth="50%">

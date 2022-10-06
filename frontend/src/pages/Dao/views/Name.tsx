@@ -1,34 +1,43 @@
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
-import { FormikValues, FormikHandlers } from 'formik'
 
 import Header from '../components/Header'
 
-const Name: React.FC<Partial<FormikValues & FormikHandlers>> = ({ values, handleChange }) => (
+const Name: React.FC<any> = (props) => (
   <>
     <Header title="Name" subtitle="Tell us the name of your company." />
     <Box>
       <TextField
         fullWidth
         type="text"
-        name="name"
         label="On-Chain name"
-        value={values.name}
-        onChange={handleChange}
+        error={!!props?.formState?.errors.name}
         placeholder="Pick a name"
-        helperText="This will be your company's on-chain name."
+        {...props?.register('name', { required: true })}
+        helperText={
+          <>
+            {props?.formState?.errors.name && props?.formState?.errors.name.type === 'required'
+              ? 'You need to pick the company name in order to continue.'
+              : "This will be your company's on-chain name"}
+          </>
+        }
       />
     </Box>
     <Box mt="32px">
       <TextField
         fullWidth
         type="text"
-        name="symbol"
         label="Token Symbol"
-        value={values.symbol}
-        onChange={handleChange}
+        error={!!props?.formState?.errors.symbol}
         placeholder="ex: SPR"
-        helperText="This will be used as your token symbol."
+        {...props?.register('symbol', { required: true })}
+        helperText={
+          <>
+            {props?.formState?.errors.symbol && props?.formState?.errors.symbol.type === 'required'
+              ? 'You need to pick a token symbol in order to continue.'
+              : 'This will be used as your token symbol.'}
+          </>
+        }
       />
     </Box>
   </>
