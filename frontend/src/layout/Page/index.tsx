@@ -89,7 +89,8 @@ export function PageLayout(props: PageLayoutProps) {
   const [open, setOpen] = useState(props.withDrawer !== false && !isMobile)
 
   const { chainId, daoId } = useParams()
-  const { data: myDao, isSuccess: isMyDaoLoaded } = useGetDAO(chainId, daoId)
+  const daoResult = useGetDAO(chainId, daoId)
+  const { data: myDao, isSuccess: isMyDaoLoaded } = daoResult
 
   const toggleDrawer = () => {
     setOpen(!open)

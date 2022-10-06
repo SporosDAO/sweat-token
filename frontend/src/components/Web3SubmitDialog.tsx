@@ -81,7 +81,7 @@ export default function Web3SubmitDialog(props: Web3SubmitDialogProps) {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">
+      <DialogTitle data-testid="web3submit-alert-dialog-title">
         Submitting On-chain Transaction!
         <IconButton
           aria-label="error"

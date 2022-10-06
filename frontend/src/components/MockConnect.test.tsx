@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { MockConnector } from 'wagmi/connectors/mock'
 
 import {
@@ -13,7 +12,7 @@ import {
   userEvent,
   waitFor
 } from '../../test'
-import { Connect } from './Connect'
+import { MockConnect as Connect } from './MockConnect'
 
 describe('<Connect />', () => {
   let user: UserEvent
@@ -22,7 +21,7 @@ describe('<Connect />', () => {
   })
 
   it('connects and disconnects wallet', async () => {
-    render(<Connect />)
+    render({ ui: <Connect /> })
 
     // Connect to wallet
     const connectButton = screen.getByRole('button', { name: 'Mock' })
@@ -43,6 +42,7 @@ describe('<Connect />', () => {
       connectors: [
         new MockConnector({
           options: {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             signer: getSigners()[0]!,
             // Turn on `failConnect` flag to simulate connect failure
             flags: { failConnect: true }
@@ -51,8 +51,11 @@ describe('<Connect />', () => {
       ]
     })
 
-    render(<Connect />, {
-      wrapper: ({ children }: { children: React.ReactNode }) => <Providers client={client}>{children}</Providers>
+    render({
+      ui: <Connect />,
+      options: {
+        wrapper: ({ children }: { children: React.ReactNode }) => <Providers client={client}>{children}</Providers>
+      }
     })
 
     // Try to connect and check for error message

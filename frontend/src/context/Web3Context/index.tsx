@@ -1,34 +1,56 @@
-import { chain, configureChains, createClient, WagmiConfig } from 'wagmi'
+import { Chain, chain, configureChains, createClient, WagmiConfig } from 'wagmi'
 import { infuraProvider } from 'wagmi/providers/infura'
 import { publicProvider } from 'wagmi/providers/public'
-
 import '@rainbow-me/rainbowkit/styles.css'
 
-import { getDefaultWallets, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit'
+import { getDefaultWallets, RainbowKitProvider, lightTheme } from '@rainbow-me/rainbowkit'
+import { ReactNode } from 'react'
 
-const { chains, provider, webSocketProvider } = configureChains(
-  [chain.mainnet, chain.polygon, chain.arbitrum, chain.optimism, chain.rinkeby, chain.goerli],
-  [infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_ID }), publicProvider()]
-)
+export function Web3ContextProvider({
+  wagmiClient,
+  chains,
+  initialChain,
+  children
+}: {
+  wagmiClient?: any
+  chains?: any
+  initialChain?: Chain
+  children: ReactNode
+}) {
+  if (!wagmiClient) {
+    const {
+      chains: defaultChains,
+      provider,
+      webSocketProvider
+    } = configureChains(
+      [chain.arbitrum, chain.goerli],
+      [infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_ID }), publicProvider()]
+    )
 
-const { connectors } = getDefaultWallets({
-  appName: 'Sporos DAO App',
-  chains
-})
+    if (!chains) {
+      chains = defaultChains
+    }
 
-const wagmiClient = createClient({
-  autoConnect: true,
-  connectors,
-  provider,
-  webSocketProvider
-})
+    initialChain = process.env.NODE_ENV === 'development' ? chain.goerli : chain.arbitrum
 
-const initialChain = process.env.NODE_ENV === 'development' ? chain.goerli : chain.arbitrum
+    const { connectors } = getDefaultWallets({
+      appName: 'Sporos DAO App',
+      chains
+    })
 
-export function Web3ContextProvider({ children }: any) {
+    const defaultWagmiClient = createClient({
+      autoConnect: true,
+      connectors,
+      provider,
+      webSocketProvider
+    })
+
+    wagmiClient = defaultWagmiClient
+  }
+
   return (
     <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains} initialChain={initialChain} theme={darkTheme()}>
+      <RainbowKitProvider chains={chains} initialChain={initialChain} theme={lightTheme()}>
         {children}
       </RainbowKitProvider>
     </WagmiConfig>
