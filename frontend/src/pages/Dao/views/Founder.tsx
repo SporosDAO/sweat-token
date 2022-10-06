@@ -4,23 +4,16 @@ import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
+import { useFieldArray } from 'react-hook-form'
 
 import Header from '../components/Header'
 import { colors } from '../../../theme/colorPalette'
-import { useFieldArray } from 'react-hook-form'
 
 const Founder: React.FC<any> = (props) => {
   const { fields, append } = useFieldArray({
     control: props.control,
     name: 'founders'
   })
-
-  React.useEffect(() => {
-    if (fields.length === 0) {
-      append({ address: '', initialTokens: 0, email: '' })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const isValidEmail = (email: string) =>
     // eslint-disable-next-line no-useless-escape
