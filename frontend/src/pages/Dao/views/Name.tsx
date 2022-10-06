@@ -1,8 +1,5 @@
 import Box from '@mui/material/Box'
-import Tooltip from '@mui/material/Tooltip'
 import TextField from '@mui/material/TextField'
-import Typography from '@mui/material/Typography'
-import InputAdornment from '@mui/material/InputAdornment'
 import { FormikValues, FormikHandlers } from 'formik'
 
 import Header from '../components/Header'
