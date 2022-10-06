@@ -3,12 +3,12 @@ import Typography from '@mui/material/Typography'
 import Header from '../components/Header'
 import { colors } from '../../../theme/colorPalette'
 
-const Terms: React.FC<Partial<any>> = ({ values, handleChange }) => (
+const Terms: React.FC<any> = ({ values, handleChange }) => (
   <>
     <Header title="Terms & conditions" subtitle="Subtitle" />
     <Typography variant="subtitle2" color={colors.gray[700]}>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Convallis proin elementum scelerisque facilisi habitasse.
-      Amet elit cras ut eu vestibulum mattis. Suspendisse condimentum nunc, viverra tempor urna, a. Sed consequat,
+      Amet elit cras ut eu vestibuluxm mattis. Suspendisse condimentum nunc, viverra tempor urna, a. Sed consequat,
       bibendum sit nibh feugiat fringilla libero diam, pellentesque. Elit elementum nec egestas venenatis dapibus
       bibendum bibendum diam. Tortor elementum nunc egestas quam. Dictum facilisi augue malesuada lacus fermentum nunc
       bibendum vel. Interdum volutpat etiam in enim, at dictum. Diam molestie consequat tincidunt a morbi eget fermentum
