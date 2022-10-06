@@ -28,11 +28,8 @@ enum View {
 const Create: React.FC = () => {
   const { handleSubmit, ...formData } = useForm({ mode: 'onChange' })
   const [activeView, setActiveView] = React.useState(View.Name)
-
   const onSubmit = async (data: any) => console.log({ data })
-
   console.log('formState', formData)
-
   return (
     <DaoLayout hideSidebar={[View.Confirmation, View.Terms].includes(activeView)}>
       <Grid container>

@@ -10,8 +10,6 @@ import { colors } from '../../../theme/colorPalette'
 import { useFieldArray } from 'react-hook-form'
 
 const Founder: React.FC<any> = (props) => {
-  // const [noOfFounderCards, setNoOfFoundCards] = React.useState<number>(1)
-
   const { fields, append } = useFieldArray({
     control: props.control,
     name: 'founders'
@@ -19,11 +17,16 @@ const Founder: React.FC<any> = (props) => {
 
   React.useEffect(() => {
     if (fields.length === 0) {
-      console.log('sdsdd', fields.length)
       append({ address: '', initialTokens: 0, email: '' })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const isValidEmail = (email: string) =>
+    // eslint-disable-next-line no-useless-escape
+    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+      email
+    )
 
   return (
     <>
@@ -62,8 +65,20 @@ const Founder: React.FC<any> = (props) => {
               name="email"
               label="Email"
               placeholder="Enter founder email address"
-              {...props?.register(`founders.${index}.email`, { required: true })}
-              helperText="This email is for Sporos' use only and will not be made public."
+              error={!!props?.formState?.errors?.founders?.[index]?.email}
+              {...props?.register(`founders.${index}.email`, {
+                required: true,
+                validate: { isValid: (email: string) => isValidEmail(email) }
+              })}
+              helperText={
+                <>
+                  {(props?.formState?.errors?.founders?.[index]?.email &&
+                    props?.formState?.errors?.founders?.[index]?.email?.type === 'required') ||
+                  props?.formState?.errors?.founders?.[index]?.email?.type === 'isValid'
+                    ? 'You need to enter a valid email address to continue.'
+                    : "This email is for Sporos' use only and will not be made public."}
+                </>
+              }
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -79,66 +94,12 @@ const Founder: React.FC<any> = (props) => {
           </Box>
         </Card>
       ))}
-
-      {/* {Array(noOfFounderCards)
-        .fill(0)
-        .map((_, key) => (
-          <Card
-            key={key}
-            sx={{ mb: '24px', background: colors.gray[50], boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)' }}
-          >
-            <Box>
-              <TextField
-                fullWidth
-                type="text"
-                name="address"
-                label="Address"
-                placeholder="0xdC..."
-                {...props?.register('address', { required: true, maxLength: 20 })}
-                helperText="Enter the wallet address you want to use to deploy the LLC."
-              />
-            </Box>
-            <Box mt="16px">
-              <TextField
-                fullWidth
-                type="number"
-                name="initial-tokens"
-                label="Initial Tokens"
-                placeholder="1000"
-                {...props?.register('initialTokens')}
-                helperText="The founder will start with this amount of XYZ tokens."
-              />
-            </Box>
-            <Box mt="16px">
-              <TextField
-                fullWidth
-                type="text"
-                name="email"
-                label="Email"
-                placeholder="Enter founder email address"
-                {...props?.register('email')}
-                helperText="This email is for Sporos' use only and will not be made public."
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <img
-                        src="/icons/mail-icon.svg"
-                        alt="Mail Tooltip Icon"
-                        style={{ cursor: 'pointer', fill: 'none' }}
-                      />
-                    </InputAdornment>
-                  )
-                }}
-              />
-            </Box>
-          </Card>
-        ))} */}
+      <>{console.log('props', props.formState.errors)}</>
       {fields.length < 5 && (
         <Button
           size="small"
           color="secondary"
           variant="contained"
-          // onClick={() => setNoOfFoundCards((noOfFounderCards) => (noOfFounderCards += 1))}
           onClick={() => append({ address: '', initialTokens: 0, email: '' })}
           startIcon={<img src="/icons/plus-circle.svg" alt="Plus Circle Icon" />}
         >

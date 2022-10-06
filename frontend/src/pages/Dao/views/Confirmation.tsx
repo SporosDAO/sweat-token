@@ -10,7 +10,7 @@ import { colors } from '../../../theme/colorPalette'
 import { AlertIcon, CheckIcon } from '../../../components/Icons'
 
 const Confirmation: React.FC<any> = (props) => {
-  console.log('props', props.getValues())
+  const { name, symbol, founders } = props.getValues()
   return (
     <>
       <Header
@@ -38,7 +38,7 @@ const Confirmation: React.FC<any> = (props) => {
           On-Chain name
         </Typography>
         <Typography m="0" variant="subtitle2" color={colors.gray[900]} fontWeight={500} sx={{ display: 'flex' }}>
-          Netbee DAO
+          {name}
         </Typography>
         <Typography
           variant="subtitle2"
@@ -53,7 +53,7 @@ const Confirmation: React.FC<any> = (props) => {
           Token symbol
         </Typography>
         <Typography variant="subtitle2" color={colors.gray[900]} fontWeight={500}>
-          NBE
+          {symbol}
         </Typography>
         <Typography
           variant="subtitle2"
@@ -196,34 +196,39 @@ const Confirmation: React.FC<any> = (props) => {
           </Grid>
         </Grid>
       </Card>
-      <Card sx={{ mb: '24px', background: colors.gray[50], boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)' }}>
-        <Typography variant="subtitle1" color={colors.gray[900]} fontWeight={500}>
-          Founder
-        </Typography>
-        <Divider orientation="horizontal" sx={{ m: '20px 0 16px' }} />
-        <Card>
-          <Typography variant="caption" color={colors.gray[500]}>
-            Address
-          </Typography>
-          <Typography variant="subtitle2" color={colors.gray[900]} fontWeight={500}>
-            0xdCE92c61B5faFB1289e3b56b6A65DCd26fED5E91
+      {founders?.map((founder: any, index: number) => (
+        <Card
+          key={index}
+          sx={{ mb: '24px', background: colors.gray[50], boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)' }}
+        >
+          <Typography variant="subtitle1" color={colors.gray[900]} fontWeight={500}>
+            Founder
           </Typography>
           <Divider orientation="horizontal" sx={{ m: '20px 0 16px' }} />
-          <Typography variant="caption" color={colors.gray[500]}>
-            Tokens
-          </Typography>
-          <Typography variant="subtitle2" color={colors.gray[900]} fontWeight={500}>
-            1
-          </Typography>
-          <Divider orientation="horizontal" sx={{ m: '20px 0 16px' }} />
-          <Typography variant="caption" color={colors.gray[500]}>
-            Email
-          </Typography>
-          <Typography variant="subtitle2" color={colors.gray[900]} fontWeight={500}>
-            victor@netbee.ro
-          </Typography>
+          <Card>
+            <Typography variant="caption" color={colors.gray[500]}>
+              Address
+            </Typography>
+            <Typography variant="subtitle2" color={colors.gray[900]} fontWeight={500}>
+              {founder.address}
+            </Typography>
+            <Divider orientation="horizontal" sx={{ m: '20px 0 16px' }} />
+            <Typography variant="caption" color={colors.gray[500]}>
+              Tokens
+            </Typography>
+            <Typography variant="subtitle2" color={colors.gray[900]} fontWeight={500}>
+              {founder.initialTokens}
+            </Typography>
+            <Divider orientation="horizontal" sx={{ m: '20px 0 16px' }} />
+            <Typography variant="caption" color={colors.gray[500]}>
+              Email
+            </Typography>
+            <Typography variant="subtitle2" color={colors.gray[900]} fontWeight={500}>
+              {founder.email}
+            </Typography>
+          </Card>
         </Card>
-      </Card>
+      ))}
     </>
   )
 }
