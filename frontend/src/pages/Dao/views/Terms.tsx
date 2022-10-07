@@ -4,6 +4,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 
 import Header from '../components/Header'
 import { colors } from '../../../theme/colorPalette'
+import { Controller } from 'react-hook-form'
 
 const Terms: React.FC<any> = (props) => (
   <>
@@ -56,14 +57,26 @@ const Terms: React.FC<any> = (props) => (
       sx={{ mt: '24px' }}
       label="Agree with terms of use and privacy policy"
       control={
-        <Checkbox
-          {...props?.register('terms', { required: true })}
-          inputProps={{ 'aria-label': 'Terms Checkbox' }}
-          icon={<img src="/icons/unchecked.svg" alt="Unchecked" />}
-          checkedIcon={<img src="/icons/checked.svg" alt="Unchecked" />}
+        <Controller
+          name="terms"
+          control={props.control}
+          rules={{ required: true }}
+          render={({ field: { onChange, onBlur, value, ref } }) => (
+            <Checkbox
+              ref={ref}
+              // name={name}
+              checked={value}
+              onBlur={onBlur}
+              onChange={onChange}
+              inputProps={{ 'aria-label': 'Terms Checkbox' }}
+              icon={<img src="/icons/unchecked.svg" alt="Unchecked" />}
+              checkedIcon={<img src="/icons/checked.svg" alt="Unchecked" />}
+            />
+          )}
         />
       }
     />
+
     <Typography variant="subtitle2" sx={{ mt: '-4px', ml: '24px', color: '#697586' }}>
       In order to continue you will have to accept our terms and conditions. You can read them here.
     </Typography>

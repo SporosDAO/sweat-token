@@ -31,6 +31,7 @@ const Create: React.FC = () => {
     defaultValues: {
       name: '',
       symbol: '',
+      terms: false,
       founders: [{ address: '', initialTokens: 0, email: '' }]
     }
   })
@@ -98,7 +99,7 @@ const Create: React.FC = () => {
                 <Button
                   size="small"
                   variant="contained"
-                  disabled={!formData.formState.isValid}
+                  disabled={activeView !== View.Confirmation && !formData.formState.isValid}
                   endIcon={<ArrowRight sx={{ mt: '4px', stroke: 'white' }} />}
                   onClick={() => setActiveView((activeView) => (activeView += 1))}
                 >
