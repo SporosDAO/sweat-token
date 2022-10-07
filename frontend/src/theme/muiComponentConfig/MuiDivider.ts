@@ -1,9 +1,10 @@
 import { Components } from '@mui/material'
+import { colors } from '../colorPalette'
 
 export const MuiDividerConfig: Components['MuiDivider'] = {
   styleOverrides: {
     root: {
-      borderColor: '#E3E8EF' // replace with colors from colorPalette
+      borderColor: colors.gray[200]
     }
   }
 }

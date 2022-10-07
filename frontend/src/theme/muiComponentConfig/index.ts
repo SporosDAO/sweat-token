@@ -12,6 +12,7 @@ import { MuiDividerConfig } from './MuiDivider'
 import { MuiTooltipConfig } from './MuiTooltip'
 import { MuiModalConfig } from './MuiModal'
 import { MuiTabConfig } from './MuiTab'
+import { MuiFormControlLabelConfig } from './MuiFormControlLabel'
 import { MuiPaginationConfig } from './MuiPagination'
 
 export const MuiComponentConfig = {
@@ -29,5 +30,6 @@ export const MuiComponentConfig = {
   Tooltip: MuiTooltipConfig,
   Modal: MuiModalConfig,
   Tab: MuiTabConfig,
-  Pagination: MuiPaginationConfig
+  Pagination: MuiPaginationConfig,
+  FormControlLabel: MuiFormControlLabelConfig
 }

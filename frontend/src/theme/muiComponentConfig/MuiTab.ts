@@ -1,4 +1,5 @@
 import { Components } from '@mui/material'
+import { colors } from '../colorPalette'
 
 export const MuiTabConfig: Components['MuiTab'] = {
   styleOverrides: {
@@ -12,10 +13,10 @@ export const MuiTabConfig: Components['MuiTab'] = {
       fontSize: '14px',
       lineHeight: '20px',
       // color: '#202939' // complete state - replace with colors from colorPalette
-      color: '#697586', // incomplete state - replace with colors from colorPalette
-      borderLeft: '2px solid #EEF2F6', // replace with colors from colorPalette
+      color: colors.gray[500], // incomplete state - replace with colors from colorPalette
+      borderLeft: `2px solid ${colors.gray[100]}`, // replace with colors from colorPalette
       '&.MuiTab-root.Mui-selected': {
-        color: '#4CA30D !important'
+        color: `${colors.primary[600]} !important`
       }
     }
   }

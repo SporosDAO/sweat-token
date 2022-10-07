@@ -1,9 +1,11 @@
+import Checkbox from '@mui/material/Checkbox'
 import Typography from '@mui/material/Typography'
+import FormControlLabel from '@mui/material/FormControlLabel'
 
 import Header from '../components/Header'
 import { colors } from '../../../theme/colorPalette'
 
-const Terms: React.FC<any> = ({ values, handleChange }) => (
+const Terms: React.FC<any> = () => (
   <>
     <Header title="Terms & conditions" subtitle="Subtitle" />
     <Typography variant="subtitle2" color={colors.gray[700]}>
@@ -49,6 +51,20 @@ const Terms: React.FC<any> = ({ values, handleChange }) => (
       ante metus, sit malesuada massa semper. Eu lectus elit et viverra tortor velit egestas suspendisse phasellus.
       Mattis vel commodo nulla a ridiculus suspendisse vel consectetur. At non, non quis eu, neque placerat eros.
       Bibendum mattis scelerisque vitae amet massa congue eget nulla.
+    </Typography>
+    <FormControlLabel
+      sx={{ mt: '24px' }}
+      label="Agree with terms of use and privacy policy"
+      control={
+        <Checkbox
+          inputProps={{ 'aria-label': 'Terms Checkbox' }}
+          icon={<img src="/icons/unchecked.svg" alt="Unchecked" />}
+          checkedIcon={<img src="/icons/checked.svg" alt="Unchecked" />}
+        />
+      }
+    />
+    <Typography variant="subtitle2" sx={{ mt: '-4px', ml: '24px', color: '#697586' }}>
+      In order to continue you will have to accept our terms and conditions. You can read them here.
     </Typography>
   </>
 )

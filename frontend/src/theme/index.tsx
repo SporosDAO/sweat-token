@@ -43,6 +43,7 @@ export const lightTheme = createTheme({
     MuiCheckbox: MuiComponentConfig.Checkbox,
     MuiDivider: MuiComponentConfig.Divider,
     MuiTooltip: MuiComponentConfig.Tooltip,
+    MuiFormControlLabel: MuiComponentConfig.FormControlLabel,
     MuiPaper: {
       defaultProps: {
         elevation: 0

@@ -34,7 +34,7 @@ const Create: React.FC = () => {
       founders: [{ address: '', initialTokens: 0, email: '' }]
     }
   })
-  const [activeView, setActiveView] = React.useState(View.Name)
+  const [activeView, setActiveView] = React.useState(View.Terms)
   const onSubmit = async (data: any) => console.log({ data })
   console.log('formState', formData)
   return (
