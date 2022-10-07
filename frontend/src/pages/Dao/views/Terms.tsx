@@ -5,7 +5,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Header from '../components/Header'
 import { colors } from '../../../theme/colorPalette'
 
-const Terms: React.FC<any> = () => (
+const Terms: React.FC<any> = (props) => (
   <>
     <Header title="Terms & conditions" subtitle="Subtitle" />
     <Typography variant="subtitle2" color={colors.gray[700]}>
@@ -57,6 +57,7 @@ const Terms: React.FC<any> = () => (
       label="Agree with terms of use and privacy policy"
       control={
         <Checkbox
+          {...props?.register('terms', { required: true })}
           inputProps={{ 'aria-label': 'Terms Checkbox' }}
           icon={<img src="/icons/unchecked.svg" alt="Unchecked" />}
           checkedIcon={<img src="/icons/checked.svg" alt="Unchecked" />}

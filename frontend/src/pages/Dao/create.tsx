@@ -34,9 +34,10 @@ const Create: React.FC = () => {
       founders: [{ address: '', initialTokens: 0, email: '' }]
     }
   })
-  const [activeView, setActiveView] = React.useState(View.Terms)
+  const [activeView, setActiveView] = React.useState(View.Name)
   const onSubmit = async (data: any) => console.log({ data })
   console.log('formState', formData)
+
   return (
     <DaoLayout hideSidebar={[View.Confirmation, View.Terms].includes(activeView)}>
       <Grid container>
@@ -62,7 +63,7 @@ const Create: React.FC = () => {
           </Box>
         </Grid>
         <Grid item width="70%" p={3}>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form>
             <TabPanel value={activeView} index={View.Name}>
               <Name {...formData} />
             </TabPanel>
@@ -73,10 +74,10 @@ const Create: React.FC = () => {
               <Confirmation {...formData} />
             </TabPanel>
             <TabPanel value={activeView} index={View.Terms}>
-              <Terms />
+              <Terms {...formData} />
             </TabPanel>
             <TabPanel value={activeView} index={View.Payment}>
-              <Payment />
+              <Payment {...formData} onPay={handleSubmit(onSubmit)} />
             </TabPanel>
             <Box sx={{ my: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               {activeView > 0 ? (
@@ -91,6 +92,8 @@ const Create: React.FC = () => {
               ) : (
                 <Box />
               )}
+              {/* @todo Keith - after signature transaction is confirmed */}
+              {/* hide the Sign button and display the continue button */}
               {activeView < 4 && (
                 <Button
                   size="small"
@@ -99,7 +102,7 @@ const Create: React.FC = () => {
                   endIcon={<ArrowRight sx={{ mt: '4px', stroke: 'white' }} />}
                   onClick={() => setActiveView((activeView) => (activeView += 1))}
                 >
-                  Continue
+                  {activeView === View.Terms ? 'Sign' : 'Continue'}
                 </Button>
               )}
             </Box>
