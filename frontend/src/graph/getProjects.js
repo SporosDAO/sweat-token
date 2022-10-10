@@ -1,7 +1,7 @@
-import { useContractRead, useContractReads } from 'wagmi'
+import {useContractRead, useContractReads} from 'wagmi'
 import PM_ABI from '../abi/ProjectManagement.json'
-import { addresses } from '../constants/addresses'
-import { ethers } from 'ethers'
+import {addresses} from '../constants/addresses'
+import {ethers} from 'ethers'
 
 /**
  *
@@ -80,15 +80,29 @@ export function useGetProjects(chainId, daoAddress) {
   */
 }
 
-export async function getProjectTributes(chainId, daoAdress) {
-  const cid = Number(chainId)
-  const pmAddress = addresses[cid]['extensions']['projectmanagement']
+export async function getProjectTributes(chainId, daoAdress, provider, projectId) {
+  const pmAddress = addresses[chainId]['extensions']['projectmanagement']
 
-  const pmContract = new ethers.Contract(pmAddress, PM_ABI)
+  const pmContract = new ethers.Contract(pmAddress, PM_ABI, provider)
 
   const filter = pmContract.filters.ExtensionCalled(daoAdress, null)
 
-  const results = await pmContract.queryFilter(filter, 7218098, 'latest')
+  const result = await pmContract.queryFilter(filter)
 
-  console.log(results)
+  const rawData = result.map((entry) => entry.args.updates[0])
+
+  const decodedData = rawData.map((entry) =>
+    ethers.utils.defaultAbiCoder.decode(['uint256', 'address', 'uint256', 'string'], entry)
+  )
+
+  const tributeData = decodedData.map((entry) => {
+    return {
+      projectId: parseInt(ethers.utils.formatUnits(entry[0], 0), 10),
+      contributorAddress: entry[1],
+      amount: ethers.utils.formatEther(entry[2]),
+      tributeString: entry[3]
+    }
+  })
+
+  return tributeData.filter((tribute) => tribute.projectId === projectId)
 }
