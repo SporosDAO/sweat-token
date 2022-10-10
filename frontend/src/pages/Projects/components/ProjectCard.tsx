@@ -1,6 +1,6 @@
 import { Card, CardContent, CardActions } from '@mui/material'
 import { Button, Typography, Link } from '@mui/material'
-import { useEnsName, useEnsAvatar, useAccount } from 'wagmi'
+import { useEnsName, useEnsAvatar, useAccount, useProvider } from 'wagmi'
 import { Work, Launch, HourglassTop, HourglassDisabled } from '@mui/icons-material'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Key } from 'react'
@@ -22,8 +22,13 @@ export default function ProjectCard(props: any) {
   const { address: userAddress } = useAccount()
   const isManager = userAddress === manager
 
+  const cid = Number(chainId)
+  const provider = useProvider({ chainId: cid })
+
   const handleCardClick = async () => {
-    await getProjectTributes(chainId, daoId)
+    const data = await getProjectTributes(cid, daoId, provider, projectID)
+    console.log(projectID)
+    console.log(data)
   }
 
   const navigate = useNavigate()
