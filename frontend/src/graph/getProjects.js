@@ -1,7 +1,7 @@
-import {useContractRead, useContractReads} from 'wagmi'
+import { useContractRead, useContractReads } from 'wagmi'
 import PM_ABI from '../abi/ProjectManagement.json'
-import {addresses} from '../constants/addresses'
-import {ethers} from 'ethers'
+import { addresses } from '../constants/addresses'
+import { ethers } from 'ethers'
 
 /**
  *
