@@ -80,7 +80,7 @@ export default function ProjectCard(props: any) {
             onClick={() => {
               navigate(`${project['projectID']}/tribute`, { state: project })
             }}
-            data-testid="tribute-button"
+            data-testid={`tribute-button-${projectID}`}
           >
             Tribute
           </Button>

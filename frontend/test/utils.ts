@@ -15,10 +15,15 @@ class EthersProviderWrapper extends providers.StaticJsonRpcProvider {
   }
 }
 
-export function getProvider({ chains = allChains, chainId }: { chains?: Chain[]; chainId?: number } = {}) {
-  const chain = allChains.find((x) => x.id === chainId) ?? chainLookup.foundry
+export function getProvider({
+  chains = allChains,
+  chainId = chainLookup.goerli.id
+}: { chains?: Chain[]; chainId?: number } = {}) {
+  // const chain = allChains.find((x) => x.id === chainId) ?? chainLookup.foundry
+  const chain = allChains.find((x) => x.id === chainId) ?? chainLookup.goerli
   const url = chainLookup.foundry.rpcUrls.default
-  const provider = new EthersProviderWrapper(url, getNetwork(chain))
+  // const provider = new EthersProviderWrapper(url, getNetwork(chain))
+  const provider = new EthersProviderWrapper(chain.rpcUrls.default, getNetwork(chain))
   provider.pollingInterval = 1_000
   return Object.assign(provider, { chains })
 }
@@ -29,10 +34,20 @@ class EthersWebSocketProviderWrapper extends providers.WebSocketProvider {
   }
 }
 
-export function getWebSocketProvider({ chains = allChains, chainId }: { chains?: Chain[]; chainId?: number } = {}) {
-  const chain = allChains.find((x) => x.id === chainId) ?? chainLookup.foundry
-  const url = chainLookup.foundry.rpcUrls.default.replace('http', 'ws')
-  const webSocketProvider = Object.assign(new EthersWebSocketProviderWrapper(url, getNetwork(chain)), { chains })
+export function getWebSocketProvider({
+  chains = allChains,
+  chainId = chainLookup.goerli.id
+}: { chains?: Chain[]; chainId?: number } = {}) {
+  const chain = allChains.find((x) => x.id === chainId) ?? chainLookup.goerli
+  // const url = chainLookup.foundry.rpcUrls.default.replace('http', 'ws')
+  // const webSocketProvider = Object.assign(new EthersWebSocketProviderWrapper(url, getNetwork(chain)), { chains })
+  const webSocketProvider = Object.assign(
+    new EthersWebSocketProviderWrapper(chain.rpcUrls.default, getNetwork(chain)),
+    {
+      chains
+    }
+  )
+
   // Clean up WebSocketProvider immediately
   // so handle doesn't stay open in test environment
   webSocketProvider?.destroy().catch(() => {
@@ -45,6 +60,7 @@ export function getWebSocketProvider({ chains = allChains, chainId }: { chains?:
 export const accounts = [
   {
     privateKey: '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80',
+    // public key: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
     balance: '10000000000000000000000'
   },
   {

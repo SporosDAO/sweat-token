@@ -1,9 +1,11 @@
-import * as React from 'react'
 import { useAccount, useConnect, useDisconnect } from 'wagmi'
 
 import { useIsMounted } from './hooks/useIsMounted'
 
-export function Connect() {
+/**
+ * Mock component. Replaces Rainbowkit's Connect button in testing.
+ */
+export function MockConnect() {
   const { address, connector, isConnected } = useAccount()
   const { connect, connectors, error, isLoading, pendingConnector } = useConnect()
   const { disconnect } = useDisconnect()
@@ -17,14 +19,16 @@ export function Connect() {
         {isConnected && (
           <>
             <div>{address}</div>
-            <button onClick={() => disconnect()}>Disconnect from {connector?.name}</button>
+            <button data-testid="btn-mock-disconnect" onClick={() => disconnect()}>
+              Disconnect from {connector?.name}
+            </button>
           </>
         )}
 
         {connectors
           .filter((x) => x.ready && x.id !== connector?.id)
           .map((x) => (
-            <button key={x.id} onClick={() => connect({ connector: x })}>
+            <button data-testid="btn-mock-connect" key={x.id} onClick={() => connect({ connector: x })}>
               {isLoading && x.id === pendingConnector?.id && 'Connecting to '}
               {x.name}
             </button>
