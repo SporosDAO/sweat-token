@@ -48,6 +48,7 @@ export const lightTheme = createTheme({
     MuiPagination: MuiComponentConfig.Pagination,
     MuiModal: MuiComponentConfig.Modal,
     MuiDialog: MuiComponentConfig.Dialog,
-    MuiSlider: MuiComponentConfig.Slider
+    MuiSlider: MuiComponentConfig.Slider,
+    MuiAlert: MuiComponentConfig.Alert
   }
 })
