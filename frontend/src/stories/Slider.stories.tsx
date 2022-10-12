@@ -4,7 +4,7 @@ import { Slider } from '@mui/material'
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'WIP/Slider',
+  title: 'Components/Slider',
   component: Slider,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   parameters: {}

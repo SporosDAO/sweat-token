@@ -9,6 +9,7 @@ import { MuiToolbarConfig } from './MuiToolbar'
 import { MuiDialogConfig } from './MuiDialog'
 import { MuiModalConfig } from './MuiModal'
 import { MuiPaginationConfig } from './MuiPagination'
+import { MuiSliderConfig } from './MuiSlider'
 
 export const MuiComponentConfig = {
   Button: MuiButtonConfig,
@@ -21,5 +22,6 @@ export const MuiComponentConfig = {
   Toolbar: MuiToolbarConfig,
   Dialog: MuiDialogConfig,
   Modal: MuiModalConfig,
-  Pagination: MuiPaginationConfig
+  Pagination: MuiPaginationConfig,
+  Slider: MuiSliderConfig
 }
