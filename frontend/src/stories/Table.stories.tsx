@@ -1,18 +1,16 @@
 import React from 'react'
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { ComponentMeta } from '@storybook/react'
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'WIP/Table',
+  title: 'Components/Table',
   component: Table,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   parameters: {}
 } as ComponentMeta<typeof Table>
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-
-const Template: ComponentStory<typeof Table> = (args) => <Table {...args} />
 
 function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
   return { name, calories, fat, carbs, protein }

@@ -11,6 +11,9 @@ import { MuiModalConfig } from './MuiModal'
 import { MuiPaginationConfig } from './MuiPagination'
 import { MuiSliderConfig } from './MuiSlider'
 import { MuiAlert } from './MuiAlert'
+import { MuiTable } from './MuiTable'
+import { MuiTableCell } from './MuiTableCell'
+import { MuiTableHead } from './MuiTableHead'
 
 export const MuiComponentConfig = {
   Button: MuiButtonConfig,
@@ -25,5 +28,8 @@ export const MuiComponentConfig = {
   Modal: MuiModalConfig,
   Pagination: MuiPaginationConfig,
   Slider: MuiSliderConfig,
-  Alert: MuiAlert
+  Alert: MuiAlert,
+  Table: MuiTable,
+  TableCell: MuiTableCell,
+  TableHead: MuiTableHead
 }

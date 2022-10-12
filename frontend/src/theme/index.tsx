@@ -49,6 +49,9 @@ export const lightTheme = createTheme({
     MuiModal: MuiComponentConfig.Modal,
     MuiDialog: MuiComponentConfig.Dialog,
     MuiSlider: MuiComponentConfig.Slider,
-    MuiAlert: MuiComponentConfig.Alert
+    MuiAlert: MuiComponentConfig.Alert,
+    MuiTable: MuiComponentConfig.Table,
+    MuiTableHead: MuiComponentConfig.TableHead,
+    MuiTableCell: MuiComponentConfig.TableCell
   }
 })
