@@ -1,4 +1,17 @@
-import { Box, Paper, TableContainer, TableHead, TableRow, TableCell, TableBody, IconButton } from '@mui/material'
+import {
+  Box,
+  Paper,
+  Table,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  IconButton,
+  Typography,
+  LinearProgress,
+  CircularProgress
+} from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
@@ -20,23 +33,29 @@ export default function ProjectDetails() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const [tributes, setTributes] = useState<Tribute[]>([])
+  const [tributesLoading, setTributesLoading] = useState(true)
 
   const cid = Number(chainId)
+  const id = parseInt(projectId || '', 10)
   const provider = useProvider({ chainId: cid })
 
   useEffect(() => {
     const getTributes = async () => {
-      const data = await getProjectTributesById(cid, daoId, provider, parseInt(projectId || '', 10))
+      const data = await getProjectTributesById(cid, daoId, provider, id)
       const formattedData = data.map((tribute) => {
         const tributeDetails = JSON.parse(tribute.tributeString)[0]
         return { ...tributeDetails, ...tribute }
       })
 
       setTributes(formattedData)
+      setTributesLoading(false)
     }
 
-    getTributes().catch((error) => console.log(error))
-  }, [cid, daoId, projectId, provider])
+    getTributes().catch((error) => {
+      console.log(error)
+      setTributesLoading(false)
+    })
+  }, [cid, daoId, id, projectId, provider])
 
   return (
     <Box>
@@ -45,28 +64,38 @@ export default function ProjectDetails() {
       </IconButton>
       <h1>Project {projectId}</h1>
       <TableContainer component={Paper}>
-        <TableHead>
-          <TableRow>
-            <TableCell>Tribute Title</TableCell>
-            <TableCell>Contributor Address </TableCell>
-            <TableCell>Amount</TableCell>
-            <TableCell>Link</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {tributes.map((tribute) => {
-            const { tributeTitle, contributorAddress, amount, tributeLink } = tribute
-
-            return (
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Tribute Title</TableCell>
+              <TableCell>Contributor Address </TableCell>
+              <TableCell>Amount</TableCell>
+              <TableCell>Link</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {!tributes.length && (
               <TableRow>
-                <TableCell>{tributeTitle}</TableCell>
-                <TableCell>{contributorAddress}</TableCell>
-                <TableCell>{amount}</TableCell>
-                <TableCell>{tributeLink}</TableCell>
+                <TableCell align={'center'} colSpan={3}>
+                  {tributesLoading ? <CircularProgress /> : 'No tributes available...'}
+                </TableCell>
               </TableRow>
-            )
-          })}
-        </TableBody>
+            )}
+
+            {tributes.map((tribute) => {
+              const { tributeTitle, contributorAddress, amount, tributeLink } = tribute
+
+              return (
+                <TableRow>
+                  <TableCell>{tributeTitle}</TableCell>
+                  <TableCell>{contributorAddress}</TableCell>
+                  <TableCell>{amount}</TableCell>
+                  <TableCell>{tributeLink}</TableCell>
+                </TableRow>
+              )
+            })}
+          </TableBody>
+        </Table>
       </TableContainer>
     </Box>
   )
