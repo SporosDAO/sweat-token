@@ -80,7 +80,7 @@ export function useGetProjects(chainId, daoAddress) {
   */
 }
 
-export async function getProjectTributes(chainId, daoAdress, provider, projectId) {
+export async function getProjectTributesById(chainId, daoAdress, provider, projectId) {
   const pmAddress = addresses[chainId]['extensions']['projectmanagement']
 
   const pmContract = new ethers.Contract(pmAddress, PM_ABI, provider)
