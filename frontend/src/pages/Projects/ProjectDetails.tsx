@@ -8,8 +8,6 @@ import {
   TableCell,
   TableBody,
   IconButton,
-  Typography,
-  LinearProgress,
   CircularProgress
 } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
