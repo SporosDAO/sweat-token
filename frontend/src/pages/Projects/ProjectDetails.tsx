@@ -11,6 +11,8 @@ interface Tribute {
   contributorAddress: string
   amount: string
   tributeString: string
+  tributeTitle?: string
+  tributeLink?: string
 }
 
 export default function ProjectDetails() {
@@ -25,7 +27,12 @@ export default function ProjectDetails() {
   useEffect(() => {
     const getTributes = async () => {
       const data = await getProjectTributesById(cid, daoId, provider, parseInt(projectId || '', 10))
-      setTributes(data)
+      const formattedData = data.map((tribute) => {
+        const tributeDetails = JSON.parse(tribute.tributeString)[0]
+        return { ...tributeDetails, ...tribute }
+      })
+
+      setTributes(formattedData)
     }
 
     getTributes().catch((error) => console.log(error))
@@ -40,17 +47,25 @@ export default function ProjectDetails() {
       <TableContainer component={Paper}>
         <TableHead>
           <TableRow>
+            <TableCell>Tribute Title</TableCell>
             <TableCell>Contributor Address </TableCell>
             <TableCell>Amount</TableCell>
+            <TableCell>Link</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {tributes.map((tribute) => (
-            <TableRow>
-              <TableCell>{tribute.contributorAddress}</TableCell>
-              <TableCell>{tribute.amount}</TableCell>
-            </TableRow>
-          ))}
+          {tributes.map((tribute) => {
+            const { tributeTitle, contributorAddress, amount, tributeLink } = tribute
+
+            return (
+              <TableRow>
+                <TableCell>{tributeTitle}</TableCell>
+                <TableCell>{contributorAddress}</TableCell>
+                <TableCell>{amount}</TableCell>
+                <TableCell>{tributeLink}</TableCell>
+              </TableRow>
+            )
+          })}
         </TableBody>
       </TableContainer>
     </Box>
