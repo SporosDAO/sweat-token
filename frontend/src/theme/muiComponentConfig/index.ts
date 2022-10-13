@@ -9,6 +9,11 @@ import { MuiToolbarConfig } from './MuiToolbar'
 import { MuiDialogConfig } from './MuiDialog'
 import { MuiModalConfig } from './MuiModal'
 import { MuiPaginationConfig } from './MuiPagination'
+import { MuiSliderConfig } from './MuiSlider'
+import { MuiAlert } from './MuiAlert'
+import { MuiTable } from './MuiTable'
+import { MuiTableCell } from './MuiTableCell'
+import { MuiTableHead } from './MuiTableHead'
 
 export const MuiComponentConfig = {
   Button: MuiButtonConfig,
@@ -21,5 +26,10 @@ export const MuiComponentConfig = {
   Toolbar: MuiToolbarConfig,
   Dialog: MuiDialogConfig,
   Modal: MuiModalConfig,
-  Pagination: MuiPaginationConfig
+  Pagination: MuiPaginationConfig,
+  Slider: MuiSliderConfig,
+  Alert: MuiAlert,
+  Table: MuiTable,
+  TableCell: MuiTableCell,
+  TableHead: MuiTableHead
 }

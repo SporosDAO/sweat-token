@@ -1,4 +1,4 @@
-import { darkTheme, lightTheme } from '../src/theme/theme'
+import { darkTheme, lightTheme } from '../src/theme'
 import { ThemeProvider, CssBaseline } from '@mui/material'
 
 export const parameters = {

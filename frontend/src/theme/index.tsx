@@ -47,6 +47,11 @@ export const lightTheme = createTheme({
     MuiTextField: MuiComponentConfig.TextField,
     MuiPagination: MuiComponentConfig.Pagination,
     MuiModal: MuiComponentConfig.Modal,
-    MuiDialog: MuiComponentConfig.Dialog
+    MuiDialog: MuiComponentConfig.Dialog,
+    MuiSlider: MuiComponentConfig.Slider,
+    MuiAlert: MuiComponentConfig.Alert,
+    MuiTable: MuiComponentConfig.Table,
+    MuiTableHead: MuiComponentConfig.TableHead,
+    MuiTableCell: MuiComponentConfig.TableCell
   }
 })
