@@ -3,17 +3,18 @@ import { TsJestCompiler } from 'ts-jest'
 import { register, unregister } from './serviceWorkerRegistration'
 
 const mockSW = {
-  ready: {}
+  ready: {},
+  register: jest.fn()
 }
 
-const mockLocation = {
+const mockWinLocation = {
   href: 'http://localhost/',
   origin: 'http://localhost',
   hostname: 'localhost'
 }
 
 Object.defineProperty(global.window, 'location', {
-  value: mockLocation
+  value: mockWinLocation
 })
 
 Object.defineProperty(global.navigator, 'serviceWorker', {
@@ -31,11 +32,17 @@ describe('registering service worker', () => {
     jest.resetAllMocks()
     process.env = { ...OLD_ENV } // Make a copy
     mockSW.ready = new Promise((resolve, reject) => resolve(mockRegistration as any))
-    global.fetch = jest.fn((swUrl) =>
-      Promise.resolve({
-        response: { status: 200, headers: { contentType: 'javascript' } }
-      })
-    ) as any
+    global.fetch = jest.fn().mockImplementation(async (swUrl, options) => {
+      console.debug('>>> within fetch <<<')
+      return {
+        status: 200,
+        headers: new Map(
+          Object.entries({
+            'content-type': 'javascript'
+          })
+        )
+      }
+    })
   })
 
   afterAll(() => {
@@ -73,6 +80,8 @@ describe('registering service worker', () => {
     await expect(global.fetch).toHaveBeenCalledWith('http://localhost//service-worker.js', {
       headers: { 'Service-Worker': 'script' }
     })
+    await expect(mockSW.register).toHaveBeenCalledTimes(1)
+    await expect(mockSW.register).toHaveBeenCalledWith('http://localhost//service-worker.js')
   })
 
   test('register service worker in prod mode non localhost', async () => {
@@ -83,9 +92,9 @@ describe('registering service worker', () => {
       NODE_ENV: 'production',
       PUBLIC_URL: `https://${sporosdao}/`
     }
-    mockLocation.href = `https://${sporosdao}/`
-    mockLocation.origin = `https://${sporosdao}`
-    mockLocation.hostname = sporosdao
+    mockWinLocation.href = `https://${sporosdao}/`
+    mockWinLocation.origin = `https://${sporosdao}`
+    mockWinLocation.hostname = sporosdao
     // registration in prod mode
     let onload: any
     ;(window.addEventListener as any).mockImplementation((event: any, callback: any) => {
@@ -99,6 +108,22 @@ describe('registering service worker', () => {
     await expect(global.fetch).toHaveBeenCalledWith('https://sporosdao.xyz//service-worker.js', {
       headers: { 'Service-Worker': 'script' }
     })
+  })
+
+  test('should not register service worker in prod mode when SW publicUrl.origin does not match window.location.origin', async () => {
+    jest.spyOn(window, 'addEventListener')
+    const sporosdao = 'sporosdao.xyz'
+    process.env = {
+      ...OLD_ENV,
+      NODE_ENV: 'production',
+      PUBLIC_URL: `https://${sporosdao}/`
+    }
+    mockWinLocation.href = `https://localhost/`
+    mockWinLocation.origin = `https://localhost`
+    mockWinLocation.hostname = 'localhost'
+    // registration in prod mode
+    await register()
+    await expect(window.addEventListener).toHaveBeenCalledTimes(0)
   })
 
   test('unregister service worker', async () => {
