@@ -9,6 +9,11 @@ const formatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0 // (causes 2500.99 to be printed as $2,501)
 })
 
+/**
+ *
+ * @param value number or string value of an amount in USD
+ * @returns whole number rounded value without '$' prefix
+ */
 export const formatCurrency = (value: string | number | bigint | undefined): string => {
   if (value === undefined) return ''
   return formatter.format(typeof value === 'string' ? +value : value).substring(1)

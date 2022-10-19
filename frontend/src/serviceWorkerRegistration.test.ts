@@ -32,8 +32,8 @@ describe('registering service worker', () => {
     jest.resetAllMocks()
     process.env = { ...OLD_ENV } // Make a copy
     mockSW.ready = new Promise((resolve, reject) => resolve(mockRegistration as any))
+    mockSW.register.mockResolvedValue(mockRegistration)
     global.fetch = jest.fn().mockImplementation(async (swUrl, options) => {
-      console.debug('>>> within fetch <<<')
       return {
         status: 200,
         headers: new Map(
