@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 /// <reference lib="webworker" />
 /* eslint-disable no-restricted-globals */
 
@@ -78,3 +79,6 @@ self.addEventListener('message', (event) => {
 })
 
 // Any other custom service worker logic can go here.
+
+const SW = 1
+export default SW

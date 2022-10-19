@@ -111,12 +111,16 @@
     }
   },
   "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!src/stories/**"
+    ],
     "coverageThreshold": {
       "global": {
-        "statements": 19,
-        "branches": 25,
-        "functions": 16,
-        "lines": 19
+        "statements": 21,
+        "branches": 27,
+        "functions": 19,
+        "lines": 22
       }
     }
   }
