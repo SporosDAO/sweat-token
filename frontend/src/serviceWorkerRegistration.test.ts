@@ -108,6 +108,7 @@ describe('registering service worker', () => {
     await expect(global.fetch).toHaveBeenCalledWith('https://sporosdao.xyz//service-worker.js', {
       headers: { 'Service-Worker': 'script' }
     })
+    await expect(navigator.serviceWorker.register).toHaveBeenCalledTimes(1)
   })
 
   test('should not register service worker in prod mode when SW publicUrl.origin does not match window.location.origin', async () => {
