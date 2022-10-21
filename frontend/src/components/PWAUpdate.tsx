@@ -27,6 +27,7 @@ export function ServiceWorkerWrapper(props: any) {
   return (
     <Snackbar
       open={showReload}
+      data-testid="new-version-alert"
       message="A new version is available!"
       onClick={reloadPage}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}

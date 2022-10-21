@@ -31,6 +31,7 @@ describe('registering service worker', () => {
 
   beforeEach(() => {
     jest.resetModules() // Most important - it clears the cache
+    jest.spyOn(window, 'addEventListener')
     process.env = { ...OLD_ENV } // Make a copy
     mockRegistration = {
       unregister: jest.fn(),
@@ -60,7 +61,6 @@ describe('registering service worker', () => {
   })
 
   test('register service worker in dev mode', async () => {
-    jest.spyOn(window, 'addEventListener')
     process.env = {
       ...OLD_ENV,
       NODE_ENV: 'development'
