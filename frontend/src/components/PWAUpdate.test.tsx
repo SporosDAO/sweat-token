@@ -11,7 +11,8 @@ const mockSW = {
 const mockWinLocation = {
   href: 'http://localhost/',
   origin: 'http://localhost',
-  hostname: 'localhost'
+  hostname: 'localhost',
+  reload: jest.fn()
 }
 
 Object.defineProperty(global.window, 'location', {
@@ -113,6 +114,75 @@ describe('PWA version update pop-up', () => {
     await waitFor(async () => {
       // SW update pop-up should show
       await expect(screen.queryByTestId('new-version-alert')).toBeVisible()
+    })
+  })
+
+  it('calls reloadPage on snackbar click', async () => {
+    const sporosdao = 'sporosdao.xyz'
+    process.env = {
+      ...OLD_ENV,
+      NODE_ENV: 'production',
+      PUBLIC_URL: `https://${sporosdao}/`
+    }
+    mockWinLocation.href = `https://${sporosdao}/`
+    mockWinLocation.origin = `https://${sporosdao}`
+    mockWinLocation.hostname = sporosdao
+    // registration in prod mode
+    let onload: any
+    ;(window.addEventListener as any).mockImplementation((event: any, callback: any) => {
+      onload = callback
+    })
+    jest.spyOn(window, 'addEventListener')
+
+    // open blank page wrapped with all used app providers, including SW provider
+    let rendered: any
+    await act(async () => {
+      rendered = await render({
+        ui: <div />,
+        options: {
+          wrapper: ({ children }: { children: React.ReactNode }) => (
+            <ServiceWorkerWrapper>{children}</ServiceWorkerWrapper>
+          )
+        }
+      })
+    })
+    const { user } = rendered
+
+    await expect(mockRegistration.onupdatefound).toBeUndefined()
+    await waitFor(() => expect(screen.queryByTestId('new-version-alert')).toBeNull())
+
+    // simulate ServiceWorker update
+    await expect(window.addEventListener).toHaveBeenCalledTimes(1)
+    await expect(window.addEventListener).toHaveBeenCalledWith('load', expect.anything())
+    await expect(onload).toBeTruthy()
+    await onload()
+    await expect(global.fetch).toHaveBeenCalledWith('https://sporosdao.xyz//service-worker.js', {
+      headers: { 'Service-Worker': 'script' }
+    })
+    await expect(navigator.serviceWorker.register).toHaveBeenCalledTimes(1)
+    await expect(mockRegistration.installing.onstatechange).toBeFalsy()
+    // simulate SW update
+    await act(async () => {
+      await mockRegistration.onupdatefound()
+      await expect(mockRegistration.installing.onstatechange).toBeTruthy()
+      mockRegistration.installing.state = 'installed'
+      mockSW.controller = jest.fn()
+      // simulate SW installing worker state change
+      await mockRegistration.installing.onstatechange()
+    })
+    let snackbar: any
+    await waitFor(async () => {
+      snackbar = await screen.getByTestId('new-version-alert')
+      await expect(snackbar).toBeEnabled()
+      await expect(mockWinLocation.reload).toHaveBeenCalledTimes(0)
+    })
+
+    // simulate snackbar button click
+    await act(async () => {
+      await user.click(snackbar)
+    })
+    await waitFor(async () => {
+      await expect(mockWinLocation.reload).toHaveBeenCalledTimes(1)
     })
   })
 })
