@@ -39,10 +39,16 @@ export const colors = {
   },
   success: {
     700: '#027A48',
-    50: '#ECFDF3'
+    600: '#039855',
+    300: '#6CE9A6',
+    50: '#ECFDF3',
+    25: '#F6FEF9'
   },
   warning: {
     700: '#B54708',
-    50: '#FFFAEB'
+    600: '#DC6803',
+    300: '#FEC84B',
+    50: '#FFFAEB',
+    25: '#FFFCF5'
   }
 }

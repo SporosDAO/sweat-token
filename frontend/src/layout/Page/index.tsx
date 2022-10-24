@@ -1,183 +1,121 @@
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import MenuIcon from '@mui/icons-material/Menu'
-import { Avatar, Box, CssBaseline, IconButton, Toolbar, useMediaQuery, useTheme } from '@mui/material'
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
-import Container from '@mui/material/Container'
-import Divider from '@mui/material/Divider'
-import MuiDrawer from '@mui/material/Drawer'
-import Link from '@mui/material/Link'
-import List from '@mui/material/List'
-import { styled } from '@mui/material/styles'
-import Typography from '@mui/material/Typography'
-import { ReactNode, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { OWNER } from '../../constants'
-import { MainMenuItems, DaoMenuItems, SecondaryMenuItems } from '../../context/PageContext'
+import { ReactNode } from 'react'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { useGetDAO } from '../../graph/getDAO'
 
-function Copyright(props: any) {
+import { FolderIcon, HomeIcon, HandThumbUpIcon, UsersIcon } from '@heroicons/react/24/outline'
+
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(' ')
+}
+
+export const PageLayout: React.FC<{ withDrawer?: boolean; children: ReactNode }> = (props) => {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href={OWNER.homepageUrl} target="_blank" rel="noopener">
-        {OWNER.name}
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
+    <div className="h-screen flex flex-col">
+      <div className="flex-none">
+        <TopNav />
+      </div>
+
+      <div className="flex flex-grow">
+        <div className="flex-none">
+          <SideNav />
+        </div>
+
+        <main className="flex-grow bg-gray-50">{props.children}</main>
+      </div>
+    </div>
   )
 }
 
-const drawerWidth = 240
+const TopNav = () => {
+  return (
+    <nav className="border-b px-4 py-3">
+      <div className="flex items-center justify-between space-x-6">
+        <div className="flex flex-1 items-center space-x-6">
+          <div className="flex flex-shrink-0 items-center space-x-2">
+            <img alt="Sporos DAO Logo" className="block h-8 w-auto" src="/logo192.png" />
+            <p className="text-gray-900 font-medium text-base">Sporos DAO</p>
+          </div>
 
-interface AppBarProps extends MuiAppBarProps {
-  open?: boolean
+          <div className="flex space-x-4">
+            <TopNavLink href="#">Discover</TopNavLink>
+            <TopNavLink href="#">Start Your Company</TopNavLink>
+          </div>
+        </div>
+
+        <ConnectButton />
+      </div>
+    </nav>
+  )
 }
 
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open'
-})<AppBarProps>(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  })
-}))
-
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
-  '& .MuiDrawer-paper': {
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    }),
-    boxSizing: 'border-box',
-    ...(!open && {
-      overflowX: 'hidden',
-      transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen
-      }),
-      width: theme.spacing(7),
-      [theme.breakpoints.up('sm')]: {
-        width: theme.spacing(9)
-      }
-    })
-  }
-}))
-
-interface PageLayoutProps {
-  withDrawer?: boolean
-  children: ReactNode
-}
-
-export function PageLayout(props: PageLayoutProps) {
-  const theme = useTheme()
-
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-  const [open, setOpen] = useState(props.withDrawer !== false && !isMobile)
-
-  const { chainId, daoId } = useParams()
-  const daoResult = useGetDAO(chainId, daoId)
-  const { data: myDao, isSuccess: isMyDaoLoaded } = daoResult
-
-  const toggleDrawer = () => {
-    setOpen(!open)
-  }
+const TopNavLink: React.FC<{ children: ReactNode; href: string }> = (props) => {
+  // TODO
+  const isActive = false
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar position="absolute" open={open}>
-        <Toolbar
-          sx={{
-            pr: '24px' // keep right padding when drawer closed
-          }}
-        >
-          <Avatar alt="Sporos DAO logo" src="/logo192.png" sx={{ width: '32px', height: '32px' }} />
-          {props.withDrawer !== false ? (
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: '36px',
-                ...(open && { display: 'none' })
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-          ) : (
-            <></>
-          )}
-          <Typography variant="subtitle1" fontWeight={600} noWrap sx={{ ml: 2 }}>
-            Sporos DAO
-          </Typography>
-          <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1, ml: 2 }}>
-            {isMyDaoLoaded && myDao?.token && `${myDao?.token?.name} (${myDao?.token?.symbol})`}
-          </Typography>
-          <IconButton color="inherit" aria-label="account">
-            {/* <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge> */}
-          </IconButton>
-          <ConnectButton />
-        </Toolbar>
-      </AppBar>
-      {props.withDrawer !== false ? (
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              px: [1]
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List component="nav">
-            {MainMenuItems()}
-            <Divider sx={{ my: 1 }} />
-            {DaoMenuItems()}
-            <Divider sx={{ my: 1 }} />
-            {SecondaryMenuItems()}
-          </List>
-        </Drawer>
-      ) : (
-        <></>
+    <a
+      href={props.href}
+      aria-current={isActive ? 'page' : undefined}
+      className={classNames(
+        'rounded-md py-2 px-3 inline-flex items-center text-sm font-medium',
+        isActive ? 'bg-gray-100 text-gray-900' : 'text-gray-900 hover:bg-gray-50 hover:text-gray-900'
       )}
-      <Box
-        component="main"
-        sx={{
-          backgroundColor: (theme) =>
-            theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
-          flexGrow: 1,
-          height: '100vh',
-          overflow: 'auto'
-        }}
-      >
-        <Toolbar />
-        <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
-          {props.children}
-          <Copyright sx={{ pt: 4 }} />
-        </Container>
-      </Box>
-    </Box>
+    >
+      {props.children}
+    </a>
+  )
+}
+
+const SideNav = () => {
+  return (
+    <nav className="flex flex-col h-full justify-between p-4 w-72 border-r">
+      <div className="space-y-1">
+        <SideNavLink href="#" icon={HomeIcon}>
+          Sporos DAO
+        </SideNavLink>
+        <SideNavLink href="#" icon={FolderIcon}>
+          Projects
+        </SideNavLink>
+        <SideNavLink href="#" icon={HandThumbUpIcon}>
+          Proposals
+        </SideNavLink>
+        <SideNavLink href="#" icon={UsersIcon}>
+          Members
+        </SideNavLink>
+      </div>
+
+      <div className="space-y-1">
+        <SideNavLink href="#" icon={HomeIcon}>
+          Docs
+        </SideNavLink>
+        <SideNavLink href="#" icon={UsersIcon}>
+          Help
+        </SideNavLink>
+      </div>
+    </nav>
+  )
+}
+
+const SideNavLink: React.FC<{ children: ReactNode; href: string; icon: typeof HomeIcon }> = (props) => {
+  // TODO
+  const isActive = false
+
+  return (
+    <a
+      href={props.href}
+      className={classNames(
+        'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+        isActive ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+      )}
+    >
+      <props.icon
+        aria-hidden="true"
+        className={classNames(
+          'mr-3 flex-shrink-0 h-6 w-6',
+          isActive ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500'
+        )}
+      />
+
+      {props.children}
+    </a>
   )
 }
