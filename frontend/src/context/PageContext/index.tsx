@@ -7,7 +7,7 @@ interface PageContextType {
   setTitle: (title: string) => void
 }
 
-const PageContext = React.createContext<PageContextType>({} as PageContextType)
+export const PageContext = React.createContext<PageContextType>({} as PageContextType)
 
 export function PageProvider({ children }: { children: React.ReactNode }): JSX.Element {
   const [title, setTitle] = React.useState('')

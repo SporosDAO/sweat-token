@@ -220,20 +220,28 @@ describe('Web3Submit dialog', () => {
     })
   })
 
-  it('shows Done button when contract write transaction completes', async () => {
+  it('handles contract write error exceptions as expected', async () => {
+    jest.spyOn(console, 'error')
     ;(useChainGuard as any).mockReturnValue({ isUserOnCorrectChain: true, isUserConnected: true, userChain: 5 })
-    ;(wagmi as any).usePrepareContractWrite.mockReturnValue({
-      config: undefined,
-      isError: true,
-      error: undefined
+    ;(wagmi as any).usePrepareContractWrite.mockImplementation(({ onError }: { onError: any }) => {
+      onError('usePrepareContractWrite')
+      return {
+        config: undefined,
+        isError: true,
+        error: undefined
+      }
     })
-    ;(wagmi as any).useContractWrite.mockReturnValue({
-      // data: writeResult,
-      isLoading: false,
-      isSuccess: false,
-      isError: false,
-      isIdle: true,
-      write: jest.fn()
+    ;(wagmi as any).useContractWrite.mockImplementation(({ onError }: { onError: any }) => {
+      onError('useContractWrite')
+      return {
+        isLoading: false,
+        isSuccess: false,
+        isError: false,
+        isIdle: true,
+        write: jest.fn().mockImplementation(() => {
+          throw Error('writeError')
+        })
+      }
     })
     const onclose = jest.fn()
     const { user, getByTestId } = await render({
@@ -253,6 +261,7 @@ describe('Web3Submit dialog', () => {
     })
     await waitFor(async () => {
       await expect(onclose).toHaveBeenCalledTimes(1)
+      await expect(console.error).toHaveBeenCalledTimes(3)
     })
   })
 })
