@@ -17,8 +17,6 @@ jest.mock('react-router-dom', () => {
 })
 
 describe('MyDAOs component', () => {
-  beforeEach(() => {})
-
   afterAll(() => {
     jest.clearAllMocks()
   })
