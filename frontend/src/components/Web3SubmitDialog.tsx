@@ -69,9 +69,9 @@ export default function Web3SubmitDialog(props: Web3SubmitDialogProps) {
   return (
     <Dialog
       open={open}
-      onClose={(event: object, reason: string) => onClose(event, reason, isWriteSuccess)}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
+      data-testid="web3dialog"
     >
       <DialogTitle data-testid="web3submit-alert-dialog-title">
         Submitting On-chain Transaction!

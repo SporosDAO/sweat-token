@@ -27,7 +27,6 @@ export default function ContentBlock(props: ContentBlockProps) {
             variant="extended"
             color="primary"
             onClick={() => {
-              console.debug('>>>>navigate<<<')
               navigate(cta?.href)
             }}
             data-testid="cta-button"
