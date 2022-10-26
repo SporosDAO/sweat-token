@@ -12,13 +12,14 @@ import { ethers } from 'ethers'
  * @param {*} daoAddress
  * @returns array of project records
  */
-function useGetProjectsRPC(chainId) {
+function useGetProjectsRPC(chainId: number) {
   const cid = Number(chainId)
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
   let result
 
   const pmContract = {
-    addressOrName: pmAddress,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    addressOrName: pmAddress!,
     contractInterface: PM_ABI,
     chainId: cid
   }
@@ -47,12 +48,12 @@ function useGetProjectsRPC(chainId) {
   return result
 }
 
-export function useGetProjects(chainId, daoAddress) {
-  const { data, error, isError, isLoading, isSuccess } = useGetProjectsRPC(chainId, daoAddress)
-  const projects = []
+export function useGetProjects(chainId: number, daoAddress: string | undefined) {
+  const { data, error, isError, isLoading, isSuccess } = useGetProjectsRPC(chainId)
+  const projects: any[] = []
   if (data) {
     data.forEach((project) => {
-      if (project.dao.toLowerCase() === daoAddress.toLowerCase()) {
+      if (project.dao.toLowerCase() === daoAddress?.toLowerCase()) {
         let goals = {}
         try {
           goals = JSON.parse(project.goals)
