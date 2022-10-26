@@ -1,6 +1,6 @@
 import { ToastProvider, ToastContext } from './ToastContext'
 
-import { act, render, screen, waitFor, within } from '../../test'
+import { act, render, screen, waitFor } from '../../test'
 
 describe('ToastProvider component', () => {
   it('hides toast pop-up alert when open prop is false', async () => {
