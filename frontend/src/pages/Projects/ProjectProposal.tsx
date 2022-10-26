@@ -39,7 +39,7 @@ export default function ProjectProposal() {
     }
   })
 
-  const { data: myDao, isSuccess: isMyDaoLoaded } = useGetDAO(chainId, daoId)
+  const { data: myDao, isSuccess: isMyDaoLoaded } = useGetDAO(cid, daoId)
 
   const daoContract = {
     addressOrName: daoId || '',
