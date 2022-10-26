@@ -9,8 +9,8 @@ import PersonCard from './components/PersonCard'
 
 export default function People() {
   const { chainId, daoId } = useParams()
-
-  const { data, error, isLoading, isSuccess } = useGetPeople(chainId, daoId)
+  const cid = Number(chainId)
+  const { data, error, isLoading, isSuccess } = useGetPeople(cid, daoId)
   let people: any[] = []
   let tokenTotalSupply = 0
   if (isSuccess) {

@@ -1,10 +1,10 @@
-import { getDAO, useGetDAO } from './getDAO'
+import { getPeople, useGetPeople } from './getPeople'
 import { renderHook, waitFor } from '../../test'
 import { useState } from 'react'
 import * as reactQuery from 'react-query'
 
-describe('useGetDAO hook', () => {
-  it('getDao fetches remote data', async () => {
+describe('useGetPeople hook', () => {
+  it('getPeople fetches remote data', async () => {
     jest.spyOn(global, 'fetch').mockResolvedValueOnce(
       Promise.resolve({
         json: () => ({
@@ -12,11 +12,11 @@ describe('useGetDAO hook', () => {
         })
       } as any)
     )
-    const res = await getDAO(5, '567')
+    const res = await getPeople(5, '567')
     expect(res).toMatchObject({ id: 567 })
   })
 
-  it('getDao returns immediately when daoId is unknown', async () => {
+  it('getPeople returns immediately when daoId is unknown', async () => {
     jest.spyOn(global, 'fetch').mockResolvedValueOnce(
       Promise.resolve({
         json: () => ({
@@ -24,19 +24,15 @@ describe('useGetDAO hook', () => {
         })
       } as any)
     )
-    const res = await getDAO(5, undefined)
+    const res = await getPeople(5, undefined)
     expect(res).toBeNull()
   })
 
-  it('useGetDao hook fetches remote data', async () => {
+  it('useGetPeople hook fetches remote data', async () => {
     jest.spyOn(global, 'fetch').mockResolvedValue(
       Promise.resolve({
         json: () => ({
-          data: {
-            dao: {
-              id: 567
-            }
-          }
+          id: 567
         })
       } as any)
     )
@@ -46,11 +42,11 @@ describe('useGetDAO hook', () => {
       promise.then((data) => setRes(data as any))
       return { data: res, isSuccess: true } as any
     })
-    const { result } = await renderHook(() => useGetDAO(5, '567'))
+    const { result } = await renderHook(() => useGetPeople(5, '567'))
     await waitFor(async () => {
       const { data, isSuccess } = result.current
       await expect(isSuccess).toBeTruthy()
-      await expect(data).toMatchObject({ chainId: 5, id: 567 })
+      await expect(data).toMatchObject({ id: 567 })
     })
   })
 })
