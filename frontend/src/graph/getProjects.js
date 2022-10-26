@@ -61,7 +61,7 @@ export function useGetProjects(chainId, daoAddress) {
           goals = [{ goalTitle: project.goals, goalLink: '' }]
         }
         const prj = {
-          projectID: project.id.toNumber(),
+          projectID: Number(project.id),
           budget: ethers.utils.formatEther(project.budget),
           deadline: project.deadline,
           manager: project.manager,
