@@ -20,7 +20,7 @@ export default function Landing() {
 
   return (
     <PageLayout withDrawer={false}>
-      <ContentBlock title="Your DAOs" cta={{ href: 'create-dao', text: 'Create a new DAO' }} sx={{ p: 2 }}>
+      <ContentBlock title="Your DAOs" /* cta={{ href: 'create-dao', text: 'Create a new DAO' }} */ sx={{ p: 2 }}>
         <MyDAOs />
       </ContentBlock>
     </PageLayout>
