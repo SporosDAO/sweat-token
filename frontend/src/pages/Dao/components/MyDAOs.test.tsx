@@ -1,6 +1,6 @@
 import MyDAOs from './MyDAOs'
 
-import { act, render, screen, waitFor } from '../../test'
+import { act, render, screen, waitFor } from '../../../../test'
 import * as graphqlRequest from 'graphql-request'
 import * as wagmi from 'wagmi'
 import * as reactRouter from 'react-router-dom'

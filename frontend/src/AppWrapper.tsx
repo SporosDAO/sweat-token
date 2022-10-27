@@ -7,21 +7,32 @@ import { ServiceWorkerWrapper } from './components/PWAUpdate'
 
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { Chain, Client } from 'wagmi'
-import { Theme, ThemeProvider } from '@mui/material'
+import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { getDesignTokens } from './theme'
 
 export function AppWrapper({
   wagmiClient,
   chains,
   initialChain,
-  children,
-  theme
+  children
 }: {
   wagmiClient?: Client
   chains?: Chain[]
   initialChain?: Chain
   children: ReactNode
-  theme: Theme
 }) {
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
+  const [mode, setMode] = React.useState('light')
+
+  React.useEffect(() => {
+    setMode(prefersDarkMode ? 'dark' : 'light')
+  }, [prefersDarkMode])
+
+  let theme = React.useMemo(() => createTheme(getDesignTokens(mode) as any), [mode])
+
+  theme = responsiveFontSizes(theme)
+
   const queryClient = new QueryClient()
 
   return (
