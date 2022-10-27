@@ -8,7 +8,8 @@ import ProjectCard from './components/ProjectCard'
 export default function Projects() {
   const { chainId, daoId } = useParams()
 
-  const { projects, error, isLoading } = useGetProjects(chainId, daoId)
+  const cid = Number(chainId)
+  const { projects, error, isLoading } = useGetProjects(cid, daoId)
 
   return (
     <ContentBlock title="Projects" cta={{ href: 'propose', text: 'Propose Project' }}>

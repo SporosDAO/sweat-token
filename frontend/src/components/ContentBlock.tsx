@@ -2,7 +2,7 @@ import { Fab, Card, SxProps, Theme } from '@mui/material'
 import { Box } from '@mui/system'
 import { ReactNode } from 'react'
 import { Add } from '@mui/icons-material'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 
 interface ContentBlockProps {
   title?: string
@@ -26,7 +26,9 @@ export default function ContentBlock(props: ContentBlockProps) {
             sx={{ margin: '10px 0 0 auto', order: 2 }}
             variant="extended"
             color="primary"
-            onClick={() => navigate(cta?.href)}
+            onClick={() => {
+              navigate(cta?.href)
+            }}
             data-testid="cta-button"
           >
             <Add />

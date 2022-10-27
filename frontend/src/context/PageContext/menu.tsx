@@ -64,7 +64,7 @@ export const menu: DaoMenuItem[] = [
 export const DaoMenuItems = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const { daoId, chainId } = useParams()
+  const { daoId, chainId, ooooo } = useParams()
 
   const goto = (path: string) => {
     navigate(getDaoUrl(chainId, daoId, path))
@@ -103,7 +103,7 @@ export const SecondaryMenuItems = () => {
         <ListItemIcon>
           <Help />
         </ListItemIcon>
-        <ListItemText primary="Help" />
+        <ListItemText data-testid="help-link" primary="Help" />
       </ListItemButton>
     </React.Fragment>
   )

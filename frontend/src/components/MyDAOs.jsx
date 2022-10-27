@@ -18,27 +18,28 @@ export function useGetUserDAOs(chainId, userAddress) {
 export default function MyDAOs() {
   const navigate = useNavigate()
   const { chain } = useNetwork()
-  const { address, isConnecting, isDisconnected } = useAccount()
+  const { address, isConnecting, isConnected, isDisconnected } = useAccount()
   const { data, isLoading, isSuccess } = useGetUserDAOs(chain?.id, address)
 
   const daos = isSuccess ? data?.['members'] : []
 
   return (
     <>
-      {isLoading ? (
+      {!chain || isDisconnected ? (
+        <div>Please connect your web3 wallet.</div>
+      ) : isLoading ? (
         <div>Loading...</div>
       ) : isConnecting ? (
         <div>Connecting to your web3 wallet...</div>
-      ) : isDisconnected ? (
-        <div>Please connect your web3 wallet.</div>
-      ) : daos && daos.length > 0 ? (
+      ) : isConnected && daos && daos.length > 0 ? (
         <List>
           {daos.map((dao) => (
             <ListItem key={dao.dao.id} data-testid={dao.dao.id}>
               <Card sx={{ width: '100%' }} raised={true}>
                 <CardActionArea
+                  data-testid={`projects-link-${dao.dao.id}`}
                   onClick={() => {
-                    navigate(`dao/chain/${chain.id}/address/${dao['dao']['id']}/projects/`)
+                    navigate(`dao/chain/${chain.id}/address/${dao['dao']['address']}/projects/`)
                   }}
                 >
                   <CardContent>
@@ -61,8 +62,9 @@ export default function MyDAOs() {
                     variant="text"
                     endIcon={<ReadMore />}
                     fontSize="inherit"
+                    data-testid={`projects-link-${dao.dao.id}`}
                     onClick={() => {
-                      navigate(`dao/chain/${chain.id}/address/${dao['dao']['id']}/projects/`)
+                      navigate(`dao/chain/${chain.id}/address/${dao['dao']['address']}/projects/`)
                     }}
                   >
                     Open
@@ -71,6 +73,7 @@ export default function MyDAOs() {
                     variant="text"
                     endIcon={<Launch />}
                     fontSize="inherit"
+                    data-testid={`kali-link-${dao.dao.id}`}
                     href={`https://app.kali.gg/daos/${chain.id}/${dao['dao']['address']}`}
                     rel="noopener"
                     target="_blank"

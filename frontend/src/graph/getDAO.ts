@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query'
 import { GRAPH_URL } from './url'
 
-export async function getDAO(chainId, daoAddress) {
+export async function getDAO(chainId: number, daoAddress: string | undefined) {
   if (!daoAddress) return null
   try {
     const res = await fetch(GRAPH_URL[chainId], {
@@ -26,7 +26,7 @@ export async function getDAO(chainId, daoAddress) {
   }
 }
 
-export function useGetDAO(chainId, daoAddress) {
+export function useGetDAO(chainId: number, daoAddress: string | undefined) {
   return useQuery(['getDAO', chainId, daoAddress], async () => {
     const data = await getDAO(chainId, daoAddress)
     // simplify structure and enrich subgraph result

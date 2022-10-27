@@ -35,11 +35,12 @@ export default function ProjectTribute() {
   const deadlineString = deadlineDate.toUTCString()
   const isExpired = deadlineDate < new Date()
 
-  const { data: myDao } = useGetDAO(chainId, daoId)
+  const cid = Number(chainId)
+
+  const { data: myDao } = useGetDAO(cid, daoId)
 
   const hasBudget = Number(budget) > 0
 
-  const cid = Number(chainId)
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
   const formResult = useForm<ProjectTributeFormValues>({ criteriaMode: 'all' })
   const {

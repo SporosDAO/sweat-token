@@ -2,12 +2,12 @@ import * as React from 'react'
 
 export * from './menu'
 
-interface PageContextType {
+export interface PageContextType {
   title: string
   setTitle: (title: string) => void
 }
 
-const PageContext = React.createContext<PageContextType>({} as PageContextType)
+export const PageContext = React.createContext<PageContextType>({} as PageContextType)
 
 export function PageProvider({ children }: { children: React.ReactNode }): JSX.Element {
   const [title, setTitle] = React.useState('')
@@ -19,6 +19,6 @@ export function PageProvider({ children }: { children: React.ReactNode }): JSX.E
   return <PageContext.Provider value={{ setTitle, title }}>{children}</PageContext.Provider>
 }
 
-export default function usePage() {
+export function usePage() {
   return React.useContext(PageContext)
 }

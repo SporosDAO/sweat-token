@@ -19,8 +19,8 @@ export default function PersonCard(props: any) {
             {ensName}
           </Typography>
           <div>{ensAvatar}</div>
-          <Typography>{person['address']}</Typography>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          <Typography data-testid="member-address">{person['address']}</Typography>
+          <Typography data-testid="member-shares" sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             Tokens: {ethers.utils.formatEther(shares)}
           </Typography>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
