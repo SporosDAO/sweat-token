@@ -20,11 +20,12 @@ export default function People() {
   return (
     <ContentBlock title="People">
       {isLoading ? (
-        <CircularProgress />
+        <CircularProgress data-testid="progress-icon" />
       ) : error ? (
         <Box>
           Failed to load data.{' '}
           <Button
+            data-testid="retry-btn"
             onClick={(e) => {
               e.preventDefault()
             }}
