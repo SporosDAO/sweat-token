@@ -9,8 +9,8 @@ import PersonCard from './components/PersonCard'
 
 export default function People() {
   const { chainId, daoId } = useParams()
-
-  const { data, error, isLoading, isSuccess } = useGetPeople(chainId, daoId)
+  const cid = Number(chainId)
+  const { data, error, isLoading, isSuccess } = useGetPeople(cid, daoId)
   let people: any[] = []
   let tokenTotalSupply = 0
   if (isSuccess) {
@@ -20,11 +20,12 @@ export default function People() {
   return (
     <ContentBlock title="People">
       {isLoading ? (
-        <CircularProgress />
+        <CircularProgress data-testid="progress-icon" />
       ) : error ? (
         <Box>
           Failed to load data.{' '}
           <Button
+            data-testid="retry-btn"
             onClick={(e) => {
               e.preventDefault()
             }}
