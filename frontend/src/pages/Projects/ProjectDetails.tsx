@@ -38,14 +38,18 @@ export default function ProjectDetails() {
   const provider = useProvider({ chainId: cid })
 
   useEffect(() => {
+    if (!cid || !daoId) {
+      return
+    }
+
     const getTributes = async () => {
       const data = await getProjectTributesById(cid, daoId, provider, id)
-      const formattedData = data.map((tribute) => {
+      const formattedData = data?.map((tribute) => {
         const tributeDetails = JSON.parse(tribute.tributeString)[0]
         return { ...tributeDetails, ...tribute }
       })
 
-      setTributes(formattedData)
+      setTributes(formattedData as Tribute[])
       setTributesLoading(false)
     }
 
