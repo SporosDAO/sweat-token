@@ -16,6 +16,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useProvider } from 'wagmi'
 import { useEffect, useState } from 'react'
 import { getProjectTributesById } from '../../graph/getProjects'
+import { v4 as uuid } from 'uuid'
 
 interface Tribute {
   projectId: number
@@ -61,12 +62,12 @@ export default function ProjectDetails() {
 
   return (
     <Box>
-      <IconButton>
-        <ArrowBackIcon onClick={() => navigate(pathname.substring(0, pathname.lastIndexOf('/')))} />
+      <IconButton onClick={() => navigate(pathname.substring(0, pathname.lastIndexOf('/')))}>
+        <ArrowBackIcon />
       </IconButton>
       <h1>Project {projectId}</h1>
       <TableContainer component={Paper}>
-        <Table>
+        <Table data-testid={'tribute-table'}>
           <TableHead>
             <TableRow>
               <TableCell>Tribute Title</TableCell>
@@ -88,7 +89,7 @@ export default function ProjectDetails() {
               const { tributeTitle, contributorAddress, amount, tributeLink } = tribute
 
               return (
-                <TableRow>
+                <TableRow key={uuid()}>
                   <TableCell>{tributeTitle}</TableCell>
                   <TableCell>{contributorAddress}</TableCell>
                   <TableCell>{amount}</TableCell>
