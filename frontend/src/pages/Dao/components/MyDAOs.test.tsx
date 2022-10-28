@@ -3,7 +3,6 @@ import MyDAOs from './MyDAOs'
 import { act, render, screen, waitFor } from '../../../../test'
 import * as graphqlRequest from 'graphql-request'
 import * as wagmi from 'wagmi'
-import * as reactRouter from 'react-router-dom'
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup'
 
 const mockNavigate = jest.fn()
@@ -118,11 +117,10 @@ describe('MyDAOs component', () => {
       status: 'connecting'
     } as any)
     jest.spyOn(wagmi, 'useNetwork').mockReturnValue({ chain: { id: 5, name: 'goerli' } } as any)
-    let user: UserEvent
     await act(() => {
-      user = render({
+      render({
         ui: <MyDAOs />
-      }).user
+      })
     })
     await waitFor(() => {
       expect(screen.getByText(/DaoA/i)).toBeVisible()
@@ -167,11 +165,10 @@ describe('MyDAOs component', () => {
       status: 'connecting'
     } as any)
     jest.spyOn(wagmi, 'useNetwork').mockReturnValue({ chain: { id: 5, name: 'goerli' } } as any)
-    let user: UserEvent
     await act(() => {
-      user = render({
+      render({
         ui: <MyDAOs />
-      }).user
+      })
     })
     await act(async () => {
       await expect(screen.getByTestId('kali-link-1')).toHaveAttribute(

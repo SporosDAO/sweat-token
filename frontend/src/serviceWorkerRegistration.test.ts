@@ -1,4 +1,3 @@
-import { string } from 'prop-types'
 import { register, unregister } from './serviceWorkerRegistration'
 
 const mockSW = {

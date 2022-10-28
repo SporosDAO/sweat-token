@@ -1,4 +1,4 @@
-import { act, screen, render, waitFor, fireEvent } from '../../test'
+import { waitFor } from '../../test'
 import { useGetProjects } from './getProjects'
 import * as wagmi from 'wagmi'
 import { ethers } from 'ethers'
