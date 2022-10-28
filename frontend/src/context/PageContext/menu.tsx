@@ -64,7 +64,7 @@ export const menu: DaoMenuItem[] = [
 export const DaoMenuItems = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const { daoId, chainId, ooooo } = useParams()
+  const { daoId, chainId } = useParams()
 
   const goto = (path: string) => {
     navigate(getDaoUrl(chainId, daoId, path))
