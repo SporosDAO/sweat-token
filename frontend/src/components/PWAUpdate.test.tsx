@@ -26,10 +26,6 @@ Object.defineProperty(global.navigator, 'serviceWorker', {
 describe('PWA version update pop-up', () => {
   const OLD_ENV = process.env
   let mockRegistration = undefined as any
-  const config = {
-    onUpdate: jest.fn(),
-    onSuccess: jest.fn()
-  }
 
   beforeEach(() => {
     jest.resetModules() // Most important - it clears the cache

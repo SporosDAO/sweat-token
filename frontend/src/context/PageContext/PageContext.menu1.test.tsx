@@ -1,10 +1,8 @@
-import { PageProvider, PageContext, usePage } from './index'
 import { MainMenuItems, DaoMenuItems, SecondaryMenuItems } from './menu'
 
-import { act, render, screen, userEvent, waitFor, renderHook } from '../../../test'
+import { act, render, screen, userEvent, waitFor } from '../../../test'
 import * as reactRouter from 'react-router-dom'
 import React from 'react'
-import { chainId } from 'wagmi'
 
 const mockNavigate = jest.fn()
 

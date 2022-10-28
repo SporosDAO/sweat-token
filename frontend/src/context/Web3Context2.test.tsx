@@ -1,4 +1,4 @@
-import { chain, configureChains, Web3ContextProvider } from './Web3Context'
+import { Web3ContextProvider } from './Web3Context'
 
 import { act, render, screen, waitFor, setupClient } from '../../test'
 import * as wagmi from 'wagmi'

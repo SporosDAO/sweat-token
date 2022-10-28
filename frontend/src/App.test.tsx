@@ -5,7 +5,7 @@ describe('Landing page', () => {
   it('render landing page', async () => {
     const { getByText, queryByText } = render({ route: '/' })
     await act(async () => {
-      await expect(getByText('The Launchpad of For-Profit DAOs')).toBeInTheDocument()
+      await expect(getByText(/The Launchpad of For-Profit DAOs/i)).toBeInTheDocument()
       await expect(queryByText('nonsense')).toBeNull()
     })
   })

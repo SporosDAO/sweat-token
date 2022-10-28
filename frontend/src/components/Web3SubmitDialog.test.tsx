@@ -1,7 +1,6 @@
 import Web3SubmitDialog from './Web3SubmitDialog'
 
 import { act, render, screen, waitFor } from '../../test'
-import ServiceWorkerWrapper from './PWAUpdate'
 import * as wagmi from 'wagmi'
 import { useChainGuard } from '@kalidao/hooks'
 

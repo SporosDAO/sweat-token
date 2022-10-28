@@ -62,7 +62,13 @@ export default function ProjectProposal() {
     }
   })
 
-  const onSubmit = async (data: any) => {
+  const onFormError = (errors: any, event: any) => {
+    if (process.env.NODE_ENV === 'development') {
+      console.debug({ errors, event })
+    }
+  }
+
+  const onSubmit = async (data: any, e: any) => {
     const { manager, budget, deadline, goalTitle, goalLink } = data
     setProposedManagerAddress(manager)
     try {
@@ -96,6 +102,7 @@ export default function ProjectProposal() {
     const PROPOSAL_TYPE_EXTENSION = 9
 
     let pmExtensionEnabled
+
     if (contractReadExtensionResult.isSuccess) {
       pmExtensionEnabled = contractReadExtensionResult.data
     } else {
@@ -120,6 +127,7 @@ export default function ProjectProposal() {
       functionName: 'propose',
       args: [PROPOSAL_TYPE_EXTENSION, description, [pmContractAddress], [TOGGLE_EXTENSION_AVAILABILITY], [payload]]
     }
+
     setDialogOpen(true)
     setTxInput(txInput)
   }
@@ -131,6 +139,8 @@ export default function ProjectProposal() {
   if (!chainId || !daoId) {
     return <Navigate replace to="/" />
   }
+
+  // console.debug({ contractReadManagerResult })
 
   return (
     <Box
@@ -148,9 +158,10 @@ export default function ProjectProposal() {
           </div>
         </Alert>
       )}
-      <List component="form" onSubmit={handleSubmit(onSubmit)}>
+      <List component="form" onSubmit={handleSubmit(onSubmit, onFormError)}>
         <ListItem>
           <TextField
+            id="manager"
             data-testid="manager"
             label="Manager"
             helperText="ETH L1/L2 address: 0x..."

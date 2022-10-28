@@ -100,7 +100,7 @@ export function PageLayout(props: PageLayoutProps) {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="absolute" open={open}>
+      <AppBar position="absolute" open={open} color="transparent">
         <Toolbar
           sx={{
             pr: '24px' // keep right padding when drawer closed
@@ -124,7 +124,7 @@ export function PageLayout(props: PageLayoutProps) {
             <></>
           )}
           <Typography variant="subtitle1" fontWeight={600} noWrap sx={{ ml: 2 }}>
-            Sporos DAO
+            Sporos DAO - The Launchpad of For-Profit DAOs
           </Typography>
           <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1, ml: 2 }}>
             {isMyDaoLoaded && myDao?.token && `${myDao?.token?.name} (${myDao?.token?.symbol})`}

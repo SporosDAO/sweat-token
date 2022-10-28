@@ -1,4 +1,4 @@
-import { act, screen, render, waitFor, fireEvent } from '../../../test'
+import { act, screen, render, waitFor, fireEvent, userEvent } from '../../../test'
 import * as daos from '../../graph/getDAO'
 import * as wagmi from 'wagmi'
 
@@ -41,8 +41,10 @@ describe('Project Proposal Page', () => {
   })
 
   it('render project proposal form', async () => {
-    render({
-      route: '/dao/chain/5/address/0xe237747055b12f4da323bc559ac8d5eb66aac2f7/projects/propose'
+    await act(async () => {
+      await render({
+        route: '/dao/chain/5/address/0xe237747055b12f4da323bc559ac8d5eb66aac2f7/projects/propose'
+      })
     })
 
     await waitFor(() => {
@@ -62,6 +64,7 @@ describe('Project Proposal Page', () => {
         return {
           isError: false,
           isLoading: false,
+          isSuccess: true,
           // PM extension already enabled in Kali DAO contract instance
           data: true,
           refetch: jest.fn()
@@ -78,17 +81,23 @@ describe('Project Proposal Page', () => {
       }
     })
 
-    const { user, getByTestId, getByText } = render({
-      route: '/dao/chain/5/address/0xe237747055b12f4da323bc559ac8d5eb66aac2f7/projects/propose'
+    await act(() => {
+      render({
+        route: '/dao/chain/5/address/0xe237747055b12f4da323bc559ac8d5eb66aac2f7/projects/propose'
+      })
     })
 
-    act(() => {
-      user.click(getByTestId('submit-button'))
+    await act(() => {
+      waitFor(() => {
+        userEvent.click(screen.getByTestId('submit-button'))
+      })
     })
 
-    await waitFor(() => {
-      expect(getByText('Manager must be an existing token holder.')).toBeVisible()
+    await waitFor(async () => {
+      await expect(screen.getByText('Manager must be an existing token holder.')).toBeVisible()
     })
+
+    // await screen.debug(undefined, 1000000)
   })
 
   it('allow project manager who is a DAO member', async () => {
@@ -113,16 +122,20 @@ describe('Project Proposal Page', () => {
       }
     })
 
-    const { user, getByTestId, queryByText } = render({
-      route: '/dao/chain/5/address/0xe237747055b12f4da323bc559ac8d5eb66aac2f7/projects/propose'
+    await act(() => {
+      render({
+        route: '/dao/chain/5/address/0xe237747055b12f4da323bc559ac8d5eb66aac2f7/projects/propose'
+      })
     })
 
-    act(() => {
-      user.click(getByTestId('submit-button'))
+    await act(() => {
+      waitFor(() => {
+        userEvent.click(screen.getByTestId('submit-button'))
+      })
     })
 
-    await waitFor(() => {
-      expect(queryByText(/Manager must be an existing token holder./i)).toBeNull()
+    await waitFor(async () => {
+      await expect(screen.queryByText('Manager must be an existing token holder.')).toBeNull()
     })
   })
 
@@ -147,55 +160,63 @@ describe('Project Proposal Page', () => {
         } as any
       }
     })
-    // jest.mock('../../components/Web3SubmitDialog')
-    const { user, getByTestId } = render({
-      route: '/dao/chain/5/address/0xe237747055b12f4da323bc559ac8d5eb66aac2f7/projects/propose'
-    })
-    act(() => {
-      // populate form with a valid proposal
-      const manager = getByTestId('manager').querySelector('input')
-      expect(manager).toBeInTheDocument()
-      fireEvent.change(manager as Element, { target: { value: '0xf952a72F39c5Fa22a443200AbE7835128bCb7439' } })
-      expect(manager?.value).toBe('0xf952a72F39c5Fa22a443200AbE7835128bCb7439')
-
-      const budget = getByTestId('budget').querySelector('input')
-      expect(budget).toBeInTheDocument()
-      fireEvent.change(budget as Element, { target: { value: '100' } })
-      expect(budget?.value).toBe('100')
-
-      const defaultDeadline = new Date() // Now
-      defaultDeadline.setDate(defaultDeadline.getDate() + 30) // Set now + 30 days as the new date
-      const deadlineInputVaue = defaultDeadline.toISOString().split('T')[0]
-      const deadlineInput = getByTestId('deadline').querySelector('input')
-      expect(deadlineInput).toBeInTheDocument()
-      fireEvent.change(deadlineInput as Element, { target: { value: deadlineInputVaue } })
-      expect(deadlineInput?.value).toBe(deadlineInputVaue)
-
-      const goalTitle = getByTestId('goalTitle').querySelector('input')
-      expect(goalTitle).toBeInTheDocument()
-      fireEvent.change(goalTitle as Element, {
-        target: { value: '100% test coverage' }
+    await act(() => {
+      render({
+        route: '/dao/chain/5/address/0xe237747055b12f4da323bc559ac8d5eb66aac2f7/projects/propose'
       })
-      expect(goalTitle?.value).toBe('100% test coverage')
-
-      const goalLink = getByTestId('goalLink').querySelector('input')
-      expect(goalLink).toBeInTheDocument()
-      fireEvent.change(goalLink as Element, {
-        target: { value: 'https://github.com/SporosDAO/sweat-token/issues/80' }
-      })
-      expect(goalLink?.value).toBe('https://github.com/SporosDAO/sweat-token/issues/80')
-
-      // submit proposal
-      user.click(getByTestId('submit-button'))
     })
+
+    await act(() => {
+      waitFor(async () => {
+        // populate form with a valid proposal
+        const manager = await screen.getByTestId('manager').querySelector('input')
+        await expect(manager).toBeInTheDocument()
+        await fireEvent.change(manager as Element, { target: { value: '0xf952a72F39c5Fa22a443200AbE7835128bCb7439' } })
+        await expect(manager?.value).toBe('0xf952a72F39c5Fa22a443200AbE7835128bCb7439')
+        const budget = await screen.getByTestId('budget').querySelector('input')
+        await expect(budget).toBeInTheDocument()
+        await fireEvent.change(budget as Element, { target: { value: '100' } })
+        await expect(budget?.value).toBe('100')
+        const defaultDeadline = new Date() // Now
+        defaultDeadline.setDate(defaultDeadline.getDate() + 30) // Set now + 30 days as the new date
+        const deadlineInputVaue = defaultDeadline.toISOString().split('T')[0]
+        const deadlineInput = await screen.getByTestId('deadline').querySelector('input')
+        await expect(deadlineInput).toBeInTheDocument()
+        await fireEvent.change(deadlineInput as Element, { target: { value: deadlineInputVaue } })
+        await expect(deadlineInput?.value).toBe(deadlineInputVaue)
+        const goalTitle = await screen.getByTestId('goalTitle').querySelector('input')
+        await expect(goalTitle).toBeInTheDocument()
+        await fireEvent.change(goalTitle as Element, {
+          target: { value: '100% test coverage' }
+        })
+        await expect(goalTitle?.value).toBe('100% test coverage')
+        const goalLink = await screen.getByTestId('goalLink').querySelector('input')
+        await expect(goalLink).toBeInTheDocument()
+        await fireEvent.change(goalLink as Element, {
+          target: { value: 'https://github.com/SporosDAO/sweat-token/issues/80' }
+        })
+        await expect(goalLink?.value).toBe('https://github.com/SporosDAO/sweat-token/issues/80')
+      })
+    })
+
+    await act(() => {
+      waitFor(() => {
+        // submit proposal
+        userEvent.click(screen.getByTestId('submit-button'))
+      })
+    })
+
+    await waitFor(async () => {
+      await expect(screen.queryByText('Manager must be an existing token holder.')).toBeNull()
+    })
+
+    // await screen.debug(undefined, 1000000)
 
     // check if smart contract input is correct
     await waitFor(() => {
       const web3Submit = screen.getByTestId('web3submit-alert-dialog-title')
       expect(web3Submit).toBeVisible()
     })
-
-    //screen.debug(undefined, 1000000)
 
     await waitFor(() => expect(screen.getByText(/transaction successfully submitted/i)).toBeInTheDocument())
 
