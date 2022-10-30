@@ -1,7 +1,7 @@
 import { useContractRead, useContractReads } from 'wagmi'
 import PM_ABI from '../abi/ProjectManagement.json'
 import { addresses } from '../constants/addresses'
-import { ethers } from 'ethers'
+import { ethers, providers } from 'ethers'
 
 /**
  *
@@ -79,4 +79,40 @@ export function useGetProjects(chainId: number, daoAddress: string | undefined) 
     return data
   })
   */
+}
+
+export async function getProjectTributesById(
+  chainId: number,
+  daoAdress: string,
+  provider: providers.BaseProvider,
+  projectId: number
+) {
+  const pmAddress = addresses[chainId]['extensions']['projectmanagement']
+
+  if (!pmAddress) {
+    throw new Error('Unable to retrieve pmAddress...')
+  }
+
+  const pmContract = new ethers.Contract(pmAddress, PM_ABI, provider)
+
+  const filter = pmContract.filters.ExtensionCalled(daoAdress, null)
+
+  const result = await pmContract.queryFilter(filter)
+
+  const rawData = result.map((entry) => entry?.args?.updates[0])
+
+  const decodedData = rawData.map((entry) =>
+    ethers.utils.defaultAbiCoder.decode(['uint256', 'address', 'uint256', 'string'], entry)
+  )
+
+  const tributeData = decodedData.map((entry) => {
+    return {
+      projectId: parseInt(ethers.utils.formatUnits(entry[0], 0), 10),
+      contributorAddress: entry[1],
+      amount: ethers.utils.formatEther(entry[2]),
+      tributeString: entry[3]
+    }
+  })
+
+  return tributeData.filter((tribute) => tribute.projectId === projectId)
 }

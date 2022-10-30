@@ -9,6 +9,7 @@ export default function ProjectCard(props: any) {
   const { chainId, daoId } = useParams()
   const { project } = props
   const { manager, projectID, budget, goals } = project
+  const navigate = useNavigate()
 
   const ensNameResult = useEnsName({ address: manager, chainId: Number(1), cacheTime: 60_000 })
   const ensName = !ensNameResult.isError && !ensNameResult.isLoading ? ensNameResult.data : ''
@@ -21,10 +22,18 @@ export default function ProjectCard(props: any) {
   const { address: userAddress } = useAccount()
   const isManager = userAddress === manager
 
-  const navigate = useNavigate()
+  const handleCardClick = () => {
+    navigate(`${projectID}`)
+  }
 
   return (
-    <Card sx={{ margin: '8px', width: '48.5%' }} data-testid={projectID} raised={true}>
+    <Card
+      sx={{ margin: '8px', width: '48.5%', cursor: 'pointer' }}
+      data-id={projectID}
+      data-testid={projectID}
+      raised={true}
+      onClick={handleCardClick}
+    >
       <CardContent>
         <Typography>#{projectID}</Typography>
         {goals &&
