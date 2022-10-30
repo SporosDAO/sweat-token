@@ -24,6 +24,6 @@ describe('index page', () => {
   })
 
   it('render index page', async () => {
-    expect(rootRender).toMatchObject(<AppWrapper theme={expect.anything()}>{expect.anything()}</AppWrapper>)
+    expect(rootRender).toMatchObject(<AppWrapper>{expect.anything()}</AppWrapper>)
   })
 })

@@ -1,7 +1,6 @@
 import ContentBlock from './ContentBlock'
 
 import { act, render, screen, waitFor, within } from '../../test'
-import reactRouter from 'react-router-dom'
 
 const mockNavigate = jest.fn()
 jest.mock('react-router-dom', () => {

@@ -1,9 +1,8 @@
 import MyDAOs from './MyDAOs'
 
-import { act, render, screen, waitFor } from '../../test'
+import { act, render, screen, waitFor } from '../../../../test'
 import * as graphqlRequest from 'graphql-request'
 import * as wagmi from 'wagmi'
-import * as reactRouter from 'react-router-dom'
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup'
 
 const mockNavigate = jest.fn()
@@ -89,7 +88,7 @@ describe('MyDAOs component', () => {
         {
           dao: {
             id: 1,
-            address: '0xf952a72F39c5Fa22a443200AbE7835128bCb7001',
+            address: '0x8791f1612453a817919697ffA4895b17F6C77929',
             token: {
               name: 'DaoA',
               symbol: 'DA'
@@ -99,7 +98,7 @@ describe('MyDAOs component', () => {
         {
           dao: {
             id: 2,
-            address: '0xf952a72F39c5Fa22a443200AbE7835128bCb7002',
+            address: '0xD0d827c41af7BF2e52D1842134D5299ba7d6efc4',
             token: {
               name: 'DaoB',
               symbol: 'DB'
@@ -118,17 +117,16 @@ describe('MyDAOs component', () => {
       status: 'connecting'
     } as any)
     jest.spyOn(wagmi, 'useNetwork').mockReturnValue({ chain: { id: 5, name: 'goerli' } } as any)
-    let user: UserEvent
     await act(() => {
-      user = render({
+      render({
         ui: <MyDAOs />
-      }).user
+      })
     })
     await waitFor(() => {
       expect(screen.getByText(/DaoA/i)).toBeVisible()
-      expect(screen.getByText(/0xf952a72F39c5Fa22a443200AbE7835128bCb7001/i)).toBeVisible()
+      expect(screen.getByText(/0x8791f1612453a817919697ffA4895b17F6C77929/i)).toBeVisible()
       expect(screen.getByText(/DaoB/i)).toBeVisible()
-      expect(screen.getByText(/0xf952a72F39c5Fa22a443200AbE7835128bCb7002/i)).toBeVisible()
+      expect(screen.getByText(/0xD0d827c41af7BF2e52D1842134D5299ba7d6efc4/i)).toBeVisible()
     })
   })
 
@@ -138,7 +136,7 @@ describe('MyDAOs component', () => {
         {
           dao: {
             id: 1,
-            address: '0xf952a72F39c5Fa22a443200AbE7835128bCb7001',
+            address: '0x8791f1612453a817919697ffA4895b17F6C77929',
             token: {
               name: 'DaoA',
               symbol: 'DA'
@@ -148,7 +146,7 @@ describe('MyDAOs component', () => {
         {
           dao: {
             id: 2,
-            address: '0xf952a72F39c5Fa22a443200AbE7835128bCb7002',
+            address: '0xD0d827c41af7BF2e52D1842134D5299ba7d6efc4',
             token: {
               name: 'DaoB',
               symbol: 'DB'
@@ -167,20 +165,19 @@ describe('MyDAOs component', () => {
       status: 'connecting'
     } as any)
     jest.spyOn(wagmi, 'useNetwork').mockReturnValue({ chain: { id: 5, name: 'goerli' } } as any)
-    let user: UserEvent
     await act(() => {
-      user = render({
+      render({
         ui: <MyDAOs />
-      }).user
+      })
     })
     await act(async () => {
       await expect(screen.getByTestId('kali-link-1')).toHaveAttribute(
         'href',
-        'https://app.kali.gg/daos/5/0xf952a72F39c5Fa22a443200AbE7835128bCb7001'
+        'https://app.kali.gg/daos/5/0x8791f1612453a817919697ffA4895b17F6C77929'
       )
       await expect(screen.getByTestId('kali-link-2')).toHaveAttribute(
         'href',
-        'https://app.kali.gg/daos/5/0xf952a72F39c5Fa22a443200AbE7835128bCb7002'
+        'https://app.kali.gg/daos/5/0xD0d827c41af7BF2e52D1842134D5299ba7d6efc4'
       )
     })
   })
@@ -191,7 +188,7 @@ describe('MyDAOs component', () => {
         {
           dao: {
             id: 1,
-            address: '0xf952a72F39c5Fa22a443200AbE7835128bCb7001',
+            address: '0x8791f1612453a817919697ffA4895b17F6C77929',
             token: {
               name: 'DaoA',
               symbol: 'DA'
@@ -201,7 +198,7 @@ describe('MyDAOs component', () => {
         {
           dao: {
             id: 2,
-            address: '0xf952a72F39c5Fa22a443200AbE7835128bCb7002',
+            address: '0xD0d827c41af7BF2e52D1842134D5299ba7d6efc4',
             token: {
               name: 'DaoB',
               symbol: 'DB'
@@ -235,7 +232,7 @@ describe('MyDAOs component', () => {
       // expect 2 clicks because DAO card itself and Open button link to DAO projects
       expect(mockNavigate).toHaveBeenCalledTimes(2)
       expect(mockNavigate).toHaveBeenCalledWith(
-        'dao/chain/5/address/0xf952a72F39c5Fa22a443200AbE7835128bCb7001/projects/'
+        'dao/chain/5/address/0x8791f1612453a817919697ffA4895b17F6C77929/projects/'
       )
     })
   })
@@ -262,7 +259,7 @@ describe('MyDAOs component', () => {
     await waitFor(() => {
       expect(screen.getByText(/You are not participating/i)).toBeVisible()
       expect(screen.queryByText(/DaoA/i)).toBeNull()
-      expect(screen.queryByText(/0xf952a72F39c5Fa22a443200AbE7835128bCb7001/i)).toBeNull()
+      expect(screen.queryByText(/0x8791f1612453a817919697ffA4895b17F6C77929/i)).toBeNull()
     })
   })
 })
