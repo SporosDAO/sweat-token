@@ -1,9 +1,9 @@
-import { Button, CircularProgress, List } from '@mui/material'
+import { Button, CircularProgress, TableHead, Table, TableCell, TableRow, TableBody } from '@mui/material'
 import { Box } from '@mui/system'
 import { useParams } from 'react-router-dom'
 import ContentBlock from '../../components/ContentBlock'
 import { useGetPeople } from '../../graph/getPeople'
-import PersonCard from './components/PersonCard'
+import { ethers } from 'ethers'
 
 /* eslint react-hooks/rules-of-hooks: 0 */
 
@@ -36,15 +36,24 @@ export default function People() {
         </Box>
       ) : (
         <Box>
-          {people && people.length ? (
-            <List>
-              {people.map((person: any) => (
-                <PersonCard key={person.address} person={person} tokenTotalSupply={tokenTotalSupply} />
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Member</TableCell>
+                <TableCell>Tokens</TableCell>
+                <TableCell>Percentage</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {people?.map((person: any) => (
+                <TableRow>
+                  <TableCell>{person.address}</TableCell>
+                  <TableCell>{ethers.utils.formatEther(person.shares)}</TableCell>
+                  <TableCell>{((100 * person.shares) / tokenTotalSupply).toFixed(2)}%</TableCell>
+                </TableRow>
               ))}
-            </List>
-          ) : (
-            <p>This DAO has no members yet.</p>
-          )}
+            </TableBody>
+          </Table>
         </Box>
       )}
     </ContentBlock>
