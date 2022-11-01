@@ -1,14 +1,4 @@
-import {
-  Button,
-  CircularProgress,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  Typography
-} from '@mui/material'
+import { Button, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material'
 import { Box } from '@mui/system'
 import { useParams } from 'react-router-dom'
 import ContentBlock from '../../components/ContentBlock'

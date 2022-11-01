@@ -32,6 +32,10 @@ export const getProposals = async (chainId: number, address: string | undefined)
               votingStarts
               dao {
                 votingPeriod
+                quorum
+                token {
+                  totalSupply
+                }
               }
           }
           }`

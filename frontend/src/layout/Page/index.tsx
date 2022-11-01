@@ -104,7 +104,14 @@ export function PageLayout(props: PageLayoutProps) {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="absolute" open={open} color="transparent">
+      <AppBar
+        position="absolute"
+        open={open}
+        sx={{
+          bgcolor: 'background.paper',
+          opacity: 0.8
+        }}
+      >
         <Toolbar
           sx={{
             pr: '24px' // keep right padding when drawer closed
