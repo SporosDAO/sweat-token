@@ -9,7 +9,7 @@ import Link from '@mui/material/Link'
 import List from '@mui/material/List'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
-import { ReactNode, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { OWNER } from '../../constants'
 import { MainMenuItems, DaoMenuItems, SecondaryMenuItems } from '../../context/PageContext'
@@ -97,6 +97,11 @@ export function PageLayout(props: PageLayoutProps) {
     setOpen(!open)
   }
 
+  useEffect(() => {
+    console.debug('useEffect', { isMobile })
+    setOpen(!isMobile)
+  }, [isMobile])
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -106,7 +111,6 @@ export function PageLayout(props: PageLayoutProps) {
             pr: '24px' // keep right padding when drawer closed
           }}
         >
-          <Avatar alt="Sporos DAO logo" src="/logo192.png" sx={{ width: '32px', height: '32px' }} />
           {props.withDrawer !== false ? (
             <IconButton
               edge="start"
@@ -123,6 +127,7 @@ export function PageLayout(props: PageLayoutProps) {
           ) : (
             <></>
           )}
+          <Avatar alt="Sporos DAO logo" src="/logo192.png" sx={{ width: '32px', height: '32px' }} />
           <Typography variant="subtitle1" fontWeight={600} noWrap sx={{ ml: 2 }}>
             Sporos DAO - The Launchpad of For-Profit DAOs
           </Typography>
@@ -147,9 +152,11 @@ export function PageLayout(props: PageLayoutProps) {
               px: [1]
             }}
           >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
+            {open && (
+              <IconButton onClick={toggleDrawer}>
+                <ChevronLeftIcon />
+              </IconButton>
+            )}
           </Toolbar>
           <Divider />
           <List component="nav">

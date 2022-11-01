@@ -1,22 +1,14 @@
-import { Card, CardContent, Typography, ListItem } from '@mui/material'
+import { TableRow, TableCell } from '@mui/material'
 
 export default function ProposalCard(props: any) {
   const { proposal } = props
 
-  console.debug({ proposal })
+  // console.debug({ proposal })
 
   return (
-    <ListItem key={proposal.id}>
-      <Card sx={{ minWidth: 400 }} raised>
-        <CardContent>
-          <Typography variant="h5" component="div" data-testid="proposal-serial">
-            Proposal #: {proposal.serial}
-          </Typography>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            Description: <span>{proposal.description}</span>
-          </Typography>
-        </CardContent>
-      </Card>
-    </ListItem>
+    <TableRow key={proposal.id}>
+      <TableCell>{proposal.serial}</TableCell>
+      <TableCell>{proposal.description}</TableCell>
+    </TableRow>
   )
 }

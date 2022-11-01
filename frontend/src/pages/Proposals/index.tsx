@@ -1,4 +1,14 @@
-import { Button, CircularProgress, List } from '@mui/material'
+import {
+  Button,
+  CircularProgress,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
+} from '@mui/material'
 import { Box } from '@mui/system'
 import { useParams } from 'react-router-dom'
 import ContentBlock from '../../components/ContentBlock'
@@ -14,7 +24,6 @@ export default function Proposals() {
   let proposals: any[] = []
   if (isSuccess) {
     proposals = data
-    console.debug({ proposals })
   }
   return (
     <ContentBlock title="Proposals">
@@ -36,11 +45,21 @@ export default function Proposals() {
       ) : (
         <Box>
           {proposals?.length ? (
-            <List>
-              {proposals.map((proposal: any) => (
-                <ProposalCard key={proposal.id} proposal={proposal} />
-              ))}
-            </List>
+            <TableContainer component={Paper}>
+              <Table data-testid={'proposals-table'}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Proposal #</TableCell>
+                    <TableCell>Description</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {proposals.map((proposal: any) => (
+                    <ProposalCard key={proposal.id} proposal={proposal} />
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           ) : (
             <p>This DAO has not had any proposals yet.</p>
           )}
