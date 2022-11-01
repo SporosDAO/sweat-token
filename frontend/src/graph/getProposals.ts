@@ -1,7 +1,8 @@
 import { GRAPH_URL } from './url'
 import { useQuery } from '@tanstack/react-query'
 
-export const getProposals = async (chainId: number, address: string) => {
+export const getProposals = async (chainId: number, address: string | undefined) => {
+  if (!address) return null
   const dao = address.toLowerCase()
   try {
     const res = await fetch(GRAPH_URL[chainId], {
@@ -44,7 +45,7 @@ export const getProposals = async (chainId: number, address: string) => {
   }
 }
 
-export function useGetProposals(chainId: number, daoAddress: string) {
+export function useGetProposals(chainId: number, daoAddress: string | undefined) {
   return useQuery(['getProposals', chainId, daoAddress], async () => {
     const data = await getProposals(chainId, daoAddress)
     return data

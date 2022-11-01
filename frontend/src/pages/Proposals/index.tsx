@@ -2,20 +2,19 @@ import { Button, CircularProgress, List } from '@mui/material'
 import { Box } from '@mui/system'
 import { useParams } from 'react-router-dom'
 import ContentBlock from '../../components/ContentBlock'
-import { useGetPeople } from '../../graph/getPeople'
-import PersonCard from './components/PersonCard'
+import { useGetProposals } from '../../graph/getProposals'
+import ProposalCard from './components/ProposalCard'
 
 /* eslint react-hooks/rules-of-hooks: 0 */
 
 export default function Proposals() {
   const { chainId, daoId } = useParams()
   const cid = Number(chainId)
-  const { data, error, isLoading, isSuccess } = useGetPeople(cid, daoId)
-  let people: any[] = []
-  let tokenTotalSupply = 0
+  const { data, error, isLoading, isSuccess } = useGetProposals(cid, daoId)
+  let proposals: any[] = []
   if (isSuccess) {
-    people = data.data.daos[0]['members']
-    tokenTotalSupply = data.data.daos[0]['token']['totalSupply']
+    proposals = data
+    console.debug({ proposals })
   }
   return (
     <ContentBlock title="Proposals">
@@ -36,14 +35,14 @@ export default function Proposals() {
         </Box>
       ) : (
         <Box>
-          {people && people.length ? (
+          {proposals?.length ? (
             <List>
-              {people.map((person: any) => (
-                <PersonCard key={person.address} person={person} tokenTotalSupply={tokenTotalSupply} />
+              {proposals.map((proposal: any) => (
+                <ProposalCard key={proposal.id} proposal={proposal} />
               ))}
             </List>
           ) : (
-            <p>This DAO has no members yet.</p>
+            <p>This DAO has not had any proposals yet.</p>
           )}
         </Box>
       )}
