@@ -6,8 +6,8 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
-  TableRow
+  TableRow,
+  Typography
 } from '@mui/material'
 import { Box } from '@mui/system'
 import { useParams } from 'react-router-dom'
@@ -47,15 +47,13 @@ export default function Proposals() {
           {proposals?.length ? (
             <TableContainer component={Paper}>
               <Table data-testid={'proposals-table'}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Proposal #</TableCell>
-                    <TableCell>Description</TableCell>
-                  </TableRow>
-                </TableHead>
                 <TableBody>
                   {proposals.map((proposal: any) => (
-                    <ProposalCard key={proposal.id} proposal={proposal} />
+                    <TableRow key={proposal.id}>
+                      <TableCell>
+                        <ProposalCard key={proposal.id} proposal={proposal} />
+                      </TableCell>
+                    </TableRow>
                   ))}
                 </TableBody>
               </Table>
