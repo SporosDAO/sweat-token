@@ -7,6 +7,7 @@ import Proposals from './pages/Proposals'
 import Dao from './pages/Dao'
 import ProjectProposal from './pages/Projects/ProjectProposal'
 import ProjectTribute from './pages/Projects/ProjectTribute'
+import ProposalDetails from './pages/Proposals/ProposalDetails'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="projects/propose" element={<ProjectProposal />}></Route>
         <Route path="projects/:projectId/tribute" element={<ProjectTribute />}></Route>
         <Route path="proposals" element={<Proposals />}></Route>
+        <Route path="proposals/:proposalId" element={<ProposalDetails />}></Route>
         <Route path="people" element={<People />} />
       </Route>
       <Route path="*" element={<NotFound />} />

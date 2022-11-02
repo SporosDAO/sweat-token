@@ -1,4 +1,4 @@
-import { HourglassDisabled, Launch, MoreVert, ThumbDown, ThumbUp } from '@mui/icons-material'
+import { HourglassDisabled, HourglassTop, Launch, ThumbDown, ThumbUp } from '@mui/icons-material'
 import {
   Button,
   Card,
@@ -13,13 +13,16 @@ import {
 } from '@mui/material'
 import LinearProgress, { LinearProgressProps } from '@mui/material/LinearProgress'
 import { ethers } from 'ethers'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { chain, useEnsAvatar, useEnsName } from 'wagmi'
 import { useNavigate } from 'react-router-dom'
 
 export default function ProposalCard(props: any) {
   const { chainId, daoId } = useParams()
-  const { proposal } = props
+  const location = useLocation()
+
+  const proposal = location?.state as any
+
   const {
     serial,
     proposer,
@@ -32,7 +35,7 @@ export default function ProposalCard(props: any) {
     votes,
     votingStarts,
     dao
-  } = proposal
+  } = proposal || {}
   // console.debug({ dao })
   const { votingPeriod, quorum, token } = dao
   const { totalSupply } = token
@@ -112,7 +115,7 @@ export default function ProposalCard(props: any) {
       <CardActionArea
         data-testid={`proposals-link-${serial}`}
         onClick={() => {
-          navigate(`./${serial}`, { state: proposal })
+          navigate(`./${serial}`)
         }}
       >
         <CardContent>
@@ -167,27 +170,22 @@ export default function ProposalCard(props: any) {
               <Typography color="text.secondary" gutterBottom>
                 Quorum {quorumProgress < 100 ? 'Not Reached' : 'Reached'}
               </Typography>
-              <Typography color="text.primary" gutterBottom>
-                ACTIVE
-              </Typography>
             </Box>
           ) : (
-            <Typography color="text.secondary" gutterBottom>
-              EXPIRED
-            </Typography>
+            <></>
           )}
         </CardContent>
       </CardActionArea>
       <CardActions sx={{ justifyContent: 'space-between' }}>
-        <Button
-          variant="text"
-          endIcon={<MoreVert />}
-          onClick={() => {
-            navigate(`./${serial}`, { state: proposal })
-          }}
-        >
-          Details
-        </Button>
+        {isExpired ? (
+          <Button disabled variant="text" endIcon={<HourglassDisabled />}>
+            Closed
+          </Button>
+        ) : (
+          <Button variant="text" endIcon={<HourglassTop />} color="success">
+            Active
+          </Button>
+        )}
         <Button
           variant="text"
           endIcon={<Launch />}

@@ -23,7 +23,7 @@ export function Web3ContextProvider({
       provider,
       webSocketProvider
     } = configureChains(
-      [chain.arbitrum, chain.goerli],
+      [chain.arbitrum, chain.goerli, chain.mainnet],
       [infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_ID }), publicProvider()]
     )
 
