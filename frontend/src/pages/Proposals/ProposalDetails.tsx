@@ -1,4 +1,4 @@
-import { Launch, MoreVert, ThumbDown, ThumbUp } from '@mui/icons-material'
+import { Launch, ThumbDown, ThumbUp } from '@mui/icons-material'
 import { Button, Card, CardActions, CardContent, Typography, Box, Grid, CardActionArea } from '@mui/material'
 import { ethers } from 'ethers'
 import { useLocation, useParams } from 'react-router-dom'
@@ -151,19 +151,26 @@ export default function ProposalDetails(props: any) {
         </CardContent>
       </CardActionArea>
       <CardActions sx={{ justifyContent: 'space-between' }}>
-        {knownProposalType ? (
+        <Box>
           <Button
-            variant="text"
-            endIcon={<MoreVert />}
+            disabled={!knownProposalType || isExpired}
+            endIcon={<ThumbUp />}
             onClick={() => {
-              navigate(`./${serial}`, { state: proposal })
+              // vote for transaction
             }}
           >
-            Details
+            Vote For
           </Button>
-        ) : (
-          <></>
-        )}
+          <Button
+            disabled={!knownProposalType || isExpired}
+            endIcon={<ThumbDown />}
+            onClick={() => {
+              // vote for transaction
+            }}
+          >
+            Vote Against
+          </Button>
+        </Box>
         <Button
           variant="text"
           endIcon={<Launch />}
