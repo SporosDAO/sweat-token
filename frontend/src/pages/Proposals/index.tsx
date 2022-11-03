@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material'
+import { Button, CircularProgress } from '@mui/material'
 import { Box } from '@mui/system'
 import { useParams } from 'react-router-dom'
 import ContentBlock from '../../components/ContentBlock'
@@ -33,23 +33,11 @@ export default function Proposals() {
           </Button>
         </Box>
       ) : (
-        <Box>
+        <Box display="flex" flexWrap={'wrap'}>
           {proposals?.length ? (
-            <TableContainer component={Paper}>
-              <Table data-testid={'proposals-table'}>
-                <TableBody>
-                  {proposals.map((proposal: any) => (
-                    <TableRow key={proposal.id}>
-                      <TableCell>
-                        <ProposalCard key={proposal.id} proposal={proposal} />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            proposals.map((proposal: any) => <ProposalCard key={proposal.id} proposal={proposal} />)
           ) : (
-            <p>This DAO has not had any proposals yet.</p>
+            <p>This DAO has no proposals yet.</p>
           )}
         </Box>
       )}

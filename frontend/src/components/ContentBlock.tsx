@@ -1,4 +1,4 @@
-import { Fab, Card, SxProps, Theme } from '@mui/material'
+import { Fab, Card, SxProps, Theme, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { ReactNode } from 'react'
 import { Add } from '@mui/icons-material'
@@ -20,7 +20,11 @@ export default function ContentBlock(props: ContentBlockProps) {
   return (
     <Card sx={sx}>
       <Box display={'flex'}>
-        {title && <h2>{title}</h2>}
+        {title && (
+          <Typography variant="h4" fontWeight={600} noWrap sx={{ m: 2 }}>
+            {title}
+          </Typography>
+        )}
         {cta?.href && (
           <Fab
             sx={{ margin: '10px 0 0 auto', order: 2 }}

@@ -23,13 +23,15 @@ export const getProposals = async (chainId: number, address: string | undefined)
               sponsored
               cancelled
               status
+              creationTime
+              votingStarts
+              accounts
+              amounts
               votes {
                 voter
                 vote
                 weight
               }
-              creationTime
-              votingStarts
               dao {
                 votingPeriod
                 quorum

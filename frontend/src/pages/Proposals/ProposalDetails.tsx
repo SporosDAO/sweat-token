@@ -1,28 +1,16 @@
-import { HourglassDisabled, HourglassTop, Launch, ThumbDown, ThumbUp } from '@mui/icons-material'
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Typography,
-  CircularProgress,
-  Box,
-  CircularProgressProps,
-  Grid,
-  CardActionArea
-} from '@mui/material'
-import LinearProgress, { LinearProgressProps } from '@mui/material/LinearProgress'
+import { Launch, MoreVert, ThumbDown, ThumbUp } from '@mui/icons-material'
+import { Button, Card, CardActions, CardContent, Typography, Box, Grid, CardActionArea } from '@mui/material'
 import { ethers } from 'ethers'
 import { useLocation, useParams } from 'react-router-dom'
 import { chain, useEnsAvatar, useEnsName } from 'wagmi'
 import { useNavigate } from 'react-router-dom'
+import CircularProgressWithLabel from '../../components/CircularProgressWithLabel'
+import LinearProgressWithLabel from '../../components/LinearProgressWithLabel'
 
-export default function ProposalCard(props: any) {
+export default function ProposalDetails(props: any) {
   const { chainId, daoId } = useParams()
   const location = useLocation()
-
   const proposal = location?.state as any
-
   const {
     serial,
     proposer,
@@ -34,6 +22,7 @@ export default function ProposalCard(props: any) {
     status,
     votes,
     votingStarts,
+    accounts,
     dao
   } = proposal || {}
   // console.debug({ dao })
@@ -73,41 +62,21 @@ export default function ProposalCard(props: any) {
 
   const navigate = useNavigate()
 
-  function CircularProgressWithLabel(props: CircularProgressProps & { value: number }) {
-    return (
-      <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-        <CircularProgress variant="determinate" {...props} />
-        <Box
-          sx={{
-            top: 0,
-            left: 0,
-            bottom: 0,
-            right: 0,
-            position: 'absolute',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <Typography variant="caption" component="div" color="text.secondary">{`${Math.round(
-            props.value
-          )}%`}</Typography>
-        </Box>
-      </Box>
-    )
-  }
+  const PM_CONTRACT = '0x9f0ad778385a2c688533958c6ada56f201ffc246'
 
-  function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
-    return (
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Box sx={{ width: '100%', mr: 1 }}>
-          <LinearProgress variant="determinate" {...props} />
-        </Box>
-        <Box sx={{ minWidth: 35 }}>
-          <Typography variant="body2" color="text.secondary">{`${Math.round(props.value)}%`}</Typography>
-        </Box>
-      </Box>
-    )
+  let decoratedProposalType = proposalType
+  let knownProposalType = true
+
+  if (proposalType === 'EXTENSION') {
+    if (accounts?.length && accounts[0] === PM_CONTRACT) {
+      decoratedProposalType = 'NEW PROJECT'
+    } else {
+      decoratedProposalType = 'UNKNOWN EXTENSION'
+      knownProposalType = false
+    }
+  } else if (proposalType !== 'MINT') {
+    decoratedProposalType = 'UKNOWN'
+    knownProposalType = false
   }
 
   return (
@@ -115,7 +84,7 @@ export default function ProposalCard(props: any) {
       <CardActionArea
         data-testid={`proposals-link-${serial}`}
         onClick={() => {
-          navigate(`./${serial}`)
+          navigate(`./${serial}`, { state: proposal })
         }}
       >
         <CardContent>
@@ -129,7 +98,7 @@ export default function ProposalCard(props: any) {
           </Typography>
           <div>{ensAvatar}</div>
           <Typography color="text.secondary" gutterBottom>
-            Proposal Type: {proposalType}
+            Proposal Type: {decoratedProposalType}
           </Typography>
           {sponsor && (
             <Typography color="text.secondary" gutterBottom>
@@ -170,21 +139,30 @@ export default function ProposalCard(props: any) {
               <Typography color="text.secondary" gutterBottom>
                 Quorum {quorumProgress < 100 ? 'Not Reached' : 'Reached'}
               </Typography>
+              <Typography color="text.primary" gutterBottom>
+                ACTIVE
+              </Typography>
             </Box>
           ) : (
-            <></>
+            <Typography color="text.secondary" gutterBottom>
+              EXPIRED
+            </Typography>
           )}
         </CardContent>
       </CardActionArea>
       <CardActions sx={{ justifyContent: 'space-between' }}>
-        {isExpired ? (
-          <Button disabled variant="text" endIcon={<HourglassDisabled />}>
-            Closed
+        {knownProposalType ? (
+          <Button
+            variant="text"
+            endIcon={<MoreVert />}
+            onClick={() => {
+              navigate(`./${serial}`, { state: proposal })
+            }}
+          >
+            Details
           </Button>
         ) : (
-          <Button variant="text" endIcon={<HourglassTop />} color="success">
-            Active
-          </Button>
+          <></>
         )}
         <Button
           variant="text"
