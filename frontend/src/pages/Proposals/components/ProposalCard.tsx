@@ -20,18 +20,17 @@ export default function ProposalCard(props: any) {
   const pmAddress = addresses[cid]['extensions']['projectmanagement']
 
   let decoratedProposalType = proposalType
-  let knownProposalType = true
+  let knownProposalType = false
 
   if (proposalType === 'EXTENSION') {
     if (accounts?.length && accounts[0] === pmAddress) {
       decoratedProposalType = 'NEW PROJECT'
+      knownProposalType = true
     } else {
       decoratedProposalType = 'UNKNOWN EXTENSION'
-      knownProposalType = false
     }
   } else if (proposalType !== 'MINT' && proposalType !== 'ESCAPE') {
     decoratedProposalType = 'UNKNOWN'
-    knownProposalType = false
   }
 
   return (

@@ -1,5 +1,7 @@
 import { GRAPH_URL } from './url'
 import { useQuery } from '@tanstack/react-query'
+import KaliDaoAbi from '../abi/KaliDAO.json'
+import { useContractReads } from 'wagmi'
 
 export const getProposals = async (chainId: number, address: string | undefined) => {
   if (!address) return null
@@ -10,7 +12,7 @@ export const getProposals = async (chainId: number, address: string | undefined)
       body: JSON.stringify({
         query: `query {
           proposals(
-            first: 1000,
+            first: 200,
             orderBy: serial,
             orderDirection: desc
             where: {dao: "${dao}"}) {
@@ -27,6 +29,7 @@ export const getProposals = async (chainId: number, address: string | undefined)
               votingStarts
               accounts
               amounts
+              payloads
               votes {
                 voter
                 vote
@@ -56,4 +59,40 @@ export function useGetProposals(chainId: number, daoAddress: string | undefined)
     const data = await getProposals(chainId, daoAddress)
     return data
   })
+}
+
+/**
+ *
+ * Fetch DAO proposal details
+ * *
+ * @param {*} chainId
+ * @param {*} daoAddress
+ * @param {*} proposalSerial
+ *
+ * @returns proposal details
+ */
+export function useGetProposalDetails(chainId: number, daoAddress: string, proposalSerial: number) {
+  const cid = Number(chainId)
+  const daoContract = {
+    addressOrName: daoAddress || '0xUnknown',
+    contractInterface: KaliDaoAbi,
+    chainId: cid
+  }
+  const result = useContractReads({
+    contracts: [
+      {
+        ...daoContract,
+        functionName: 'proposals'
+      },
+      {
+        ...daoContract,
+        functionName: 'getProposalArrays'
+      }
+    ],
+    onError(readProposalArraysError: any) {
+      console.error({ readProposalArraysError })
+    }
+  })
+  console.debug({ result })
+  return result
 }
