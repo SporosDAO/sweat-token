@@ -1,13 +1,23 @@
 import { Launch, ThumbDown, ThumbUp } from '@mui/icons-material'
-import { Button, Card, CardActions, CardContent, Typography, Box, Grid } from '@mui/material'
+import { Link, Button, Card, CardActions, CardContent, Typography, Box, Grid } from '@mui/material'
 import { ethers } from 'ethers'
 import { useLocation, useParams } from 'react-router-dom'
-import { chain, useEnsAvatar, useEnsName } from 'wagmi'
+import { chain, useEnsName } from 'wagmi'
 import CircularProgressWithLabel from '../../components/CircularProgressWithLabel'
 import LinearProgressWithLabel from '../../components/LinearProgressWithLabel'
 import ContentBlock from '../../components/ContentBlock'
 import ReactMarkdown from 'react-markdown'
 import { AbiCoder } from 'ethers/lib/utils'
+
+function LabelValue(props: { label: string; children: React.ReactNode }): JSX.Element {
+  const { label, children } = props
+  return (
+    <Box sx={{ mt: 1 }}>
+      <Typography sx={{ fontWeight: 'bold', mt: 1 }}>{label}:</Typography>
+      <Typography>{children}</Typography>
+    </Box>
+  )
+}
 
 export default function ProposalDetails(props: any) {
   const { chainId, daoId } = useParams()
@@ -17,7 +27,6 @@ export default function ProposalDetails(props: any) {
     serial,
     proposer,
     proposalType,
-    description,
     sponsor,
     sponsored,
     cancelled,
@@ -31,13 +40,13 @@ export default function ProposalDetails(props: any) {
   } = proposal || {}
   console.debug({ proposal, chainId, daoId, serial, payloads, dao })
   const { votingPeriod, quorum, token } = dao
-  const { totalSupply } = token
+  const { totalSupply, symbol } = token
   const creationTimeString = new Date(Number(creationTime) * 1000).toUTCString()
   const votingStartsString = new Date(Number(votingStarts) * 1000).toUTCString()
   console.debug({ creationTime, creationTimeString, votingStarts, votingStartsString })
-  const deadline = new Date((Number(votingStarts) + Number(votingPeriod)) * 1000)
-  const deadlineString = deadline.toUTCString()
-  const isExpired = deadline < new Date()
+  const voteDeadline = new Date((Number(votingStarts) + Number(votingPeriod)) * 1000)
+  const voteDeadlineString = voteDeadline.toUTCString()
+  const isExpired = voteDeadline < new Date()
   const votesFor = votes?.reduce(
     (result: any, item: { vote: any; weight: any }) =>
       result + Number(item.vote ? ethers.utils.formatEther(item.weight) : 0),
@@ -55,25 +64,19 @@ export default function ProposalDetails(props: any) {
 
   const ensNameResult = useEnsName({ address: proposer, chainId: chain.mainnet.id, cacheTime: 60_000 })
   const ensName = !ensNameResult.isError && !ensNameResult.isLoading ? ensNameResult.data : ''
-  const ensAvatarResult = useEnsAvatar({ addressOrName: proposer, chainId: chain.mainnet.id, cacheTime: 60_000 })
-  const ensAvatar = !ensAvatarResult.isError && !ensAvatarResult.isLoading ? ensAvatarResult.data : ''
 
   const PM_CONTRACT = '0x9f0ad778385a2c688533958c6ada56f201ffc246'
 
-  let decoratedProposalType = proposalType
   let knownProposalType = true
   let isProjectProposal = true
 
   if (proposalType === 'EXTENSION') {
     if (accounts?.length && accounts[0] === PM_CONTRACT) {
-      decoratedProposalType = 'NEW PROJECT'
       isProjectProposal = true
     } else {
-      decoratedProposalType = 'UNKNOWN EXTENSION'
       knownProposalType = false
     }
   } else if (proposalType !== 'MINT') {
-    decoratedProposalType = 'UKNOWN'
     knownProposalType = false
   }
 
@@ -92,76 +95,69 @@ export default function ProposalDetails(props: any) {
   const goals = JSON.parse(goalString)
   const { goalTitle, goalDescription, goalLink } = goals[0] || {}
   const budget = ethers.utils.formatEther(budgetE18)
-  console.debug({ goals, budget, deadline })
+  console.debug({ goals, budget, voteDeadline })
 
   const managerEnsNameResult = useEnsName({ address: proposer, chainId: chain.mainnet.id, cacheTime: 60_000 })
   const managerEnsName = !managerEnsNameResult.isError && !ensNameResult.isLoading ? ensNameResult.data : ''
-  const managerEnsAvatarResult = useEnsAvatar({ addressOrName: proposer, chainId: chain.mainnet.id, cacheTime: 60_000 })
-  const managerEnsAvatar = !managerEnsAvatarResult.isError && !ensAvatarResult.isLoading ? ensAvatarResult.data : ''
 
   return isProjectProposal ? (
-    <ContentBlock title="Project Proposal Details">
+    <ContentBlock title={`Project Management`}>
       <Box display="flex" flexWrap={'wrap'}>
         <Card sx={{ margin: '8px' }}>
           <CardContent>
-            <Typography>Proposal #{serial}</Typography>
-            <Typography gutterBottom>{description}</Typography>
+            <Typography color="subtitle1">Proposal #{serial}</Typography>
+            <Typography variant="h4" color="accent">
+              {goalTitle}
+            </Typography>
             <Typography color="text.secondary" gutterBottom>
-              Proposer: {proposer}
+              By {proposer}
             </Typography>
-            <Typography variant="h5" component="div">
-              {ensName}
-            </Typography>
-            <div>{ensAvatar}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent>
-            <Typography variant="h5">Project Information</Typography>
-            <Typography>Manager: {manager}</Typography>
-            <Typography variant="h5" component="div">
-              {managerEnsName}
-            </Typography>
-            <Box>{managerEnsAvatar}</Box>
-            <Typography>Budget: {budget}</Typography>
-            <Typography>Submitted On: {creationTimeString}</Typography>
-            <Typography>Voting Start Date: {votingStartsString}</Typography>
-            <Typography>Deadline: {projectDeadline}</Typography>
-            <Typography>Goal: {goalTitle}</Typography>
-            <Typography>Project Description:</Typography>
-            <ReactMarkdown>{goalDescription}</ReactMarkdown>
-            <Typography>Progress Tracking: {goalLink}</Typography>
+            <Typography color="text.secondary">{ensName}</Typography>
+            <LabelValue label="Manager">
+              {manager} {managerEnsName}
+            </LabelValue>
+            <LabelValue label="Budget">
+              {budget} {symbol}
+            </LabelValue>
+            <LabelValue label="Project Deadline">{projectDeadline}</LabelValue>
+            <LabelValue label="Project Description">
+              <ReactMarkdown>{goalDescription}</ReactMarkdown>
+            </LabelValue>
+            <LabelValue label="Progress Tracking">
+              <Link href="{goalLink}">{goalLink}</Link>
+            </LabelValue>
           </CardContent>
         </Card>
         <Card sx={{ margin: '8px' }}>
           <CardContent>
-            <Typography color="text.secondary" gutterBottom>
-              Proposal Type: {decoratedProposalType}
-            </Typography>
-            {sponsor && (
-              <Typography color="text.secondary" gutterBottom>
-                Sponsor: {sponsor}
-              </Typography>
+            <LabelValue label="Submitted On">{creationTimeString}</LabelValue>
+            {sponsored ? (
+              <>
+                <LabelValue label="Voting Start Date">{votingStartsString}</LabelValue>
+                <LabelValue label="Voting Deadline">{voteDeadlineString}</LabelValue>
+                {sponsor ? (
+                  <LabelValue label="Sponsor">{sponsor}</LabelValue>
+                ) : (
+                  <Typography color="text.secondary" gutterBottom>
+                    Submitted by a DAO member.
+                  </Typography>
+                )}
+              </>
+            ) : (
+              <Box sx={{ mt: 1 }}>
+                <Typography color="warning.main" gutterBottom>
+                  NOT SPONSORED.
+                </Typography>
+                <Typography variant="subtitle2" color="warning.main" gutterBottom>
+                  Submitted by a non-member. Requires member sponsorship.
+                </Typography>
+              </Box>
             )}
-            <Typography color="text.secondary" gutterBottom>
-              {sponsored
-                ? 'Submitted by a DAO member.'
-                : 'NOT SPONSORED. Submitted by a non-member. Requires member sponsorship.'}
-            </Typography>
             {cancelled && (
               <Typography color="text.secondary" gutterBottom>
                 CANCELLED
               </Typography>
             )}
-            <Typography color={status ? 'success.main' : 'text.secondary'} gutterBottom>
-              {status ? 'PASSED' : 'NOT PASSED'}
-            </Typography>
-            <Typography color="text.secondary" gutterBottom>
-              Submitted on: {deadlineString}
-            </Typography>
-            <Typography color="text.secondary" gutterBottom>
-              Voting Deadline: {deadlineString}
-            </Typography>
             {!isExpired && votes?.length ? (
               <Grid container spacing={2} minHeight={80}>
                 <Grid display="flex" justifyContent="center" alignItems="center" sx={{ pl: 4 }}>
@@ -186,9 +182,16 @@ export default function ProposalDetails(props: any) {
                 </Typography>
               </Box>
             ) : (
-              <Typography color="text.secondary" gutterBottom>
-                EXPIRED
-              </Typography>
+              sponsored && (
+                <>
+                  <Typography color="text.secondary" gutterBottom>
+                    CLOSED
+                  </Typography>
+                  <Typography color={status ? 'success.main' : 'text.secondary'} gutterBottom>
+                    {status ? 'PASSED' : 'NOT PASSED'}
+                  </Typography>
+                </>
+              )
             )}
           </CardContent>
           <CardActions sx={{ justifyContent: 'space-between' }}>

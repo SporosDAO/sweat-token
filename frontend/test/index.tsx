@@ -23,7 +23,7 @@ type ProvidersProps = {
 }
 export function Providers({ children, client = setupClient() }: ProvidersProps) {
   return (
-    <AppWrapper theme={createTheme()} wagmiClient={client} chains={defaultChains} initialChain={chain.goerli}>
+    <AppWrapper wagmiClient={client} chains={defaultChains} initialChain={chain.goerli}>
       {children}
     </AppWrapper>
   )

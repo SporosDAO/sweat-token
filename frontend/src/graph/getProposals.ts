@@ -40,6 +40,7 @@ export const getProposals = async (chainId: number, address: string | undefined)
                 quorum
                 token {
                   totalSupply
+                  symbol
                 }
               }
           }
