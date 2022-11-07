@@ -1,45 +1,65 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { Box } from '@mui/system'
+import { Paper, Table, TableBody, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import TableCell, { tableCellClasses } from '@mui/material/TableCell'
+import { styled } from '@mui/material/styles'
+
 import { ThumbUp, ThumbDown } from '@mui/icons-material'
-export default function VotesTable(props: any) {
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.grey[300]
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14
+  }
+}))
+
+export default function VotesTable(props: any): JSX.Element {
   const { votes } = props
 
   console.debug({ votes })
 
-  return votes?.length ? (
+  return (
     <TableContainer component={Paper}>
-      <Table data-testid={'votes-table'}>
+      <Table data-testid={'votes-table'} size="small">
         <TableHead>
           <TableRow>
-            <TableCell>
+            <StyledTableCell>
               <Typography>Voter</Typography>
-            </TableCell>
-            <TableCell>
+            </StyledTableCell>
+            <StyledTableCell>
+              <Typography>Tokens</Typography>
+            </StyledTableCell>
+            <StyledTableCell>
               <Typography>Vote</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography>Weight</Typography>
-            </TableCell>
+            </StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {votes.map(({ voter, vote, weight }: any) => (
-            <TableRow key={voter}>
-              <TableCell>
-                <Typography>{voter}</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography>{vote ? <ThumbUp color="success" /> : <ThumbDown color="error" />}</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography>{weight}</Typography>
-              </TableCell>
+          {votes?.length ? (
+            votes.map(({ voter, vote, weight }: any) => (
+              <TableRow key={voter}>
+                <StyledTableCell>
+                  <Typography>{voter}</Typography>
+                </StyledTableCell>
+                <StyledTableCell>
+                  <Typography>{vote ? <ThumbUp color="success" /> : <ThumbDown color="error" />}</Typography>
+                </StyledTableCell>
+                <StyledTableCell>
+                  <Typography>{weight}</Typography>
+                </StyledTableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <StyledTableCell>
+                <Typography variant="body1">No votes yet.</Typography>
+              </StyledTableCell>
+              <StyledTableCell></StyledTableCell>
+              <StyledTableCell></StyledTableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
     </TableContainer>
-  ) : (
-    <Box>No votes yet.</Box>
   )
 }

@@ -8,6 +8,7 @@ import LinearProgressWithLabel from '../../components/LinearProgressWithLabel'
 import ContentBlock from '../../components/ContentBlock'
 import ReactMarkdown from 'react-markdown'
 import { AbiCoder } from 'ethers/lib/utils'
+import VotesTable from './components/VotesTable'
 
 function LabelValue(props: { label: string; children: React.ReactNode }): JSX.Element {
   const { label, children } = props
@@ -226,6 +227,9 @@ export default function ProposalDetails(props: any) {
             </Button>
           </CardActions>
         </Card>
+      </Box>
+      <Box display="flex" flexWrap={'wrap'} sx={{ margin: '8px' }}>
+        <VotesTable votes={votes} />
       </Box>
     </ContentBlock>
   ) : (
