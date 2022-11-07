@@ -95,7 +95,9 @@ export default function ProposalDetails(props: any) {
   const projectDeadline = new Date(dateInSecs * 1000).toUTCString()
   const goals = JSON.parse(goalString)
   const { goalTitle, goalDescription, goalLink } = goals[0] || {}
-  const budget = ethers.utils.formatEther(budgetE18)
+  let budget = ethers.utils.formatEther(budgetE18)
+  budget = new Intl.NumberFormat().format(Number(budget))
+
   console.debug({ goals, budget, voteDeadline })
 
   const managerEnsNameResult = useEnsName({ address: proposer, chainId: chain.mainnet.id, cacheTime: 60_000 })
@@ -196,10 +198,12 @@ export default function ProposalDetails(props: any) {
             )}
           </CardContent>
           <CardActions sx={{ justifyContent: 'space-between' }}>
-            <Box>
+            <Box sx={{ mr: 1 }}>
               <Button
+                variant="contained"
                 disabled={!knownProposalType || isExpired}
                 endIcon={<ThumbUp />}
+                sx={{ m: 1 }}
                 onClick={() => {
                   // vote for transaction
                 }}
@@ -207,8 +211,10 @@ export default function ProposalDetails(props: any) {
                 Vote For
               </Button>
               <Button
+                variant="contained"
                 disabled={!knownProposalType || isExpired}
                 endIcon={<ThumbDown />}
+                sx={{ mr: 1 }}
                 onClick={() => {
                   // vote for transaction
                 }}

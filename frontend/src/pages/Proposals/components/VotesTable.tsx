@@ -3,6 +3,33 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell'
 import { styled } from '@mui/material/styles'
 
 import { ThumbUp, ThumbDown } from '@mui/icons-material'
+import { useEnsName, chain } from 'wagmi'
+import { ethers } from 'ethers'
+
+function VoterRow(props: { voter: string; weight: number; vote: boolean }) {
+  const { voter, weight, vote } = props
+  const ensNameResult = useEnsName({ address: voter, chainId: chain.mainnet.id, cacheTime: 60_000 })
+  const voterEnsName = !ensNameResult.isError && !ensNameResult.isLoading ? ensNameResult.data : ''
+  let votingTokensFormatted: any = Number(ethers.utils.formatEther(weight))
+  votingTokensFormatted = new Intl.NumberFormat().format(votingTokensFormatted)
+
+  return (
+    <TableRow key={voter}>
+      <StyledTableCell>
+        <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
+          {voterEnsName}
+        </Typography>
+        <Typography>{voter}</Typography>
+      </StyledTableCell>
+      <StyledTableCell>
+        <Typography>{votingTokensFormatted}</Typography>
+      </StyledTableCell>
+      <StyledTableCell>
+        <Typography>{vote ? <ThumbUp color="success" /> : <ThumbDown color="error" />}</Typography>
+      </StyledTableCell>
+    </TableRow>
+  )
+}
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -36,19 +63,7 @@ export default function VotesTable(props: any): JSX.Element {
         </TableHead>
         <TableBody>
           {votes?.length ? (
-            votes.map(({ voter, vote, weight }: any) => (
-              <TableRow key={voter}>
-                <StyledTableCell>
-                  <Typography>{voter}</Typography>
-                </StyledTableCell>
-                <StyledTableCell>
-                  <Typography>{vote ? <ThumbUp color="success" /> : <ThumbDown color="error" />}</Typography>
-                </StyledTableCell>
-                <StyledTableCell>
-                  <Typography>{weight}</Typography>
-                </StyledTableCell>
-              </TableRow>
-            ))
+            votes.map((vote: any) => <VoterRow key={vote.voter} {...vote} />)
           ) : (
             <TableRow>
               <StyledTableCell>
