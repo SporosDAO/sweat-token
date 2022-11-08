@@ -86,7 +86,12 @@ export function PageLayout(props: PageLayoutProps) {
   const theme = useTheme()
 
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-  const [open, setOpen] = useState(props.withDrawer !== false && !isMobile)
+
+  const shouldOpen = props.withDrawer !== false && !isMobile
+
+  const [open, setOpen] = useState(shouldOpen)
+
+  console.debug({ props, open, isMobile, shouldOpen })
 
   const { chainId, daoId } = useParams()
   const cid = Number(chainId)
@@ -98,8 +103,8 @@ export function PageLayout(props: PageLayoutProps) {
   }
 
   useEffect(() => {
-    setOpen(!isMobile)
-  }, [isMobile])
+    setOpen(shouldOpen)
+  }, [shouldOpen])
 
   return (
     <Box sx={{ display: 'flex' }}>

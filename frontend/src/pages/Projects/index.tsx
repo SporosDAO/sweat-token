@@ -1,4 +1,4 @@
-import { Button, CircularProgress } from '@mui/material'
+import { Button, CircularProgress, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { useParams } from 'react-router-dom'
 import ContentBlock from '../../components/ContentBlock'
@@ -26,7 +26,9 @@ export default function Projects() {
         {projects &&
           projects.length > 0 &&
           projects.map((project: any) => <ProjectCard key={project['projectID']} project={project} />)}
-        {!isLoading && projects && projects.length === 0 && <p>This DAO has no projects yet.</p>}
+        {!isLoading && projects && projects.length === 0 && (
+          <Typography sx={{ margin: 2 }}>This DAO has no projects yet.</Typography>
+        )}
       </Box>
     </ContentBlock>
   )

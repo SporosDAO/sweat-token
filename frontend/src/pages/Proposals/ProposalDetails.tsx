@@ -9,6 +9,9 @@ import ContentBlock from '../../components/ContentBlock'
 import ReactMarkdown from 'react-markdown'
 import { AbiCoder } from 'ethers/lib/utils'
 import VotesTable from './components/VotesTable'
+import Web3SubmitDialog from '../../components/Web3SubmitDialog'
+import { useState } from 'react'
+import KALIDAO_ABI from '../../abi/KaliDAO.json'
 
 function LabelValue(props: { label: string; children: React.ReactNode }): JSX.Element {
   const { label, children } = props
@@ -22,6 +25,8 @@ function LabelValue(props: { label: string; children: React.ReactNode }): JSX.El
 
 export default function ProposalDetails(props: any) {
   const { chainId, daoId } = useParams()
+  const cid = Number(chainId)
+
   const location = useLocation()
   const proposal = location?.state as any
   const {
@@ -102,6 +107,37 @@ export default function ProposalDetails(props: any) {
 
   const managerEnsNameResult = useEnsName({ address: proposer, chainId: chain.mainnet.id, cacheTime: 60_000 })
   const managerEnsName = !managerEnsNameResult.isError && !ensNameResult.isLoading ? ensNameResult.data : ''
+
+  // Web3SubmitDialog state vars
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [txInput, setTxInput] = useState(undefined as any)
+
+  const onDialogClose = async () => {
+    setIsDialogOpen(false)
+  }
+
+  function submitVote(approval: boolean): void {
+    const contractInfo = {
+      addressOrName: daoId,
+      chainId: cid,
+      contractInterface: KALIDAO_ABI,
+      functionName: 'vote' //  ['uint256' /* proposal serial # */, 'bool' /* yes/no approval */]
+    }
+
+    setTxInput({
+      ...contractInfo,
+      args: [serial, approval]
+    })
+    setIsDialogOpen(true)
+  }
+
+  function onVoteFor(event: any) {
+    submitVote(true)
+  }
+
+  function onVoteAgainst(event: any) {
+    submitVote(false)
+  }
 
   return isProjectProposal ? (
     <ContentBlock title={`Project Management`}>
@@ -204,9 +240,7 @@ export default function ProposalDetails(props: any) {
                 disabled={!knownProposalType || isExpired}
                 endIcon={<ThumbUp />}
                 sx={{ m: 1 }}
-                onClick={() => {
-                  // vote for transaction
-                }}
+                onClick={onVoteFor}
               >
                 Vote For
               </Button>
@@ -215,9 +249,7 @@ export default function ProposalDetails(props: any) {
                 disabled={!knownProposalType || isExpired}
                 endIcon={<ThumbDown />}
                 sx={{ mr: 1 }}
-                onClick={() => {
-                  // vote for transaction
-                }}
+                onClick={onVoteAgainst}
               >
                 Vote Against
               </Button>
@@ -237,8 +269,15 @@ export default function ProposalDetails(props: any) {
       <Box display="flex" flexWrap={'wrap'} sx={{ margin: '8px' }}>
         <VotesTable votes={votes} />
       </Box>
+      {isDialogOpen && (
+        <Web3SubmitDialog open={isDialogOpen} onClose={onDialogClose} txInput={txInput} hrefAfterSuccess=".." />
+      )}
     </ContentBlock>
   ) : (
-    <></>
+    <Box display="flex" flexWrap={'wrap'} sx={{ margin: '8px' }}>
+      <Typography color="error.main">
+        Proposal type {proposalType} not supported. Please try Kali DAO or another front end.
+      </Typography>
+    </Box>
   )
 }

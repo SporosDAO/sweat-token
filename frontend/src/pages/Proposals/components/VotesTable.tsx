@@ -19,7 +19,7 @@ function VoterRow(props: { voter: string; weight: number; vote: boolean }) {
         <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
           {voterEnsName}
         </Typography>
-        <Typography>{voter}</Typography>
+        <Typography variant="overline">{voter}</Typography>
       </StyledTableCell>
       <StyledTableCell>
         <Typography>{votingTokensFormatted}</Typography>
