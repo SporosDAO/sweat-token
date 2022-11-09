@@ -3,8 +3,6 @@ import { useGetProjects } from './getProjects'
 import * as wagmi from 'wagmi'
 import { ethers } from 'ethers'
 import { renderHook } from '../../test'
-import { UseContractReadConfig } from 'wagmi/dist/declarations/src/hooks/contracts/useContractRead'
-import { AnyPtrRecord } from 'dns'
 
 describe('useGetProjects hook', () => {
   beforeEach(() => {
