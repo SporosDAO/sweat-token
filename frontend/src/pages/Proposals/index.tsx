@@ -10,11 +10,20 @@ import ProposalCard from './components/ProposalCard'
 export default function Proposals() {
   const { chainId, daoId } = useParams()
   const cid = Number(chainId)
-  const { data, error, isLoading, isSuccess } = useGetProposals(cid, daoId)
+  const { data, error, isLoading, isSuccess } = useGetProposals({
+    chainId: cid,
+    daoAddress: daoId,
+    queryOptions: {
+      // refetch proposal list every 5 seconds
+      refetchInterval: 5000
+    }
+  })
   let proposals: any[] = []
   if (isSuccess) {
     proposals = data
   }
+
+  console.debug({ proposals })
   return (
     <ContentBlock title="Proposals">
       {isLoading ? (

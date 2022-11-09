@@ -11,4 +11,5 @@
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "eslint.format.enable": true,
     "source.fixAll.eslint": true,
+    "editor.tabCompletion": "on",
 }

@@ -3,9 +3,9 @@ import { useQuery } from '@tanstack/react-query'
 import KaliDaoAbi from '../abi/KaliDAO.json'
 import { useContractReads } from 'wagmi'
 
-export const getProposals = async (chainId: number, address: string | undefined) => {
-  if (!address) return null
-  const dao = address.toLowerCase()
+export const getProposals = async ({ chainId, daoAddress }: { chainId: number; daoAddress: string | undefined }) => {
+  if (!daoAddress) return null
+  const dao = daoAddress.toLowerCase()
   try {
     const res = await fetch(GRAPH_URL[chainId], {
       method: 'POST',
@@ -55,11 +55,113 @@ export const getProposals = async (chainId: number, address: string | undefined)
   }
 }
 
-export function useGetProposals(chainId: number, daoAddress: string | undefined) {
-  return useQuery(['getProposals', chainId, daoAddress], async () => {
-    const data = await getProposals(chainId, daoAddress)
-    return data
-  })
+export function useGetProposals({
+  chainId,
+  daoAddress,
+  queryOptions
+}: {
+  chainId: number
+  daoAddress: string | undefined
+  queryOptions?: any
+}) {
+  return useQuery(
+    ['getProposals', chainId, daoAddress],
+    async () => {
+      const data = await getProposals({ chainId, daoAddress })
+      return data
+    },
+    {
+      // Refetch proposal data every 5 seconds (in case there were any new votes)
+      refetchInterval: 1000
+    }
+
+    // { ...queryOptions }
+  )
+}
+
+export async function getProposal({
+  chainId,
+  daoAddress,
+  proposalSerial
+}: {
+  chainId: number
+  daoAddress: string | undefined
+  proposalSerial: number
+}) {
+  if (!daoAddress) return null
+  const dao = daoAddress.toLowerCase()
+  try {
+    const res = await fetch(GRAPH_URL[chainId], {
+      method: 'POST',
+      body: JSON.stringify({
+        query: `query {
+          proposals(
+            first: 200,
+            orderBy: serial,
+            orderDirection: desc
+            where: {dao: "${dao}" serial: ${proposalSerial}} ) {
+              id
+              serial
+              proposer
+              proposalType
+              description
+              sponsor
+              sponsored
+              cancelled
+              status
+              creationTime
+              votingStarts
+              accounts
+              amounts
+              payloads
+              votes {
+                voter
+                vote
+                weight
+              }
+              dao {
+                votingPeriod
+                quorum
+                token {
+                  totalSupply
+                  symbol
+                }
+              }
+          }
+          }`
+      })
+    })
+
+    const data = await res.json()
+    return data?.data?.proposals?.length ? data?.data?.proposals[0] : null
+  } catch (e) {
+    return e
+  }
+}
+
+export function useGetProposal({
+  chainId,
+  daoAddress,
+  proposalSerial,
+  queryOptions
+}: {
+  chainId: number
+  daoAddress: string | undefined
+  proposalSerial: number
+  queryOptions?: any
+}) {
+  return useQuery(
+    ['getProposal', chainId, daoAddress, proposalSerial],
+    async () => {
+      const data = await getProposal({ chainId, daoAddress, proposalSerial })
+      return data
+    },
+    {
+      // Refetch proposal data every 5 seconds (in case there were any new votes)
+      refetchInterval: 1000
+    }
+    // { ...queryOptions }
+  )
 }
 
 /**
