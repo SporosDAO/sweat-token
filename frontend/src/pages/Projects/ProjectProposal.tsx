@@ -64,7 +64,7 @@ export default function ProjectProposal() {
 
   const onFormError = (errors: any, event: any) => {
     if (process.env.NODE_ENV === 'development') {
-      console.debug({ errors, event })
+      console.info({ errors, event })
     }
   }
 
@@ -139,8 +139,6 @@ export default function ProjectProposal() {
   if (!chainId || !daoId) {
     return <Navigate replace to="/" />
   }
-
-  // console.debug({ contractReadManagerResult })
 
   return (
     <Box

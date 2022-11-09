@@ -91,8 +91,6 @@ export function PageLayout(props: PageLayoutProps) {
 
   const [open, setOpen] = useState(shouldOpen)
 
-  console.debug({ props, open, isMobile, shouldOpen })
-
   const { chainId, daoId } = useParams()
   const cid = Number(chainId)
   const daoResult = useGetDAO(cid, daoId)

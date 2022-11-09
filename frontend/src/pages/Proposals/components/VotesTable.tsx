@@ -43,8 +43,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 export default function VotesTable(props: any): JSX.Element {
   const { votes } = props
 
-  console.debug({ votes })
-
   return (
     <TableContainer component={Paper}>
       <Table data-testid={'votes-table'} size="small">

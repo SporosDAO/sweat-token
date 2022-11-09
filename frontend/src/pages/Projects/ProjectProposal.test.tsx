@@ -59,7 +59,7 @@ describe('Project Proposal Page', () => {
   })
 
   it('require project manager to be a DAO member', async () => {
-    jest.spyOn(wagmi, `useContractRead`).mockImplementation(({ functionName }) => {
+    jest.spyOn(wagmi, `useContractRead`).mockImplementation(({ functionName }: any) => {
       if (functionName === 'extensions') {
         return {
           isError: false,
@@ -101,7 +101,7 @@ describe('Project Proposal Page', () => {
   })
 
   it('allow project manager who is a DAO member', async () => {
-    jest.spyOn(wagmi, `useContractRead`).mockImplementation(({ functionName }) => {
+    jest.spyOn(wagmi, `useContractRead`).mockImplementation(({ functionName }: any) => {
       if (functionName === 'extensions') {
         return {
           isError: false,
@@ -140,7 +140,7 @@ describe('Project Proposal Page', () => {
   })
 
   it('Enable project management extension if not already enabled', async () => {
-    jest.spyOn(wagmi, `useContractRead`).mockImplementation(({ functionName }) => {
+    jest.spyOn(wagmi, `useContractRead`).mockImplementation(({ functionName }: any) => {
       if (functionName === 'extensions') {
         return {
           isError: false,

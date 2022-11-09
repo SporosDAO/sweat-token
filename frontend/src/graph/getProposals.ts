@@ -94,6 +94,5 @@ export function useGetProposalDetails(chainId: number, daoAddress: string, propo
       console.error({ readProposalArraysError })
     }
   })
-  console.debug({ result })
   return result
 }

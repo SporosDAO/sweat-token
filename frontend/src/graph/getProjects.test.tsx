@@ -3,6 +3,8 @@ import { useGetProjects } from './getProjects'
 import * as wagmi from 'wagmi'
 import { ethers } from 'ethers'
 import { renderHook } from '../../test'
+import { UseContractReadConfig } from 'wagmi/dist/declarations/src/hooks/contracts/useContractRead'
+import { AnyPtrRecord } from 'dns'
 
 describe('useGetProjects hook', () => {
   beforeEach(() => {
@@ -106,11 +108,11 @@ describe('useGetProjects hook', () => {
 
   it('reports contract read errors', async () => {
     jest.spyOn(console, 'error')
-    jest.spyOn(wagmi, `useContractRead`).mockImplementation(({ onError }: { onError?: any }) => {
+    jest.spyOn(wagmi, `useContractRead`).mockImplementation(({ onError }: any) => {
       onError('useContractReads')
       return { data: 101 } as any
     })
-    jest.spyOn(wagmi, `useContractReads`).mockImplementation(({ onError }: { onError?: any }) => {
+    jest.spyOn(wagmi, `useContractReads`).mockImplementation(({ onError }: any) => {
       onError('useContractReads')
       return {
         data: [],

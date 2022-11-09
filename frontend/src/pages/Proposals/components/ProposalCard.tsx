@@ -1,5 +1,5 @@
 import { Launch, MoreVert } from '@mui/icons-material'
-import { Button, Card, CardActions, CardContent, Typography, Box, CardActionArea } from '@mui/material'
+import { Button, Card, CardActions, CardContent, Typography, Box } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { addresses } from '../../../constants/addresses'
@@ -35,43 +35,36 @@ export default function ProposalCard(props: any) {
 
   return (
     <Card sx={{ margin: '8px', width: '48.5%' }} raised={true}>
-      <CardActionArea
-        data-testid={`proposals-link-${serial}`}
-        onClick={() => {
-          navigate(`./${serial}`, { state: proposal })
-        }}
-      >
-        <CardContent>
-          <Typography>#{serial}</Typography>
-          <Typography gutterBottom>{description}</Typography>
-          <Typography gutterBottom>Proposal Type: {decoratedProposalType}</Typography>
+      <CardContent>
+        <Typography>#{serial}</Typography>
+        <Typography gutterBottom>{description}</Typography>
+        <Typography gutterBottom>Proposal Type: {decoratedProposalType}</Typography>
+        <Typography color="text.secondary" gutterBottom>
+          Proposer: {proposer}
+        </Typography>
+        {cancelled && (
           <Typography color="text.secondary" gutterBottom>
-            Proposer: {proposer}
+            CANCELLED
           </Typography>
-          {cancelled && (
-            <Typography color="text.secondary" gutterBottom>
-              CANCELLED
+        )}
+        <Typography color={status ? 'success.main' : 'text.secondary'} gutterBottom>
+          {status ? 'PASSED' : 'NOT PASSED'}
+        </Typography>
+        <Typography color="text.secondary" gutterBottom>
+          Voting Deadline: {deadlineString}
+        </Typography>
+        {!isExpired ? (
+          <Box sx={{ width: '100%' }}>
+            <Typography color="text.primary" gutterBottom>
+              ACTIVE
             </Typography>
-          )}
-          <Typography color={status ? 'success.main' : 'text.secondary'} gutterBottom>
-            {status ? 'PASSED' : 'NOT PASSED'}
-          </Typography>
+          </Box>
+        ) : (
           <Typography color="text.secondary" gutterBottom>
-            Voting Deadline: {deadlineString}
+            EXPIRED
           </Typography>
-          {!isExpired ? (
-            <Box sx={{ width: '100%' }}>
-              <Typography color="text.primary" gutterBottom>
-                ACTIVE
-              </Typography>
-            </Box>
-          ) : (
-            <Typography color="text.secondary" gutterBottom>
-              EXPIRED
-            </Typography>
-          )}
-        </CardContent>
-      </CardActionArea>
+        )}
+      </CardContent>
       <CardActions sx={{ justifyContent: 'space-between' }}>
         <Button
           disabled={!knownProposalType}

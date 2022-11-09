@@ -44,12 +44,10 @@ export default function ProposalDetails(props: any) {
     payloads,
     dao
   } = proposal || {}
-  console.debug({ proposal, chainId, daoId, serial, payloads, dao })
   const { votingPeriod, quorum, token } = dao
   const { totalSupply, symbol } = token
   const creationTimeString = new Date(Number(creationTime) * 1000).toUTCString()
   const votingStartsString = new Date(Number(votingStarts) * 1000).toUTCString()
-  console.debug({ creationTime, creationTimeString, votingStarts, votingStartsString })
   const voteDeadline = new Date((Number(votingStarts) + Number(votingPeriod)) * 1000)
   const voteDeadlineString = voteDeadline.toUTCString()
   const isExpired = voteDeadline < new Date()
@@ -103,8 +101,6 @@ export default function ProposalDetails(props: any) {
   let budget = ethers.utils.formatEther(budgetE18)
   budget = new Intl.NumberFormat().format(Number(budget))
 
-  console.debug({ goals, budget, voteDeadline })
-
   const managerEnsNameResult = useEnsName({ address: proposer, chainId: chain.mainnet.id, cacheTime: 60_000 })
   const managerEnsName = !managerEnsNameResult.isError && !ensNameResult.isLoading ? ensNameResult.data : ''
 
@@ -138,6 +134,8 @@ export default function ProposalDetails(props: any) {
   function onVoteAgainst(event: any) {
     submitVote(false)
   }
+
+  console.debug({ votes })
 
   return isProjectProposal ? (
     <ContentBlock title={`Project Management`}>
@@ -270,7 +268,7 @@ export default function ProposalDetails(props: any) {
         <VotesTable votes={votes} />
       </Box>
       {isDialogOpen && (
-        <Web3SubmitDialog open={isDialogOpen} onClose={onDialogClose} txInput={txInput} hrefAfterSuccess=".." />
+        <Web3SubmitDialog open={isDialogOpen} onClose={onDialogClose} txInput={txInput} hrefAfterSuccess="./" />
       )}
     </ContentBlock>
   ) : (
