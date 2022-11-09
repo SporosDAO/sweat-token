@@ -1,7 +1,7 @@
 import { ThumbUp, ThumbDown, Launch } from '@mui/icons-material'
 import { Card, CardContent, Typography, Box, Grid, CardActions, Button } from '@mui/material'
 import { ethers } from 'ethers'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import CircularProgressWithLabel from '../../../components/CircularProgressWithLabel'
 import LabeledValue from '../../../components/LabeledValue'
@@ -9,6 +9,7 @@ import LinearProgressWithLabel from '../../../components/LinearProgressWithLabel
 import Web3SubmitDialog from '../../../components/Web3SubmitDialog'
 import { addresses } from '../../../constants/addresses'
 import KALIDAO_ABI from '../../../abi/KaliDAO.json'
+import { useAccount } from 'wagmi'
 
 export default function VoteSummaryCard(props: any) {
   const { chainId, daoId } = useParams()
@@ -95,6 +96,20 @@ export default function VoteSummaryCard(props: any) {
     submitVote(false)
   }
 
+  const { address, isConnected } = useAccount()
+  const canVote: boolean = useMemo(() => {
+    if (!knownProposalType || isExpired) return false
+    if (isConnected) {
+      const userVoted = votes?.reduce(
+        (result: boolean, item: { voter: string }) => result || item.voter === address,
+        false
+      )
+      return !userVoted
+    } else {
+      return false
+    }
+  }, [votes, isExpired, knownProposalType, isConnected, address])
+
   return (
     <Card sx={{ margin: '8px' }}>
       <CardContent>
@@ -166,18 +181,12 @@ export default function VoteSummaryCard(props: any) {
       </CardContent>
       <CardActions sx={{ justifyContent: 'space-between' }}>
         <Box sx={{ mr: 1 }}>
-          <Button
-            variant="contained"
-            disabled={!knownProposalType || isExpired}
-            endIcon={<ThumbUp />}
-            sx={{ m: 1 }}
-            onClick={onVoteFor}
-          >
+          <Button variant="contained" disabled={!canVote} endIcon={<ThumbUp />} sx={{ m: 1 }} onClick={onVoteFor}>
             Vote For
           </Button>
           <Button
             variant="contained"
-            disabled={!knownProposalType || isExpired}
+            disabled={!canVote}
             endIcon={<ThumbDown />}
             sx={{ mr: 1 }}
             onClick={onVoteAgainst}

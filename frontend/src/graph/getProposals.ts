@@ -70,12 +70,7 @@ export function useGetProposals({
       const data = await getProposals({ chainId, daoAddress })
       return data
     },
-    {
-      // Refetch proposal data every 5 seconds (in case there were any new votes)
-      refetchInterval: 1000
-    }
-
-    // { ...queryOptions }
+    { ...queryOptions }
   )
 }
 
@@ -156,11 +151,7 @@ export function useGetProposal({
       const data = await getProposal({ chainId, daoAddress, proposalSerial })
       return data
     },
-    {
-      // Refetch proposal data every 5 seconds (in case there were any new votes)
-      refetchInterval: 1000
-    }
-    // { ...queryOptions }
+    { ...queryOptions }
   )
 }
 
