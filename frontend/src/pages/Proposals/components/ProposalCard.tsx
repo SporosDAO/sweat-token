@@ -2,6 +2,7 @@ import { Launch, MoreVert } from '@mui/icons-material'
 import { Button, Card, CardActions, CardContent, Typography, Box } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import LabeledValue from '../../../components/LabeledValue'
 import { addresses } from '../../../constants/addresses'
 
 export default function ProposalCard(props: any) {
@@ -38,10 +39,8 @@ export default function ProposalCard(props: any) {
       <CardContent>
         <Typography>#{serial}</Typography>
         <Typography gutterBottom>{description}</Typography>
-        <Typography gutterBottom>Proposal Type: {decoratedProposalType}</Typography>
-        <Typography color="text.secondary" gutterBottom>
-          Proposer: {proposer}
-        </Typography>
+        <LabeledValue label="Proposal Type">{decoratedProposalType}</LabeledValue>
+        <LabeledValue label="Proposer">{proposer}</LabeledValue>
         {cancelled && (
           <Typography color="text.secondary" gutterBottom>
             CANCELLED
@@ -50,9 +49,7 @@ export default function ProposalCard(props: any) {
         <Typography color={status ? 'success.main' : 'text.secondary'} gutterBottom>
           {status ? 'PASSED' : 'NOT PASSED'}
         </Typography>
-        <Typography color="text.secondary" gutterBottom>
-          Voting Deadline: {deadlineString}
-        </Typography>
+        <LabeledValue label="Voting Deadline">{deadlineString}</LabeledValue>
         {!isExpired ? (
           <Box sx={{ width: '100%' }}>
             <Typography color="text.primary" gutterBottom>
