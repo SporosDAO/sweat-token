@@ -59,6 +59,7 @@ export default function ProposalDetails() {
   }
   const projectDeadline = new Date(dateInSecs * 1000).toUTCString()
   const goals = goalString ? JSON.parse(goalString) : []
+  console.debug({ goals })
   const { goalTitle, goalDescription, goalLink } = goals[0] || {}
   let budget = budgetE18 ? ethers.utils.formatEther(budgetE18) : 0
   budget = new Intl.NumberFormat().format(Number(budget))

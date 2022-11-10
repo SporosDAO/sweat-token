@@ -1,9 +1,11 @@
 import { Card, CardContent, CardActions } from '@mui/material'
 import { Button, Typography, Link } from '@mui/material'
-import { useEnsName, useEnsAvatar, useAccount } from 'wagmi'
+import { useEnsName, useAccount } from 'wagmi'
 import { Work, Launch, HourglassTop, HourglassDisabled } from '@mui/icons-material'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Key } from 'react'
+import ReactMarkdown from 'react-markdown'
+import LabeledValue from '../../../components/LabeledValue'
 
 export default function ProjectCard(props: any) {
   const { chainId, daoId } = useParams()
@@ -12,8 +14,6 @@ export default function ProjectCard(props: any) {
 
   const ensNameResult = useEnsName({ address: manager, chainId: Number(1), cacheTime: 60_000 })
   const ensName = !ensNameResult.isError && !ensNameResult.isLoading ? ensNameResult.data : ''
-  const ensAvatarResult = useEnsAvatar({ addressOrName: manager, chainId: Number(1), cacheTime: 60_000 })
-  const ensAvatar = !ensAvatarResult.isError && !ensAvatarResult.isLoading ? ensAvatarResult.data : ''
   const deadline = new Date()
   deadline.setTime(project['deadline'] * 1000)
   const deadlineString = deadline.toUTCString()
@@ -28,7 +28,7 @@ export default function ProjectCard(props: any) {
       <CardContent>
         <Typography>#{projectID}</Typography>
         {goals &&
-          goals.map((goal: { goalTitle: string; goalLink: string }, idx: Key) => (
+          goals.map((goal: { goalTitle: string; goalDescription: string; goalLink: string }, idx: Key) => (
             <div key={idx}>
               <Typography variant="h5" component="div">
                 {goal.goalTitle}
@@ -36,27 +36,17 @@ export default function ProjectCard(props: any) {
               <Link href={goal.goalLink} sx={{ fontSize: 14 }} target="_blank" rel="noopener" color="text.secondary">
                 Tracking Link
               </Link>
+              {goal.goalDescription && (
+                <LabeledValue label="Project Description">
+                  <ReactMarkdown>{goal.goalDescription}</ReactMarkdown>
+                </LabeledValue>
+              )}
             </div>
           ))}
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Budget: {budget}
-        </Typography>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Deadline: {deadlineString}
-        </Typography>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Manager Address: {manager}
-        </Typography>
-        {ensName ? (
-          <div>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-              Manager ENS: {ensName}
-            </Typography>
-            <div>{ensAvatar}</div>
-          </div>
-        ) : (
-          <div />
-        )}
+        <LabeledValue label="Budget">{budget}</LabeledValue>
+        <LabeledValue label="Deadline">{deadlineString}</LabeledValue>
+        <LabeledValue label="Manager Address">{manager}</LabeledValue>
+        {ensName ? <LabeledValue label="Manager ENS">{ensName}</LabeledValue> : <></>}
       </CardContent>
       <CardActions sx={{ justifyContent: 'space-between' }}>
         {isExpired ? (

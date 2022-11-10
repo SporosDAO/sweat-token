@@ -5,7 +5,7 @@ export default function LabeledValue(props: { label: string; children: React.Rea
   return (
     <Box sx={{ mt: 1 }}>
       <Typography sx={{ fontWeight: 'bold', mt: 1 }}>{label}:</Typography>
-      <Typography>{children}</Typography>
+      {typeof children === 'string' ? <Typography>{children}</Typography> : <>{children}</>}
     </Box>
   )
 }

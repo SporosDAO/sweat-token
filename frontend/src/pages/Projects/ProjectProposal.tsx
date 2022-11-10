@@ -10,6 +10,7 @@ import { Navigate } from 'react-router-dom'
 import Web3SubmitDialog from '../../components/Web3SubmitDialog'
 import { useGetDAO } from '../../graph/getDAO'
 import { ErrorMessage } from '@hookform/error-message'
+import ReactMarkdown from 'react-markdown'
 
 export default function ProjectProposal() {
   const { chainId, daoId } = useParams()
@@ -28,6 +29,7 @@ export default function ProjectProposal() {
   const {
     register,
     formState: { errors: formErrors },
+    watch,
     handleSubmit
   } = useForm({
     defaultValues: {
@@ -35,9 +37,13 @@ export default function ProjectProposal() {
       budget: 0,
       deadline: defaultDeadline.toISOString().split('T')[0],
       goalTitle: '',
+      goalDescription: '',
       goalLink: ''
     }
   })
+
+  const watchGoalDescription = watch('goalDescription')
+  console.debug({ watchGoalDescription })
 
   const { data: myDao, isSuccess: isMyDaoLoaded } = useGetDAO(cid, daoId)
 
@@ -69,7 +75,7 @@ export default function ProjectProposal() {
   }
 
   const onSubmit = async (data: any, e: any) => {
-    const { manager, budget, deadline, goalTitle, goalLink } = data
+    const { manager, budget, deadline, goalTitle, goalDescription, goalLink } = data
     setProposedManagerAddress(manager)
     try {
       await contractReadManagerResult.refetch({
@@ -83,7 +89,7 @@ export default function ProjectProposal() {
     if (contractReadManagerResult.isError || contractReadManagerResult.isLoading) return
 
     let payload
-    const goals = [{ goalTitle, goalLink }]
+    const goals = [{ goalTitle, goalLink, goalDescription }]
     const goalString = JSON.stringify(goals)
     const milliseconds = new Date(deadline).getTime()
     const dateInSecs = Math.floor(milliseconds / 1000)
@@ -143,7 +149,7 @@ export default function ProjectProposal() {
   return (
     <Box
       sx={{
-        maxWidth: 400
+        maxWidth: 600
       }}
     >
       {isMyDaoLoaded && (
@@ -253,6 +259,30 @@ export default function ProjectProposal() {
             {...register('goalLink')}
           />
         </ListItem>
+        <ListItem>
+          <TextField
+            label="Description"
+            helperText="Describe the main goal(s) of this project using Markdown format."
+            variant="filled"
+            multiline
+            fullWidth
+            data-testid="goalDescription"
+            minRows={5}
+            {...register('goalDescription')}
+          />
+        </ListItem>
+        {watchGoalDescription && (
+          <>
+            <ListItem>
+              <Typography variant="caption">Markdown Preview</Typography>
+            </ListItem>
+            <ListItem>
+              <Box component="span" sx={{ p: 2, border: '1px dashed grey' }}>
+                <ReactMarkdown skipHtml children={watchGoalDescription} />
+              </Box>
+            </ListItem>
+          </>
+        )}
         <ListItem>
           <Button
             type="submit"
