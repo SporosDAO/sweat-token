@@ -1,4 +1,4 @@
-import { ThumbUp, ThumbDown, Launch } from '@mui/icons-material'
+import { ThumbUp, ThumbDown, Launch, PlayArrow } from '@mui/icons-material'
 import { Card, CardContent, Typography, Box, Grid, CardActions, Button } from '@mui/material'
 import { ethers } from 'ethers'
 import { useMemo, useState } from 'react'
@@ -26,16 +26,17 @@ export default function VoteSummaryCard(props: any) {
     votes,
     creationTime,
     votingStarts,
+    isReadyToProcessImmediately,
     accounts,
     dao
   } = proposal || {}
 
   const { votingPeriod, quorum, token } = dao || {}
   const { totalSupply } = token || { totalSupply: '0' }
-  const creationTimeString = new Date(Number(creationTime) * 1000).toUTCString()
-  const votingStartsString = new Date(Number(votingStarts) * 1000).toUTCString()
+  const creationTimeString = new Date(Number(creationTime) * 1000).toLocaleString()
+  const votingStartsString = new Date(Number(votingStarts) * 1000).toLocaleString()
   const voteDeadline = new Date((Number(votingStarts) + Number(votingPeriod)) * 1000)
-  const voteDeadlineString = voteDeadline.toUTCString()
+  const voteDeadlineString = voteDeadline.toLocaleString()
   const isExpired = voteDeadline < new Date()
   const votesFor = votes?.reduce(
     (result: any, item: { vote: any; weight: any }) =>
@@ -94,6 +95,21 @@ export default function VoteSummaryCard(props: any) {
 
   function onVoteAgainst(event: any) {
     submitVote(false)
+  }
+
+  function onProcess(event: any) {
+    const contractInfo = {
+      addressOrName: daoId,
+      chainId: cid,
+      contractInterface: KALIDAO_ABI,
+      functionName: 'processProposal' //  ['uint256' /* proposal serial # */
+    }
+
+    setTxInput({
+      ...contractInfo,
+      args: [serial]
+    })
+    setIsDialogOpen(true)
   }
 
   const { address, isConnected } = useAccount()
@@ -170,7 +186,7 @@ export default function VoteSummaryCard(props: any) {
                 CLOSED
               </Typography>
               <Typography color={status ? 'success.main' : 'text.secondary'} gutterBottom>
-                {status ? 'PASSED' : 'NOT PASSED'}
+                {status ? 'PASSED' : status === false ? 'NOT PASSED' : ''}
               </Typography>
             </>
           )
@@ -180,22 +196,24 @@ export default function VoteSummaryCard(props: any) {
         )}
       </CardContent>
       <CardActions sx={{ justifyContent: 'space-between' }}>
-        <Box sx={{ mr: 1 }}>
-          <Button variant="contained" disabled={!canVote} endIcon={<ThumbUp />} sx={{ m: 1 }} onClick={onVoteFor}>
-            Vote For
+        {canVote && (
+          <Box sx={{ mr: 1 }}>
+            <Button variant="contained" endIcon={<ThumbUp />} sx={{ m: 1 }} onClick={onVoteFor}>
+              For
+            </Button>
+            <Button variant="contained" endIcon={<ThumbDown />} sx={{ mr: 1 }} onClick={onVoteAgainst}>
+              Against
+            </Button>
+          </Box>
+        )}
+        {isReadyToProcessImmediately && (
+          <Button variant="contained" endIcon={<PlayArrow />} sx={{ m: 1 }} onClick={onProcess}>
+            Process
           </Button>
-          <Button
-            variant="contained"
-            disabled={!canVote}
-            endIcon={<ThumbDown />}
-            sx={{ mr: 1 }}
-            onClick={onVoteAgainst}
-          >
-            Vote Against
-          </Button>
-        </Box>
+        )}
         <Button
           variant="text"
+          color="secondary"
           endIcon={<Launch />}
           href={`https://app.kali.gg/daos/${chainId}/${daoId}/proposals/${serial}`}
           rel="noopener"

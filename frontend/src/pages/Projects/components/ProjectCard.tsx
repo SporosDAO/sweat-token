@@ -16,7 +16,7 @@ export default function ProjectCard(props: any) {
   const ensName = !ensNameResult.isError && !ensNameResult.isLoading ? ensNameResult.data : ''
   const deadline = new Date()
   deadline.setTime(project['deadline'] * 1000)
-  const deadlineString = deadline.toUTCString()
+  const deadlineString = deadline.toLocaleString()
   const isExpired = deadline < new Date()
   const { address: userAddress } = useAccount()
   const isManager = userAddress === manager

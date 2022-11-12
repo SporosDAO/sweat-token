@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import { PageProvider } from './context/PageContext'
-import { ToastProvider } from './context/ToastContext'
 import { Web3ContextProvider } from './context/Web3Context'
 import { ServiceWorkerWrapper } from './components/PWAUpdate'
 
@@ -40,13 +39,11 @@ export function AppWrapper({
       <ServiceWorkerWrapper />
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <ToastProvider>
-            <Web3ContextProvider wagmiClient={wagmiClient} chains={chains} initialChain={initialChain}>
-              <PageProvider>
-                <ThemeProvider theme={theme}>{children}</ThemeProvider>
-              </PageProvider>
-            </Web3ContextProvider>
-          </ToastProvider>
+          <Web3ContextProvider wagmiClient={wagmiClient} chains={chains} initialChain={initialChain}>
+            <PageProvider>
+              <ThemeProvider theme={theme}>{children}</ThemeProvider>
+            </PageProvider>
+          </Web3ContextProvider>
         </BrowserRouter>
       </QueryClientProvider>
     </React.StrictMode>

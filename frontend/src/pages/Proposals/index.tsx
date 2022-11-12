@@ -1,8 +1,10 @@
-import { Button, CircularProgress } from '@mui/material'
+import { Button, CircularProgress, Link, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import { useParams } from 'react-router-dom'
+import { error } from 'console'
+import React, { ReactNode } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import ContentBlock from '../../components/ContentBlock'
-import { useGetProposals } from '../../graph/getProposals'
+import { useGetProposals, findProcessableProposals } from '../../graph/getProposals'
 import ProposalCard from './components/ProposalCard'
 
 /* eslint react-hooks/rules-of-hooks: 0 */
@@ -23,14 +25,38 @@ export default function Proposals() {
     proposals = data
   }
 
-  console.debug({ proposals })
+  const processable = findProcessableProposals(proposals)
+  const nextProposalToProcess = processable?.length ? processable[processable.length - 1] : undefined
+  const navigate = useNavigate()
+
+  const nextPropAction = (
+    <Button
+      color="inherit"
+      size="small"
+      onClick={() => {
+        navigate(`./${nextProposalToProcess.serial}`, { state: nextProposalToProcess })
+      }}
+    >
+      Details
+    </Button>
+  ) as ReactNode
+
   return (
-    <ContentBlock title="Proposals">
+    <ContentBlock
+      title="Proposals"
+      alert={
+        nextProposalToProcess && {
+          text: `Proposal #${nextProposalToProcess.serial} is ready to process.`,
+          type: 'info',
+          action: nextPropAction
+        }
+      }
+    >
       {isLoading ? (
         <CircularProgress data-testid="progress-icon" />
       ) : error ? (
         <Box>
-          Failed to load data.{' '}
+          Failed to load data.
           <Button
             data-testid="retry-btn"
             onClick={(e) => {

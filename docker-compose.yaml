@@ -43,7 +43,7 @@ services:
   #   volumes:
   #     - ./backend:/app/backend
   frontend:
-    command: bash -c "yarn install && yarn start"
+    command: bash -c "yarn start"
     container_name: frontend
     working_dir: /app/frontend
     networks:

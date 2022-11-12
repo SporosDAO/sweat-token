@@ -32,7 +32,7 @@ export default function ProjectTribute() {
 
   const deadlineDate = new Date()
   deadlineDate.setTime(deadline * 1000)
-  const deadlineString = deadlineDate.toUTCString()
+  const deadlineString = deadlineDate.toLocaleString()
   const isExpired = deadlineDate < new Date()
 
   const cid = Number(chainId)

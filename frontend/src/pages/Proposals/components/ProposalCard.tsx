@@ -12,7 +12,7 @@ export default function ProposalCard(props: any) {
   const { votingPeriod } = dao
 
   const deadline = new Date((Number(votingStarts) + Number(votingPeriod)) * 1000)
-  const deadlineString = deadline.toUTCString()
+  const deadlineString = deadline.toLocaleString()
   const isExpired = deadline < new Date()
 
   const navigate = useNavigate()
@@ -53,12 +53,12 @@ export default function ProposalCard(props: any) {
         {!isExpired ? (
           <Box sx={{ width: '100%' }}>
             <Typography color="text.primary" gutterBottom>
-              ACTIVE
+              VOTING OPEN
             </Typography>
           </Box>
         ) : (
           <Typography color="text.secondary" gutterBottom>
-            EXPIRED
+            VOTING CLOSED
           </Typography>
         )}
       </CardContent>
@@ -75,6 +75,7 @@ export default function ProposalCard(props: any) {
         </Button>
         <Button
           variant="text"
+          color="secondary"
           endIcon={<Launch />}
           href={`https://app.kali.gg/daos/${chainId}/${daoId}/proposals/${serial}`}
           rel="noopener"

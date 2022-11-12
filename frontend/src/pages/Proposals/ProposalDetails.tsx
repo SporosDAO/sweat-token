@@ -15,7 +15,7 @@ export default function ProposalDetails() {
   const { chainId, daoId } = useParams()
   const cid = Number(chainId)
   const location = useLocation()
-  const { serial } = location?.state as any
+  const { serial, isReadyToProcessImmediately } = (location?.state as any) || {}
 
   // fetch fresh proposal data every few seconds
   const { data: proposal } = useGetProposal({
@@ -28,7 +28,9 @@ export default function ProposalDetails() {
     }
   })
 
-  console.debug({ location, serial, proposal })
+  if (proposal) {
+    proposal.isReadyToProcessImmediately = isReadyToProcessImmediately
+  }
 
   const { proposer, proposalType, votes, accounts, payloads, dao } = proposal || {}
   const { token } = dao || {}
@@ -57,9 +59,8 @@ export default function ProposalDetails() {
   } catch (e) {
     console.error('Error while encoding project proposal', e)
   }
-  const projectDeadline = new Date(dateInSecs * 1000).toUTCString()
+  const projectDeadline = new Date(dateInSecs * 1000).toLocaleString()
   const goals = goalString ? JSON.parse(goalString) : []
-  console.debug({ goals })
   const { goalTitle, goalDescription, goalLink } = goals[0] || {}
   let budget = budgetE18 ? ethers.utils.formatEther(budgetE18) : 0
   budget = new Intl.NumberFormat().format(Number(budget))

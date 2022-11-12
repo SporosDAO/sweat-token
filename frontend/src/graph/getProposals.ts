@@ -55,6 +55,48 @@ export const getProposals = async ({ chainId, daoAddress }: { chainId: number; d
   }
 }
 
+/**
+ * Filters proposals that can be processed immediately without triggering on-chain errors.
+ *
+ * @returns array of proposals that can be immediately prcessed.
+ *
+ */
+export function findProcessableProposals(proposals: any[]): any[] {
+  function isAvailableToProcess(proposal: any, index: number, proposals: any[]) {
+    // unsponsored
+    if (!proposal?.sponsored) {
+      return false
+    }
+    // expired
+    const timeLeft =
+      new Date().getTime() - new Date(proposal.dao?.votingPeriod * 1000 + proposal?.votingStarts * 1000).getTime()
+    if (timeLeft <= 0) {
+      return false
+    }
+
+    // already processed
+    if (proposal.status !== null) {
+      return false
+    }
+
+    // if type ESCAPE then allow to process
+    if (proposal.proposalType === 'ESCAPE') {
+      return true
+    }
+
+    // if non-ESCAPE, make sure it's next in queue
+    // otherwise Kali smart contract will block processing
+    if (index + 1 < proposals.length && proposals[index + 1].status != null) {
+      proposal.isReadyToProcessImmediately = true
+      return true
+    }
+
+    return false
+  }
+  const availableToProcess = proposals.filter(isAvailableToProcess)
+  return availableToProcess
+}
+
 export function useGetProposals({
   chainId,
   daoAddress,
@@ -74,6 +116,15 @@ export function useGetProposals({
   )
 }
 
+/**
+ *
+ * Fetches a single proposal details
+ *
+ * @param {number} chainId - DAO home ETH chain ID
+ * @param {string} daoAddress - DAO address
+ * @param {number} proposalSerial - serial number of the proposal
+ * @returns proposal details
+ */
 export async function getProposal({
   chainId,
   daoAddress,

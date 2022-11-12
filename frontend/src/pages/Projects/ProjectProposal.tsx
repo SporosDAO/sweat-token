@@ -43,7 +43,6 @@ export default function ProjectProposal() {
   })
 
   const watchGoalDescription = watch('goalDescription')
-  console.debug({ watchGoalDescription })
 
   const { data: myDao, isSuccess: isMyDaoLoaded } = useGetDAO(cid, daoId)
 
