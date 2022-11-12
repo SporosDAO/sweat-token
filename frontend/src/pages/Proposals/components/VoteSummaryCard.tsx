@@ -183,10 +183,10 @@ export default function VoteSummaryCard(props: any) {
           sponsored && (
             <>
               <Typography color="text.secondary" gutterBottom>
-                CLOSED
+                Voting Closed
               </Typography>
               <Typography color={status ? 'success.main' : 'text.secondary'} gutterBottom>
-                {status ? 'PASSED' : status === false ? 'NOT PASSED' : ''}
+                {status ? 'PROPOSAL PASSED' : status === false ? 'PROPOSAL NOT PASSED' : ''}
               </Typography>
             </>
           )
