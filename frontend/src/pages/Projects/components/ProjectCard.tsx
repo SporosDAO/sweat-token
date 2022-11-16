@@ -24,8 +24,12 @@ export default function ProjectCard(props: any) {
   const navigate = useNavigate()
 
   return (
-    <Card sx={{ margin: '8px', width: '48.5%' }} data-testid={projectID} raised={true}>
-      <CardContent>
+    <Card
+      sx={{ margin: '8px', width: '48.5%', display: 'flex', flexDirection: 'column' }}
+      data-testid={projectID}
+      raised={true}
+    >
+      <CardContent sx={{ flexGrow: 1 }}>
         <Typography>#{projectID}</Typography>
         {goals &&
           goals.map((goal: { goalTitle: string; goalDescription: string; goalLink: string }, idx: Key) => (
@@ -71,6 +75,7 @@ export default function ProjectCard(props: any) {
         )}
         <Button
           variant="text"
+          color="secondary"
           endIcon={<Launch />}
           href={`https://app.kali.gg/daos/${chainId}/${daoId}`}
           rel="noopener"

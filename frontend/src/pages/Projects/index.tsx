@@ -22,7 +22,7 @@ export default function Projects() {
           </Button>
         </Box>
       )}
-      <Box display="flex" flexWrap={'wrap'} data-testid="projects-box">
+      <Box display="flex" data-testid="projects-box" sx={{ justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
         {projects &&
           projects.length > 0 &&
           projects.map((project: any) => <ProjectCard key={project['projectID']} project={project} />)}

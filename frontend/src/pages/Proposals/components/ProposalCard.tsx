@@ -35,8 +35,8 @@ export default function ProposalCard(props: any) {
   }
 
   return (
-    <Card sx={{ margin: '8px', width: '48.5%' }} raised={true}>
-      <CardContent>
+    <Card sx={{ margin: '8px', width: '48.5%', display: 'flex', flexDirection: 'column' }} raised={true}>
+      <CardContent sx={{ flexGrow: 1 }}>
         <Typography>#{serial}</Typography>
         <Typography gutterBottom>{description}</Typography>
         <LabeledValue label="Proposal Type">{decoratedProposalType}</LabeledValue>
@@ -63,16 +63,19 @@ export default function ProposalCard(props: any) {
         )}
       </CardContent>
       <CardActions sx={{ justifyContent: 'space-between' }}>
-        <Button
-          disabled={!knownProposalType}
-          variant="text"
-          endIcon={<MoreVert />}
-          onClick={() => {
-            navigate(`./${serial}`, { state: proposal })
-          }}
-        >
-          Details
-        </Button>
+        {knownProposalType ? (
+          <Button
+            variant="text"
+            endIcon={<MoreVert />}
+            onClick={() => {
+              navigate(`./${serial}`, { state: proposal })
+            }}
+          >
+            Details
+          </Button>
+        ) : (
+          <Button />
+        )}
         <Button
           variant="text"
           color="secondary"
