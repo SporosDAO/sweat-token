@@ -99,6 +99,9 @@
     }
   },
   "jest": {
+    "transformIgnorePatterns": [
+      "node_modules/(?!(@rainbow-me|react-markdown|vfile-message|vfile|unist-\\S*|unified|bail|is-plain-obj|trough|remark-\\S*|mdast\\S*|micromark\\S*)|decode-named-character-reference\\S*|character-entities|trim-lines|property-information|hast-util-whitespace|space-separated-tokens|comma-separated-tokens/)"
+    ],
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
       "!src/stories/**"
