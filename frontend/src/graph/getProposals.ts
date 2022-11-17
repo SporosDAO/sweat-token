@@ -1,7 +1,7 @@
 import { GRAPH_URL } from './url'
 import { useQuery } from '@tanstack/react-query'
-import KaliDaoAbi from '../abi/KaliDAO.json'
-import { useContractReads } from 'wagmi'
+// import KaliDaoAbi from '../abi/KaliDAO.json'
+// import { useContractReads } from 'wagmi'
 
 export const getProposals = async ({ chainId, daoAddress }: { chainId: number; daoAddress: string | undefined }) => {
   if (!daoAddress) return null
@@ -48,7 +48,9 @@ export const getProposals = async ({ chainId, daoAddress }: { chainId: number; d
       })
     })
 
+    console.debug({ res })
     const data = await res.json()
+    console.debug({ data })
     return data?.data?.proposals
   } catch (e) {
     return e
@@ -216,27 +218,27 @@ export function useGetProposal({
  *
  * @returns proposal details
  */
-export function useGetProposalDetails(chainId: number, daoAddress: string, proposalSerial: number) {
-  const cid = Number(chainId)
-  const daoContract = {
-    addressOrName: daoAddress || '0xUnknown',
-    contractInterface: KaliDaoAbi,
-    chainId: cid
-  }
-  const result = useContractReads({
-    contracts: [
-      {
-        ...daoContract,
-        functionName: 'proposals'
-      },
-      {
-        ...daoContract,
-        functionName: 'getProposalArrays'
-      }
-    ],
-    onError(readProposalArraysError: any) {
-      console.error({ readProposalArraysError })
-    }
-  })
-  return result
-}
+// export function useGetProposalDetails(chainId: number, daoAddress: string, proposalSerial: number) {
+//   const cid = Number(chainId)
+//   const daoContract = {
+//     addressOrName: daoAddress || '0xUnknown',
+//     contractInterface: KaliDaoAbi,
+//     chainId: cid
+//   }
+//   const result = useContractReads({
+//     contracts: [
+//       {
+//         ...daoContract,
+//         functionName: 'proposals'
+//       },
+//       {
+//         ...daoContract,
+//         functionName: 'getProposalArrays'
+//       }
+//     ],
+//     onError(readProposalArraysError: any) {
+//       console.error({ readProposalArraysError })
+//     }
+//   })
+//   return result
+// }
