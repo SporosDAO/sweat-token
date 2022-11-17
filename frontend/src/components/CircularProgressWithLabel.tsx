@@ -3,7 +3,7 @@ import { CircularProgressProps, Box, CircularProgress, Typography } from '@mui/m
 export default function CircularProgressWithLabel(props: CircularProgressProps & { value: number }) {
   return (
     <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-      <CircularProgress variant="determinate" {...props} />
+      <CircularProgress variant="determinate" {...props} data-testid="circular-progress" />
       <Box
         sx={{
           top: 0,
