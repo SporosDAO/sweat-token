@@ -1,6 +1,6 @@
 import CircularProgressWithLabel from './CircularProgressWithLabel'
 
-import { act, render, screen, waitFor, within } from '../../test'
+import { act, render, screen, waitFor } from '../../test'
 
 describe('CircularProgressWithLabel component', () => {
   it('shows label and circular progress', async () => {
