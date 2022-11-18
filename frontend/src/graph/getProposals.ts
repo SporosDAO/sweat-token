@@ -4,7 +4,6 @@ import { useQuery } from 'react-query'
 // import { useContractReads } from 'wagmi'
 
 export const getProposals = async ({ chainId, daoAddress }: { chainId: number; daoAddress: string | undefined }) => {
-  console.debug('>>>> enter getProposals <<<<<')
   if (!daoAddress) return null
   const dao = daoAddress.toLowerCase()
   const res = await fetch(GRAPH_URL[chainId], {
@@ -48,9 +47,7 @@ export const getProposals = async ({ chainId, daoAddress }: { chainId: number; d
     })
   })
 
-  console.debug({ res })
   const data = await res.json()
-  console.debug({ data })
   return data?.data?.proposals
 }
 
@@ -66,15 +63,18 @@ export function findProcessableProposals(proposals: any[]): any[] {
     if (!proposal?.sponsored) {
       return false
     }
-    // expired
-    const timeLeft =
-      new Date().getTime() - new Date(proposal.dao?.votingPeriod * 1000 + proposal?.votingStarts * 1000).getTime()
+    // voting not closed yet
+    const now = new Date()
+    const vstarts = proposal?.votingStarts
+    const vperiod = proposal.dao?.votingPeriod
+    const vcloses = new Date(vstarts * 1000 + vperiod * 1000)
+    const timeLeft = now.getTime() - vcloses.getTime()
     if (timeLeft <= 0) {
       return false
     }
 
     // already processed
-    if (proposal.status !== null) {
+    if (proposal.status !== null && proposal.status !== undefined) {
       return false
     }
 
@@ -109,7 +109,6 @@ export function useGetProposals({
     ['getProposals', chainId, daoAddress],
     async () => {
       const data = await getProposals({ chainId, daoAddress })
-      console.debug({ data })
       return data
     },
     { ...queryOptions }
