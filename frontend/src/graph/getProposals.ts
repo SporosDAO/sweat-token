@@ -1,16 +1,16 @@
 import { GRAPH_URL } from './url'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery } from 'react-query'
 // import KaliDaoAbi from '../abi/KaliDAO.json'
 // import { useContractReads } from 'wagmi'
 
 export const getProposals = async ({ chainId, daoAddress }: { chainId: number; daoAddress: string | undefined }) => {
+  console.debug('>>>> enter getProposals <<<<<')
   if (!daoAddress) return null
   const dao = daoAddress.toLowerCase()
-  try {
-    const res = await fetch(GRAPH_URL[chainId], {
-      method: 'POST',
-      body: JSON.stringify({
-        query: `query {
+  const res = await fetch(GRAPH_URL[chainId], {
+    method: 'POST',
+    body: JSON.stringify({
+      query: `query {
           proposals(
             first: 200,
             orderBy: serial,
@@ -45,16 +45,13 @@ export const getProposals = async ({ chainId, daoAddress }: { chainId: number; d
               }
           }
           }`
-      })
     })
+  })
 
-    console.debug({ res })
-    const data = await res.json()
-    console.debug({ data })
-    return data?.data?.proposals
-  } catch (e) {
-    return e
-  }
+  console.debug({ res })
+  const data = await res.json()
+  console.debug({ data })
+  return data?.data?.proposals
 }
 
 /**
@@ -112,6 +109,7 @@ export function useGetProposals({
     ['getProposals', chainId, daoAddress],
     async () => {
       const data = await getProposals({ chainId, daoAddress })
+      console.debug({ data })
       return data
     },
     { ...queryOptions }
@@ -138,11 +136,10 @@ export async function getProposal({
 }) {
   if (!daoAddress) return null
   const dao = daoAddress.toLowerCase()
-  try {
-    const res = await fetch(GRAPH_URL[chainId], {
-      method: 'POST',
-      body: JSON.stringify({
-        query: `query {
+  const res = await fetch(GRAPH_URL[chainId], {
+    method: 'POST',
+    body: JSON.stringify({
+      query: `query {
           proposals(
             first: 200,
             orderBy: serial,
@@ -177,14 +174,11 @@ export async function getProposal({
               }
           }
           }`
-      })
     })
+  })
 
-    const data = await res.json()
-    return data?.data?.proposals?.length ? data?.data?.proposals[0] : null
-  } catch (e) {
-    return e
-  }
+  const data = await res.json()
+  return data?.data?.proposals?.length ? data?.data?.proposals[0] : null
 }
 
 export function useGetProposal({
