@@ -12,16 +12,16 @@ import { useGetProposal } from '../../graph/getProposals'
 import { addresses } from '../../constants/addresses'
 
 export default function ProposalDetails() {
-  const { chainId, daoId } = useParams()
+  const { chainId, daoId, serial } = useParams()
   const cid = Number(chainId)
   const location = useLocation()
-  const { serial, isReadyToProcessImmediately } = (location?.state as any) || {}
+  const { isReadyToProcessImmediately } = (location?.state as any) || {}
 
   // fetch fresh proposal data every few seconds
   const { data: proposal } = useGetProposal({
     chainId: cid,
     daoAddress: daoId,
-    proposalSerial: serial,
+    proposalSerial: Number(serial),
     queryOptions: {
       // Refetch proposal data every 5 seconds (in case there were any new votes)
       refetchInterval: 5000
