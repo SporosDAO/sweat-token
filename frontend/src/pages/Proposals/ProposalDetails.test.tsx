@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import { screen, render, waitFor, within, userEvent, act } from '../../../test'
+import { screen, render, waitFor } from '../../../test'
 import * as getProposals from '../../graph/getProposals'
 import * as daos from '../../graph/getDAO'
 import { addresses } from '../../constants/addresses'
