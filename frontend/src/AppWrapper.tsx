@@ -29,6 +29,10 @@ export function AppWrapper({
     setMode(prefersDarkMode ? 'dark' : 'light')
   }, [prefersDarkMode])
 
+  React.useEffect(() => {
+    console.log('mounted  AppWrapper')
+  }, [])
+
   let theme = React.useMemo(() => createTheme(getDesignTokens(mode) as any), [mode])
 
   theme = responsiveFontSizes(theme)
@@ -36,7 +40,7 @@ export function AppWrapper({
   const queryClient = new QueryClient()
 
   return (
-    <React.StrictMode>
+    <>
       <ServiceWorkerWrapper />
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
@@ -49,7 +53,7 @@ export function AppWrapper({
           </ToastProvider>
         </BrowserRouter>
       </QueryClientProvider>
-    </React.StrictMode>
+    </>
   )
 }
 

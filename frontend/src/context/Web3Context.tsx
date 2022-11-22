@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import { Chain, chain, configureChains, createClient, WagmiConfig } from 'wagmi'
 import { infuraProvider } from 'wagmi/providers/infura'
 import { publicProvider } from 'wagmi/providers/public'
@@ -17,6 +18,18 @@ export function Web3ContextProvider({
   initialChain?: Chain
   children: ReactNode
 }) {
+  React.useEffect(() => {
+    console.log('mounted web3context')
+  }, [])
+  const [hasWagmiClient, setHasWagmiClient] = useState(false)
+
+  React.useEffect(() => {
+    if (wagmiClient) {
+      console.log('setting hwc to true')
+      setHasWagmiClient(true)
+    }
+  }, [wagmiClient])
+
   if (!wagmiClient) {
     const {
       chains: defaultChains,
