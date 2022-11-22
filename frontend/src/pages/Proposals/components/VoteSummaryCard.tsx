@@ -11,10 +11,10 @@ import { addresses } from '../../../constants/addresses'
 import KALIDAO_ABI from '../../../abi/KaliDAO.json'
 import { useAccount } from 'wagmi'
 
-export default function VoteSummaryCard(props: any) {
+export default function VoteSummaryCard(props: { proposal: any }) {
   const { chainId, daoId } = useParams()
   const cid = Number(chainId)
-  const { proposal } = props
+  const { proposal, ...otherProps } = props
 
   const {
     serial,
@@ -37,6 +37,7 @@ export default function VoteSummaryCard(props: any) {
   const votingStartsString = new Date(Number(votingStarts) * 1000).toLocaleString()
   const voteDeadline = new Date((Number(votingStarts) + Number(votingPeriod)) * 1000)
   const voteDeadlineString = voteDeadline.toLocaleString()
+  console.debug({ voteDeadline, voteDeadlineString, votingStarts, votingPeriod })
   const isExpired = voteDeadline < new Date()
   const votesFor = votes?.reduce(
     (result: any, item: { vote: any; weight: any }) =>
@@ -127,13 +128,19 @@ export default function VoteSummaryCard(props: any) {
   }, [votes, isExpired, knownProposalType, isConnected, address])
 
   return (
-    <Card sx={{ margin: '8px' }}>
+    <Card sx={{ margin: '8px' }} {...otherProps}>
       <CardContent>
-        <LabeledValue label="Submitted On">{creationTimeString}</LabeledValue>
+        <LabeledValue data-testid="created-lv" label="Submitted On">
+          {creationTimeString}
+        </LabeledValue>
         {sponsored ? (
           <>
-            <LabeledValue label="Voting Start Date">{votingStartsString}</LabeledValue>
-            <LabeledValue label="Voting Deadline">{voteDeadlineString}</LabeledValue>
+            <LabeledValue data-testid="starts-lv" label="Voting Start Date">
+              {votingStartsString}
+            </LabeledValue>
+            <LabeledValue data-testid="deadline-lv" label="Voting Deadline">
+              {voteDeadlineString}
+            </LabeledValue>
             {sponsor ? (
               <LabeledValue label="Sponsor">{sponsor}</LabeledValue>
             ) : (

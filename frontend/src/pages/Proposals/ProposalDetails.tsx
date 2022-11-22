@@ -15,6 +15,7 @@ export default function ProposalDetails() {
   const { chainId, daoId, serial } = useParams()
   const cid = Number(chainId)
   const location = useLocation()
+  console.debug({ location })
   const { isReadyToProcessImmediately } = (location?.state as any) || {}
 
   // fetch fresh proposal data every few seconds
@@ -32,6 +33,8 @@ export default function ProposalDetails() {
     proposal.isReadyToProcessImmediately = isReadyToProcessImmediately
   }
 
+  console.debug({ proposal })
+
   const { proposer, proposalType, votes, accounts, payloads, dao } = proposal || {}
   const { token } = dao || {}
   const { symbol } = token || {}
@@ -41,13 +44,13 @@ export default function ProposalDetails() {
 
   const PM_CONTRACT = addresses[cid]['extensions']['projectmanagement']
 
-  let isProjectProposal = true
+  let isProjectProposal = false
 
-  if (proposalType === 'EXTENSION') {
-    if (accounts?.length && accounts[0] === PM_CONTRACT) {
-      isProjectProposal = true
-    }
+  if (proposalType === 'EXTENSION' && accounts?.length && accounts[0] === PM_CONTRACT) {
+    isProjectProposal = true
   }
+
+  console.log({ proposalType })
 
   let manager, budgetE18, dateInSecs, goalString
 
@@ -81,25 +84,27 @@ export default function ProposalDetails() {
               By {proposer}
             </Typography>
             <Typography color="text.secondary">{ensName}</Typography>
-            <LabeledValue label="Manager">
+            <LabeledValue data-testid="manager" label="Manager">
               {manager} {managerEnsName}
             </LabeledValue>
-            <LabeledValue label="Budget">
+            <LabeledValue data-testid="budget" label="Budget">
               {budget} {symbol}
             </LabeledValue>
-            <LabeledValue label="Project Deadline">{projectDeadline}</LabeledValue>
-            <LabeledValue label="Project Description">
+            <LabeledValue data-testid="project-deadline" label="Project Deadline">
+              {projectDeadline}
+            </LabeledValue>
+            <LabeledValue data-testid="project-description" label="Project Description">
               <ReactMarkdown>{goalDescription}</ReactMarkdown>
             </LabeledValue>
-            <LabeledValue label="Progress Tracking">
+            <LabeledValue data-testid="project-link" label="Progress Tracking">
               <Link href="{goalLink}">{goalLink}</Link>
             </LabeledValue>
           </CardContent>
         </Card>
-        <VoteSummaryCard proposal={proposal} />
+        <VoteSummaryCard data-testid="vote-summary" proposal={proposal} />
       </Box>
       <Box display="flex" flexWrap={'wrap'} sx={{ margin: '8px' }}>
-        <VotesTable votes={votes} />
+        <VotesTable data-testid="votes-table" votes={votes} />
       </Box>
     </ContentBlock>
   ) : (

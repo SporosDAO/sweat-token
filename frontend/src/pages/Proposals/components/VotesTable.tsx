@@ -7,14 +7,16 @@ import { useEnsName, chain } from 'wagmi'
 import { ethers } from 'ethers'
 
 function VoterRow(props: { voter: string; weight: number; vote: boolean }) {
-  const { voter, weight, vote } = props
+  const { voter, weight, vote, ...otherProps } = props
   const ensNameResult = useEnsName({ address: voter, chainId: chain.mainnet.id, cacheTime: 60_000 })
   const voterEnsName = !ensNameResult.isError && !ensNameResult.isLoading ? ensNameResult.data : ''
   let votingTokensFormatted: any = Number(ethers.utils.formatEther(weight))
   votingTokensFormatted = new Intl.NumberFormat().format(votingTokensFormatted)
 
+  console.debug('VoterRow', { props })
+
   return (
-    <TableRow key={voter}>
+    <TableRow key={voter} {...otherProps}>
       <StyledTableCell>
         <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
           {voterEnsName}
@@ -40,12 +42,12 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   }
 }))
 
-export default function VotesTable(props: any): JSX.Element {
-  const { votes } = props
+export default function VotesTable(props: { votes: any }): JSX.Element {
+  const { votes, ...otherProps } = props
 
   return (
-    <TableContainer component={Paper}>
-      <Table data-testid={'votes-table'} size="small">
+    <TableContainer component={Paper} {...otherProps}>
+      <Table size="small">
         <TableHead>
           <TableRow>
             <StyledTableCell>
@@ -61,7 +63,7 @@ export default function VotesTable(props: any): JSX.Element {
         </TableHead>
         <TableBody>
           {votes?.length ? (
-            votes.map((vote: any) => <VoterRow key={vote.voter} {...vote} />)
+            votes.map((vote: any) => <VoterRow data-testid="vote-row" key={vote.voter} {...vote} />)
           ) : (
             <TableRow>
               <StyledTableCell>
