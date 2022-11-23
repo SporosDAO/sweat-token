@@ -3,6 +3,7 @@ import { Box } from '@mui/system'
 import { ReactNode } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import ContentBlock from '../../components/ContentBlock'
+import LoadingError from '../../components/LoadingError'
 import { useGetProposals, findProcessableProposals } from '../../graph/getProposals'
 import ProposalCard from './components/ProposalCard'
 
@@ -57,19 +58,8 @@ export default function Proposals() {
     >
       {isLoading ? (
         <CircularProgress data-testid="progress-icon" />
-      ) : error ? (
-        <Box>
-          Failed to load data.
-          <Button
-            data-testid="retry-btn"
-            onClick={(e) => {
-              e.preventDefault()
-            }}
-            aria-label="retry"
-          >
-            Retry
-          </Button>
-        </Box>
+      ) : !isLoading && error ? (
+        <LoadingError />
       ) : (
         <Box display="flex" flexWrap={'wrap'}>
           {proposals?.length ? (

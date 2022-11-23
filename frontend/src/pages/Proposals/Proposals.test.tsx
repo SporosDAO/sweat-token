@@ -249,4 +249,48 @@ describe('Proposals list page', () => {
     await expect(mockNavigate).toBeCalledTimes(1)
     await expect(mockNavigate).toHaveBeenCalledWith('./6', expect.anything())
   })
+
+  it('handles data fetch errors', async () => {
+    jest
+      .spyOn(getProposals, 'useGetProposals')
+      .mockImplementation(({ chainId, daoAddress }: { chainId: number; daoAddress: string | undefined }) => {
+        const propData = {
+          data: [],
+          isSuccess: false,
+          isError: true,
+          isLoading: false,
+          error: 'Loading Error'
+        } as any
+        return propData
+      })
+    await act(() => {
+      render({
+        route: '/dao/chain/5/address/0x3fcdf2b58ba93b1335766f01217b7ede7be61a0a/proposals'
+      })
+    })
+    const loadingError = await screen.findByTestId('loading-error')
+    await expect(loadingError).toBeVisible()
+  })
+
+
+  it('handles DAOs without proposals', async () => {
+    jest
+      .spyOn(getProposals, 'useGetProposals')
+      .mockImplementation(({ chainId, daoAddress }: { chainId: number; daoAddress: string | undefined }) => {
+        const propData = {
+          data: [],
+          isSuccess: true,
+          isError: false,
+          isLoading: false,
+        } as any
+        return propData
+      })
+    await act(() => {
+      render({
+        route: '/dao/chain/5/address/0x3fcdf2b58ba93b1335766f01217b7ede7be61a0a/proposals'
+      })
+    })
+    const noProps = await screen.findByText(/This DAO has no proposals yet/i)
+    await expect(noProps).toBeVisible()
+  })
 })

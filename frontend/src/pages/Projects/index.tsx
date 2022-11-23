@@ -1,7 +1,8 @@
-import { Button, CircularProgress, Typography } from '@mui/material'
+import { CircularProgress, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { useParams } from 'react-router-dom'
 import ContentBlock from '../../components/ContentBlock'
+import LoadingError from '../../components/LoadingError'
 import { useGetProjects } from '../../graph/getProjects'
 import ProjectCard from './components/ProjectCard'
 
@@ -14,14 +15,7 @@ export default function Projects() {
   return (
     <ContentBlock title="Projects" cta={{ href: 'propose', text: 'Propose Project' }}>
       {isLoading && <CircularProgress />}
-      {!isLoading && error && (
-        <Box>
-          Failed to load data.{' '}
-          <Button onClick={(e) => e.preventDefault()} aria-label="retry">
-            Retry
-          </Button>
-        </Box>
-      )}
+      {!isLoading && error && <LoadingError />}
       <Box display="flex" data-testid="projects-box" sx={{ justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
         {projects &&
           projects.length > 0 &&
