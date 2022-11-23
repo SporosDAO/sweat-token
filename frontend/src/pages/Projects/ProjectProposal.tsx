@@ -6,7 +6,6 @@ import KALIDAO_ABI from '../../abi/KaliDAO.json'
 import { useParams } from 'react-router-dom'
 import { Box, TextField, Button, List, ListItem, Typography, Alert, CircularProgress } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { Navigate } from 'react-router-dom'
 import Web3SubmitDialog from '../../components/Web3SubmitDialog'
 import { useGetDAO } from '../../graph/getDAO'
 import { ErrorMessage } from '@hookform/error-message'
@@ -68,9 +67,7 @@ export default function ProjectProposal() {
   })
 
   const onFormError = (errors: any, event: any) => {
-    if (process.env.NODE_ENV === 'development') {
-      console.info({ errors, event })
-    }
+    console.info({ errors, event })
   }
 
   const onSubmit = async (data: any, e: any) => {
@@ -88,32 +85,20 @@ export default function ProjectProposal() {
     }
     if (contractReadManagerResult.isError || contractReadManagerResult.isLoading) return
 
-    let payload
     const goals = [{ goalTitle, goalLink, goalDescription }]
     const goalString = JSON.stringify(goals)
     const milliseconds = new Date(deadline).getTime()
     const dateInSecs = Math.floor(milliseconds / 1000)
-    try {
-      const abiCoder = ethers.utils.defaultAbiCoder
-      payload = abiCoder.encode(
-        ['uint256', 'address', 'uint256', 'uint256', 'string'],
-        [0, manager, ethers.utils.parseEther(budget), dateInSecs, goalString]
-      )
-    } catch (e) {
-      console.error('Error while encoding project proposal', e)
-      return
-    }
+    const abiCoder = ethers.utils.defaultAbiCoder
+    const payload = abiCoder.encode(
+      ['uint256', 'address', 'uint256', 'uint256', 'string'],
+      [0, manager, ethers.utils.parseEther(budget), dateInSecs, goalString]
+    )
 
     // https://github.com/kalidao/kali-contracts/blob/c3b25ca762f083dfe88096a7a512b33607c0ac57/contracts/KaliDAO.sol#L111
     const PROPOSAL_TYPE_EXTENSION = 9
 
-    let pmExtensionEnabled
-
-    if (contractReadExtensionResult.isSuccess) {
-      pmExtensionEnabled = contractReadExtensionResult.data
-    } else {
-      pmExtensionEnabled = await contractReadExtensionResult.refetch()
-    }
+    const pmExtensionEnabled = await contractReadExtensionResult.refetch()
 
     // if PM extension is not enabled yet, toggle it on
     const TOGGLE_EXTENSION_AVAILABILITY = pmExtensionEnabled ? 0 : 1
@@ -140,10 +125,6 @@ export default function ProjectProposal() {
 
   const onDialogClose = async () => {
     setDialogOpen(false)
-  }
-
-  if (!chainId || !daoId) {
-    return <Navigate replace to="/" />
   }
 
   return (
