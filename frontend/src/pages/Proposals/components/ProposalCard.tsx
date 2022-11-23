@@ -35,9 +35,13 @@ export default function ProposalCard(props: any) {
   }
 
   return (
-    <Card sx={{ margin: '8px', width: '48.5%', display: 'flex', flexDirection: 'column' }} raised={true}>
+    <Card
+      data-testid="proposal-card"
+      sx={{ margin: '8px', width: '48.5%', display: 'flex', flexDirection: 'column' }}
+      raised={true}
+    >
       <CardContent sx={{ flexGrow: 1 }}>
-        <Typography>#{serial}</Typography>
+        <Typography data-testid="prop-serial">#{serial}</Typography>
         <Typography gutterBottom>{description}</Typography>
         <LabeledValue label="Proposal Type">{decoratedProposalType}</LabeledValue>
         <LabeledValue label="Proposer">{proposer}</LabeledValue>

@@ -59,27 +59,33 @@ export const getProposals = async ({ chainId, daoAddress }: { chainId: number; d
  */
 export function findProcessableProposals(proposals: any[]): any[] {
   function isAvailableToProcess(proposal: any, index: number, proposals: any[]) {
+    // console.debug({ proposal })
     // unsponsored
     if (!proposal?.sponsored) {
+      // console.debug('unsponsored')
       return false
     }
     // voting not closed yet
     const now = new Date()
     const vstarts = proposal?.votingStarts
+    // console.debug('vstarts as Date:', new Date(vstarts * 1000))
     const vperiod = proposal.dao?.votingPeriod
     const vcloses = new Date(vstarts * 1000 + vperiod * 1000)
     const timeLeft = now.getTime() - vcloses.getTime()
     if (timeLeft <= 0) {
+      // console.debug('voting not closed', { now, vstarts, vperiod, vcloses, timeLeft })
       return false
     }
 
     // already processed
     if (proposal.status !== null && proposal.status !== undefined) {
+      // console.debug('already processed')
       return false
     }
 
     // if type ESCAPE then allow to process
     if (proposal.proposalType === 'ESCAPE') {
+      // console.debug('escape prop')
       return true
     }
 
@@ -87,12 +93,14 @@ export function findProcessableProposals(proposals: any[]): any[] {
     // otherwise Kali smart contract will block processing
     if (index + 1 < proposals.length && proposals[index + 1].status != null) {
       proposal.isReadyToProcessImmediately = true
+      // console.debug('ready to process')
       return true
     }
 
+    // console.debug('not ready to process')
     return false
   }
-  const availableToProcess = proposals.filter(isAvailableToProcess)
+  const availableToProcess = proposals?.filter(isAvailableToProcess)
   return availableToProcess
 }
 

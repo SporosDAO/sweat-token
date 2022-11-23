@@ -26,13 +26,17 @@ export default function Proposals() {
 
   const processable = findProcessableProposals(proposals)
   const nextProposalToProcess = processable?.length ? processable[processable.length - 1] : undefined
+  // console.debug({ processable, nextProposalToProcess })
   const navigate = useNavigate()
 
   const nextPropAction = (
     <Button
       color="inherit"
       size="small"
+      data-testid="next-prop-button"
+      variant="text"
       onClick={() => {
+        // console.debug('>>>>nextPropAction Button Clicked<<<<')
         navigate(`./${nextProposalToProcess.serial}`, { state: nextProposalToProcess })
       }}
     >
