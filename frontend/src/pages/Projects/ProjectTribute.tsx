@@ -74,18 +74,12 @@ export default function ProjectTribute() {
     const tributeString = JSON.stringify(tribute)
 
     const abiCoder = ethers.utils.defaultAbiCoder
-    let payload
-    try {
-      payload = abiCoder.encode(callArgs, [
-        projectId, // project id of the just activated project
-        contributorAddress, // address of contributor to receive DAO tokens
-        ethers.utils.parseEther(mintAmount), // mint amount in whole token units similar to Ether with 18 decimal places
-        tributeString // reference to tribute that contributor makes to DAO in exchange for DAO tokens
-      ])
-    } catch (e) {
-      console.error('Error while encoding project tribute', e)
-      return
-    }
+    const payload = abiCoder.encode(callArgs, [
+      projectId, // project id of the just activated project
+      contributorAddress, // address of contributor to receive DAO tokens
+      ethers.utils.parseEther(mintAmount), // mint amount in whole token units similar to Ether with 18 decimal places
+      tributeString // reference to tribute that contributor makes to DAO in exchange for DAO tokens
+    ])
 
     setTxInput({
       ...contractInfo,
@@ -155,6 +149,7 @@ export default function ProjectTribute() {
             <ListItem>
               <TextField
                 label="Contributor"
+                data-testid="contributor-input"
                 helperText="ETH L1/L2 address: 0x..."
                 variant="filled"
                 fullWidth
@@ -167,7 +162,7 @@ export default function ProjectTribute() {
             <ListItem>
               <TextField
                 label="Mint Amount"
-                helperText="Amount in DAO sweat tokens to mint to contributor"
+                data-testid="amount-input"
                 variant="filled"
                 type="number"
                 InputProps={{
@@ -187,6 +182,7 @@ export default function ProjectTribute() {
             <ListItem>
               <TextField
                 label="Tribute Title"
+                data-testid="title-input"
                 helperText="Describe the tribute to the project"
                 variant="filled"
                 fullWidth
@@ -198,8 +194,9 @@ export default function ProjectTribute() {
             </ListItem>
             <ListItem>
               <TextField
-                type="url"
                 label="Tribute Reference Link"
+                type="url"
+                data-testid="link-input"
                 helperText="URL referencing tribute details."
                 variant="filled"
                 fullWidth
