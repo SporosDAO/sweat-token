@@ -112,6 +112,38 @@ describe('Proposals list page', () => {
                 votingPeriod: 60 * 60 * 24 * 3, // 3 days
                 quorum: 51 // 51%
               }
+            },
+            {
+              id: 3,
+              serial: 8,
+              proposer: '0xf952a72F39c5Fa22a443200AbE7835128bCb7439',
+              proposalType: 'EXTENSION',
+              sponsored: true,
+              creationTime,
+              votingStarts,
+              status: true,
+              votes: [
+                {
+                  voter: '0xf952a72F39c5Fa22a443200AbE7835128bCb7439',
+                  weight: '2000000000000000000000',
+                  vote: true
+                },
+                {
+                  voter: '0xd0d827c41af7bf2e52d1842134d5299ba7d6efc4',
+                  weight: '1000000000000000000000',
+                  vote: false
+                }
+              ],
+              accounts: [], // unknown extension type
+              payloads: [],
+              dao: {
+                token: {
+                  symbol: 'TEST',
+                  totalSupply: '3000000000000000000000'
+                },
+                votingPeriod: 60 * 60 * 24 * 3, // 3 days
+                quorum: 51 // 51%
+              }
             }
           ],
           isSuccess: true
@@ -125,11 +157,16 @@ describe('Proposals list page', () => {
       })
     })
     const propCards = await screen.findAllByTestId('proposal-card')
-    await expect(propCards.length).toBe(2)
+    await expect(propCards.length).toBe(3)
     const serial6 = await within(propCards[0]).findByTestId('prop-serial')
     await expect(await within(serial6).findByText(/#\s*6/i)).toBeVisible()
+    await expect(await within(propCards[0]).findByText(/NEW PROJECT/i)).toBeVisible()
     const serial7 = await within(propCards[1]).findByTestId('prop-serial')
     await expect(await within(serial7).findByText(/#\s*7/i)).toBeVisible()
+    await expect(await within(propCards[1]).findByText(/NEW PROJECT/i)).toBeVisible()
+    const serial8 = await within(propCards[2]).findByTestId('prop-serial')
+    await expect(await within(serial8).findByText(/#\s*8/i)).toBeVisible()
+    await expect(await within(propCards[2]).findByText(/UNKNOWN EXTENSION/i)).toBeVisible()
   })
 
   it('shows next proposal ready to process and handles its button', async () => {
@@ -247,6 +284,12 @@ describe('Proposals list page', () => {
       await user.click(nextPropButton)
     })
     await expect(mockNavigate).toBeCalledTimes(1)
+    await expect(mockNavigate).toHaveBeenCalledWith('./6', expect.anything())
+    const propDetailsBtn = await within(propCards[0]).findByTestId('prop-details-button')
+    await act(async () => {
+      await user.click(propDetailsBtn)
+    })
+    await expect(mockNavigate).toBeCalledTimes(2)
     await expect(mockNavigate).toHaveBeenCalledWith('./6', expect.anything())
   })
 

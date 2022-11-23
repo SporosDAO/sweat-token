@@ -30,8 +30,6 @@ export default function ProposalCard(props: any) {
     } else {
       decoratedProposalType = 'UNKNOWN EXTENSION'
     }
-  } else if (proposalType !== 'MINT' && proposalType !== 'ESCAPE') {
-    decoratedProposalType = 'UNKNOWN'
   }
 
   return (
@@ -70,6 +68,7 @@ export default function ProposalCard(props: any) {
         {knownProposalType ? (
           <Button
             variant="text"
+            data-testid="prop-details-button"
             endIcon={<MoreVert />}
             onClick={() => {
               navigate(`./${serial}`, { state: proposal })
