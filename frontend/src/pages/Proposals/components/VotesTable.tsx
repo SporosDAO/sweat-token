@@ -13,7 +13,7 @@ function VoterRow(props: { voter: string; weight: number; vote: boolean }) {
   let votingTokensFormatted: any = Number(ethers.utils.formatEther(weight))
   votingTokensFormatted = new Intl.NumberFormat().format(votingTokensFormatted)
 
-  console.debug('VoterRow', { props })
+  // console.debug('VoterRow', { props })
 
   return (
     <TableRow key={voter} {...otherProps}>

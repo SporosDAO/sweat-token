@@ -71,7 +71,7 @@ export default function ProjectProposal() {
   }
 
   const onSubmit = async (data: any, e: any) => {
-    console.debug({ data })
+    // console.debug({ data })
     const { manager, budget, deadline, goalTitle, goalDescription, goalLink } = data
     setProposedManagerAddress(manager)
     try {

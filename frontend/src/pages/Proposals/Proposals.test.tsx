@@ -272,7 +272,6 @@ describe('Proposals list page', () => {
     await expect(loadingError).toBeVisible()
   })
 
-
   it('handles DAOs without proposals', async () => {
     jest
       .spyOn(getProposals, 'useGetProposals')
@@ -281,7 +280,7 @@ describe('Proposals list page', () => {
           data: [],
           isSuccess: true,
           isError: false,
-          isLoading: false,
+          isLoading: false
         } as any
         return propData
       })

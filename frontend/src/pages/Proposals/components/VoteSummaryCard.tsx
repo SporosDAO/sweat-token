@@ -37,7 +37,7 @@ export default function VoteSummaryCard(props: { proposal: any }) {
   const votingStartsString = new Date(Number(votingStarts) * 1000).toLocaleString()
   const voteDeadline = new Date((Number(votingStarts) + Number(votingPeriod)) * 1000)
   const voteDeadlineString = voteDeadline.toLocaleString()
-  console.debug({ voteDeadline, voteDeadlineString, votingStarts, votingPeriod })
+  // console.debug({ voteDeadline, voteDeadlineString, votingStarts, votingPeriod })
   const isExpired = voteDeadline < new Date()
   const votesFor = votes?.reduce(
     (result: any, item: { vote: any; weight: any }) =>

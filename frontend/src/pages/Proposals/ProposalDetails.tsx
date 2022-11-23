@@ -15,7 +15,7 @@ export default function ProposalDetails() {
   const { chainId, daoId, serial } = useParams()
   const cid = Number(chainId)
   const location = useLocation()
-  console.debug({ location })
+  // console.debug({ location })
   const { isReadyToProcessImmediately } = (location?.state as any) || {}
 
   // fetch fresh proposal data every few seconds
@@ -33,7 +33,7 @@ export default function ProposalDetails() {
     proposal.isReadyToProcessImmediately = isReadyToProcessImmediately
   }
 
-  console.debug({ proposal })
+  // console.debug({ proposal })
 
   const { proposer, proposalType, votes, accounts, payloads, dao } = proposal || {}
   const { token } = dao || {}
@@ -50,7 +50,7 @@ export default function ProposalDetails() {
     isProjectProposal = true
   }
 
-  console.log({ proposalType })
+  // console.debug({ proposalType })
 
   let manager, budgetE18, dateInSecs, goalString
 
