@@ -7,9 +7,9 @@ import CircularProgressWithLabel from '../../../components/CircularProgressWithL
 import LabeledValue from '../../../components/LabeledValue'
 import LinearProgressWithLabel from '../../../components/LinearProgressWithLabel'
 import Web3SubmitDialog from '../../../components/Web3SubmitDialog'
-import { addresses } from '../../../constants/addresses'
 import KALIDAO_ABI from '../../../abi/KaliDAO.json'
 import { useAccount } from 'wagmi'
+import { knownProposalType } from '../proposalHelpers'
 
 export default function VoteSummaryCard(props: { proposal: any }) {
   const { chainId, daoId } = useParams()
@@ -54,18 +54,7 @@ export default function VoteSummaryCard(props: { proposal: any }) {
   const quorumVotesRequired = (quorum * totalSupplyFormatted) / 100
   const quorumProgress = votesTotal >= quorumVotesRequired ? 100 : (votesTotal * 100) / quorumVotesRequired
 
-  const PM_CONTRACT = addresses[cid]['extensions']['projectmanagement']
-
-  let knownProposalType = true
-
-  if (proposalType === 'EXTENSION') {
-    if (accounts?.length && accounts[0] === PM_CONTRACT) {
-    } else {
-      knownProposalType = false
-    }
-  } else if (proposalType !== 'MINT') {
-    knownProposalType = false
-  }
+  const { isKnown } = knownProposalType({ proposalType, accounts })
 
   // Web3SubmitDialog state vars
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -115,7 +104,7 @@ export default function VoteSummaryCard(props: { proposal: any }) {
 
   const { address, isConnected } = useAccount()
   const canVote: boolean = useMemo(() => {
-    if (!knownProposalType || isExpired) return false
+    if (!isKnown || isExpired) return false
     if (isConnected) {
       const userVoted = votes?.reduce(
         (result: boolean, item: { voter: string }) => result || item.voter === address,
@@ -125,7 +114,7 @@ export default function VoteSummaryCard(props: { proposal: any }) {
     } else {
       return false
     }
-  }, [votes, isExpired, knownProposalType, isConnected, address])
+  }, [votes, isExpired, isKnown, isConnected, address])
 
   return (
     <Card sx={{ margin: '8px' }} {...otherProps}>

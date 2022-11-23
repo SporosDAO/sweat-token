@@ -3,7 +3,7 @@ import { Button, Card, CardActions, CardContent, Typography, Box } from '@mui/ma
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import LabeledValue from '../../../components/LabeledValue'
-import { addresses } from '../../../constants/addresses'
+import { knownProposalType } from '../proposalHelpers'
 
 export default function ProposalCard(props: any) {
   const { chainId, daoId } = useParams()
@@ -17,20 +17,7 @@ export default function ProposalCard(props: any) {
 
   const navigate = useNavigate()
 
-  const cid = Number(chainId)
-  const pmAddress = addresses[cid]['extensions']['projectmanagement']
-
-  let decoratedProposalType = proposalType
-  let knownProposalType = false
-
-  if (proposalType === 'EXTENSION') {
-    if (accounts?.length && accounts[0] === pmAddress) {
-      decoratedProposalType = 'NEW PROJECT'
-      knownProposalType = true
-    } else {
-      decoratedProposalType = 'UNKNOWN EXTENSION'
-    }
-  }
+  const { isKnown, label: decoratedProposalType } = knownProposalType({ proposalType, accounts })
 
   return (
     <Card
@@ -65,7 +52,7 @@ export default function ProposalCard(props: any) {
         )}
       </CardContent>
       <CardActions sx={{ justifyContent: 'space-between' }}>
-        {knownProposalType ? (
+        {isKnown ? (
           <Button
             variant="text"
             data-testid="prop-details-button"
