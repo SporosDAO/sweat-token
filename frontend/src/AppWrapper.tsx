@@ -25,7 +25,7 @@ export function AppWrapper({ children }: { children: ReactNode }) {
   const queryClient = new QueryClient()
 
   return (
-    <>
+    <React.StrictMode>
       <ServiceWorkerWrapper />
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
@@ -38,7 +38,7 @@ export function AppWrapper({ children }: { children: ReactNode }) {
           </ToastProvider>
         </BrowserRouter>
       </QueryClientProvider>
-    </>
+    </React.StrictMode>
   )
 }
 
