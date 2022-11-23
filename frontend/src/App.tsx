@@ -9,10 +9,6 @@ import ProjectProposal from './pages/Projects/ProjectProposal'
 import ProjectTribute from './pages/Projects/ProjectTribute'
 
 function App() {
-  React.useEffect(() => {
-    console.log('mounted App')
-  }, [])
-
   return (
     <Routes>
       <Route path="/" element={<Landing />} />

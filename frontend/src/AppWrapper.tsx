@@ -6,32 +6,17 @@ import { Web3ContextProvider } from './context/Web3Context'
 import { ServiceWorkerWrapper } from './components/PWAUpdate'
 
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { Chain, Client } from 'wagmi'
 import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { getDesignTokens } from './theme'
 
-export function AppWrapper({
-  wagmiClient,
-  chains,
-  initialChain,
-  children
-}: {
-  wagmiClient?: Client
-  chains?: Chain[]
-  initialChain?: Chain
-  children: ReactNode
-}) {
+export function AppWrapper({ children }: { children: ReactNode }) {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
   const [mode, setMode] = React.useState('light')
 
   React.useEffect(() => {
     setMode(prefersDarkMode ? 'dark' : 'light')
   }, [prefersDarkMode])
-
-  React.useEffect(() => {
-    console.log('mounted  AppWrapper')
-  }, [])
 
   let theme = React.useMemo(() => createTheme(getDesignTokens(mode) as any), [mode])
 
@@ -45,7 +30,7 @@ export function AppWrapper({
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <ToastProvider>
-            <Web3ContextProvider wagmiClient={wagmiClient} chains={chains} initialChain={initialChain}>
+            <Web3ContextProvider>
               <PageProvider>
                 <ThemeProvider theme={theme}>{children}</ThemeProvider>
               </PageProvider>
