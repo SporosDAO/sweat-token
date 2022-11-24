@@ -37,8 +37,9 @@ export default function VoteSummaryCard(props: { proposal: any }) {
   const votingStartsString = new Date(Number(votingStarts) * 1000).toLocaleString()
   const voteDeadline = new Date((Number(votingStarts) + Number(votingPeriod)) * 1000)
   const voteDeadlineString = voteDeadline.toLocaleString()
-  // console.debug({ voteDeadline, voteDeadlineString, votingStarts, votingPeriod })
-  const isExpired = voteDeadline < new Date()
+  const now = new Date()
+  const isExpired = voteDeadline < now
+  // console.debug({ isExpired, now, voteDeadline, voteDeadlineString, votingStarts, votingPeriod })
   const votesFor = votes?.reduce(
     (result: any, item: { vote: any; weight: any }) =>
       result + Number(item.vote ? ethers.utils.formatEther(item.weight) : 0),
@@ -104,17 +105,17 @@ export default function VoteSummaryCard(props: { proposal: any }) {
 
   const { address, isConnected } = useAccount()
   const canVote: boolean = useMemo(() => {
-    if (!isKnown || isExpired) return false
-    if (isConnected) {
+    if (isKnown && !isExpired && isConnected) {
       const userVoted = votes?.reduce(
         (result: boolean, item: { voter: string }) => result || item.voter === address,
         false
       )
       return !userVoted
-    } else {
-      return false
     }
+    return false
   }, [votes, isExpired, isKnown, isConnected, address])
+
+  // console.debug({ canVote, votes, isExpired, isKnown, isConnected, address })
 
   return (
     <Card sx={{ margin: '8px' }} {...otherProps}>
@@ -194,16 +195,34 @@ export default function VoteSummaryCard(props: { proposal: any }) {
       <CardActions sx={{ justifyContent: 'space-between' }}>
         {canVote && (
           <Box sx={{ mr: 1 }}>
-            <Button variant="contained" endIcon={<ThumbUp />} sx={{ m: 1 }} onClick={onVoteFor}>
+            <Button
+              data-testid="for-button"
+              variant="contained"
+              endIcon={<ThumbUp />}
+              sx={{ m: 1 }}
+              onClick={onVoteFor}
+            >
               For
             </Button>
-            <Button variant="contained" endIcon={<ThumbDown />} sx={{ mr: 1 }} onClick={onVoteAgainst}>
+            <Button
+              data-testid="against-button"
+              variant="contained"
+              endIcon={<ThumbDown />}
+              sx={{ mr: 1 }}
+              onClick={onVoteAgainst}
+            >
               Against
             </Button>
           </Box>
         )}
-        {isReadyToProcessImmediately && (
-          <Button variant="contained" endIcon={<PlayArrow />} sx={{ m: 1 }} onClick={onProcess}>
+        {isReadyToProcessImmediately && isConnected && isKnown && (
+          <Button
+            data-testid="process-button"
+            variant="contained"
+            endIcon={<PlayArrow />}
+            sx={{ m: 1 }}
+            onClick={onProcess}
+          >
             Process
           </Button>
         )}
