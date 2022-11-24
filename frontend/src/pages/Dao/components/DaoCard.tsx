@@ -60,6 +60,7 @@ export default function DaoCard(props: any) {
         </Button>
         <Button
           variant="text"
+          color="secondary"
           data-testid={`kali-link-${dao.id}`}
           endIcon={<Launch />}
           href={`https://app.kali.gg/daos/${chain.id}/${dao.address}`}

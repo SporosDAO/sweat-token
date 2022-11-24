@@ -106,11 +106,11 @@ describe('useGetProjects hook', () => {
 
   it('reports contract read errors', async () => {
     jest.spyOn(console, 'error')
-    jest.spyOn(wagmi, `useContractRead`).mockImplementation(({ onError }: { onError?: any }) => {
+    jest.spyOn(wagmi, `useContractRead`).mockImplementation(({ onError }: any) => {
       onError('useContractReads')
       return { data: 101 } as any
     })
-    jest.spyOn(wagmi, `useContractReads`).mockImplementation(({ onError }: { onError?: any }) => {
+    jest.spyOn(wagmi, `useContractReads`).mockImplementation(({ onError }: any) => {
       onError('useContractReads')
       return {
         data: [],

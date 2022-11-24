@@ -1,14 +1,14 @@
 import { Card, CardContent, Typography, ListItem } from '@mui/material'
-import { useEnsName, useEnsAvatar } from 'wagmi'
+import { useEnsName, useEnsAvatar, chain } from 'wagmi'
 import { ethers } from 'ethers'
 
 export default function PersonCard(props: any) {
   const { person, tokenTotalSupply } = props
   const { address, shares } = person
 
-  const ensNameResult = useEnsName({ address: address, chainId: Number(1), cacheTime: 60_000 })
+  const ensNameResult = useEnsName({ address: address, chainId: chain.mainnet.id, cacheTime: 60_000 })
   const ensName = !ensNameResult.isError && !ensNameResult.isLoading ? ensNameResult.data : ''
-  const ensAvatarResult = useEnsAvatar({ addressOrName: address, chainId: Number(1), cacheTime: 60_000 })
+  const ensAvatarResult = useEnsAvatar({ addressOrName: address, chainId: chain.mainnet.id, cacheTime: 60_000 })
   const ensAvatar = !ensAvatarResult.isError && !ensAvatarResult.isLoading ? ensAvatarResult.data : ''
 
   return (
