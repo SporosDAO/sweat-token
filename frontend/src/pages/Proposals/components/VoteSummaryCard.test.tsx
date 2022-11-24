@@ -1,4 +1,4 @@
-import { act, screen, render, waitFor, fireEvent, userEvent, within } from '../../../../test'
+import { act, screen, render, waitFor, userEvent, within } from '../../../../test'
 import * as reactDom from 'react-router-dom'
 import VoteSummaryCard from './VoteSummaryCard'
 import * as wagmi from 'wagmi'
