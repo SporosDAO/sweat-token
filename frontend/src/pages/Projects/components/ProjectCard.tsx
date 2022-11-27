@@ -21,8 +21,7 @@ export default function ProjectCard(props: any) {
   const deadlineString = deadline.toUTCString()
   const isExpired = deadline < new Date()
   const { address: userAddress } = useAccount()
-  //const isManager = userAddress === manager
-  const isManager = true
+  const isManager = userAddress === manager
 
   const handleTributeClick = () => {
     navigate(`${project['projectID']}/tribute`, { state: project })
