@@ -1,0 +1,20 @@
+name: "Build and test contracts"
+
+on:
+  push:
+    paths:
+      - contracts/**
+  pull_request:
+    paths:
+      - contracts/**
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run contracts tests
+        run: |
+          yarn install
+          yarn build
+          yarn coverage
+        working-directory: ./contracts
