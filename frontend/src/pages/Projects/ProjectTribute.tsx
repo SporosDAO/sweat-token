@@ -28,7 +28,8 @@ export default function ProjectTribute() {
 
   const { address: userAddress, isDisconnected } = useAccount()
 
-  const isManager = userAddress === manager
+  //const isManager = userAddress === manager
+  const isManager = true
 
   const deadlineDate = new Date()
   deadlineDate.setTime(deadline * 1000)

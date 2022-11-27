@@ -15,8 +15,8 @@ function App() {
       <Route path="dao/chain/:chainId/address/:daoId" element={<Dao />}>
         <Route path="projects" element={<Projects />}></Route>
         <Route path="projects/propose" element={<ProjectProposal />}></Route>
-        <Route path="projects/:projectId" element={<ProjectDetails />}></Route>
         <Route path="projects/:projectId/tribute" element={<ProjectTribute />}></Route>
+        <Route path="projects/:projectId" element={<ProjectDetails />}></Route>
         <Route path="people" element={<People />} />
       </Route>
       <Route path="*" element={<NotFound />} />

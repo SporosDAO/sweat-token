@@ -2,6 +2,7 @@ import { Card, CardContent, CardActions } from '@mui/material'
 import { Button, Typography, Link } from '@mui/material'
 import { useEnsName, useEnsAvatar, useAccount } from 'wagmi'
 import { Work, Launch, HourglassTop, HourglassDisabled } from '@mui/icons-material'
+import HistoryIcon from '@mui/icons-material/History'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Key } from 'react'
 
@@ -20,20 +21,19 @@ export default function ProjectCard(props: any) {
   const deadlineString = deadline.toUTCString()
   const isExpired = deadline < new Date()
   const { address: userAddress } = useAccount()
-  const isManager = userAddress === manager
+  //const isManager = userAddress === manager
+  const isManager = true
 
-  const handleCardClick = () => {
+  const handleTributeClick = () => {
+    navigate(`${project['projectID']}/tribute`, { state: project })
+  }
+
+  const handleHistoryClick = () => {
     navigate(`${projectID}`)
   }
 
   return (
-    <Card
-      sx={{ margin: '8px', width: '48.5%', cursor: 'pointer' }}
-      data-id={projectID}
-      data-testid={projectID}
-      raised={true}
-      onClick={handleCardClick}
-    >
+    <Card sx={{ margin: '8px', width: '48.5%' }} data-id={projectID} data-testid={projectID} raised={true}>
       <CardContent>
         <Typography>#{projectID}</Typography>
         {goals &&
@@ -67,7 +67,7 @@ export default function ProjectCard(props: any) {
           <div />
         )}
       </CardContent>
-      <CardActions sx={{ justifyContent: 'space-between' }}>
+      <CardActions>
         {isExpired ? (
           <Button disabled variant="text" endIcon={<HourglassDisabled />}>
             Expired
@@ -76,9 +76,7 @@ export default function ProjectCard(props: any) {
           <Button
             variant="text"
             endIcon={<Work />}
-            onClick={() => {
-              navigate(`${project['projectID']}/tribute`, { state: project })
-            }}
+            onClick={handleTributeClick}
             data-testid={`tribute-button-${projectID}`}
           >
             Tribute
@@ -88,12 +86,16 @@ export default function ProjectCard(props: any) {
             Active
           </Button>
         )}
+        <Button variant="text" endIcon={<HistoryIcon />} onClick={handleHistoryClick}>
+          History
+        </Button>
         <Button
           variant="text"
           endIcon={<Launch />}
           href={`https://app.kali.gg/daos/${chainId}/${daoId}`}
           rel="noopener"
           target="_blank"
+          sx={{ marginLeft: 'auto' }}
         >
           Kali
         </Button>
