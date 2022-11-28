@@ -57,7 +57,7 @@ describe('Proposal Details Page', () => {
           const propData = {
             data: {
               id: daoAddress,
-              serial: 6,
+              serial: proposalSerial,
               proposer: '0xf952a72F39c5Fa22a443200AbE7835128bCb7439',
               proposalType: 'EXTENSION',
               sponsored: true,

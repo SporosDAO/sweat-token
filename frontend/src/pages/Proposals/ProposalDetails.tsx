@@ -33,7 +33,7 @@ export default function ProposalDetails() {
     proposal.isReadyToProcessImmediately = isReadyToProcessImmediately
   }
 
-  // console.debug({ proposal })
+  // console.debug({ cid, daoId, serial, proposal })
 
   const { proposer, proposalType, votes, accounts, payloads, dao } = proposal || {}
   const { token } = dao || {}
@@ -50,7 +50,7 @@ export default function ProposalDetails() {
     isProjectProposal = true
   }
 
-  // console.debug({ proposalType })
+  // console.debug({ isProjectProposal, proposalType, accounts })
 
   let manager, budgetE18, dateInSecs, goalString
 
