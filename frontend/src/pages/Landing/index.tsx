@@ -1,19 +1,28 @@
-import ContentBlock from '../../components/ContentBlock'
+import { useEffect, useState } from 'react'
 import MyDAOs from '../Dao/components/MyDAOs'
+import ContentBlock from '../../components/ContentBlock'
 import { PageLayout } from '../../layout/Page'
 
-export default function Landing() {
+const Landing: React.FC = () => {
+  const [loading, setLoading] = useState(false)
+  const [failed] = useState(false)
+
+  useEffect(() => {
+    if (loading) return
+    if (failed) return
+    setLoading(true)
+  }, [failed, loading])
+
   return (
     <PageLayout withDrawer={false}>
-      <ContentBlock title="Your DAOs" /* cta={{ href: 'create-dao', text: 'Create a new DAO' }} */ sx={{ p: 2 }}>
+      <ContentBlock>
+        <h1>The Launchpad of For-Profit DAOs</h1>
+      </ContentBlock>
+      <ContentBlock title="Your DAOs" cta={{ href: 'dao', text: 'Create a new DAO' }}>
         <MyDAOs />
       </ContentBlock>
-<<<<<<< HEAD
-      <ContentBlock title="Your DAOs" cta={{ href: 'create-dao', text: 'Create a new DAO' }}>
-        <MyDAOs />
-      </ContentBlock>
-=======
->>>>>>> dbe81aefa88bd00a37bb7c9747521a4dc84a626f
     </PageLayout>
   )
 }
+
+export default Landing

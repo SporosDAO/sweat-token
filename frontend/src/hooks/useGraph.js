@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { request } from 'graphql-request'
-import { GRAPH_URL } from '../../graph'
+import { GRAPH_URL } from '../graph'
 
-export const useGraph = (chainId, query, variables) => {
+const useGraph = (chainId, query, variables) => {
   const [data, setData] = useState()
   const isLoading = data ? false : true
 
@@ -19,3 +19,5 @@ export const useGraph = (chainId, query, variables) => {
 
   return { data, isLoading }
 }
+
+export default useGraph
