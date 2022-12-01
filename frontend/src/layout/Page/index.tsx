@@ -9,7 +9,7 @@ import Link from '@mui/material/Link'
 import List from '@mui/material/List'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
-import { ReactNode, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { OWNER } from '../../constants'
 import { MainMenuItems, DaoMenuItems, SecondaryMenuItems } from '../../context/PageContext'
@@ -86,25 +86,40 @@ export function PageLayout(props: PageLayoutProps) {
   const theme = useTheme()
 
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-  const [open, setOpen] = useState(props.withDrawer !== false && !isMobile)
+
+  const shouldOpen = props.withDrawer !== false && !isMobile
+
+  const [open, setOpen] = useState(shouldOpen)
 
   const { chainId, daoId } = useParams()
-  const { data: myDao, isSuccess: isMyDaoLoaded } = useGetDAO(chainId, daoId)
+  const cid = Number(chainId)
+  const daoResult = useGetDAO(cid, daoId)
+  const { data: myDao, isSuccess: isMyDaoLoaded } = daoResult
 
   const toggleDrawer = () => {
     setOpen(!open)
   }
 
+  useEffect(() => {
+    setOpen(shouldOpen)
+  }, [shouldOpen])
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="absolute" open={open}>
+      <AppBar
+        position="absolute"
+        open={open}
+        sx={{
+          bgcolor: 'background.paper',
+          opacity: 0.8
+        }}
+      >
         <Toolbar
           sx={{
             pr: '24px' // keep right padding when drawer closed
           }}
         >
-          <Avatar alt="Sporos DAO logo" src="/logo192.png" />
           {props.withDrawer !== false ? (
             <IconButton
               edge="start"
@@ -120,6 +135,12 @@ export function PageLayout(props: PageLayoutProps) {
             </IconButton>
           ) : (
             <></>
+          )}
+          <Avatar alt="Sporos DAO logo" src="/logo192.png" sx={{ width: '32px', height: '32px' }} />
+          {!isMobile && (
+            <Typography variant="subtitle1" fontWeight={600} noWrap sx={{ ml: 2 }}>
+              Sporos DAO - The Launchpad of For-Profit DAOs
+            </Typography>
           )}
           <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1, ml: 2 }}>
             {isMyDaoLoaded && myDao?.token && `${myDao?.token?.name} (${myDao?.token?.symbol})`}
@@ -142,9 +163,11 @@ export function PageLayout(props: PageLayoutProps) {
               px: [1]
             }}
           >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
+            {open && (
+              <IconButton onClick={toggleDrawer}>
+                <ChevronLeftIcon />
+              </IconButton>
+            )}
           </Toolbar>
           <Divider />
           <List component="nav">
@@ -169,7 +192,7 @@ export function PageLayout(props: PageLayoutProps) {
         }}
       >
         <Toolbar />
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
           {props.children}
           <Copyright sx={{ pt: 4 }} />
         </Container>

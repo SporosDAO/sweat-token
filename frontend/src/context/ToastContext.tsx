@@ -11,10 +11,10 @@ interface ToastContextType {
   showToast: (msg: string, type?: AlertColor) => void
 }
 
-const ToastContext = React.createContext<ToastContextType>({} as ToastContextType)
+export const ToastContext = React.createContext<ToastContextType>({} as ToastContextType)
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
+  return <MuiAlert data-testid="toast-alert" elevation={6} ref={ref} variant="filled" {...props} />
 })
 
 export function ToastProvider({ children }: { children: React.ReactNode }): JSX.Element {
@@ -22,9 +22,6 @@ export function ToastProvider({ children }: { children: React.ReactNode }): JSX.
   const [open, setOpen] = React.useState<boolean>(false)
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return
-    }
     setOpen(false)
   }
 
@@ -44,13 +41,14 @@ export function ToastProvider({ children }: { children: React.ReactNode }): JSX.
         <Snackbar
           open={open}
           autoHideDuration={5000}
-          onClose={handleClose}
+          data-testid="toast-snackbar"
+          onClick={handleClose}
           anchorOrigin={{
             vertical: 'top',
             horizontal: 'center'
           }}
         >
-          <Alert onClose={handleClose} severity={toastMessage.type} sx={{ width: '100%' }}>
+          <Alert onClick={handleClose} severity={toastMessage.type} sx={{ width: '100%' }}>
             {toastMessage.message}
           </Alert>
         </Snackbar>

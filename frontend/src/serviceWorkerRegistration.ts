@@ -133,7 +133,7 @@ export function unregister() {
         registration.unregister()
       })
       .catch((error) => {
-        console.error(error.message)
+        console.error('Service Worker Unregister Error: ', error.message)
       })
   }
 }

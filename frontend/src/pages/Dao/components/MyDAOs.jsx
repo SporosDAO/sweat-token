@@ -16,11 +16,16 @@ export function useGetUserDAOs(chainId, userAddress) {
 
 export default function MyDAOs() {
   const { chain } = useNetwork()
+<<<<<<< HEAD
   const { address, isConnecting, isDisconnected } = useAccount()
+=======
+  const { address, isConnecting, isConnected, isDisconnected } = useAccount()
+>>>>>>> dbe81aefa88bd00a37bb7c9747521a4dc84a626f
   const { data, isLoading, isSuccess } = useGetUserDAOs(chain?.id, address)
 
   const daos = isSuccess ? data?.['members'] : []
 
+<<<<<<< HEAD
   console.debug({
     daos
   })
@@ -28,6 +33,13 @@ export default function MyDAOs() {
   return (
     <>
       {isLoading ? (
+=======
+  return (
+    <>
+      {!chain || isDisconnected ? (
+        <div>Please connect your web3 wallet.</div>
+      ) : isLoading ? (
+>>>>>>> dbe81aefa88bd00a37bb7c9747521a4dc84a626f
         <div>
           <span>Loading list of DAOs</span>
           <CircularProgress />
@@ -37,9 +49,13 @@ export default function MyDAOs() {
           <span>Connecting to your web3 wallet...</span>
           <CircularProgress />
         </div>
+<<<<<<< HEAD
       ) : isDisconnected ? (
         <div>Please connect your web3 wallet.</div>
       ) : daos && daos.length > 0 ? (
+=======
+      ) : isConnected && daos && daos.length > 0 ? (
+>>>>>>> dbe81aefa88bd00a37bb7c9747521a4dc84a626f
         daos.map((dao) => <DaoCard key={dao.dao.id} dao={dao.dao} chain={chain} />)
       ) : (
         <div>You are not participating in any for-profit (Sporos-style) DAOs on chain: {chain.name}.</div>

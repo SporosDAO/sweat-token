@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 export default function DaoCard(props: any) {
   const { dao, chain } = props
 
-  console.log({ dao, chain }, dao.id, dao.address, dao.birth)
+  // console.log({ dao, chain }, dao.id, dao.address, dao.birth)
 
   const ensNameResult = useEnsName({ address: dao.address, chainId: Number(1), cacheTime: 60_000 })
   const ensName = !ensNameResult.isError && !ensNameResult.isLoading ? ensNameResult.data : ''
@@ -19,6 +19,7 @@ export default function DaoCard(props: any) {
   return (
     <Card sx={{ margin: '8px', width: '48.5%' }} data-testid={dao['address']} raised={true}>
       <CardActionArea
+        data-testid={`projects-link-${dao.id}`}
         onClick={() => {
           navigate(`dao/chain/${chain.id}/address/${dao['address']}/projects/`)
         }}
@@ -49,6 +50,7 @@ export default function DaoCard(props: any) {
       <CardActions sx={{ justifyContent: 'space-between' }}>
         <Button
           variant="text"
+          data-testid={`projects-link-${dao.id}`}
           endIcon={<ReadMore />}
           onClick={() => {
             navigate(`dao/chain/${chain.id}/address/${dao.address}/projects/`)
@@ -58,6 +60,8 @@ export default function DaoCard(props: any) {
         </Button>
         <Button
           variant="text"
+          color="secondary"
+          data-testid={`kali-link-${dao.id}`}
           endIcon={<Launch />}
           href={`https://app.kali.gg/daos/${chain.id}/${dao.address}`}
           rel="noopener"

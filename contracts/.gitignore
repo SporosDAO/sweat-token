@@ -17,3 +17,5 @@ deployments
 
 # loval dotenv files
 .env.local
+
+yarn-error.log

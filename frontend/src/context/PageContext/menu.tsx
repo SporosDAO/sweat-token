@@ -1,4 +1,11 @@
-import { Factory, Help, Home, MenuBook, People } from '@mui/icons-material'
+import {
+  ThumbUpOutlined,
+  FolderOutlined,
+  HelpOutlined,
+  HomeOutlined,
+  MenuBookOutlined,
+  HowToRegOutlined
+} from '@mui/icons-material'
 import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 import * as React from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
@@ -10,7 +17,7 @@ export const MainMenuItems = () => {
     <React.Fragment>
       <ListItemButton data-testid="home-button" onClick={() => navigate('/')}>
         <ListItemIcon>
-          <Home />
+          <HomeOutlined />
         </ListItemIcon>
         <ListItemText primary="Home" />
       </ListItemButton>
@@ -49,13 +56,19 @@ export const menu: DaoMenuItem[] = [
   */
   {
     label: 'Projects',
-    icon: Factory,
+    icon: FolderOutlined,
     link: 'projects/',
     dataCy: 'projects-button'
   },
   {
-    label: 'People',
-    icon: People,
+    label: 'Proposals',
+    icon: ThumbUpOutlined,
+    link: 'proposals/',
+    dataCy: 'proposals-button'
+  },
+  {
+    label: 'Members',
+    icon: HowToRegOutlined,
     link: 'people/',
     dataCy: 'people-button'
   }
@@ -95,15 +108,15 @@ export const SecondaryMenuItems = () => {
     <React.Fragment>
       <ListItemButton href={OWNER.docsUrl} rel="noopener" target="_blank">
         <ListItemIcon>
-          <MenuBook />
+          <MenuBookOutlined />
         </ListItemIcon>
         <ListItemText primary="Docs" />
       </ListItemButton>
       <ListItemButton href={OWNER.helpUrl} rel="noopener" target="_blank">
         <ListItemIcon>
-          <Help />
+          <HelpOutlined />
         </ListItemIcon>
-        <ListItemText primary="Help" />
+        <ListItemText data-testid="help-link" primary="Help" />
       </ListItemButton>
     </React.Fragment>
   )

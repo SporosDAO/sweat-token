@@ -1,27 +1,16 @@
-import { createTheme } from '@mui/material'
+import { green } from '@mui/material/colors'
 
-export const darkTheme = createTheme({
-  palette: {
-    mode: 'dark'
-  },
-  typography: {
-    allVariants: {
-      fontFamily: ['Roboto'].join(','),
-      fontSize: 15
-    }
-  },
-  components: {
-    MuiCssBaseline: {
-      styleOverrides: `
-        @font-face {
-          font-family: Roboto
-        }`
-    }
-  }
-})
+// Uses MUIv5 Theme API
 
-export const lightTheme = createTheme({
+export const getDesignTokens = (mode: string) => ({
   palette: {
-    mode: 'light'
+    mode,
+    ...(mode === 'light'
+      ? {
+          primary: green
+        }
+      : {
+          primary: green
+        })
   }
 })
