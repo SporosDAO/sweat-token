@@ -18,7 +18,7 @@ const Landing: React.FC = () => {
       <ContentBlock>
         <h1>The Launchpad of For-Profit DAOs</h1>
       </ContentBlock>
-      <ContentBlock title="Your DAOs" cta={{ href: 'dao', text: 'Create a new DAO' }}>
+      <ContentBlock title="Your DAOs" cta={{ href: 'dao/create', text: 'Create a new DAO' }}>
         <MyDAOs />
       </ContentBlock>
     </PageLayout>

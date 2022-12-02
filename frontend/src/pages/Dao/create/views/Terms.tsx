@@ -2,7 +2,7 @@ import Checkbox from '@mui/material/Checkbox'
 import Typography from '@mui/material/Typography'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
-import Header from '../components/Header'
+import Header from '../../components/Header'
 import { useTheme } from '@mui/material'
 import { Controller } from 'react-hook-form'
 

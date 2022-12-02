@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 
-import Header from '../components/Header'
+import Header from '../../components/Header'
 
 const Name: React.FC<any> = (props) => (
   <>

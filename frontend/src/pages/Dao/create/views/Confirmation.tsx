@@ -5,9 +5,9 @@ import Divider from '@mui/material/Divider'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 
-import Header from '../components/Header'
+import Header from '../../components/Header'
 import { useTheme } from '@mui/material'
-import { AlertIcon, CheckIcon } from '../../../components/Icons'
+import { AlertIcon, CheckIcon } from '../../../../components/Icons'
 
 const Confirmation: React.FC<any> = (props) => {
   const { name, symbol, founders } = props.getValues()

@@ -13,9 +13,9 @@ import Terms from './views/Terms'
 import Founder from './views/Founder'
 import Payment from './views/Payment'
 import Confirmation from './views/Confirmation'
-import { DaoLayout } from '../../layout/dao-layout'
-import { a11yProps, TabPanel } from './components/TabPanel'
-import { ArrowRight, HelpIcon } from '../../components/Icons'
+import { DaoLayout } from '../../../layout/dao-layout'
+import { a11yProps, TabPanel } from '../components/TabPanel'
+import { ArrowRight, HelpIcon } from '../../../components/Icons'
 
 enum View {
   Name,
@@ -25,7 +25,7 @@ enum View {
   Payment
 }
 
-const Create: React.FC = () => {
+export default function DaoCreateStepper() {
   const { handleSubmit, ...formData } = useForm({
     mode: 'onChange',
     defaultValues: {
@@ -203,5 +203,3 @@ const Create: React.FC = () => {
     </DaoLayout>
   )
 }
-
-export default Create
