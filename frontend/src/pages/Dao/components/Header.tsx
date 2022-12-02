@@ -18,7 +18,6 @@ const Header: React.FC<Props> = (props) => {
       <Typography variant="subtitle2" color={palette.grey[700]}>
         {props.subtitle}
       </Typography>
-      palette
       <Divider orientation="horizontal" sx={{ m: '20px 0 24px' }} />
     </>
   )

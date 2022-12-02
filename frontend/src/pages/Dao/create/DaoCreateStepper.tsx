@@ -11,8 +11,9 @@ import { useTheme } from '@mui/material'
 import Name from './views/Name'
 import Terms from './views/Terms'
 import Founder from './views/Founder'
-import Payment from './views/Payment'
+import Settings from './views/Settings'
 import Confirmation from './views/Confirmation'
+import Payment from './views/Payment'
 import { DaoLayout } from '../../../layout/dao-layout'
 import { a11yProps, TabPanel } from '../components/TabPanel'
 import { ArrowRight, HelpIcon } from '../../../components/Icons'
@@ -20,6 +21,7 @@ import { ArrowRight, HelpIcon } from '../../../components/Icons'
 enum View {
   Name,
   Founder,
+  Settings,
   Confirmation,
   Terms,
   Payment
@@ -51,11 +53,12 @@ export default function DaoCreateStepper() {
             aria-label="scrollable force tabs example"
             TabIndicatorProps={{ sx: { left: 0, backgroundColor: palette.primary.dark } }}
           >
-            <Tab label="Name" {...a11yProps(View.Name)} />
-            <Tab label="Founder" {...a11yProps(View.Founder)} />
-            <Tab label="Confirmation" {...a11yProps(View.Confirmation)} />
-            <Tab label="Terms & conditions" {...a11yProps(View.Terms)} />
-            <Tab label="Payment" {...a11yProps(View.Payment)} />
+            <Tab label="Name" {...a11yProps(View.Name)} sx={{ alignSelf: 'start' }} />
+            <Tab label="Founder" {...a11yProps(View.Founder)} sx={{ alignSelf: 'start' }} />
+            <Tab label="Settings" {...a11yProps(View.Settings)} sx={{ alignSelf: 'start' }} />
+            <Tab label="Confirm" {...a11yProps(View.Confirmation)} sx={{ alignSelf: 'start' }} />
+            <Tab label="Terms" {...a11yProps(View.Terms)} sx={{ alignSelf: 'start' }} />
+            <Tab label="Payment" {...a11yProps(View.Payment)} sx={{ alignSelf: 'start' }} />
           </Tabs>
           <Box sx={{ cursor: 'pointer', position: 'fixed', bottom: '40px' }}>
             <Typography variant="subtitle2" color={palette.grey[500]} display="flex" alignItems="center">
@@ -71,6 +74,9 @@ export default function DaoCreateStepper() {
             </TabPanel>
             <TabPanel value={activeView} index={View.Founder}>
               <Founder {...formData} />
+            </TabPanel>
+            <TabPanel value={activeView} index={View.Settings}>
+              <Settings {...formData} />
             </TabPanel>
             <TabPanel value={activeView} index={View.Confirmation}>
               <Confirmation {...formData} />
@@ -96,7 +102,7 @@ export default function DaoCreateStepper() {
               )}
               {/* @todo Keith - after signature transaction is confirmed */}
               {/* hide the Sign button and display the continue button */}
-              {activeView < 4 && (
+              {activeView < Object.keys(View).length - 1 && (
                 <Button
                   size="small"
                   variant="contained"
@@ -162,6 +168,28 @@ export default function DaoCreateStepper() {
               <Typography variant="subtitle2" color={palette.grey[500]}>
                 We only use your email to communicate directly with you. We do not share your email with any third
                 parties.
+              </Typography>
+            </Box>
+          </>
+        )}
+        {activeView === View.Settings && (
+          <>
+            <Box mb="32px">
+              <Typography variant="body1" mb="8px" fontWeight={500}>
+                What are governance settings?
+              </Typography>
+              <Typography variant="subtitle2" color={palette.grey[500]}>
+                Governance settings determine how your company enforces decisions on-chain. Transparently and immutably.
+              </Typography>
+            </Box>
+            <Box sx={{ mb: '32px' }}>
+              <Typography variant="body1" mb="8px" fontWeight={500}>
+                Can I change governance settings later?
+              </Typography>
+              <Typography variant="subtitle2" color={palette.grey[500]}>
+                Yes. You can change your company governance settings later via on-chain proposal vote. However it is
+                very important to choose your initial settings wisely. Any subsequent change of governance settings has
+                to comply with the then current governance settings.
               </Typography>
             </Box>
           </>
