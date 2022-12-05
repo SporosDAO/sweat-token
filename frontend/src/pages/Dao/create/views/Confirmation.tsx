@@ -10,7 +10,7 @@ import { useTheme } from '@mui/material'
 import { AlertIcon, CheckIcon } from '../../../../components/Icons'
 
 const Confirmation: React.FC<any> = (props) => {
-  const { name, symbol, founders } = props.getValues()
+  const { name, symbol, founders, voting } = props.getValues()
   const { palette } = useTheme()
 
   return (
@@ -98,7 +98,7 @@ const Confirmation: React.FC<any> = (props) => {
           </Tooltip>
         </Typography>
         <Typography variant="subtitle2" color={palette.grey[900]} m="0" fontWeight={500}>
-          10 minutes
+          {voting.period.hours} hour(s)
         </Typography>
         <Divider orientation="horizontal" sx={{ m: '16px 0' }} />
         <Typography display="flex" variant="caption" color={palette.grey[500]} m="0">
@@ -119,7 +119,7 @@ const Confirmation: React.FC<any> = (props) => {
           </Tooltip>
         </Typography>
         <Typography variant="subtitle2" color={palette.grey[900]} m="0" fontWeight={500}>
-          20%
+          {voting.quorum}%
         </Typography>
         <Divider orientation="horizontal" sx={{ m: '16px 0' }} />
         <Typography display="flex" variant="caption" color={palette.grey[500]} m="0">
@@ -140,7 +140,7 @@ const Confirmation: React.FC<any> = (props) => {
           </Tooltip>
         </Typography>
         <Typography variant="subtitle2" color={palette.grey[900]} m="0" fontWeight={500}>
-          60%
+          {voting.approval}%
         </Typography>
       </Card>
       <Card sx={{ mb: '24px', background: palette.grey[50], boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)' }}>

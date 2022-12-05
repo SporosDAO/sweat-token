@@ -38,7 +38,12 @@ export default function DaoCreateStepper() {
     }
   })
   const [activeView, setActiveView] = React.useState(View.Name)
-  const onSubmit = async (data: any) => console.log({ data })
+  async function onSubmit(data: any) {
+    // TODO: deploy using KaliDAOFactory
+    // https://github.com/kalidao/kali-ui/blob/fe3dafdf6c8a04446f16b2ce8724b703f33d79dd/components/deploy-dao/checkout/index.js#L39
+    // TODO: in the future use Kali wrappr for new DAO deployment with legal entity wrappr
+    console.log({ data })
+  }
   console.debug('formState', formData)
   const { palette } = useTheme()
 
