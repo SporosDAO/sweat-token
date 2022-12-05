@@ -6,19 +6,20 @@ import KALIDAO_ABI from '../../abi/KaliDAO.json'
 import { useParams } from 'react-router-dom'
 import { Box, TextField, Button, List, ListItem, Typography, Alert, CircularProgress } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { Navigate } from 'react-router-dom'
 import Web3SubmitDialog from '../../components/Web3SubmitDialog'
 import { useGetDAO } from '../../graph/getDAO'
 import { ErrorMessage } from '@hookform/error-message'
+import ReactMarkdown from 'react-markdown'
 
 export default function ProjectProposal() {
   const { chainId, daoId } = useParams()
 
   // Web3SubmitDialog state vars
   const [dialogOpen, setDialogOpen] = useState(false)
+
   const [txInput, setTxInput] = useState({})
-  const { address: userAddress } = useAccount()
-  const [proposedManagerAddress, setProposedManagerAddress] = useState(userAddress)
+  const { address: userAddress, isConnected } = useAccount()
+  const [proposedManagerAddress, setProposedManagerAddress] = useState(isConnected ? userAddress : '')
 
   const cid = Number(chainId)
   const pmContractAddress = addresses[cid]['extensions']['projectmanagement']
@@ -27,6 +28,7 @@ export default function ProjectProposal() {
   const {
     register,
     formState: { errors: formErrors },
+    watch,
     handleSubmit
   } = useForm({
     defaultValues: {
@@ -34,11 +36,14 @@ export default function ProjectProposal() {
       budget: 0,
       deadline: defaultDeadline.toISOString().split('T')[0],
       goalTitle: '',
+      goalDescription: '',
       goalLink: ''
     }
   })
 
-  const { data: myDao, isSuccess: isMyDaoLoaded } = useGetDAO(chainId, daoId)
+  const watchGoalDescription = watch('goalDescription')
+
+  const { data: myDao, isSuccess: isMyDaoLoaded } = useGetDAO(cid, daoId)
 
   const daoContract = {
     addressOrName: daoId || '',
@@ -55,11 +60,19 @@ export default function ProjectProposal() {
   const contractReadManagerResult = useContractRead({
     ...daoContract,
     functionName: 'balanceOf',
-    args: [proposedManagerAddress]
+    args: [proposedManagerAddress],
+    onError(error) {
+      console.warn('Error reading default manager balance', { proposedManagerAddress, error })
+    }
   })
 
-  const onSubmit = async (data: any) => {
-    const { manager, budget, deadline, goalTitle, goalLink } = data
+  const onFormError = (errors: any, event: any) => {
+    console.info({ errors, event })
+  }
+
+  const onSubmit = async (data: any, e: any) => {
+    // console.debug({ data })
+    const { manager, budget, deadline, goalTitle, goalDescription, goalLink } = data
     setProposedManagerAddress(manager)
     try {
       await contractReadManagerResult.refetch({
@@ -72,31 +85,20 @@ export default function ProjectProposal() {
     }
     if (contractReadManagerResult.isError || contractReadManagerResult.isLoading) return
 
-    let payload
-    const goals = [{ goalTitle, goalLink }]
+    const goals = [{ goalTitle, goalLink, goalDescription }]
     const goalString = JSON.stringify(goals)
-    const miliseconds = new Date(deadline).getTime()
-    const dateInSecs = Math.floor(miliseconds / 1000)
-    try {
-      const abiCoder = ethers.utils.defaultAbiCoder
-      payload = abiCoder.encode(
-        ['uint256', 'address', 'uint256', 'uint256', 'string'],
-        [0, manager, ethers.utils.parseEther(budget), dateInSecs, goalString]
-      )
-    } catch (e) {
-      console.error('Error while encoding project proposal', e)
-      return
-    }
+    const milliseconds = new Date(deadline).getTime()
+    const dateInSecs = Math.floor(milliseconds / 1000)
+    const abiCoder = ethers.utils.defaultAbiCoder
+    const payload = abiCoder.encode(
+      ['uint256', 'address', 'uint256', 'uint256', 'string'],
+      [0, manager, ethers.utils.parseEther(budget), dateInSecs, goalString]
+    )
 
     // https://github.com/kalidao/kali-contracts/blob/c3b25ca762f083dfe88096a7a512b33607c0ac57/contracts/KaliDAO.sol#L111
     const PROPOSAL_TYPE_EXTENSION = 9
 
-    let pmExtensionEnabled
-    if (contractReadExtensionResult.isSuccess) {
-      pmExtensionEnabled = contractReadExtensionResult.data
-    } else {
-      pmExtensionEnabled = await contractReadExtensionResult.refetch()
-    }
+    const pmExtensionEnabled = await contractReadExtensionResult.refetch()
 
     // if PM extension is not enabled yet, toggle it on
     const TOGGLE_EXTENSION_AVAILABILITY = pmExtensionEnabled ? 0 : 1
@@ -116,6 +118,7 @@ export default function ProjectProposal() {
       functionName: 'propose',
       args: [PROPOSAL_TYPE_EXTENSION, description, [pmContractAddress], [TOGGLE_EXTENSION_AVAILABILITY], [payload]]
     }
+
     setDialogOpen(true)
     setTxInput(txInput)
   }
@@ -124,14 +127,10 @@ export default function ProjectProposal() {
     setDialogOpen(false)
   }
 
-  if (!chainId || !daoId) {
-    return <Navigate replace to="/" />
-  }
-
   return (
     <Box
       sx={{
-        maxWidth: 400
+        maxWidth: 600
       }}
     >
       {isMyDaoLoaded && (
@@ -144,9 +143,10 @@ export default function ProjectProposal() {
           </div>
         </Alert>
       )}
-      <List component="form" onSubmit={handleSubmit(onSubmit)}>
+      <List component="form" onSubmit={handleSubmit(onSubmit, onFormError)}>
         <ListItem>
           <TextField
+            id="manager"
             data-testid="manager"
             label="Manager"
             helperText="ETH L1/L2 address: 0x..."
@@ -196,6 +196,7 @@ export default function ProjectProposal() {
         <ListItem>
           <TextField
             id="deadline"
+            data-testid="deadline"
             label="Deadline"
             type="date"
             InputLabelProps={{
@@ -216,6 +217,7 @@ export default function ProjectProposal() {
         <ListItem>
           <TextField
             id="goalTitle"
+            data-testid="goalTitle"
             label="Goal"
             helperText="Describe a measurable goal of the project"
             variant="filled"
@@ -229,6 +231,7 @@ export default function ProjectProposal() {
         <ListItem>
           <TextField
             id="goalLink"
+            data-testid="goalLink"
             type="url"
             label="Goal Tracking Link"
             helperText="URL to project board where this goal is tracked."
@@ -237,6 +240,30 @@ export default function ProjectProposal() {
             {...register('goalLink')}
           />
         </ListItem>
+        <ListItem>
+          <TextField
+            label="Description"
+            helperText="Describe the main goal(s) of this project using Markdown format."
+            variant="filled"
+            multiline
+            fullWidth
+            data-testid="goalDescription"
+            minRows={5}
+            {...register('goalDescription')}
+          />
+        </ListItem>
+        {watchGoalDescription && (
+          <>
+            <ListItem>
+              <Typography variant="caption">Markdown Preview</Typography>
+            </ListItem>
+            <ListItem>
+              <Box component="span" sx={{ p: 2, border: '1px dashed grey' }}>
+                <ReactMarkdown skipHtml children={watchGoalDescription} />
+              </Box>
+            </ListItem>
+          </>
+        )}
         <ListItem>
           <Button
             type="submit"

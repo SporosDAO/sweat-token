@@ -54,7 +54,8 @@ ports:
   # https://www.gitpod.io/docs/config-ports#cors
   # frontend web app service : Node.js, React
   - port: 3000
-    onOpen: open-browser
+    name: SporosDAO UI
+    onOpen: ignore
     visibility: public
 
   - port: 3001
@@ -65,7 +66,8 @@ ports:
   - port: 5900
     onOpen: ignore
   - port: 6080
-    onOpen: open-browser
+    name: Synpress console
+    onOpen: ignore
   - port: 10000
     onOpen: ignore
 

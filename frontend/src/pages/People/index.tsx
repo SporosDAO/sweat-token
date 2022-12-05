@@ -1,7 +1,8 @@
-import { Button, CircularProgress, List } from '@mui/material'
+import { CircularProgress, List } from '@mui/material'
 import { Box } from '@mui/system'
 import { useParams } from 'react-router-dom'
 import ContentBlock from '../../components/ContentBlock'
+import LoadingError from '../../components/LoadingError'
 import { useGetPeople } from '../../graph/getPeople'
 import PersonCard from './components/PersonCard'
 
@@ -9,8 +10,8 @@ import PersonCard from './components/PersonCard'
 
 export default function People() {
   const { chainId, daoId } = useParams()
-
-  const { data, error, isLoading, isSuccess } = useGetPeople(chainId, daoId)
+  const cid = Number(chainId)
+  const { data, error, isLoading, isSuccess } = useGetPeople(cid, daoId)
   let people: any[] = []
   let tokenTotalSupply = 0
   if (isSuccess) {
@@ -20,19 +21,9 @@ export default function People() {
   return (
     <ContentBlock title="People">
       {isLoading ? (
-        <CircularProgress />
+        <CircularProgress data-testid="progress-icon" />
       ) : error ? (
-        <Box>
-          Failed to load data.{' '}
-          <Button
-            onClick={(e) => {
-              e.preventDefault()
-            }}
-            aria-label="retry"
-          >
-            Retry
-          </Button>
-        </Box>
+        <LoadingError />
       ) : (
         <Box>
           {people && people.length ? (
