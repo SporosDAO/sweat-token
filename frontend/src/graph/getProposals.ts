@@ -23,6 +23,7 @@ export const getProposals = async ({ chainId, daoAddress }: { chainId: number; d
               sponsor
               sponsored
               cancelled
+              escaped
               status
               creationTime
               votingStarts
@@ -89,8 +90,22 @@ export function findProcessableProposals(proposals: any[]): any[] {
       return true
     }
 
-    // if non-ESCAPE, make sure it's next in queue
-    // otherwise Kali smart contract will block processing
+    // if ESCAPED (when processing blocked by revert)
+    // then do not offer for processing
+    if (proposal.escaped || proposal.cancelled) {
+      // console.debug('escaped prop')
+      return false
+    }
+
+    // If CANCELLED (by original proposal) then do not offer for processing
+    if (proposal.escaped || proposal.cancelled) {
+      // console.debug('cancelled prop')
+      return false
+    }
+
+    // If non-ESCAPE, make sure it's next in queue
+    // otherwise Kali smart contract will block processing.
+    // Also make sure it's not an ESCAPED or CANCELLED proposal.
     if (index + 1 < proposals.length && proposals[index + 1].status != null) {
       proposal.isReadyToProcessImmediately = true
       // console.debug('ready to process')
