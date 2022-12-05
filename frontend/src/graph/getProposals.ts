@@ -92,13 +92,13 @@ export function findProcessableProposals(proposals: any[]): any[] {
 
     // if ESCAPED (when processing blocked by revert)
     // then do not offer for processing
-    if (proposal.escaped || proposal.cancelled) {
+    if (proposal.escaped) {
       // console.debug('escaped prop')
       return false
     }
 
     // If CANCELLED (by original proposal) then do not offer for processing
-    if (proposal.escaped || proposal.cancelled) {
+    if (proposal.cancelled) {
       // console.debug('cancelled prop')
       return false
     }
