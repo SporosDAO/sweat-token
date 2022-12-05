@@ -23,6 +23,7 @@ export const getProposals = async ({ chainId, daoAddress }: { chainId: number; d
               sponsor
               sponsored
               cancelled
+              escaped
               status
               creationTime
               votingStarts
