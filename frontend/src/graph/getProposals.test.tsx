@@ -219,4 +219,36 @@ describe('getProposal(s) hooks', () => {
     ])
     expect(res).toMatchObject([])
   })
+
+  it('findProcessableProposals filters out ESCAPEd proposals', async () => {
+    jest.useFakeTimers()
+    jest.setSystemTime(new Date(2020, 3, 1))
+    const now = new Date()
+    const startAsDate = new Date()
+    startAsDate.setDate(now.getDate() - 10) // set start time ten days ago
+    const dateInSecs = Math.floor(startAsDate.getTime() / 1000)
+    const votingStarts = dateInSecs
+    const votingPeriod = 300 // 5 minute voting period
+    const res = findProcessableProposals([
+      { votingStarts, dao: { votingPeriod }, sponsored: true, status: null, escaped: true },
+      { votingStarts, dao: { votingPeriod }, sponsored: true, status: true }
+    ])
+    expect(res).toMatchObject([])
+  })
+
+  it('findProcessableProposals filters out CANCELLed proposals', async () => {
+    jest.useFakeTimers()
+    jest.setSystemTime(new Date(2020, 3, 1))
+    const now = new Date()
+    const startAsDate = new Date()
+    startAsDate.setDate(now.getDate() - 10) // set start time ten days ago
+    const dateInSecs = Math.floor(startAsDate.getTime() / 1000)
+    const votingStarts = dateInSecs
+    const votingPeriod = 300 // 5 minute voting period
+    const res = findProcessableProposals([
+      { votingStarts, dao: { votingPeriod }, sponsored: true, status: null, cancelled: true },
+      { votingStarts, dao: { votingPeriod }, sponsored: true, status: true }
+    ])
+    expect(res).toMatchObject([])
+  })
 })
