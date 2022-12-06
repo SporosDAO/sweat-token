@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Box from '@mui/material/Box'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTheme } from '@mui/material'
+import { AddressZero } from '@ethersproject/constants'
 
 import Name from './views/Name'
 import Terms from './views/Terms'
@@ -17,6 +18,11 @@ import Payment from './views/Payment'
 import { DaoLayout } from '../../../layout/dao-layout'
 import { a11yProps, TabPanel } from '../components/TabPanel'
 import { ArrowRight, HelpIcon } from '../../../components/Icons'
+import { CreateDaoForm, prepareKaliDaoCell } from './createDaoHelper'
+import FACTORY_ABI from '../../../abi/KaliDAOFactory.json'
+import { useNetwork } from 'wagmi'
+import { addresses } from '../../../constants/addresses'
+import Web3SubmitDialog from '../../../components/Web3SubmitDialog'
 
 enum View {
   Name,
@@ -28,23 +34,54 @@ enum View {
 }
 
 export default function DaoCreateStepper() {
-  const { handleSubmit, ...formData } = useForm({
+  const { handleSubmit, ...formData } = useForm<CreateDaoForm>({
     mode: 'onChange',
     defaultValues: {
       name: '',
       symbol: '',
       terms: false,
-      founders: [{ address: '', initialTokens: 0, email: '' }]
+      transferability: false,
+      founders: [{ address: '', initialTokens: 0, email: '' }],
+      voting: {
+        period: { hours: 10 },
+        quorum: 20,
+        approval: 60
+      }
     }
   })
+
   const [activeView, setActiveView] = React.useState(View.Name)
-  async function onSubmit(data: any) {
+
+  const { chain: activeChain } = useNetwork()
+  // Web3SubmitDialog state vars
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [txInput, setTxInput] = useState({})
+
+  const daoFactory = {
+    addressOrName: activeChain?.id ? addresses[activeChain.id]['factory'] : AddressZero,
+    chainId: activeChain?.id,
+    contractInterface: FACTORY_ABI,
+    functionName: 'deployKaliDAO'
+  }
+
+  const onSubmit: SubmitHandler<CreateDaoForm> = (formData) => {
     // TODO: deploy using KaliDAOFactory
     // https://github.com/kalidao/kali-ui/blob/fe3dafdf6c8a04446f16b2ce8724b703f33d79dd/components/deploy-dao/checkout/index.js#L39
-    // TODO: in the future use Kali wrappr for new DAO deployment with legal entity wrappr
-    console.log({ data })
+    // In the future, we will use Kali wrappr for new DAO deployment with legal entity
+    console.log({ formData })
+    const initArgs = prepareKaliDaoCell(formData)
+    const txInput = {
+      ...daoFactory,
+      args: initArgs
+    }
+    setDialogOpen(true)
+    setTxInput(txInput)
   }
-  console.debug('formState', formData)
+
+  const onDialogClose = async () => {
+    setDialogOpen(false)
+  }
+
   const { palette } = useTheme()
 
   return (
@@ -105,8 +142,6 @@ export default function DaoCreateStepper() {
               ) : (
                 <Box />
               )}
-              {/* @todo Keith - after signature transaction is confirmed */}
-              {/* hide the Sign button and display the continue button */}
               {activeView < Object.keys(View).length - 1 && (
                 <Button
                   size="small"
@@ -119,6 +154,9 @@ export default function DaoCreateStepper() {
                 </Button>
               )}
             </Box>
+            {dialogOpen && (
+              <Web3SubmitDialog open={dialogOpen} onClose={onDialogClose} txInput={txInput} hrefAfterSuccess="./" />
+            )}
           </form>
         </Grid>
       </Grid>

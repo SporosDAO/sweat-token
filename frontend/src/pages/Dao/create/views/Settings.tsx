@@ -35,7 +35,10 @@ const Settings: React.FC<any> = (props) => {
               placeholder="10"
               {...props?.register(`voting.period.hours`, {
                 required: true,
-                min: { value: 1, message: 'Voting period has to be a positive number.' }
+                min: { value: 1, message: 'Voting period has to be a positive number.' },
+                // see KaliDAO contract checks:
+                // https://github.com/kalidao/kali-contracts/blob/de721b483b04feba5c42b49b997d68e8ce4885dd/contracts/KaliDAO.sol#L160
+                max: { value: 24 * 365, message: 'Voting period has to be less than 365 days.' }
               })}
               helperText="Time period proposals for your company will be live for."
               data-testid="voting-period-input"
@@ -55,7 +58,7 @@ const Settings: React.FC<any> = (props) => {
               {...props?.register(`voting.quorum`, {
                 required: true,
                 min: { value: 1, message: 'Quorum percentage has to be a positive number.' },
-                max: { value: 100, message: 'Quorum percentage has to be less than 100.' }
+                max: { value: 100, message: 'Quorum percentage has to be no greater than 100.' }
               })}
               helperText="Percentage of your LLC's tokens that need to vote on a proposal for it to be valid."
               data-testid="voting-quorum-input"
@@ -75,8 +78,8 @@ const Settings: React.FC<any> = (props) => {
               helperText="Percentage of Yes-voting tokens for a proposal."
               {...props?.register(`voting.approval`, {
                 required: true,
-                min: { value: 1, message: 'Approval percentage has to be a positive number.' },
-                max: { value: 100, message: 'Approval percentage has to be less than 100.' }
+                min: { value: 51, message: 'Approval percentage has to be at least 51.' },
+                max: { value: 100, message: 'Approval percentage has to be no greater than 100.' }
               })}
               data-testid="voting-approval-input"
               variant="filled"
