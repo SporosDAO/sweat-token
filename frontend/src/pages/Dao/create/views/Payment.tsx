@@ -4,9 +4,7 @@ import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import { Checkbox, Link, useTheme } from '@mui/material'
-import { Controller } from 'react-hook-form'
+import { useTheme } from '@mui/material'
 
 const Payment: React.FC<any> = (props) => {
   const { palette } = useTheme()
