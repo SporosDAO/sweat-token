@@ -15,8 +15,8 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
-      <Route path="dao/create" element={<DaoCreate />} />
-      <Route path="dao/create/stepper" element={<DaoCreateStepper />} />
+      <Route path="dao/create/:chainId" element={<DaoCreate />} />
+      <Route path="dao/create/stepper/:chainId" element={<DaoCreateStepper />} />
       <Route path="dao/chain/:chainId/address/:daoId" element={<Dao />}>
         <Route path="projects" element={<Projects />}></Route>
         <Route path="projects/propose" element={<ProjectProposal />}></Route>

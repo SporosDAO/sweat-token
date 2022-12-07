@@ -10,7 +10,6 @@ import { useTheme } from '@mui/material'
 import { AddressZero } from '@ethersproject/constants'
 
 import Name from './views/Name'
-import Terms from './views/Terms'
 import Founder from './views/Founder'
 import Settings from './views/Settings'
 import Confirmation from './views/Confirmation'
@@ -29,7 +28,6 @@ enum View {
   Founder,
   Settings,
   Confirmation,
-  Terms,
   Payment
 }
 
@@ -43,7 +41,7 @@ export default function DaoCreateStepper() {
       transferability: false,
       founders: [{ address: '', initialTokens: 0, email: '' }],
       voting: {
-        period: { hours: 10 },
+        period: { hours: 1 },
         quorum: 20,
         approval: 60
       }
@@ -74,8 +72,9 @@ export default function DaoCreateStepper() {
       ...daoFactory,
       args: initArgs
     }
-    setDialogOpen(true)
+    console.log({ txInput })
     setTxInput(txInput)
+    setDialogOpen(true)
   }
 
   const onDialogClose = async () => {
@@ -85,7 +84,7 @@ export default function DaoCreateStepper() {
   const { palette } = useTheme()
 
   return (
-    <DaoLayout hideSidebar={[View.Confirmation, View.Terms].includes(activeView)}>
+    <DaoLayout hideSidebar={[View.Confirmation].includes(activeView)}>
       <Grid container>
         <Grid item width="30%">
           <Tabs
@@ -99,7 +98,6 @@ export default function DaoCreateStepper() {
             <Tab label="Founder" {...a11yProps(View.Founder)} sx={{ alignSelf: 'start' }} />
             <Tab label="Settings" {...a11yProps(View.Settings)} sx={{ alignSelf: 'start' }} />
             <Tab label="Confirm" {...a11yProps(View.Confirmation)} sx={{ alignSelf: 'start' }} />
-            <Tab label="Terms" {...a11yProps(View.Terms)} sx={{ alignSelf: 'start' }} />
             <Tab label="Payment" {...a11yProps(View.Payment)} sx={{ alignSelf: 'start' }} />
           </Tabs>
           <Box sx={{ cursor: 'pointer', position: 'fixed', bottom: '40px' }}>
@@ -123,9 +121,6 @@ export default function DaoCreateStepper() {
             <TabPanel value={activeView} index={View.Confirmation}>
               <Confirmation {...formData} />
             </TabPanel>
-            <TabPanel value={activeView} index={View.Terms}>
-              <Terms {...formData} />
-            </TabPanel>
             <TabPanel value={activeView} index={View.Payment}>
               <Payment {...formData} onPay={handleSubmit(onSubmit)} />
             </TabPanel>
@@ -142,20 +137,20 @@ export default function DaoCreateStepper() {
               ) : (
                 <Box />
               )}
-              {activeView < Object.keys(View).length - 1 && (
+              {activeView < Object.keys(View).length / 2 - 1 && (
                 <Button
                   size="small"
                   variant="contained"
-                  disabled={activeView !== View.Confirmation && !formData.formState.isValid}
+                  disabled={!formData.formState.isValid}
                   endIcon={<ArrowRight sx={{ mt: '4px', stroke: 'white' }} />}
                   onClick={() => setActiveView((activeView) => (activeView += 1))}
                 >
-                  {activeView === View.Terms ? 'Sign' : 'Continue'}
+                  Continue
                 </Button>
               )}
             </Box>
             {dialogOpen && (
-              <Web3SubmitDialog open={dialogOpen} onClose={onDialogClose} txInput={txInput} hrefAfterSuccess="./" />
+              <Web3SubmitDialog open={dialogOpen} onClose={onDialogClose} txInput={txInput} hrefAfterSuccess="/" />
             )}
           </form>
         </Grid>

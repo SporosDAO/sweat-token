@@ -3,7 +3,7 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useTheme } from '@mui/material'
 import { DaoLayout } from '../../../layout/dao-layout'
 import { AnchorLink } from '../components/AnchorLink'
@@ -11,6 +11,7 @@ import { AnchorLink } from '../components/AnchorLink'
 export default function DaoCreate() {
   const navigate = useNavigate()
   const { palette } = useTheme()
+  const { chainId } = useParams()
 
   return (
     <DaoLayout>
@@ -26,7 +27,7 @@ export default function DaoCreate() {
           <Button
             size="large"
             variant="contained"
-            onClick={() => navigate('/dao/create/stepper')}
+            onClick={() => navigate(`/dao/create/stepper/${chainId}`)}
             endIcon={<img src="/icons/chevron-right.svg" alt="Chevron Right Icon" />}
           >
             Let's go!

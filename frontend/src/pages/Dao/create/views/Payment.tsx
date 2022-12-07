@@ -4,7 +4,9 @@ import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
-import { useTheme } from '@mui/material'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import { Checkbox, Link, useTheme } from '@mui/material'
+import { Controller } from 'react-hook-form'
 
 const Payment: React.FC<any> = (props) => {
   const { palette } = useTheme()
@@ -14,15 +16,15 @@ const Payment: React.FC<any> = (props) => {
       <Grid container>
         <Grid item md={7}>
           <Typography variant="h6" mb="4px">
-            Payment
+            Deployment
           </Typography>
           <Typography variant="subtitle2" color={palette.grey[700]}>
-            Please provide payment to complete your transaction, and deploy your LLC on-chain.
+            You are now ready to deploy your new DAO with a Series LLC wrapper.
           </Typography>
         </Grid>
-        <Grid item md={5} display="flex" justifyContent="flex-end">
+        {/* <Grid item md={5} display="flex" justifyContent="flex-end">
           <Button variant="outlined">Bridge funds</Button>
-        </Grid>
+        </Grid> */}
       </Grid>
       <Divider orientation="horizontal" sx={{ m: '20px 0 24px' }} />
       <Card sx={{ p: 0 }}>
@@ -32,10 +34,10 @@ const Payment: React.FC<any> = (props) => {
             Delaware Series LLC
           </Typography>
           <Typography variant="h3" fontWeight={600} color={palette.grey[900]} letterSpacing="-0.02em">
-            $199
+            $199 value
           </Typography>
           <Typography variant="body1" color={palette.grey[500]} fontWeight={400}>
-            one-time fee paid in DAI or USDC
+            Formation fee waived for a limited time.
           </Typography>
           <Box m="32px 0 0">
             <Box sx={{ display: 'flex', alignItems: 'center', margin: '16px 0', gap: '10px' }}>
@@ -60,7 +62,7 @@ const Payment: React.FC<any> = (props) => {
         </Box>
         <Box p="32px" sx={{ background: palette.grey[50] }}>
           <Button fullWidth size="large" variant="contained" onClick={props.onPay}>
-            Pay now
+            Deploy now
           </Button>
         </Box>
       </Card>

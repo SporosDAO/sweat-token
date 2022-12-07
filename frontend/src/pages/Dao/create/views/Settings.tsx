@@ -32,7 +32,7 @@ const Settings: React.FC<any> = (props) => {
               type="number"
               name="votingPeriod"
               label="Voting Period"
-              placeholder="10"
+              placeholder="1"
               {...props?.register(`voting.period.hours`, {
                 required: true,
                 min: { value: 1, message: 'Voting period has to be a positive number.' },

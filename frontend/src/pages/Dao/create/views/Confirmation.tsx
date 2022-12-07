@@ -6,8 +6,9 @@ import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 
 import Header from '../../components/Header'
-import { useTheme } from '@mui/material'
+import { Checkbox, FormControlLabel, Link, useTheme } from '@mui/material'
 import { AlertIcon, CheckIcon } from '../../../../components/Icons'
+import { Controller } from 'react-hook-form'
 
 const Confirmation: React.FC<any> = (props) => {
   const { name, symbol, founders, voting } = props.getValues()
@@ -228,6 +229,41 @@ const Confirmation: React.FC<any> = (props) => {
             </Typography>
             <Typography variant="subtitle2" color={palette.grey[900]} fontWeight={500}>
               {founder.email}
+            </Typography>
+          </Card>
+          <Card
+            key={index}
+            sx={{ mb: '24px', background: palette.grey[50], boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)' }}
+          >
+            <Divider orientation="horizontal" sx={{ m: '20px 0 16px' }} />
+            <FormControlLabel
+              sx={{ ml: '4px', mt: '24px' }}
+              label="Agree with terms of use and privacy policy"
+              control={
+                <Controller
+                  name="terms"
+                  control={props.control}
+                  rules={{ required: true }}
+                  render={({ field: { onChange, onBlur, value, ref } }) => (
+                    <Checkbox
+                      ref={ref}
+                      checked={value}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      inputProps={{ 'aria-label': 'Terms Checkbox' }}
+                      icon={<img src="/icons/unchecked.svg" alt="Unchecked" />}
+                      checkedIcon={<img src="/icons/checked.svg" alt="Unchecked" />}
+                    />
+                  )}
+                />
+              }
+            />
+            <Typography variant="subtitle2" sx={{ mt: '-4px', ml: '24px', color: '#697586' }}>
+              In order to continue you will have to accept our terms and conditions. You can read them{' '}
+              <Link href="https://sporosdao.xyz/terms-and-conditions/" rel="noopener" target="_blank">
+                here
+              </Link>
+              .
             </Typography>
           </Card>
         </Card>
