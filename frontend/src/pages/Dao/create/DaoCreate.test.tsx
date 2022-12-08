@@ -1,4 +1,4 @@
-import { act, screen, render, waitFor, fireEvent, userEvent, within } from '../../../../test'
+import { act, screen, render, waitFor, fireEvent, within } from '../../../../test'
 import * as daoNames from '../../../graph/getDaoNames'
 import * as wagmi from 'wagmi'
 
