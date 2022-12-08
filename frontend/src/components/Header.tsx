@@ -1,6 +1,6 @@
 import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
-import { useTheme } from '@mui/material'
+import { Box, useTheme } from '@mui/material'
 
 type Props = {
   title: string
@@ -11,7 +11,7 @@ const Header: React.FC<Props> = (props) => {
   const { palette } = useTheme()
 
   return (
-    <>
+    <Box data-testid="content-header">
       <Typography variant="h6" mb="4px">
         {props.title}
       </Typography>
@@ -19,7 +19,7 @@ const Header: React.FC<Props> = (props) => {
         {props.subtitle}
       </Typography>
       <Divider orientation="horizontal" sx={{ m: '20px 0 24px' }} />
-    </>
+    </Box>
   )
 }
 export default Header

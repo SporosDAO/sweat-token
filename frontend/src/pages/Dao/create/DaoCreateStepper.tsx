@@ -14,8 +14,8 @@ import Founder from './views/Founder'
 import Settings from './views/Settings'
 import Confirmation from './views/Confirmation'
 import Payment from './views/Payment'
-import { DaoLayout } from '../../../layout/dao-layout'
-import { a11yProps, TabPanel } from '../components/TabPanel'
+import { ActionDocLayout } from '../../../components/ActionDocLayout'
+import { a11yProps, TabPanel } from '../../../components/TabPanel'
 import { ArrowRight, HelpIcon } from '../../../components/Icons'
 import { CreateDaoForm, prepareKaliDaoCell } from './createDaoHelper'
 import FACTORY_ABI from '../../../abi/KaliDAOFactory.json'
@@ -63,10 +63,7 @@ export default function DaoCreateStepper() {
   }
 
   const onSubmit: SubmitHandler<CreateDaoForm> = (formData) => {
-    // TODO: deploy using KaliDAOFactory
-    // https://github.com/kalidao/kali-ui/blob/fe3dafdf6c8a04446f16b2ce8724b703f33d79dd/components/deploy-dao/checkout/index.js#L39
-    // In the future, we will use Kali wrappr for new DAO deployment with legal entity
-    console.log({ formData })
+    // console.log({ formData })
     const initArgs = prepareKaliDaoCell(formData)
     const txInput = {
       ...daoFactory,
@@ -84,7 +81,7 @@ export default function DaoCreateStepper() {
   const { palette } = useTheme()
 
   return (
-    <DaoLayout hideSidebar={[View.Confirmation].includes(activeView)}>
+    <ActionDocLayout hideSidebar={[View.Confirmation].includes(activeView)}>
       <Grid container>
         <Grid item width="30%">
           <Tabs
@@ -141,6 +138,7 @@ export default function DaoCreateStepper() {
                 <Button
                   size="small"
                   variant="contained"
+                  data-testid="continue-button"
                   disabled={!formData.formState.isValid}
                   endIcon={<ArrowRight sx={{ mt: '4px', stroke: 'white' }} />}
                   onClick={() => setActiveView((activeView) => (activeView += 1))}
@@ -266,6 +264,6 @@ export default function DaoCreateStepper() {
           </>
         )}
       </Box>
-    </DaoLayout>
+    </ActionDocLayout>
   )
 }

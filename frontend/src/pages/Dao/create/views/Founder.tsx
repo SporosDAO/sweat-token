@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import { useFieldArray } from 'react-hook-form'
 
-import Header from '../../components/Header'
+import Header from '../../../../components/Header'
 import { useTheme } from '@mui/material'
 
 const Founder: React.FC<any> = (props) => {

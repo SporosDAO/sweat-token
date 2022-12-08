@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom'
 
-export const DaoLayout: React.FC<{ children: Array<React.ReactNode>; hideSidebar?: boolean }> = (props) => {
+export const ActionDocLayout: React.FC<{ children: Array<React.ReactNode>; hideSidebar?: boolean }> = (props) => {
   const navigate = useNavigate()
   return (
     <Grid container spacing={0} sx={{ height: '100vh' }}>

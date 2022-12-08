@@ -5,14 +5,14 @@ import TextField from '@mui/material/TextField'
 import { useParams } from 'react-router'
 import { useGetDaoNames } from '../../../../graph/getDaoNames'
 
-import Header from '../../components/Header'
+import Header from '../../../../components/Header'
 
 const Name: React.FC<any> = (props) => {
   const { chainId } = useParams()
 
-  const { data: names, isLoading, isSuccess } = useGetDaoNames(Number(chainId))
+  const { data: names } = useGetDaoNames(Number(chainId))
 
-  console.debug({ names, isLoading, isSuccess })
+  // console.debug({ names, isLoading, isSuccess })
 
   function isUniqueDaoName(candidateDaoName: string) {
     return !names?.includes(candidateDaoName)
@@ -20,12 +20,13 @@ const Name: React.FC<any> = (props) => {
 
   return (
     <>
-      <Header title="Name" subtitle="Tell us the name of your company." />
+      <Header title="Company Name" subtitle="Tell us the name of your company." />
       <Box>
         <TextField
           fullWidth
           type="text"
           label="On-Chain name"
+          data-testid="daoname-input"
           error={!!props?.formState?.errors.name}
           placeholder="Pick a name"
           {...props?.register('name', {
@@ -43,6 +44,7 @@ const Name: React.FC<any> = (props) => {
           fullWidth
           type="text"
           label="Token Symbol"
+          data-testid="daoticker-input"
           error={!!props?.formState?.errors.symbol}
           placeholder="ex: SPR"
           {...props?.register('symbol', { required: true })}

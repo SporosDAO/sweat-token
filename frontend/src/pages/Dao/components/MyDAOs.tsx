@@ -21,9 +21,7 @@ export default function MyDAOs() {
 
   const daos = isSuccess ? data?.['members'] : []
 
-  console.debug({
-    daos
-  })
+  // console.debug({ daos })
 
   return (
     <>

@@ -11,6 +11,8 @@ const Landing: React.FC = () => {
   const { chain } = useNetwork()
   const { isDisconnected } = useAccount()
 
+  // console.debug({ chain, isDisconnected })
+
   useEffect(() => {
     if (loading) return
     if (failed) return
@@ -25,7 +27,7 @@ const Landing: React.FC = () => {
       {!chain || isDisconnected ? (
         <div>Please connect your web3 wallet.</div>
       ) : (
-        <ContentBlock title="Your DAOs" cta={{ href: `dao/create/${chain?.id}`, text: 'Create a new DAO' }}>
+        <ContentBlock title="Your DAOs" cta={{ href: `dao/chain/${chain?.id}/create/`, text: 'Create a new DAO' }}>
           <MyDAOs />
         </ContentBlock>
       )}

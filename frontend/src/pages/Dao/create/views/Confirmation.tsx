@@ -5,7 +5,7 @@ import Divider from '@mui/material/Divider'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 
-import Header from '../../components/Header'
+import Header from '../../../../components/Header'
 import { Checkbox, FormControlLabel, Link, useTheme } from '@mui/material'
 import { AlertIcon, CheckIcon } from '../../../../components/Icons'
 import { Controller } from 'react-hook-form'
