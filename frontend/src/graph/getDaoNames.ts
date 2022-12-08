@@ -17,6 +17,7 @@ export async function getDaoNames(chainId: number) {
     })
     const data = await res.json()
     const names = data?.data?.daos?.map((dao: any) => dao.token?.name)
+    // console.debug({ data, names })
     return names
   } catch (e) {
     return e
