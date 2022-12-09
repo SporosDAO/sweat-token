@@ -4,10 +4,13 @@ import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
-import { useFieldArray } from 'react-hook-form'
+import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
+import { ethers } from 'ethers'
 
 import Header from '../../../../components/Header'
-import { useTheme } from '@mui/material'
+import { Alert, useTheme } from '@mui/material'
+import { ErrorMessage } from '@hookform/error-message'
+import EnsNameInfo from '../../../../components/EnsNameInfo'
 
 const Founder: React.FC<any> = (props) => {
   const { fields, append } = useFieldArray({
@@ -22,58 +25,77 @@ const Founder: React.FC<any> = (props) => {
     )
 
   const { palette } = useTheme()
+  const { formState, control, register } = useFormContext()
 
   return (
     <>
       <Header title="Founder" subtitle="Provide information for founder(s) below." />
-      {fields.map((item, index) => (
+      {fields.map((field, index) => (
         <Card
-          key={item.id}
+          key={field.id}
           sx={{ mb: '24px', background: palette.grey[50], boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)' }}
         >
           <Box>
             <TextField
               fullWidth
               type="text"
-              name="address"
               label="Address"
+              data-testid="founder-address-input"
               placeholder="0xdC..."
-              {...props?.register(`founders.${index}.address`, { required: true })}
+              {...register(`founders.${index}.address`, {
+                required: 'Founder address required.',
+                validate: {
+                  isValidEvmAddress: (v: string) => {
+                    const isValidEvmAddress = ethers.utils.isAddress(v)
+                    console.debug({ isValidEvmAddress })
+                    return isValidEvmAddress || 'Please enter a valid EVM address for the founder.'
+                  }
+                }
+              })}
               helperText="Enter the wallet address you want to use to deploy the LLC."
+            />
+            <Controller
+              control={control}
+              name={`founders.${index}.address`}
+              render={({ field: { value } }) => <EnsNameInfo address={value} />}
+            />
+            <ErrorMessage
+              as={<Alert severity="error" />}
+              errors={formState?.errors}
+              name={`founders.${index}.address`}
             />
           </Box>
           <Box mt="16px">
             <TextField
               fullWidth
               type="number"
-              name="initial-tokens"
               label="Initial Tokens"
+              data-testid="founder-tokens-input"
               placeholder="1000"
-              {...props?.register(`founders.${index}.initialTokens`, { required: true })}
-              helperText="The founder will start with this amount of XYZ tokens."
+              {...register(`founders.${index}.initialTokens`, {
+                required: 'Founder initial tokens required.',
+                validate: { positiveNumber: (tokens: number) => tokens > 0 || 'Positive number of tokens required.' }
+              })}
+              helperText="The founder will start with this amount of member tokens."
+            />
+            <ErrorMessage
+              as={<Alert severity="error" />}
+              errors={formState?.errors}
+              name={`founders.${index}.initialTokens`}
             />
           </Box>
           <Box mt="16px">
             <TextField
               fullWidth
               type="text"
-              name="email"
               label="Email"
+              data-testid="founder-email-input"
               placeholder="Enter founder email address"
-              error={!!props?.formState?.errors?.founders?.[index]?.email}
-              {...props?.register(`founders.${index}.email`, {
-                required: true,
-                validate: { isValid: (email: string) => isValidEmail(email) }
+              {...register(`founders.${index}.email`, {
+                required: 'Founder email required.',
+                validate: { isValid: (email: string) => isValidEmail(email) || 'Founder email address required.' }
               })}
-              helperText={
-                <>
-                  {(props?.formState?.errors?.founders?.[index]?.email &&
-                    props?.formState?.errors?.founders?.[index]?.email?.type === 'required') ||
-                  props?.formState?.errors?.founders?.[index]?.email?.type === 'isValid'
-                    ? 'You need to enter a valid email address to continue.'
-                    : "This email is for Sporos' use only and will not be made public."}
-                </>
-              }
+              helperText="This email is for Sporos' use only and will not be made public."
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -86,10 +108,11 @@ const Founder: React.FC<any> = (props) => {
                 )
               }}
             />
+            <ErrorMessage as={<Alert severity="error" />} errors={formState?.errors} name={`founders.${index}.email`} />
           </Box>
         </Card>
       ))}
-      <>{console.log('props', props.formState.errors)}</>
+      {/* <>{console.log('props', props.formState.errors)}</> */}
       {fields.length < 5 && (
         <Button
           size="small"

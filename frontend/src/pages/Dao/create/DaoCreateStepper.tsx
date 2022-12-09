@@ -5,7 +5,7 @@ import Tabs from '@mui/material/Tabs'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useTheme } from '@mui/material'
 import { AddressZero } from '@ethersproject/constants'
 
@@ -32,7 +32,7 @@ enum View {
 }
 
 export default function DaoCreateStepper() {
-  const { handleSubmit, ...formData } = useForm<CreateDaoForm>({
+  const formMethods = useForm<CreateDaoForm>({
     mode: 'onChange',
     defaultValues: {
       name: '',
@@ -47,7 +47,7 @@ export default function DaoCreateStepper() {
       }
     }
   })
-
+  const { handleSubmit, formState } = formMethods
   const [activeView, setActiveView] = React.useState(View.Name)
 
   const { chain: activeChain } = useNetwork()
@@ -105,52 +105,54 @@ export default function DaoCreateStepper() {
           </Box>
         </Grid>
         <Grid item width="70%" p={3}>
-          <form>
-            <TabPanel value={activeView} index={View.Name}>
-              <Name {...formData} />
-            </TabPanel>
-            <TabPanel value={activeView} index={View.Founder}>
-              <Founder {...formData} />
-            </TabPanel>
-            <TabPanel value={activeView} index={View.Settings}>
-              <Settings {...formData} />
-            </TabPanel>
-            <TabPanel value={activeView} index={View.Confirmation}>
-              <Confirmation {...formData} />
-            </TabPanel>
-            <TabPanel value={activeView} index={View.Payment}>
-              <Payment {...formData} onPay={handleSubmit(onSubmit)} />
-            </TabPanel>
-            <Box sx={{ my: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              {activeView > 0 ? (
-                <Button
-                  size="small"
-                  variant="outlined"
-                  startIcon={<ArrowRight sx={{ mt: '4px', transform: 'scaleX(-1)', stroke: 'black' }} />}
-                  onClick={() => setActiveView((activeView) => (activeView -= 1))}
-                >
-                  Back
-                </Button>
-              ) : (
-                <Box />
+          <FormProvider {...formMethods}>
+            <form>
+              <TabPanel value={activeView} index={View.Name}>
+                <Name />
+              </TabPanel>
+              <TabPanel value={activeView} index={View.Founder}>
+                <Founder />
+              </TabPanel>
+              <TabPanel value={activeView} index={View.Settings}>
+                <Settings />
+              </TabPanel>
+              <TabPanel value={activeView} index={View.Confirmation}>
+                <Confirmation />
+              </TabPanel>
+              <TabPanel value={activeView} index={View.Payment}>
+                <Payment onPay={handleSubmit(onSubmit)} />
+              </TabPanel>
+              <Box sx={{ my: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                {activeView > 0 ? (
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    startIcon={<ArrowRight sx={{ mt: '4px', transform: 'scaleX(-1)', stroke: 'black' }} />}
+                    onClick={() => setActiveView((activeView) => (activeView -= 1))}
+                  >
+                    Back
+                  </Button>
+                ) : (
+                  <Box />
+                )}
+                {activeView < Object.keys(View).length / 2 - 1 && (
+                  <Button
+                    size="small"
+                    variant="contained"
+                    data-testid="continue-button"
+                    disabled={!formState.isValid}
+                    endIcon={<ArrowRight sx={{ mt: '4px', stroke: 'white' }} />}
+                    onClick={() => setActiveView((activeView) => (activeView += 1))}
+                  >
+                    Continue
+                  </Button>
+                )}
+              </Box>
+              {dialogOpen && (
+                <Web3SubmitDialog open={dialogOpen} onClose={onDialogClose} txInput={txInput} hrefAfterSuccess="/" />
               )}
-              {activeView < Object.keys(View).length / 2 - 1 && (
-                <Button
-                  size="small"
-                  variant="contained"
-                  data-testid="continue-button"
-                  disabled={!formData.formState.isValid}
-                  endIcon={<ArrowRight sx={{ mt: '4px', stroke: 'white' }} />}
-                  onClick={() => setActiveView((activeView) => (activeView += 1))}
-                >
-                  Continue
-                </Button>
-              )}
-            </Box>
-            {dialogOpen && (
-              <Web3SubmitDialog open={dialogOpen} onClose={onDialogClose} txInput={txInput} hrefAfterSuccess="/" />
-            )}
-          </form>
+            </form>
+          </FormProvider>
         </Grid>
       </Grid>
       <Box maxWidth="50%">

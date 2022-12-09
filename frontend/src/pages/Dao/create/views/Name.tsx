@@ -6,11 +6,14 @@ import { useParams } from 'react-router'
 import { useGetDaoNames } from '../../../../graph/getDaoNames'
 
 import Header from '../../../../components/Header'
+import { useFormContext } from 'react-hook-form'
 
 const Name: React.FC<any> = (props) => {
   const { chainId } = useParams()
 
   const { data: names } = useGetDaoNames(Number(chainId))
+
+  const { formState, register } = useFormContext()
 
   // console.debug({ names, isLoading, isSuccess })
 
@@ -27,35 +30,36 @@ const Name: React.FC<any> = (props) => {
           type="text"
           label="On-Chain name"
           data-testid="daoname-input"
-          error={!!props?.formState?.errors.name}
+          error={!!formState?.errors.name}
           placeholder="Pick a name"
-          {...props?.register('name', {
-            required: true,
+          {...register('name', {
+            required: 'Company name required',
             validate: {
               uniqueName: (v: string) => isUniqueDaoName(v) || 'This name is already used. Try another name.'
             }
           })}
-          helperText="This will be your company's on-chain name"
+          helperText="This will be your company's on-chain name."
         />
-        <ErrorMessage as={<Alert severity="error" />} errors={props?.formState?.errors} name="name" />
+        <ErrorMessage as={<Alert severity="error" />} errors={formState?.errors} name="name" />
       </Box>
       <Box mt="32px">
         <TextField
           fullWidth
           type="text"
           label="Token Symbol"
-          data-testid="daoticker-input"
-          error={!!props?.formState?.errors.symbol}
+          data-testid="daosymbol-input"
+          error={!!formState?.errors.symbol}
           placeholder="ex: SPR"
-          {...props?.register('symbol', { required: true })}
-          helperText={
-            <>
-              {props?.formState?.errors.symbol && props?.formState?.errors.symbol.type === 'required'
-                ? 'You need to pick a token symbol in order to continue.'
-                : 'This will be used as your token symbol.'}
-            </>
-          }
+          {...register('symbol', {
+            required: 'Company symbol required.',
+            maxLength: {
+              value: 11,
+              message: 'DAO token symbol should be less than 11 characters. Usually 3-5.'
+            }
+          })}
+          helperText="This will be used as your token symbol."
         />
+        <ErrorMessage as={<Alert severity="error" />} errors={formState?.errors} name="symbol" />
       </Box>
     </>
   )
