@@ -4,6 +4,7 @@ import Card from '@mui/material/Card'
 import Divider from '@mui/material/Divider'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
+import { useFormContext } from 'react-hook-form'
 
 import Header from '../../../../components/Header'
 import { Checkbox, FormControlLabel, Link, useTheme } from '@mui/material'
@@ -11,8 +12,9 @@ import { AlertIcon, CheckIcon } from '../../../../components/Icons'
 import { Controller } from 'react-hook-form'
 
 const Confirmation: React.FC<any> = (props) => {
-  const { name, symbol, founders, voting } = props.getValues()
   const { palette } = useTheme()
+  const { getValues, control } = useFormContext()
+  const { name, symbol, founders, voting } = getValues()
 
   return (
     <>
@@ -242,7 +244,7 @@ const Confirmation: React.FC<any> = (props) => {
               control={
                 <Controller
                   name="terms"
-                  control={props.control}
+                  control={control}
                   rules={{ required: true }}
                   render={({ field: { onChange, onBlur, value, ref } }) => (
                     <Checkbox

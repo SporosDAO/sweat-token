@@ -81,7 +81,7 @@ export default function DaoCreateStepper() {
   const { palette } = useTheme()
 
   return (
-    <ActionDocLayout hideSidebar={[View.Confirmation].includes(activeView)}>
+    <ActionDocLayout>
       <Grid container>
         <Grid item width="30%">
           <Tabs

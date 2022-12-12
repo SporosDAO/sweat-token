@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 export const ActionDocLayout: React.FC<{ children: Array<React.ReactNode>; hideSidebar?: boolean }> = (props) => {
   const navigate = useNavigate()
   return (
-    <Grid container spacing={0} sx={{ height: '100vh' }}>
+    <Grid container spacing={0} sx={{ minHeight: '100vh' }}>
       <Grid item xs={12} md={7}>
         <Box
           sx={{

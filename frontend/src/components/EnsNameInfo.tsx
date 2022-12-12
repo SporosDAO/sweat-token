@@ -15,7 +15,7 @@ export default function EnsNameInfo(props: { address: string }): JSX.Element {
 
   console.debug('Founder address provided to ENS lookup:', { address })
 
-  return isValidAddress && isEnsName ? (
+  return isValidAddress && isEnsName && ensName ? (
     <Alert severity="info" {...otherProps}>
       ENS name: {ensName}
     </Alert>
