@@ -13,7 +13,7 @@ export default function EnsNameInfo(props: { address: string }): JSX.Element {
     chainId: 1
   })
 
-  console.debug('Founder address provided to ENS lookup:', { address })
+  // console.debug('Founder address provided to ENS lookup:', { address })
 
   return isValidAddress && isEnsName && ensName ? (
     <Alert severity="info" {...otherProps}>

@@ -24,22 +24,6 @@ describe('DAO Formation - Step DAO Name', () => {
       isConnected: true
     } as any)
 
-    jest.spyOn(wagmi, `usePrepareContractWrite`).mockReturnValue({
-      config: jest.fn(),
-      isError: false,
-      error: undefined
-    } as any)
-
-    jest.spyOn(wagmi, `useContractWrite`).mockReturnValue({
-      isLoading: false,
-      isSuccess: true,
-      isError: false,
-      error: undefined,
-      isIdle: false,
-      write: jest.fn()
-    } as any)
-  })
-
   afterEach(() => {
     jest.clearAllMocks()
   })

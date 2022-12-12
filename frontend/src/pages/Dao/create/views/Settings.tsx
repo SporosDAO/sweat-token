@@ -76,7 +76,7 @@ const Settings: React.FC<any> = (props) => {
           />
         </Box>
       </Card>
-      <>{console.log('formState errors', formState.errors)}</>
+      {/* <>{console.log('formState errors', formState.errors)}</> */}
     </>
   )
 }

@@ -47,7 +47,7 @@ const Founder: React.FC<any> = (props) => {
                 validate: {
                   isValidEvmAddress: (v: string) => {
                     const isValidEvmAddress = ethers.utils.isAddress(v)
-                    console.debug({ isValidEvmAddress })
+                    // console.debug({ isValidEvmAddress })
                     return isValidEvmAddress || 'Please enter a valid EVM address for the founder.'
                   }
                 }

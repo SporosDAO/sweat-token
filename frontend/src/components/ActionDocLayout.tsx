@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom'
 
-export const ActionDocLayout: React.FC<{ children: Array<React.ReactNode>; hideSidebar?: boolean }> = (props) => {
+export const ActionDocLayout: React.FC<{ children: Array<React.ReactNode> }> = (props) => {
   const navigate = useNavigate()
   return (
     <Grid container spacing={0} sx={{ minHeight: '100vh' }}>
@@ -30,8 +30,8 @@ export const ActionDocLayout: React.FC<{ children: Array<React.ReactNode>; hideS
         md={5}
         sx={{
           p: '120px 32px',
-          borderLeft: props.hideSidebar ? 'none' : '1px solid #EEF2F6',
-          background: props.hideSidebar ? '#fff' : '#FAFCFF url(/sporos.png) bottom right no-repeat'
+          borderLeft: '1px solid #EEF2F6',
+          background: '#FAFCFF url(/sporos.png) bottom right no-repeat'
         }}
       >
         {props.children[1]}

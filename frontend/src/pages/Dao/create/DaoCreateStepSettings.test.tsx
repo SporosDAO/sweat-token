@@ -2,7 +2,7 @@ import { act, screen, render, waitFor, fireEvent, within } from '../../../../tes
 import * as daoNames from '../../../graph/getDaoNames'
 import * as wagmi from 'wagmi'
 
-describe('DAO Formation - Step DAO Founder', () => {
+describe('DAO Formation - Step DAO Settings', () => {
   beforeEach(async () => {
     const useGetDaoNames = jest.spyOn(daoNames, 'useGetDaoNames')
     useGetDaoNames.mockImplementation(
@@ -26,6 +26,21 @@ describe('DAO Formation - Step DAO Founder', () => {
 
     jest.spyOn(wagmi, 'useEnsName').mockReturnValue({ data: '', isSuccess: false } as any)
 
+    jest.spyOn(wagmi, `usePrepareContractWrite`).mockReturnValue({
+      config: jest.fn(),
+      isError: false,
+      error: undefined
+    } as any)
+
+    jest.spyOn(wagmi, `useContractWrite`).mockReturnValue({
+      isLoading: false,
+      isSuccess: true,
+      isError: false,
+      error: undefined,
+      isIdle: false,
+      write: jest.fn()
+    } as any)
+
     await act(async () => {
       await render({
         route: '/dao/chain/5/create/stepper'
@@ -41,37 +56,14 @@ describe('DAO Formation - Step DAO Founder', () => {
 
     await act(async () => {
       const continueButton = await screen.findByTestId('continue-button')
-      await expect(continueButton).toBeEnabled()
       await continueButton.click()
     })
-  })
-
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
-
-  it('Shows Founder step', async () => {
-    await waitFor(async () => {
-      const header = await screen.getByTestId('content-header')
-      await expect(await within(header).findByText('Founder')).toBeVisible()
-    })
-  })
-
-  it('Allows valid founder inputs', async () => {
-    jest.spyOn(wagmi, 'useEnsName').mockReturnValue({ data: 'afounder.eth', isSuccess: true } as any)
 
     await act(async () => {
       const founderAddressInput = await (await screen.findByTestId('founder-address-input')).querySelector('input')
       await fireEvent.change(founderAddressInput as Element, {
         target: { value: '0xf952a72F39c5Fa22a443200AbE7835128bCb7439' }
       })
-    })
-
-    await waitFor(async () => {
-      await screen.findByText(/ENS name:\s+afounder.eth/i)
-    })
-
-    await act(async () => {
       const founderTokensInput = await (await screen.findByTestId('founder-tokens-input')).querySelector('input')
       await fireEvent.change(founderTokensInput as Element, { target: { value: '1000' } })
       const founderEmailInput = await (await screen.findByTestId('founder-email-input')).querySelector('input')
@@ -80,21 +72,22 @@ describe('DAO Formation - Step DAO Founder', () => {
 
     await waitFor(async () => {
       const continueButton = await screen.findByTestId('continue-button')
-      await expect(continueButton).toBeEnabled()
+      await continueButton.click()
     })
   })
 
-  it('Rejects invalid founder address', async () => {
-    await act(async () => {
-      const founderAddressInput = await (await screen.findByTestId('founder-address-input')).querySelector('input')
-      await fireEvent.change(founderAddressInput as Element, {
-        target: { value: '0xf952Nonsense' }
-      })
-    })
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
 
+  it('Shows Settings step', async () => {
     await waitFor(async () => {
-      const continueButton = await screen.findByTestId('continue-button')
-      await expect(continueButton).toBeDisabled()
+      const header = await screen.getByTestId('content-header')
+      await expect(await within(header).findByText('Settings')).toBeVisible()
     })
+  })
+
+  it('Allows valid settings inputs', async () => {
+    //
   })
 })
