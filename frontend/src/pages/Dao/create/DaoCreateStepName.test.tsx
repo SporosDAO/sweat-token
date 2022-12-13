@@ -23,6 +23,7 @@ describe('DAO Formation - Step DAO Name', () => {
       isDisconnected: false,
       isConnected: true
     } as any)
+  })
 
   afterEach(() => {
     jest.clearAllMocks()

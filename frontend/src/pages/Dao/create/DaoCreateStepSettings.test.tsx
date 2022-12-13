@@ -26,21 +26,6 @@ describe('DAO Formation - Step DAO Settings', () => {
 
     jest.spyOn(wagmi, 'useEnsName').mockReturnValue({ data: '', isSuccess: false } as any)
 
-    jest.spyOn(wagmi, `usePrepareContractWrite`).mockReturnValue({
-      config: jest.fn(),
-      isError: false,
-      error: undefined
-    } as any)
-
-    jest.spyOn(wagmi, `useContractWrite`).mockReturnValue({
-      isLoading: false,
-      isSuccess: true,
-      isError: false,
-      error: undefined,
-      isIdle: false,
-      write: jest.fn()
-    } as any)
-
     await act(async () => {
       await render({
         route: '/dao/chain/5/create/stepper'
@@ -70,7 +55,7 @@ describe('DAO Formation - Step DAO Settings', () => {
       await fireEvent.change(founderEmailInput as Element, { target: { value: 'afounder@email.com' } })
     })
 
-    await waitFor(async () => {
+    await act(async () => {
       const continueButton = await screen.findByTestId('continue-button')
       await continueButton.click()
     })
@@ -87,7 +72,101 @@ describe('DAO Formation - Step DAO Settings', () => {
     })
   })
 
-  it('Allows valid settings inputs', async () => {
-    //
+  it('Allows valid default settings inputs', async () => {
+    await act(async () => {
+      const continueButton = await screen.findByTestId('continue-button')
+      await expect(continueButton).toBeEnabled()
+      await continueButton.click()
+    })
+  })
+
+  it('Rejects negative voting period', async () => {
+    await act(async () => {
+      const votingPeriod = await (await screen.findByTestId('voting-period-input')).querySelector('input')
+      await fireEvent.change(votingPeriod as Element, { target: { value: '-1' } })
+    })
+
+    await waitFor(async () => {
+      const errorMessage = await screen.findByTestId('voting-period-error')
+      await expect(errorMessage).toBeVisible()
+      await expect(within(errorMessage).findByText(/Voting period has to be a positive number/i))
+      const continueButton = await screen.findByTestId('continue-button')
+      await expect(continueButton).toBeDisabled()
+    })
+  })
+
+  it('Rejects voting period over 365 days', async () => {
+    await act(async () => {
+      const votingPeriod = await (await screen.findByTestId('voting-period-input')).querySelector('input')
+      await fireEvent.change(votingPeriod as Element, { target: { value: 24 * 366 } })
+    })
+
+    await waitFor(async () => {
+      const errorMessage = await screen.findByTestId('voting-period-error')
+      await expect(errorMessage).toBeVisible()
+      await expect(within(errorMessage).findByText(/Voting period has to be less than 365 days/i))
+      const continueButton = await screen.findByTestId('continue-button')
+      await expect(continueButton).toBeDisabled()
+    })
+  })
+
+  it('Rejects negative quorum', async () => {
+    await act(async () => {
+      const votingPeriod = await (await screen.findByTestId('voting-quorum-input')).querySelector('input')
+      await fireEvent.change(votingPeriod as Element, { target: { value: -10 } })
+    })
+
+    await waitFor(async () => {
+      const errorMessage = await screen.findByTestId('voting-quorum-error')
+      await expect(errorMessage).toBeVisible()
+      await expect(within(errorMessage).findByText(/Quorum percentage has to be a positive number/i))
+      const continueButton = await screen.findByTestId('continue-button')
+      await expect(continueButton).toBeDisabled()
+    })
+  })
+
+  it('Rejects quorum over 100%', async () => {
+    await act(async () => {
+      const votingPeriod = await (await screen.findByTestId('voting-quorum-input')).querySelector('input')
+      await fireEvent.change(votingPeriod as Element, { target: { value: 101 } })
+    })
+
+    await waitFor(async () => {
+      const errorMessage = await screen.findByTestId('voting-quorum-error')
+      await expect(errorMessage).toBeVisible()
+      await expect(within(errorMessage).findByText(/Quorum percentage has to be no greater than 100/i))
+      const continueButton = await screen.findByTestId('continue-button')
+      await expect(continueButton).toBeDisabled()
+    })
+  })
+
+  it('Rejects approval less than 51%', async () => {
+    await act(async () => {
+      const votingPeriod = await (await screen.findByTestId('voting-approval-input')).querySelector('input')
+      await fireEvent.change(votingPeriod as Element, { target: { value: 50 } })
+    })
+
+    await waitFor(async () => {
+      const errorMessage = await screen.findByTestId('voting-approval-error')
+      await expect(errorMessage).toBeVisible()
+      await expect(within(errorMessage).findByText(/Approval percentage has to be at least 51/i))
+      const continueButton = await screen.findByTestId('continue-button')
+      await expect(continueButton).toBeDisabled()
+    })
+  })
+
+  it('Rejects approval over 100%', async () => {
+    await act(async () => {
+      const votingPeriod = await (await screen.findByTestId('voting-approval-input')).querySelector('input')
+      await fireEvent.change(votingPeriod as Element, { target: { value: 110 } })
+    })
+
+    await waitFor(async () => {
+      const errorMessage = await screen.findByTestId('voting-approval-error')
+      await expect(errorMessage).toBeVisible()
+      await expect(within(errorMessage).findByText(/Approval percentage has to be no greater than 100/i))
+      const continueButton = await screen.findByTestId('continue-button')
+      await expect(continueButton).toBeDisabled()
+    })
   })
 })

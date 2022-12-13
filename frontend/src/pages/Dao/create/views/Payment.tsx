@@ -5,25 +5,14 @@ import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
 import { useTheme } from '@mui/material'
+import Header from '../../../../components/Header'
 
 const Payment: React.FC<any> = (props) => {
   const { palette } = useTheme()
 
   return (
     <>
-      <Grid container>
-        <Grid item md={7}>
-          <Typography variant="h6" mb="4px">
-            Deployment
-          </Typography>
-          <Typography variant="subtitle2" color={palette.grey[700]}>
-            You are now ready to deploy your new DAO with a Series LLC wrapper.
-          </Typography>
-        </Grid>
-        {/* <Grid item md={5} display="flex" justifyContent="flex-end">
-          <Button variant="outlined">Bridge funds</Button>
-        </Grid> */}
-      </Grid>
+      <Header title="Deployment" subtitle="You are now ready to deploy your new DAO with a Series LLC wrapper." />
       <Divider orientation="horizontal" sx={{ m: '20px 0 24px' }} />
       <Card sx={{ p: 0 }}>
         <Box p="32px 32px 16px">
@@ -59,7 +48,7 @@ const Payment: React.FC<any> = (props) => {
           </Box>
         </Box>
         <Box p="32px" sx={{ background: palette.grey[50] }}>
-          <Button fullWidth size="large" variant="contained" onClick={props.onPay}>
+          <Button fullWidth size="large" variant="contained" onClick={props.onPay} data-testid="deploy-button">
             Deploy now
           </Button>
         </Box>

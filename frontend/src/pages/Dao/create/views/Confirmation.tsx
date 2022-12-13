@@ -10,11 +10,13 @@ import Header from '../../../../components/Header'
 import { Checkbox, FormControlLabel, Link, useTheme } from '@mui/material'
 import { AlertIcon, CheckIcon } from '../../../../components/Icons'
 import { Controller } from 'react-hook-form'
+import { useNetwork } from 'wagmi'
 
 const Confirmation: React.FC<any> = (props) => {
   const { palette } = useTheme()
   const { getValues, control } = useFormContext()
   const { name, symbol, founders, voting } = getValues()
+  const { chain } = useNetwork()
 
   return (
     <>
@@ -42,7 +44,14 @@ const Confirmation: React.FC<any> = (props) => {
         <Typography variant="caption" color={palette.grey[500]} m="0">
           On-Chain name
         </Typography>
-        <Typography m="0" variant="subtitle2" color={palette.grey[900]} fontWeight={500} sx={{ display: 'flex' }}>
+        <Typography
+          m="0"
+          variant="subtitle2"
+          color={palette.grey[900]}
+          fontWeight={500}
+          sx={{ display: 'flex' }}
+          data-testid="dao-name"
+        >
           {name}
         </Typography>
         <Typography
@@ -58,7 +67,7 @@ const Confirmation: React.FC<any> = (props) => {
         <Typography variant="caption" color={palette.grey[500]} m="0">
           Token symbol
         </Typography>
-        <Typography variant="subtitle2" color={palette.grey[900]} fontWeight={500}>
+        <Typography variant="subtitle2" color={palette.grey[900]} fontWeight={500} data-testid="token-symbol">
           {symbol}
         </Typography>
         <Typography
@@ -74,8 +83,8 @@ const Confirmation: React.FC<any> = (props) => {
         <Typography variant="caption" color={palette.grey[500]} m="0">
           Deploying on
         </Typography>
-        <Typography variant="subtitle2" color={palette.grey[900]} fontWeight={500}>
-          Arbitrum
+        <Typography variant="subtitle2" color={palette.grey[900]} fontWeight={500} data-testid="chain-name">
+          {chain?.name}
         </Typography>
       </Card>
       <Card sx={{ mb: '24px', background: palette.grey[50], boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)' }}>
@@ -215,21 +224,36 @@ const Confirmation: React.FC<any> = (props) => {
             <Typography variant="caption" color={palette.grey[500]}>
               Address
             </Typography>
-            <Typography variant="subtitle2" color={palette.grey[900]} fontWeight={500}>
+            <Typography
+              variant="subtitle2"
+              color={palette.grey[900]}
+              fontWeight={500}
+              data-testid={`founder.${index}.address`}
+            >
               {founder.address}
             </Typography>
             <Divider orientation="horizontal" sx={{ m: '20px 0 16px' }} />
             <Typography variant="caption" color={palette.grey[500]}>
               Tokens
             </Typography>
-            <Typography variant="subtitle2" color={palette.grey[900]} fontWeight={500}>
+            <Typography
+              variant="subtitle2"
+              color={palette.grey[900]}
+              fontWeight={500}
+              data-testid={`founder.${index}.initialTokens`}
+            >
               {founder.initialTokens}
             </Typography>
             <Divider orientation="horizontal" sx={{ m: '20px 0 16px' }} />
             <Typography variant="caption" color={palette.grey[500]}>
               Email
             </Typography>
-            <Typography variant="subtitle2" color={palette.grey[900]} fontWeight={500}>
+            <Typography
+              variant="subtitle2"
+              color={palette.grey[900]}
+              fontWeight={500}
+              data-testid={`founder.${index}.email`}
+            >
               {founder.email}
             </Typography>
           </Card>
@@ -255,6 +279,7 @@ const Confirmation: React.FC<any> = (props) => {
                       inputProps={{ 'aria-label': 'Terms Checkbox' }}
                       icon={<img src="/icons/unchecked.svg" alt="Unchecked" />}
                       checkedIcon={<img src="/icons/checked.svg" alt="Unchecked" />}
+                      data-testid="terms"
                     />
                   )}
                 />

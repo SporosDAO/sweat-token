@@ -6,7 +6,8 @@ import InputAdornment from '@mui/material/InputAdornment'
 import { useFormContext } from 'react-hook-form'
 
 import Header from '../../../../components/Header'
-import { useTheme } from '@mui/material'
+import { Alert, useTheme } from '@mui/material'
+import { ErrorMessage } from '@hookform/error-message'
 
 const Settings: React.FC<any> = (props) => {
   const { palette } = useTheme()
@@ -36,6 +37,12 @@ const Settings: React.FC<any> = (props) => {
               endAdornment: <InputAdornment position="end">hours</InputAdornment>
             }}
           />
+          <ErrorMessage
+            as={<Alert severity="error" />}
+            errors={formState?.errors}
+            name={'voting.period.hours'}
+            data-testid="voting-period-error"
+          />
         </Box>
         <Box mt="16px">
           <TextField
@@ -55,6 +62,12 @@ const Settings: React.FC<any> = (props) => {
               endAdornment: <InputAdornment position="end">%</InputAdornment>
             }}
           />
+          <ErrorMessage
+            as={<Alert severity="error" />}
+            errors={formState?.errors}
+            name={'voting.quorum'}
+            data-testid="voting-quorum-error"
+          />
         </Box>
         <Box mt="16px">
           <TextField
@@ -73,6 +86,12 @@ const Settings: React.FC<any> = (props) => {
             InputProps={{
               endAdornment: <InputAdornment position="end">%</InputAdornment>
             }}
+          />
+          <ErrorMessage
+            as={<Alert severity="error" />}
+            errors={formState?.errors}
+            name={'voting.approval'}
+            data-testid="voting-approval-error"
           />
         </Box>
       </Card>
