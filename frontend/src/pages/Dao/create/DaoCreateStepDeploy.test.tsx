@@ -48,13 +48,13 @@ describe('DAO Formation - Step DAO Deployment', () => {
     })
 
     await act(async () => {
-      const founderAddressInput = await (await screen.findByTestId('founder-address-input')).querySelector('input')
+      const founderAddressInput = await (await screen.findByTestId('founder.0.address-input')).querySelector('input')
       await fireEvent.change(founderAddressInput as Element, {
         target: { value: '0xf952a72F39c5Fa22a443200AbE7835128bCb7439' }
       })
-      const founderTokensInput = await (await screen.findByTestId('founder-tokens-input')).querySelector('input')
+      const founderTokensInput = await (await screen.findByTestId('founder.0.tokens-input')).querySelector('input')
       await fireEvent.change(founderTokensInput as Element, { target: { value: '1000' } })
-      const founderEmailInput = await (await screen.findByTestId('founder-email-input')).querySelector('input')
+      const founderEmailInput = await (await screen.findByTestId('founder.0.email-input')).querySelector('input')
       await fireEvent.change(founderEmailInput as Element, { target: { value: 'afounder@email.com' } })
     })
 

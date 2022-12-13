@@ -257,44 +257,41 @@ const Confirmation: React.FC<any> = (props) => {
               {founder.email}
             </Typography>
           </Card>
-          <Card
-            key={index}
-            sx={{ mb: '24px', background: palette.grey[50], boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)' }}
-          >
-            <Divider orientation="horizontal" sx={{ m: '20px 0 16px' }} />
-            <FormControlLabel
-              sx={{ ml: '4px', mt: '24px' }}
-              label="Agree with terms of use and privacy policy"
-              control={
-                <Controller
-                  name="terms"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { onChange, onBlur, value, ref } }) => (
-                    <Checkbox
-                      ref={ref}
-                      checked={value}
-                      onBlur={onBlur}
-                      onChange={onChange}
-                      inputProps={{ 'aria-label': 'Terms Checkbox' }}
-                      icon={<img src="/icons/unchecked.svg" alt="Unchecked" />}
-                      checkedIcon={<img src="/icons/checked.svg" alt="Unchecked" />}
-                      data-testid="terms"
-                    />
-                  )}
-                />
-              }
-            />
-            <Typography variant="subtitle2" sx={{ mt: '-4px', ml: '24px', color: '#697586' }}>
-              In order to continue you will have to accept our terms and conditions. You can read them{' '}
-              <Link href="https://sporosdao.xyz/terms-and-conditions/" rel="noopener" target="_blank">
-                here
-              </Link>
-              .
-            </Typography>
-          </Card>
         </Card>
       ))}
+      <Card sx={{ mb: '24px', background: palette.grey[50], boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)' }}>
+        <Divider orientation="horizontal" sx={{ m: '20px 0 16px' }} />
+        <FormControlLabel
+          sx={{ ml: '4px', mt: '24px' }}
+          label="Agree with terms of use and privacy policy"
+          control={
+            <Controller
+              name="terms"
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value, ref } }) => (
+                <Checkbox
+                  ref={ref}
+                  checked={value}
+                  onBlur={onBlur}
+                  onChange={onChange}
+                  inputProps={{ 'aria-label': 'Terms Checkbox' }}
+                  icon={<img src="/icons/unchecked.svg" alt="Unchecked" />}
+                  checkedIcon={<img src="/icons/checked.svg" alt="Unchecked" />}
+                  data-testid="terms"
+                />
+              )}
+            />
+          }
+        />
+        <Typography variant="subtitle2" sx={{ mt: '-4px', ml: '24px', color: '#697586' }}>
+          In order to continue you will have to accept our terms and conditions. You can read them{' '}
+          <Link href="https://sporosdao.xyz/terms-and-conditions/" rel="noopener" target="_blank">
+            here
+          </Link>
+          .
+        </Typography>
+      </Card>
     </>
   )
 }

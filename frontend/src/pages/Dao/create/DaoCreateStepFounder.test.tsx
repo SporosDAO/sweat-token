@@ -61,7 +61,7 @@ describe('DAO Formation - Step DAO Founder', () => {
     jest.spyOn(wagmi, 'useEnsName').mockReturnValue({ data: 'afounder.eth', isSuccess: true } as any)
 
     await act(async () => {
-      const founderAddressInput = await (await screen.findByTestId('founder-address-input')).querySelector('input')
+      const founderAddressInput = await (await screen.findByTestId('founder.0.address-input')).querySelector('input')
       await fireEvent.change(founderAddressInput as Element, {
         target: { value: '0xf952a72F39c5Fa22a443200AbE7835128bCb7439' }
       })
@@ -72,9 +72,9 @@ describe('DAO Formation - Step DAO Founder', () => {
     })
 
     await act(async () => {
-      const founderTokensInput = await (await screen.findByTestId('founder-tokens-input')).querySelector('input')
+      const founderTokensInput = await (await screen.findByTestId('founder.0.tokens-input')).querySelector('input')
       await fireEvent.change(founderTokensInput as Element, { target: { value: '1000' } })
-      const founderEmailInput = await (await screen.findByTestId('founder-email-input')).querySelector('input')
+      const founderEmailInput = await (await screen.findByTestId('founder.0.email-input')).querySelector('input')
       await fireEvent.change(founderEmailInput as Element, { target: { value: 'afounder@email.com' } })
     })
 
@@ -86,7 +86,7 @@ describe('DAO Formation - Step DAO Founder', () => {
 
   it('Rejects invalid founder address', async () => {
     await act(async () => {
-      const founderAddressInput = await (await screen.findByTestId('founder-address-input')).querySelector('input')
+      const founderAddressInput = await (await screen.findByTestId('founder.0.address-input')).querySelector('input')
       await fireEvent.change(founderAddressInput as Element, {
         target: { value: '0xf952Nonsense' }
       })
@@ -95,6 +95,98 @@ describe('DAO Formation - Step DAO Founder', () => {
     await waitFor(async () => {
       const continueButton = await screen.findByTestId('continue-button')
       await expect(continueButton).toBeDisabled()
+    })
+  })
+
+  it('Allows adding second founder', async () => {
+    jest.spyOn(wagmi, 'useEnsName').mockReturnValue({ data: 'afounder.eth', isSuccess: true } as any)
+
+    await act(async () => {
+      const founderAddressInput = await (await screen.findByTestId('founder.0.address-input')).querySelector('input')
+      await fireEvent.change(founderAddressInput as Element, {
+        target: { value: '0xf952a72F39c5Fa22a443200AbE7835128bCb7439' }
+      })
+    })
+
+    await waitFor(async () => {
+      await screen.findByText(/ENS name:\s+afounder.eth/i)
+    })
+
+    await act(async () => {
+      const founderTokensInput = await (await screen.findByTestId('founder.0.tokens-input')).querySelector('input')
+      await fireEvent.change(founderTokensInput as Element, { target: { value: '1000' } })
+      const founderEmailInput = await (await screen.findByTestId('founder.0.email-input')).querySelector('input')
+      await fireEvent.change(founderEmailInput as Element, { target: { value: 'afounder@email.com' } })
+    })
+
+    await waitFor(async () => {
+      const continueButton = await screen.findByTestId('continue-button')
+      await expect(continueButton).toBeEnabled()
+    })
+
+    await waitFor(async () => {
+      const addFounderButton = await screen.findByTestId('add-founder-button')
+      await expect(addFounderButton).toBeEnabled()
+      const removeFounderButton = await screen.queryByTestId('remove-founder-button')
+      await expect(removeFounderButton).toBeNull()
+    })
+
+    await act(async () => {
+      await (await screen.findByTestId('add-founder-button')).click()
+    })
+
+    await waitFor(async () => {
+      const continueButton = await screen.findByTestId('continue-button')
+      await expect(continueButton).toBeDisabled()
+    })
+
+    await act(async () => {
+      const founderAddressInput = await (await screen.findByTestId('founder.1.address-input')).querySelector('input')
+      await fireEvent.change(founderAddressInput as Element, {
+        target: { value: '0x8791f1612453a817919697ffA4895b17F6C77929' }
+      })
+      const founderTokensInput = await (await screen.findByTestId('founder.1.tokens-input')).querySelector('input')
+      await fireEvent.change(founderTokensInput as Element, { target: { value: '2000' } })
+      const founderEmailInput = await (await screen.findByTestId('founder.1.email-input')).querySelector('input')
+      await fireEvent.change(founderEmailInput as Element, { target: { value: 'bfounder@email.com' } })
+    })
+
+    await waitFor(async () => {
+      const continueButton = await screen.findByTestId('continue-button')
+      await expect(continueButton).toBeEnabled()
+    })
+  })
+
+  it('Allows removal of second founder', async () => {
+    jest.spyOn(wagmi, 'useEnsName').mockReturnValue({ data: 'afounder.eth', isSuccess: true } as any)
+
+    await waitFor(async () => {
+      const addFounderButton = await screen.findByTestId('add-founder-button')
+      await expect(addFounderButton).toBeEnabled()
+      // const removeFounderButton = await screen.queryByTestId('remove-founder-button')
+      // await expect(removeFounderButton).toBeNull()
+    })
+
+    await act(async () => {
+      await (await screen.findByTestId('add-founder-button')).click()
+    })
+
+    await waitFor(async () => {
+      const secondFounderAddressInput = await screen.findByTestId('founder.1.address-input')
+      // screen.debug(secondFounderAddressInput)
+      await expect(secondFounderAddressInput).toBeInTheDocument()
+      await expect(secondFounderAddressInput).toBeVisible()
+      const removeFounderButton = await screen.queryByTestId('remove-founder-button')
+      await expect(removeFounderButton).toBeEnabled()
+    })
+
+    await act(async () => {
+      await (await screen.findByTestId('remove-founder-button')).click()
+    })
+
+    await waitFor(async () => {
+      const secondFounderAddressInput = await screen.queryByTestId('founder.1.address-input')
+      await expect(secondFounderAddressInput).toBeNull()
     })
   })
 })

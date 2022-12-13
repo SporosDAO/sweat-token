@@ -95,18 +95,18 @@ export function prepareKaliDaoCell(formData: CreateDaoForm): any[] {
   const extensionsArray: any[] = []
   const extensionsData: any[] = []
 
-  console.log(
-    'deploy params',
-    name,
-    symbol,
-    docs_,
-    Number(!transferability),
-    extensionsArray,
-    extensionsData,
-    voters,
-    shares,
-    govSettings
-  )
+  // console.debug(
+  //   'deploy params',
+  //   name,
+  //   symbol,
+  //   docs_,
+  //   Number(!transferability),
+  //   extensionsArray,
+  //   extensionsData,
+  //   voters,
+  //   shares,
+  //   govSettings
+  // )
 
   // Prepare input args for KaliDAO.init() call
   // https://github.com/kalidao/kali-contracts/blob/de721b483b04feba5c42b49b997d68e8ce4885dd/contracts/KaliDAO.sol#L145

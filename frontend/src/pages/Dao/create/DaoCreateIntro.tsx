@@ -3,6 +3,7 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
+import Link from '@mui/material/Link'
 import { useNavigate } from 'react-router-dom'
 import { useTheme } from '@mui/material'
 import { ActionDocLayout } from '../../../components/ActionDocLayout'
@@ -42,6 +43,16 @@ export default function DaoCreateIntro() {
           </Typography>
           <Typography variant="h4" mb="8px" letterSpacing="-0.02em">
             Everything You Need to Launch and Grow
+          </Typography>
+          <Typography variant="h6" mb="8px" letterSpacing="-0.02em">
+            Supported by{' '}
+            <Link href="https://www.lexdao.coop/" rel="noreferrer" target="_blank">
+              Lex DAO
+            </Link>{' '}
+            and{' '}
+            <Link href="https://www.kali.gg/" rel="noreferrer" target="_blank">
+              Kali DAO
+            </Link>
           </Typography>
           <Typography variant="body2" color={palette.grey[500]}>
             Get simple yet powerful tools to help you manage your DAO.
@@ -93,7 +104,7 @@ export default function DaoCreateIntro() {
             Through KaliDAO, Sporos enables you to instantly create an on-chain Delaware LLC, as a "child" of the{' '}
             <AnchorLink href="https://docs.kalidao.xyz/#kalico-ricardian-llc">KaliCo Ricardian Series LLC.</AnchorLink>
           </Typography>
-          <Typography variant="subtitle2" mt="16px">
+          <Typography variant="subtitle2" mt="16px" color={palette.grey[500]}>
             Effectively, each LLC has its own rights and liability protection, separate and apart from each other,
             enforced by Delaware law and under the terms of the{' '}
             <AnchorLink href="https://gateway.pinata.cloud/ipfs/QmdHFNxtecmCNcTscWJqnA4AiASyk3SHCgKamugLHqR23i">
@@ -111,10 +122,10 @@ export default function DaoCreateIntro() {
         </Box>
         <Box mb="32px">
           <Typography variant="body1" mb="8px" fontWeight={500}>
-            When will my DAO be ready?
+            When will my LLC be ready?
           </Typography>
           <Typography variant="subtitle2" color={palette.grey[500]}>
-            Your DAO will be instantly created and deployed on-chain as soon as you complete this form.
+            Your LLC will be instantly created and deployed on-chain as soon as you complete this form.
           </Typography>
         </Box>
         <Box>

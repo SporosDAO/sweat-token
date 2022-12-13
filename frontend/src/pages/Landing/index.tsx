@@ -27,7 +27,7 @@ const Landing: React.FC = () => {
       {!chain || isDisconnected ? (
         <div>Please connect your web3 wallet.</div>
       ) : (
-        <ContentBlock title="Your DAOs" cta={{ href: `dao/chain/${chain?.id}/create/`, text: 'Create a new DAO' }}>
+        <ContentBlock title="Your DAOs" cta={{ href: `dao/chain/${chain?.id}/create/`, text: 'Create a new company' }}>
           <MyDAOs />
         </ContentBlock>
       )}
