@@ -15,7 +15,7 @@ import Settings from './views/Settings'
 import Confirmation from './views/Confirmation'
 import Payment from './views/Payment'
 import { ActionDocLayout } from '../../../components/ActionDocLayout'
-import { a11yProps, TabPanel } from '../../../components/TabPanel'
+import { useA11yProps, TabPanel } from '../../../components/TabPanel'
 import { ArrowRight, HelpIcon } from '../../../components/Icons'
 import { CreateDaoForm, prepareKaliDaoCell } from './createDaoHelper'
 import FACTORY_ABI from '../../../abi/KaliDAOFactory.json'
@@ -47,7 +47,7 @@ export default function DaoCreateStepper() {
       }
     }
   })
-  const { handleSubmit, formState } = formMethods
+  const { handleSubmit, formState, getValues } = formMethods
   const [activeView, setActiveView] = React.useState(View.Name)
 
   const { chain: activeChain } = useNetwork()
@@ -91,15 +91,20 @@ export default function DaoCreateStepper() {
             aria-label="scrollable force tabs example"
             TabIndicatorProps={{ sx: { left: 0, backgroundColor: palette.primary.dark } }}
           >
-            <Tab label="Name" {...a11yProps(View.Name)} sx={{ alignSelf: 'start' }} />
-            <Tab label="Founder" {...a11yProps(View.Founder)} sx={{ alignSelf: 'start' }} />
-            <Tab label="Settings" {...a11yProps(View.Settings)} sx={{ alignSelf: 'start' }} />
-            <Tab label="Confirm" {...a11yProps(View.Confirmation)} sx={{ alignSelf: 'start' }} />
-            <Tab label="Payment" {...a11yProps(View.Payment)} sx={{ alignSelf: 'start' }} />
+            <Tab label="Name" disabled {...useA11yProps(View.Name, activeView)} sx={{ alignSelf: 'start' }} />
+            <Tab label="Founder" disabled {...useA11yProps(View.Founder, activeView)} sx={{ alignSelf: 'start' }} />
+            <Tab label="Settings" disabled {...useA11yProps(View.Settings, activeView)} sx={{ alignSelf: 'start' }} />
+            <Tab
+              label="Confirm"
+              disabled
+              {...useA11yProps(View.Confirmation, activeView)}
+              sx={{ alignSelf: 'start' }}
+            />
+            <Tab label="Payment" disabled {...useA11yProps(View.Payment, activeView)} sx={{ alignSelf: 'start' }} />
           </Tabs>
           <Box sx={{ cursor: 'pointer', position: 'fixed', bottom: '40px' }}>
-            <Typography variant="subtitle2" color={palette.grey[500]} display="flex" alignItems="center">
-              <HelpIcon sx={{ mt: '2px', fill: 'none', stroke: '#61787C', fontSize: '20px', mr: '6px' }} />
+            <Typography variant="subtitle2" color={palette.text.secondary} display="flex" alignItems="center">
+              <HelpIcon sx={{ mt: '2px', fill: 'none', mr: '6px' }} />
               Help &amp; Support
             </Typography>
           </Box>
@@ -140,7 +145,7 @@ export default function DaoCreateStepper() {
                     size="small"
                     variant="contained"
                     data-testid="continue-button"
-                    disabled={!formState.isValid}
+                    disabled={!formState.isValid || (activeView === View.Confirmation && getValues('terms') === false)}
                     endIcon={<ArrowRight sx={{ mt: '4px', stroke: 'white' }} />}
                     onClick={() => setActiveView((activeView) => (activeView += 1))}
                   >
@@ -159,30 +164,30 @@ export default function DaoCreateStepper() {
         {activeView === View.Name && (
           <>
             <Box mb="32px">
-              <Typography variant="body1" mb="8px" fontWeight={500}>
+              <Typography variant="body1" mb="8px">
                 What is an on-chain name?
               </Typography>
-              <Typography variant="subtitle2" color={palette.grey[500]}>
+              <Typography variant="subtitle2" color={palette.text.secondary}>
                 This is the name blockchain explorers such as arbiscan will use to represent your company.
               </Typography>
             </Box>
             <Box sx={{ mb: '32px' }}>
-              <Typography variant="body1" mb="8px" fontWeight={500}>
+              <Typography variant="body1" mb="8px">
                 Can I change my on-chain name or token symbol later?
               </Typography>
-              <Typography variant="subtitle2" color={palette.grey[500]}>
+              <Typography variant="subtitle2" color={palette.text.secondary}>
                 No. You will not be able to change your on-chain name nor token symbol after you deploy your LLC.
               </Typography>
             </Box>
             <Box>
-              <Typography variant="body1" mb="8px" fontWeight={500}>
+              <Typography variant="body1" mb="8px">
                 What will be my company's legal name?
               </Typography>
-              <Typography variant="subtitle2" color={palette.grey[500]}>
+              <Typography variant="subtitle2" color={palette.text.secondary}>
                 The actual name of your LLC will be "Ricardian LLC, [chainId: RicardianId]" as a Series LLC under Kali's
                 Master Ricardian LLC.
               </Typography>
-              <Typography variant="subtitle2" color={palette.grey[500]} sx={{ mt: '16px' }}>
+              <Typography variant="subtitle2" color={palette.text.secondary} sx={{ mt: '16px' }}>
                 You will need to register a trade name with the state of Delaware if you want to do business with a
                 different name off-chain.
               </Typography>
@@ -192,18 +197,18 @@ export default function DaoCreateStepper() {
         {activeView === View.Founder && (
           <>
             <Box mb="32px">
-              <Typography variant="body1" mb="8px" fontWeight={500}>
+              <Typography variant="body1" mb="8px">
                 Can I launch a DAO with more than one founder?
               </Typography>
-              <Typography variant="subtitle2" color={palette.grey[500]}>
+              <Typography variant="subtitle2" color={palette.text.secondary}>
                 Yes. You can add up to 5 number of founders when you launch your DAO.
               </Typography>
             </Box>
             <Box>
-              <Typography variant="body1" mb="8px" fontWeight={500}>
+              <Typography variant="body1" mb="8px">
                 Why do you need my email address?
               </Typography>
-              <Typography variant="subtitle2" color={palette.grey[500]}>
+              <Typography variant="subtitle2" color={palette.text.secondary}>
                 We only use your email to communicate directly with you. We do not share your email with any third
                 parties.
               </Typography>
@@ -213,18 +218,18 @@ export default function DaoCreateStepper() {
         {activeView === View.Settings && (
           <>
             <Box mb="32px">
-              <Typography variant="body1" mb="8px" fontWeight={500}>
+              <Typography variant="body1" mb="8px">
                 What are governance settings?
               </Typography>
-              <Typography variant="subtitle2" color={palette.grey[500]}>
+              <Typography variant="subtitle2" color={palette.text.secondary}>
                 Governance settings determine how your company enforces decisions on-chain. Transparently and immutably.
               </Typography>
             </Box>
             <Box sx={{ mb: '32px' }}>
-              <Typography variant="body1" mb="8px" fontWeight={500}>
+              <Typography variant="body1" mb="8px">
                 Can I change governance settings later?
               </Typography>
-              <Typography variant="subtitle2" color={palette.grey[500]}>
+              <Typography variant="subtitle2" color={palette.text.secondary}>
                 Yes. You can change your company governance settings later via on-chain proposal vote. However it is
                 very important to choose your initial settings wisely. Any subsequent change of governance settings has
                 to comply with the then current governance settings.
@@ -235,18 +240,18 @@ export default function DaoCreateStepper() {
         {activeView === View.Payment && (
           <>
             <Box mb="32px">
-              <Typography variant="body1" mb="8px" fontWeight={500}>
+              <Typography variant="body1" mb="8px">
                 What payment methods do you accept?
               </Typography>
-              <Typography variant="subtitle2" color={palette.grey[500]}>
+              <Typography variant="subtitle2" color={palette.text.secondary}>
                 Sporos only accepts payment in USDC or DAI.
               </Typography>
             </Box>
             <Box mb="32px">
-              <Typography variant="body1" mb="8px" fontWeight={500}>
+              <Typography variant="body1" mb="8px">
                 Where do you accept payment?
               </Typography>
-              <Typography variant="subtitle2" color={palette.grey[500]}>
+              <Typography variant="subtitle2" color={palette.text.secondary}>
                 The Sporos treasury is on Arbitrum, so we are{' '}
                 <Box component="span" color="#121926">
                   only able to accept payment on Arbitrum.
@@ -254,10 +259,10 @@ export default function DaoCreateStepper() {
               </Typography>
             </Box>
             <Box>
-              <Typography variant="body1" mb="8px" fontWeight={500}>
+              <Typography variant="body1" mb="8px">
                 Can I get a refund?
               </Typography>
-              <Typography variant="subtitle2" color={palette.grey[500]}>
+              <Typography variant="subtitle2" color={palette.text.secondary}>
                 Because your LLC is instantly created and minted on-chain once you pay and deploy, we are unable to
                 provide a refund. However, we are more than happy to provide help and support for any of your Sporos
                 related needs.

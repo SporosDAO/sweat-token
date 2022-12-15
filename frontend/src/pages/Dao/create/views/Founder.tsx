@@ -8,9 +8,10 @@ import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
 import { ethers } from 'ethers'
 
 import Header from '../../../../components/Header'
-import { Alert, CardActions, CardContent, Divider, useTheme } from '@mui/material'
+import { Alert, CardActions, CardContent, Divider } from '@mui/material'
 import { ErrorMessage } from '@hookform/error-message'
 import EnsNameInfo from '../../../../components/EnsNameInfo'
+import { Add, Remove } from '@mui/icons-material'
 
 const Founder: React.FC<any> = (props) => {
   const { fields, append, remove } = useFieldArray({
@@ -24,13 +25,12 @@ const Founder: React.FC<any> = (props) => {
       email
     )
 
-  const { palette } = useTheme()
   const { formState, control, register } = useFormContext()
 
   return (
     <>
       <Header title="Founder" subtitle="Provide information for founder(s) below." />
-      <Card sx={{ mb: '24px', background: palette.grey[50], boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)' }}>
+      <Card>
         {fields.map((field, index) => (
           <CardContent key={field.id}>
             <Divider orientation="horizontal" sx={{ m: '20px 0 24px' }} />
@@ -123,7 +123,7 @@ const Founder: React.FC<any> = (props) => {
               color="secondary"
               variant="contained"
               onClick={() => append({ address: '', initialTokens: 0, email: '' })}
-              startIcon={<img src="/icons/plus-circle.svg" alt="Plus Circle Icon" />}
+              startIcon={<Add />}
               data-testid="add-founder-button"
             >
               Add a founder
@@ -135,7 +135,7 @@ const Founder: React.FC<any> = (props) => {
               color="secondary"
               variant="contained"
               onClick={() => remove(fields.length - 1)}
-              startIcon={<img src="/icons/plus-circle.svg" alt="Plus Circle Icon" />}
+              startIcon={<Remove />}
               data-testid="remove-founder-button"
             >
               Remove a founder

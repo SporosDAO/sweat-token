@@ -2,6 +2,8 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom'
+import { Close } from '@mui/icons-material'
+import { IconButton } from '@mui/material'
 
 export const ActionDocLayout: React.FC<{ children: Array<React.ReactNode> }> = (props) => {
   const navigate = useNavigate()
@@ -12,12 +14,12 @@ export const ActionDocLayout: React.FC<{ children: Array<React.ReactNode> }> = (
           sx={{
             p: '15px',
             display: 'flex',
-            alignItems: 'center',
-            borderBottom: '1px solid #EEF2F6'
+            alignItems: 'center'
           }}
         >
-          <img src="/icons/x.svg" alt="X Icon" style={{ cursor: 'pointer' }} onClick={() => navigate('/')} />
-          <Box sx={{ m: '0 10px', background: '#EEF2F6', width: '1px', height: '20px' }} />
+          <IconButton aria-label="Close" onClick={() => navigate('/')}>
+            <Close />
+          </IconButton>
           <Typography variant="subtitle2" sx={{ color: '#202939', fontWeight: 500 }}>
             Start your Company with Sporos
           </Typography>
