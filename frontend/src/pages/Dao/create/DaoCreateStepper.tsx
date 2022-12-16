@@ -84,7 +84,7 @@ export default function DaoCreateStepper() {
   return (
     <ActionDocLayout>
       <Grid container>
-        <Grid item width="30%">
+        <Grid item sx={{ width: '30%', display: { xs: 'none', sm: 'block' } }}>
           <Tabs
             value={activeView}
             sx={{ border: 'none' }}
@@ -112,7 +112,7 @@ export default function DaoCreateStepper() {
             </Typography>
           </Box>
         </Grid>
-        <Grid item width="70%" p={3}>
+        <Grid item sx={{ width: { xs: '100%', sm: '70%' }, p: { sm: '0', md: '3' } }}>
           <FormProvider {...formMethods}>
             <form>
               <TabPanel value={activeView} index={View.Name}>
@@ -163,7 +163,7 @@ export default function DaoCreateStepper() {
           </FormProvider>
         </Grid>
       </Grid>
-      <Box maxWidth="50%">
+      <Box sx={{ maxWidth: '50%' }}>
         {activeView === View.Name && (
           <>
             <Box mb="32px">
