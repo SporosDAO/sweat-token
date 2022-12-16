@@ -107,12 +107,8 @@ export default function ProjectTribute() {
       }}
     >
       {isDisconnected && (
-        <Alert severity="error" sx={{ overflow: 'hidden', wordBreak: 'break-word' }}>
-          Your wallet has been disconnected. Click{' '}
-          <Link onClick={openConnectModal} color={'#0000EE'} sx={{ cursor: 'pointer' }}>
-            here
-          </Link>{' '}
-          to connect again.
+        <Alert severity="error">
+          Your wallet has been disconnected. Click <Link onClick={openConnectModal}>here</Link> to connect again.
         </Alert>
       )}
       {!isManager && !isDisconnected && (

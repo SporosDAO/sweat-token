@@ -35,7 +35,7 @@ function VoterRow(props: { voter: string; weight: number; vote: boolean }) {
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.grey[400]
+    backgroundColor: theme.palette.action.disabledBackground
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14

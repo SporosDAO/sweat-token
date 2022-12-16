@@ -6,9 +6,9 @@ import { ServiceWorkerWrapper } from './components/PWAUpdate'
 
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { Chain, Client } from 'wagmi'
-import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { getDesignTokens } from './theme'
+import { CssBaseline, ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material'
 
 export function AppWrapper({
   wagmiClient,
@@ -36,6 +36,7 @@ export function AppWrapper({
 
   return (
     <React.StrictMode>
+      <CssBaseline />
       <ServiceWorkerWrapper />
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
