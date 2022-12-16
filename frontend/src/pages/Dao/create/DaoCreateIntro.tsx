@@ -35,12 +35,12 @@ export default function DaoCreateIntro() {
           >
             Let's go!
           </Button>
-          <Typography variant="body1" color="text.secondary" fontStyle="italic" fontWeight={400}>
+          <Typography variant="body1" color="text.secondary" fontStyle="italic">
             Available only on Arbitrum.
           </Typography>
         </Grid>
         <Box mt="64px">
-          <Typography variant="body1" color="text.secondary" fontWeight={600} mb="12px">
+          <Typography variant="body1" color="text.secondary" mb="12px">
             Features that let you grow
           </Typography>
           <Typography variant="h4" mb="8px" letterSpacing="-0.02em">

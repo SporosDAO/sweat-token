@@ -139,19 +139,9 @@ export function PageLayout(props: PageLayoutProps) {
           <Link href="https://sporosdao.xyz/" rel="noopener" target="_blank">
             <Avatar alt="Sporos DAO logo" src="/logo192.png" sx={{ width: '32px', height: '32px' }} />
           </Link>
-          {/* {!isMobile && (
-            <Typography variant="subtitle1" fontWeight={600} noWrap sx={{ ml: 2 }}>
-              Sporos DAO - The Launchpad of For-Profit DAOs
-            </Typography>
-          )} */}
           <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1, ml: 2 }}>
             {isMyDaoLoaded && myDao?.token && `${myDao?.token?.name} (${myDao?.token?.symbol})`}
           </Typography>
-          <IconButton color="inherit" aria-label="account">
-            {/* <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge> */}
-          </IconButton>
           <ConnectButton />
         </Toolbar>
       </AppBar>

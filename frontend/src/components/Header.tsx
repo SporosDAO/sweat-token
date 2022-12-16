@@ -15,7 +15,7 @@ const Header: React.FC<Props> = (props) => {
       <Typography variant="h6" mb="4px">
         {props.title}
       </Typography>
-      <Typography variant="subtitle2" color={palette.grey[700]}>
+      <Typography variant="subtitle2" color={palette.text.secondary}>
         {props.subtitle}
       </Typography>
       <Divider orientation="horizontal" sx={{ m: '20px 0 24px' }} />

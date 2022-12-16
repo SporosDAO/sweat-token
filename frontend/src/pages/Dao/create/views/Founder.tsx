@@ -11,7 +11,7 @@ import Header from '../../../../components/Header'
 import { Alert, CardActions, CardContent, Divider } from '@mui/material'
 import { ErrorMessage } from '@hookform/error-message'
 import EnsNameInfo from '../../../../components/EnsNameInfo'
-import { Add, Remove } from '@mui/icons-material'
+import { Add, Remove, Email } from '@mui/icons-material'
 
 const Founder: React.FC<any> = (props) => {
   const { fields, append, remove } = useFieldArray({
@@ -98,11 +98,7 @@ const Founder: React.FC<any> = (props) => {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <img
-                        src="/icons/mail-icon.svg"
-                        alt="Mail Tooltip Icon"
-                        style={{ cursor: 'pointer', fill: 'none' }}
-                      />
+                      <Email />
                     </InputAdornment>
                   )
                 }}

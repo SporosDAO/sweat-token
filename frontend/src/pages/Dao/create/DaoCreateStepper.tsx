@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { useTheme } from '@mui/material'
+import { Link, useTheme } from '@mui/material'
 import { AddressZero } from '@ethersproject/constants'
 
 import Name from './views/Name'
@@ -16,7 +16,8 @@ import Confirmation from './views/Confirmation'
 import Payment from './views/Payment'
 import { ActionDocLayout } from '../../../components/ActionDocLayout'
 import { useA11yProps, TabPanel } from '../../../components/TabPanel'
-import { ArrowRight, HelpIcon } from '../../../components/Icons'
+import { ChevronLeft, ChevronRight, Help } from '@mui/icons-material'
+
 import { CreateDaoForm, prepareKaliDaoCell } from './createDaoHelper'
 import FACTORY_ABI from '../../../abi/KaliDAOFactory.json'
 import { useNetwork } from 'wagmi'
@@ -104,8 +105,10 @@ export default function DaoCreateStepper() {
           </Tabs>
           <Box sx={{ cursor: 'pointer', position: 'fixed', bottom: '40px' }}>
             <Typography variant="subtitle2" color={palette.text.secondary} display="flex" alignItems="center">
-              <HelpIcon sx={{ mt: '2px', fill: 'none', mr: '6px' }} />
-              Help &amp; Support
+              <Help sx={{ mt: '2px', fill: 'none', mr: '6px' }} />
+              <Link href="https://sporosdao.xyz/support/" rel="noreferrer" target="_blank">
+                Help &amp; Support
+              </Link>
             </Typography>
           </Box>
         </Grid>
@@ -132,7 +135,7 @@ export default function DaoCreateStepper() {
                   <Button
                     size="small"
                     variant="outlined"
-                    startIcon={<ArrowRight sx={{ mt: '4px', transform: 'scaleX(-1)', stroke: 'black' }} />}
+                    startIcon={<ChevronLeft />}
                     onClick={() => setActiveView((activeView) => (activeView -= 1))}
                   >
                     Back
@@ -146,7 +149,7 @@ export default function DaoCreateStepper() {
                     variant="contained"
                     data-testid="continue-button"
                     disabled={!formState.isValid || (activeView === View.Confirmation && getValues('terms') === false)}
-                    endIcon={<ArrowRight sx={{ mt: '4px', stroke: 'white' }} />}
+                    endIcon={<ChevronRight />}
                     onClick={() => setActiveView((activeView) => (activeView += 1))}
                   >
                     Continue
@@ -237,6 +240,28 @@ export default function DaoCreateStepper() {
             </Box>
           </>
         )}
+        {activeView === View.Confirmation && (
+          <>
+            <Box mb="32px">
+              <Typography variant="body1" mb="8px">
+                Carefully Review All Settings!
+              </Typography>
+              <Typography variant="subtitle2" color={palette.text.secondary}>
+                Please review and make sure all information looks good. On the next page you will be prompted to pay for
+                the formation fees, and deploy your company on-chain.
+              </Typography>
+            </Box>
+            <Box mb="32px">
+              <Typography variant="body1" mb="8px">
+                Note!
+              </Typography>
+              <Typography variant="subtitle2" color={palette.text.secondary}>
+                We know getting started can seem confusing, so we help take the guess work out of it by providing
+                default settings.
+              </Typography>
+            </Box>
+          </>
+        )}
         {activeView === View.Payment && (
           <>
             <Box mb="32px">
@@ -253,7 +278,7 @@ export default function DaoCreateStepper() {
               </Typography>
               <Typography variant="subtitle2" color={palette.text.secondary}>
                 The Sporos treasury is on Arbitrum, so we are{' '}
-                <Box component="span" color="#121926">
+                <Box component="span" fontWeight="bold">
                   only able to accept payment on Arbitrum.
                 </Box>
               </Typography>
