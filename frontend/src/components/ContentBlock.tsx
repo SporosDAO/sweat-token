@@ -27,7 +27,7 @@ export default function ContentBlock(props: ContentBlockProps) {
     <Stack sx={sx} spacing={2}>
       <Box display={'flex'}>
         {title && (
-          <Typography variant="h4" fontWeight={600} noWrap sx={{ m: 2 }}>
+          <Typography variant="h4" noWrap sx={{ m: 2 }}>
             {title}
           </Typography>
         )}

@@ -6,7 +6,7 @@ import { GRAPH_URL } from '../../../graph'
 import { CircularProgress } from '@mui/material'
 import DaoCard from './DaoCard'
 
-export function useGetUserDAOs(chainId, userAddress) {
+export function useGetUserDAOs(chainId: number | undefined, userAddress: string | undefined) {
   return useQuery([chainId, userAddress, USER_DAOS], async () => {
     if (!chainId || !userAddress) return {}
     const data = await request(GRAPH_URL[chainId], USER_DAOS, { address: userAddress })
@@ -20,6 +20,8 @@ export default function MyDAOs() {
   const { data, isLoading, isSuccess } = useGetUserDAOs(chain?.id, address)
 
   const daos = isSuccess ? data?.['members'] : []
+
+  // console.debug({ daos })
 
   return (
     <>
@@ -36,7 +38,7 @@ export default function MyDAOs() {
           <CircularProgress />
         </div>
       ) : isConnected && daos && daos.length > 0 ? (
-        daos.map((dao) => <DaoCard key={dao.dao.id} dao={dao.dao} chain={chain} />)
+        daos.map((dao: any) => <DaoCard key={dao.dao.id} dao={dao.dao} chain={chain} />)
       ) : (
         <div>You are not participating in any for-profit (Sporos-style) DAOs on chain: {chain.name}.</div>
       )}
