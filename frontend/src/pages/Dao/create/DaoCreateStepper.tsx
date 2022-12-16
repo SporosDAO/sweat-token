@@ -201,10 +201,10 @@ export default function DaoCreateStepper() {
           <>
             <Box mb="32px">
               <Typography variant="body1" mb="8px">
-                Can I launch a DAO with more than one founder?
+                Can I launch my company with more than one founder?
               </Typography>
               <Typography variant="subtitle2" color={palette.text.secondary}>
-                Yes. You can add up to 5 number of founders when you launch your DAO.
+                Yes. You can add up to 5 founders when you launch your company.
               </Typography>
             </Box>
             <Box>
@@ -244,20 +244,11 @@ export default function DaoCreateStepper() {
           <>
             <Box mb="32px">
               <Typography variant="body1" mb="8px">
-                Carefully Review All Settings!
+                Carefully review all settings!
               </Typography>
               <Typography variant="subtitle2" color={palette.text.secondary}>
                 Please review and make sure all information looks good. On the next page you will be prompted to pay for
                 the formation fees, and deploy your company on-chain.
-              </Typography>
-            </Box>
-            <Box mb="32px">
-              <Typography variant="body1" mb="8px">
-                Note!
-              </Typography>
-              <Typography variant="subtitle2" color={palette.text.secondary}>
-                We know getting started can seem confusing, so we help take the guess work out of it by providing
-                default settings.
               </Typography>
             </Box>
           </>

@@ -25,10 +25,12 @@ const Settings: React.FC<any> = (props) => {
               placeholder="1"
               {...register(`voting.period.hours`, {
                 required: 'Voting period required.',
-                min: { value: 1, message: 'Voting period has to be a positive number.' },
                 // see KaliDAO contract checks:
                 // https://github.com/kalidao/kali-contracts/blob/de721b483b04feba5c42b49b997d68e8ce4885dd/contracts/KaliDAO.sol#L160
-                max: { value: 24 * 365, message: 'Voting period has to be less than 365 days.' }
+                max: { value: 24 * 365, message: 'Voting period has to be less than 365 days.' },
+                validate: {
+                  positiveNumber: (v: any) => v > 0 || 'Voting period has to be a positive number.'
+                }
               })}
               helperText="Time period proposals for your company will be live for."
               data-testid="voting-period-input"
