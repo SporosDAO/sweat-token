@@ -91,7 +91,7 @@
     "babel-plugin-named-exports-order": "^0.0.2",
     "husky": "^8.0.1",
     "prop-types": "^15.8.1",
-    "webpack": "^5.74.0"
+    "webpack": "^5.76.0"
   },
   "husky": {
     "hooks": {
