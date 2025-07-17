@@ -9,16 +9,16 @@
     "build": "hardhat compile",
     "start": "hardhat node",
     "test": "hardhat --show-stack-traces test",
-    "coverage": "hardhat --show-stack-traces coverage && yarn coverage:check",
+    "coverage": "hardhat --show-stack-traces coverage && pnpm coverage:check",
     "coverage:check": "npx istanbul check-coverage ./coverage/coverage-final.json --statements 100 --branches 94 --functions 100 --lines 100 ",
-    "lint": "yarn prettier:solidity",
+    "lint": "pnpm prettier:solidity",
     "solhint": "solhint -f table src/**/*.sol",
     "prettier:solidity": "./node_modules/.bin/prettier --write src/**/*.sol",
     "prepare": "cd ../ && husky install ./contracts/.husky"
   },
   "husky": {
     "hooks": {
-      "pre-push": "yarn lint"
+      "pre-push": "pnpm lint"
     }
   },
   "repository": {

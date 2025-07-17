@@ -12,9 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v3
       - name: Run contracts tests
         run: |
-          yarn install
-          yarn build
-          yarn coverage
+          pnpm install
+          pnpm build
+          pnpm coverage
         working-directory: ./contracts

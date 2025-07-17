@@ -18,8 +18,8 @@ All tests in this repo run as CI checks on pull request and push. See [Github Ac
 
 Install globally [`dotenv-cli`](https://www.npmjs.com/package/dotenv-cli) for parsing `.env` files
 ```bash
-yarn global add dotenv
-export PATH=$PATH:"$(yarn global bin)"
+pnpm global add dotenv
+export PATH=$PATH:"$(pnpm global bin)"
 ```
 
 Synpress expects `PRIVATE_KEY` environment variable to be used for initializing a Metamask test account. You can add it to `.env` or `.env.local`. See `.env.example`.
@@ -28,21 +28,21 @@ Synpress expects `PRIVATE_KEY` environment variable to be used for initializing 
 
 In the project directory, you can run:
 
-### `yarn install`
+### `pnpm install`
 
 Install all third party dependencies.
 
-### `yarn test`
+### `pnpm test`
 
 Before running tests, the full app stack needs to be running on localhost via
 `compose-docker up` from the main directory.
 
-Then run e2e tests via `yarn test`.
+Then run e2e tests via `pnpm test`.
 
 __NOTE__: In Gitpod environment, the Synpress/Cypress interactive browser window is available via web service on port `6080`. You can watch the simulated user actions in the browser as tests are running.
 
 
-### `yarn coverage`
+### `pnpm coverage`
 
 After running tests, run this command to see coverage reporting.
 
