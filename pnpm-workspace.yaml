@@ -1,3 +1,4 @@
 packages:
   - 'contracts'
   - 'frontend'
+  - 'e2e-tests'
