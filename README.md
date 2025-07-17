@@ -1,3 +1,4 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/1ae6fac2-3c79-42ad-9f3f-8a8e6122d734/deploy-status)](https://app.netlify.com/projects/sporosdaoapp-main/deploys)
 
 # Sweat Token
 
@@ -19,7 +20,7 @@ Each of the above subdirectories has its own README file with additional informa
 
 # Progressive Web App
 
-SporosDAO Sweat Token is a Progressive Web App (source in `frontend`) hosted on Netlify.
+SporosDAO Sweat Token is a Progressive Web App (source in `frontend`) hosted on Netlify. 
 It uses NestJS backend (`backend` dir) hosted on Heroku and Mongodb Atlas cloud database. Deployment URLs for the app below:
 
 | Purpose | Branch | Live Deployment | Admin Console |
