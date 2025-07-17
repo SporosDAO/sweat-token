@@ -1,0 +1,4 @@
+packages:
+  - 'contracts'
+  - 'frontend'
+  # Add others if needed (e.g., any shared pkgs)
