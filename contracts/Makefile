@@ -3,16 +3,16 @@
 NETWORK?=hardhat
 
 node:
-	yarn hardhat node
+	pnpm hardhat node
 
 build:
-	yarn hardhat compile
+	pnpm hardhat compile
 
 test:
-	yarn hardhat test
+	pnpm hardhat test
 
 test/watch:
-	yarn hardhat watch test
+	pnpm hardhat watch test
 
 deploy/clean:
 	rm -f build/contracts.json

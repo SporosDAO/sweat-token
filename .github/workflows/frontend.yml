@@ -12,11 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v3
       - name: Run frontend tests
         run: |
-          yarn install
-          yarn build
-          yarn test
+          pnpm install
+          pnpm build
+          pnpm test
         working-directory: frontend
         env:
           CI: false

@@ -2,13 +2,9 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 cd frontend/
-yarn lint --fix
-cd -
-
-cd backend
-yarn lint --fix
+pnpm lint --fix
 cd -
 
 cd contracts
-yarn lint --fix
+pnpm lint --fix
 cd -

@@ -1,0 +1,22 @@
+packages:
+  - contracts
+  - frontend
+  - e2e-tests
+
+ignoredBuiltDependencies:
+  - '@nestjs/core'
+  - '@openapitools/openapi-generator-cli'
+  - bufferutil
+  - core-js
+  - core-js-pure
+  - cypress
+  - es5-ext
+  - keccak
+  - postinstall-postinstall
+  - puppeteer
+  - secp256k1
+  - sleep
+  - utf-8-validate
+  - web3
+  - web3-bzz
+  - web3-shh

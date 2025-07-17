@@ -27,13 +27,13 @@ More EVM deployments will be added in the future as the contract is battle teste
 # Basic CLI
 
 ```shell
-yarn clean
-yarn build
-yarn lint
-yarn test
-yarn test --trace
-yarn test --fulltrace
-yarn coverage
+pnpm clean
+pnpm build
+pnpm lint
+pnpm test
+pnpm test --trace
+pnpm test --fulltrace
+pnpm coverage
 ```
 
 # Advanced Hardhat CLI

@@ -1,7 +1,5 @@
 import * as dotenv from "dotenv";
 import { HardhatUserConfig, task } from "hardhat/config";
-import "@nomiclabs/hardhat-etherscan";
-import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
@@ -12,6 +10,7 @@ import "hardhat-dependency-compiler";
 import "solidity-coverage";
 import "xdeployer";
 require("hardhat-tracer");
+import "@nomicfoundation/hardhat-toolbox";
 
 dotenv.config();
 
@@ -45,7 +44,7 @@ const config: HardhatUserConfig = {
   solidity: {
     compilers: [
       {
-        version: "0.8.14",
+        version: "0.8.26",
         settings: {
           optimizer: {
             enabled: true,
@@ -56,18 +55,29 @@ const config: HardhatUserConfig = {
     ],
   },
   networks: {
-    ropsten: {
-      url: process.env.ROPSTEN_URL || "",
-      accounts:
-        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    hardhat: {
+      chainId: 1337,
+    },
+    localhost: {
+      url: "http://127.0.0.1:8545",
+    },
+    sepolia: {
+      url: `https://sepolia.infura.io/v3/${process.env.INFURA_API_KEY}`,
+      accounts: [process.env.PRIVATE_KEY],
+    },
+    mainnet: {
+      url: `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
+      accounts: [process.env.PRIVATE_KEY],
+    },
+  },
+  verify: {
+    etherscan: {
+      apiKey: process.env.ETHERSCAN_API_KEY,
     },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
     currency: "USD",
-  },
-  etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY,
   },
   watcher: {
     test: {
@@ -104,12 +114,11 @@ const config: HardhatUserConfig = {
       "0xe1904817e407877ea09135933f39121aa68ed0d9729d301084c544204171d100",
     networks: [
       "hardhat",
-      // "goerli"
-    ], // "rinkeby"],
+      // "sepolia"
+    ],
     rpcUrls: [
       "hardhat",
-      // "https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
-      // "https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+      // "https://sepolia.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
     ],
     gasLimit: 1.2 * 10 ** 7,
   },
