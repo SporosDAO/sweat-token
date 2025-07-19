@@ -52,8 +52,7 @@
     "test": "react-scripts test --watchAll=false --detectOpenHandles --forceExit --coverage",
     "test:dev": "react-scripts test --detectOpenHandles",
     "eject": "react-scripts eject",
-    "lint": "eslint './src/**/*.js' './src/**/*.ts*' --fix",
-    "prepare": "cd ../ && husky install ./frontend/.husky"
+    "lint": "eslint './src/**/*.js' './src/**/*.ts*' --fix"
   },
   "eslintConfig": {
     "extends": [
@@ -85,14 +84,8 @@
   },
   "devDependencies": {
     "babel-plugin-named-exports-order": "^0.0.2",
-    "husky": "^8.0.1",
     "prop-types": "^15.8.1",
     "webpack": "^5.74.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "pnpm lint"
-    }
   },
   "jest": {
     "transformIgnorePatterns": [

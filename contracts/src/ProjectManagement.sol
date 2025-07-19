@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity >=0.8.14;
+pragma solidity ^0.8.26;
 
+// Version: 1.0.1 - Removed unused tribute variable (July 18, 2025)
 import {IProjectManagement} from "./interfaces/IProjectManagement.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -160,14 +161,12 @@ contract ProjectManagement is ReentrancyGuard {
             (
                 uint256 projectId,
                 address toContributorAccount,
-                uint256 mintAmount,
-                string memory tribute
-            ) = abi.decode(extensionData[i], (uint256, address, uint256, string));
+                uint256 mintAmount
+            ) = abi.decode(extensionData[i], (uint256, address, uint256));
 
             Project storage project = projects[projectId];
 
             // console.log("(EVM)----> projectId, toContributorAccount, mintAmount:", projectId, toContributorAccount, mintAmount);
-            // console.log("(EVM)----> projectId, toContributorAccount, deliverable:", projectId, toContributorAccount, tribute);
 
             if (project.id == 0) revert ProjectUnknown();
 

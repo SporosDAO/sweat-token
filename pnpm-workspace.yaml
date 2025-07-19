@@ -1,8 +1,8 @@
 packages:
-  - contracts
-  - frontend
-  - e2e-tests
-
+  - 'contracts'
+  - 'frontend'
+  - 'e2e-tests'
+  
 ignoredBuiltDependencies:
   - '@nestjs/core'
   - '@openapitools/openapi-generator-cli'

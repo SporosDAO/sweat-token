@@ -5,7 +5,7 @@
 "resolutions": {
   "@types/react": "^18.3.3",
   "@types/react-dom": "^18.3.0",
-  "eslint": "^8.57.1",
+  "eslint": "^9.31.0",
   "react": "^18.3.1",
   "react-dom": "^18.3.1",
   "jest": "^29.7.0",
