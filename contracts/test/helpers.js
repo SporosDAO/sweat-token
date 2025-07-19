@@ -1,11 +1,10 @@
-
-const { BigNumber } = require("ethers")
+const { network } = require("hardhat");
 
 const wethAddress = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
 
 // Defaults to e18 using amount * 10^18
 function getBigNumber(amount, decimals = 18) {
-  return BigNumber.from(amount).mul(BigNumber.from(10).pow(decimals));
+  return BigInt(amount) * (10n ** BigInt(decimals));
 }
 
 async function advanceTime(time) {
@@ -13,11 +12,8 @@ async function advanceTime(time) {
 }
 
 async function latestBlockTimestamp() {
-  const blocktime = await ethers.provider.send("eth_getBlockByNumber", [
-    "latest",
-    false,
-  ]);
-  return blocktime.timestamp;
+  const block = await ethers.provider.getBlock("latest");
+  return Number(block.timestamp);
 }
 
 function hours(n) {

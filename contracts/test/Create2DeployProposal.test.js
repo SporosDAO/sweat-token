@@ -1,4 +1,4 @@
-const { BigNumber } = require("ethers");
+const { ethers } = require("hardhat");
 const chai = require("chai");
 const { expect } = chai;
 const { getBigNumber, latestBlockTimestamp, hours, advanceTime, AMOUNT, RESET, GREEN, YELLOW } = require("./helpers.js")
@@ -31,7 +31,7 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
 
     Kali = await ethers.getContractFactory("KaliDAO");
     kali = await Kali.deploy();
-    await kali.deployed();
+    await kali.waitForDeployment();
 
     console.log("KaliDAO address", kali.address);
 
@@ -49,21 +49,23 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
     );
 
     // deploy create2deploy on the local hardhat testnet
-    let hhcreate2Deployer = await hre.ethers.getContractFactory(
+    let hhcreate2Deployer = await ethers.getContractFactory(
       "Create2DeployerLocal"
     );
     create2Deployer = await hhcreate2Deployer.deploy();
+    await create2Deployer.waitForDeployment();
     console.log(`create2Deployer.address: ${ create2Deployer.address }`);
   });
 
   it("Should deploy ProjectManagement contract via create2deploy.", async function () {
-    const contract = await hre.ethers.getContractFactory(
-      hre.config.xdeploy.contract
+    const contract = await ethers.getContractFactory(
+      "ProjectManagement"
     );
     const initcode = contract.getDeployTransaction();
+    const salt = "SporosDAOProjectManagement"; // Hardcoded salt for test
     computedContractAddress = await create2Deployer.computeAddress(
-      hre.ethers.utils.id(hre.config.xdeploy.salt),
-      hre.ethers.utils.keccak256(initcode.data)
+      ethers.keccak256(ethers.toUtf8Bytes(salt)),
+      ethers.keccak256(initcode.data)
     );
     console.log(
       `\nYour deployment parameters will lead to the following contract address: ${GREEN}${computedContractAddress}${RESET}\n` +
@@ -71,23 +73,23 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
         `${YELLOW}the salt parameter or the bytecode of the contract!${RESET}\n`
     );
     if ((await ethers.provider.getCode(computedContractAddress)) !== "0x") {
-      throw new NomicLabsHardhatPluginError(
-        PLUGIN_NAME,
-        `The address of the contract you want to deploy already has existing bytecode on ${hre.config.xdeploy.networks[0]}.
+      throw new Error(
+        `The address of the contract you want to deploy already has existing bytecode.
         It is very likely that you have deployed this contract before with the same salt parameter value.
         Please try using a different salt value.`
       );
     };
     let createReceipt = await create2Deployer.deploy(
       AMOUNT,
-      hre.ethers.utils.id(hre.config.xdeploy.salt),
+      ethers.keccak256(ethers.toUtf8Bytes(salt)),
       initcode.data,
-      { gasLimit: hre.config.xdeploy.gasLimit }
+      { gasLimit: 1000000 }
     );
     createReceipt = await createReceipt.wait();
     let projectDeadline = await latestBlockTimestamp() + hours(72);
     // Set up payload for extension proposal
-    let payload = ethers.utils.defaultAbiCoder.encode(
+    const abiCoder = new ethers.AbiCoder();
+    let payload = abiCoder.encode(
         // Project struct encoding
         [ "uint256", "address", "uint256", "uint256", "string"],
         [
@@ -111,32 +113,33 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
     console.debug("Proposal submitted on-chain");
     await kali.vote(1, true)
     await advanceTime(35)
-    await expect(await await kali.processProposal(1))
+    await expect(kali.processProposal(1))
       .to.emit(kali, "ProposalProcessed")
         .withArgs(1, true) // expect proposal 1 to pass
     const nextProjectId = await projectManagement.nextProjectId();
     console.log(`ProjectManagement deployment address: ${projectManagement.address}`);
     console.log({ nextProjectId });
-    expect(nextProjectId).equal(101);
-    const savedProject = await projectManagement.projects(100);
+    expect(nextProjectId).to.equal(101n);
+    const savedProject = await projectManagement.projects(100n);
     console.log({savedProject});
-    expect(savedProject["id"]).equal(100);
-    expect(savedProject["dao"]).equal(kali.address);
-    expect(savedProject["manager"]).equal(manager.address);
-    expect(savedProject["budget"]).equal(getBigNumber(200));
-    expect(savedProject["deadline"]).equal(projectDeadline);
-    expect(savedProject["goals"]).equal("Website facelift");
+    expect(savedProject["id"]).to.equal(100n);
+    expect(savedProject["dao"]).to.equal(kali.address);
+    expect(savedProject["manager"]).to.equal(manager.address);
+    expect(savedProject["budget"]).to.equal(getBigNumber(200));
+    expect(savedProject["deadline"]).to.equal(BigInt(projectDeadline));
+    expect(savedProject["goals"]).to.equal("Website facelift");
   });
 
   it("Should deploy ProjectManagement contract via proposal.", async function () {
-    const contract = await hre.ethers.getContractFactory(
-      hre.config.xdeploy.contract
+    const contract = await ethers.getContractFactory(
+      "ProjectManagement"
     );
     const initcode = contract.getDeployTransaction();
     // predictable deployment address for ProjectManagement
+    const salt = "SporosDAOProjectManagement"; // Hardcoded salt for test
     computedContractAddress = await create2Deployer.computeAddress(
-      hre.ethers.utils.id(hre.config.xdeploy.salt),
-      hre.ethers.utils.keccak256(initcode.data)
+      ethers.keccak256(ethers.toUtf8Bytes(salt)),
+      ethers.keccak256(initcode.data)
     );
     console.log(
       `\nYour deployment parameters will lead to the following contract address: ${GREEN}${computedContractAddress}${RESET}\n` +
@@ -144,14 +147,14 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
         `${YELLOW}the salt parameter or the bytecode of the contract!${RESET}\n`
     );
     // The address of the ProjectManagement contract should not have existing bytecode onchain
-    expect(await ethers.provider.getCode(computedContractAddress)).equal("0x");
+    expect(await ethers.provider.getCode(computedContractAddress)).to.equal("0x");
     // prepare ABI for Create2Deploy.deploy
     // https://github.com/pcaversaccio/xdeployer/blob/8b79b9ac5021ccfce7d1589947669d169af3d666/src/contracts/Create2Deployer.sol#L34
     let ABI = [
       "function deploy( uint256 value, bytes32 salt, bytes memory code)"
     ];
-    let iface = new ethers.utils.Interface(ABI);
-    const deployProposalPayload = iface.encodeFunctionData("deploy", [ AMOUNT, hre.ethers.utils.id(hre.config.xdeploy.salt), initcode.data ])
+    let iface = new ethers.Interface(ABI);
+    const deployProposalPayload = iface.encodeFunctionData("deploy", [ AMOUNT, ethers.keccak256(ethers.toUtf8Bytes(salt)), initcode.data ])
     console.log('ABI payload for ProposalType.CALL to deploy ProjectManagement contract:', deployProposalPayload)
     // ProposalType.CALL = 2
     // https://github.com/kalidao/kali-contracts/blob/c3b25ca762f083dfe88096a7a512b33607c0ac57/contracts/KaliDAO.sol#L104
@@ -159,19 +162,19 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
     await kali.propose(2, "Proposal to deploy ProjectManagement contract via create2deploy.", [create2Deployer.address], [0], [deployProposalPayload])
     console.debug("CALL proposal for ProjectManagement deployment submitted on-chain.");
     // approve proposal
-    await expect(await kali.vote(1, true))
+    await expect(kali.vote(1, true))
       .to.emit(kali, "VoteCast")
         .withArgs(proposer.address, 1, true)
     console.debug("CALL proposal for ProjectManagement approved.");
     await advanceTime(35)
-    await expect(await await kali.processProposal(1, { gasLimit: hre.config.xdeploy.gasLimit }))
+    await expect(kali.processProposal(1, { gasLimit: 1000000 }))
       .to.emit(kali, "ProposalProcessed")
         .withArgs(1, true) // expect proposal 1 to pass
     console.debug("CALL proposal for ProjectManagement deployment processed!");
     // Now that the ProjectManagement contract is deployed, it can be used as extension by other KaliDAO instances
 
     const kali2 = await Kali.deploy()
-    await kali2.deployed()
+    await kali2.waitForDeployment()
 
     console.log("KaliDAO2 address", kali2.address)
 
@@ -200,10 +203,11 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
     console.log(`ProjectManagement deployment address: ${projectManagement.address}`);
     console.log({ nextProjectId });
     // no projects proposed yet
-    expect(nextProjectId).equal(100);
+    expect(nextProjectId).to.equal(100n);
     let projectDeadline = await latestBlockTimestamp() + hours(72);
     // Set up payload for extension proposal
-    let payload = ethers.utils.defaultAbiCoder.encode(
+    const abiCoder = new ethers.AbiCoder();
+    let payload = abiCoder.encode(
         // Project struct encoding
         [ "uint256", "address", "uint256", "uint256", "string"],
         [
@@ -220,22 +224,23 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
     console.debug("New Project Proposal submitted on-chain");
     await kali2.connect(manager).vote(1, true)
     await advanceTime(35)
-    await expect(await await kali2.processProposal(1))
+    await expect(kali2.processProposal(1))
       .to.emit(kali2, "ProposalProcessed")
         .withArgs(1, true) // expect proposal 2 to pass
     nextProjectId = await projectManagement.nextProjectId();
     console.log({ nextProjectId });
-    expect(nextProjectId).equal(101);
-    const savedProject = await projectManagement.projects(100);
+    expect(nextProjectId).to.equal(101n);
+    const savedProject = await projectManagement.projects(100n);
     console.log({savedProject});
-    expect(savedProject["id"]).equal(100);
-    expect(savedProject["dao"]).equal(kali2.address);
-    expect(savedProject["manager"]).equal(manager.address);
-    expect(savedProject["budget"]).equal(getBigNumber(200));
-    expect(savedProject["deadline"]).equal(projectDeadline);
-    expect(savedProject["goals"]).equal("Website facelift");
+    expect(savedProject["id"]).to.equal(100n);
+    expect(savedProject["dao"]).to.equal(kali2.address);
+    expect(savedProject["manager"]).to.equal(manager.address);
+    expect(savedProject["budget"]).to.equal(getBigNumber(200));
+    expect(savedProject["deadline"]).to.equal(BigInt(projectDeadline));
+    expect(savedProject["goals"]).to.equal("Website facelift");
     // Make sure a project manager can mint to contributors
-    let mintRequest = ethers.utils.defaultAbiCoder.encode(
+    const abiCoder2 = new ethers.AbiCoder();
+    let mintRequest = abiCoder2.encode(
       // Project struct encoding
       [ "uint256", "address", "uint256", "string"],
       [
