@@ -33,7 +33,7 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
     kali = await Kali.deploy();
     await kali.waitForDeployment();
 
-    console.log("KaliDAO address", kali.address);
+    console.log("KaliDAO address", kali.target);
 
     // Instantiate KaliDAO
     await kali.init(
@@ -54,18 +54,18 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
     );
     create2Deployer = await hhcreate2Deployer.deploy();
     await create2Deployer.waitForDeployment();
-    console.log(`create2Deployer.address: ${ create2Deployer.address }`);
+    console.log(`create2Deployer.address: ${ create2Deployer.target }`);
   });
 
   it("Should deploy ProjectManagement contract via create2deploy.", async function () {
     const contract = await ethers.getContractFactory(
       "ProjectManagement"
     );
-    const initcode = contract.getDeployTransaction();
+    const initcode = contract.bytecode;
     const salt = "SporosDAOProjectManagement"; // Hardcoded salt for test
     computedContractAddress = await create2Deployer.computeAddress(
       ethers.keccak256(ethers.toUtf8Bytes(salt)),
-      ethers.keccak256(initcode.data)
+      ethers.keccak256(initcode)
     );
     console.log(
       `\nYour deployment parameters will lead to the following contract address: ${GREEN}${computedContractAddress}${RESET}\n` +
@@ -82,7 +82,7 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
     let createReceipt = await create2Deployer.deploy(
       AMOUNT,
       ethers.keccak256(ethers.toUtf8Bytes(salt)),
-      initcode.data,
+      initcode,
       { gasLimit: 1000000 }
     );
     createReceipt = await createReceipt.wait();
@@ -109,7 +109,7 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
     );
     // ProposalType.EXTENSION = 9
     // https://github.com/kalidao/kali-contracts/blob/c3b25ca762f083dfe88096a7a512b33607c0ac57/contracts/KaliDAO.sol#L111
-    await kali.propose(9, "New Project Proposal", [projectManagement.address], [1], [payload])
+    await kali.propose(9, "New Project Proposal", [projectManagement.target], [1], [payload])
     console.debug("Proposal submitted on-chain");
     await kali.vote(1, true)
     await advanceTime(35)
@@ -117,13 +117,13 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
       .to.emit(kali, "ProposalProcessed")
         .withArgs(1, true) // expect proposal 1 to pass
     const nextProjectId = await projectManagement.nextProjectId();
-    console.log(`ProjectManagement deployment address: ${projectManagement.address}`);
+    console.log(`ProjectManagement deployment address: ${projectManagement.target}`);
     console.log({ nextProjectId });
     expect(nextProjectId).to.equal(101n);
     const savedProject = await projectManagement.projects(100n);
     console.log({savedProject});
     expect(savedProject["id"]).to.equal(100n);
-    expect(savedProject["dao"]).to.equal(kali.address);
+    expect(savedProject["dao"]).to.equal(kali.target);
     expect(savedProject["manager"]).to.equal(manager.address);
     expect(savedProject["budget"]).to.equal(getBigNumber(200));
     expect(savedProject["deadline"]).to.equal(BigInt(projectDeadline));
@@ -134,12 +134,12 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
     const contract = await ethers.getContractFactory(
       "ProjectManagement"
     );
-    const initcode = contract.getDeployTransaction();
+    const initcode = contract.bytecode;
     // predictable deployment address for ProjectManagement
     const salt = "SporosDAOProjectManagement"; // Hardcoded salt for test
     computedContractAddress = await create2Deployer.computeAddress(
       ethers.keccak256(ethers.toUtf8Bytes(salt)),
-      ethers.keccak256(initcode.data)
+      ethers.keccak256(initcode)
     );
     console.log(
       `\nYour deployment parameters will lead to the following contract address: ${GREEN}${computedContractAddress}${RESET}\n` +
@@ -154,12 +154,12 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
       "function deploy( uint256 value, bytes32 salt, bytes memory code)"
     ];
     let iface = new ethers.Interface(ABI);
-    const deployProposalPayload = iface.encodeFunctionData("deploy", [ AMOUNT, ethers.keccak256(ethers.toUtf8Bytes(salt)), initcode.data ])
+    const deployProposalPayload = iface.encodeFunctionData("deploy", [ AMOUNT, ethers.keccak256(ethers.toUtf8Bytes(salt)), initcode ])
     console.log('ABI payload for ProposalType.CALL to deploy ProjectManagement contract:', deployProposalPayload)
     // ProposalType.CALL = 2
     // https://github.com/kalidao/kali-contracts/blob/c3b25ca762f083dfe88096a7a512b33607c0ac57/contracts/KaliDAO.sol#L104
-    console.log(`Processing CALL proposal to create2Deployer.address: ${ create2Deployer.address}`)
-    await kali.propose(2, "Proposal to deploy ProjectManagement contract via create2deploy.", [create2Deployer.address], [0], [deployProposalPayload])
+    console.log(`Processing CALL proposal to create2Deployer.address: ${ create2Deployer.target}`)
+    await kali.propose(2, "Proposal to deploy ProjectManagement contract via create2deploy.", [create2Deployer.target], [0], [deployProposalPayload])
     console.debug("CALL proposal for ProjectManagement deployment submitted on-chain.");
     // approve proposal
     await expect(kali.vote(1, true))
@@ -167,7 +167,7 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
         .withArgs(proposer.address, 1, true)
     console.debug("CALL proposal for ProjectManagement approved.");
     await advanceTime(35)
-    await expect(kali.processProposal(1, { gasLimit: 1000000 }))
+    await expect(kali.processProposal(1, { gasLimit: 3000000 }))
       .to.emit(kali, "ProposalProcessed")
         .withArgs(1, true) // expect proposal 1 to pass
     console.debug("CALL proposal for ProjectManagement deployment processed!");
@@ -176,7 +176,7 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
     const kali2 = await Kali.deploy()
     await kali2.waitForDeployment()
 
-    console.log("KaliDAO2 address", kali2.address)
+    console.log("KaliDAO2 address", kali2.target)
 
     // Instantiate KaliDAO
     await kali2.init(
@@ -200,7 +200,7 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
     );
     // Make sure a new Project can be approved and have a predictable state
     let nextProjectId = await projectManagement.nextProjectId();
-    console.log(`ProjectManagement deployment address: ${projectManagement.address}`);
+    console.log(`ProjectManagement deployment address: ${projectManagement.target}`);
     console.log({ nextProjectId });
     // no projects proposed yet
     expect(nextProjectId).to.equal(100n);
@@ -220,7 +220,7 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
     )
     // ProposalType.EXTENSION = 9
     // https://github.com/kalidao/kali-contracts/blob/c3b25ca762f083dfe88096a7a512b33607c0ac57/contracts/KaliDAO.sol#L111
-    await kali2.connect(manager).propose(9, "New Project Proposal", [projectManagement.address], [1], [payload])
+    await kali2.connect(manager).propose(9, "New Project Proposal", [projectManagement.target], [1], [payload])
     console.debug("New Project Proposal submitted on-chain");
     await kali2.connect(manager).vote(1, true)
     await advanceTime(35)
@@ -233,7 +233,7 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
     const savedProject = await projectManagement.projects(100n);
     console.log({savedProject});
     expect(savedProject["id"]).to.equal(100n);
-    expect(savedProject["dao"]).to.equal(kali2.address);
+    expect(savedProject["dao"]).to.equal(kali2.target);
     expect(savedProject["manager"]).to.equal(manager.address);
     expect(savedProject["budget"]).to.equal(getBigNumber(200));
     expect(savedProject["deadline"]).to.equal(BigInt(projectDeadline));
@@ -251,7 +251,7 @@ describe("Deploy a new smart contract with counterfactual multi chain address vi
       ]
     )
     await projectManagement
-      .connect(manager).callExtension(kali2.address, [mintRequest]);
+      .connect(manager).callExtension(kali2.target, [mintRequest]);
       expect(await kali2.balanceOf(contributor.address)).to.equal(getBigNumber(56))
   });
 
