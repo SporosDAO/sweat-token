@@ -31,7 +31,10 @@ export function Web3ContextProvider({
       chains = defaultChains
     }
 
-    initialChain = process.env.NODE_ENV === 'development' ? chain.goerli : chain.arbitrum
+    initialChain = chain.arbitrum
+    //Aug 2025 update:
+    // hardcoded chain to arbitrum for production and dev until contracts and subgraphs are available for sepolia
+    // process.env.NODE_ENV === 'development' ? chain.goerli : chain.arbitrum
 
     const { connectors } = getDefaultWallets({
       appName: 'Sporos DAO App',

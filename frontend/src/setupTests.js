@@ -10,7 +10,6 @@ jest.mock('@rainbow-me/rainbowkit', () => {
       metaMask: jest.fn(),
       brave: jest.fn(),
       rainbow: jest.fn(),
-      walletConnect: jest.fn(),
       coinbase: jest.fn()
     },
     connectorsForWallets: jest.fn(),
