@@ -1,10 +1,10 @@
 import { Chain, chain, configureChains, createClient, WagmiConfig } from 'wagmi'
-import { infuraProvider } from 'wagmi/providers/infura'
-import { publicProvider } from 'wagmi/providers/public'
+import { alchemyProvider } from 'wagmi/providers/alchemy'
 import '@rainbow-me/rainbowkit/styles.css'
-
 import { getDefaultWallets, RainbowKitProvider, lightTheme } from '@rainbow-me/rainbowkit'
 import { ReactNode } from 'react'
+
+const alchemyApiKey = process.env.REACT_APP_ALCHEMY_API_KEY
 
 export function Web3ContextProvider({
   wagmiClient,
@@ -22,16 +22,16 @@ export function Web3ContextProvider({
       chains: defaultChains,
       provider,
       webSocketProvider
-    } = configureChains(
-      [chain.arbitrum, chain.goerli, chain.mainnet],
-      [infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_ID }), publicProvider()]
-    )
+    } = configureChains([chain.arbitrum], [alchemyProvider({ apiKey: alchemyApiKey })])
 
     if (!chains) {
       chains = defaultChains
     }
 
-    initialChain = process.env.NODE_ENV === 'development' ? chain.goerli : chain.arbitrum
+    initialChain = chain.arbitrum
+    //Aug 2025 update:
+    // hardcoded chain to arbitrum for production and dev until contracts and subgraphs are available for sepolia
+    // process.env.NODE_ENV === 'development' ? chain.goerli : chain.arbitrum
 
     const { connectors } = getDefaultWallets({
       appName: 'Sporos DAO App',

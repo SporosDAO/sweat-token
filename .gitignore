@@ -8,3 +8,6 @@ backend/data
 .idea
 
 # Cypress 
+
+# Ignore LLM digest file
+digest.txt
