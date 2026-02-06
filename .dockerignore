@@ -1,0 +1,10 @@
+data
+build
+dist
+node_modules
+.git
+
+**/data
+**/build
+**/dist
+**/node_modules
